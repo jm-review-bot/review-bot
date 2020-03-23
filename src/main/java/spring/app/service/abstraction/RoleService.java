@@ -9,8 +9,6 @@ public interface RoleService {
 
 	void addRole(Role role);
 
-	Role getRoleByName(String roleName);
-
 	Role getRoleById(Long id);
 
 	List<Role> getAllRoles();
