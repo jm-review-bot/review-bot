@@ -1,4 +1,4 @@
-package spring.app.configuration.initializator;
+/*package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.model.Role;
@@ -50,3 +50,5 @@ public class TestDataInit {
 		userService.addUser(user);
 	}
 }
+
+ */
