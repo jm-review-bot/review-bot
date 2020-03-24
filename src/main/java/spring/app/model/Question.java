@@ -75,12 +75,11 @@ public class Question {
         if (o == null || getClass() != o.getClass()) return false;
         Question question1 = (Question) o;
         return id.equals(question1.id) &&
-                question.equals(question1.question) &&
-                theme.equals(question1.theme);
+                question.equals(question1.question);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, question, theme);
+        return Objects.hash(id, question);
     }
 }

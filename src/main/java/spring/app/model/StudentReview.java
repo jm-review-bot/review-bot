@@ -52,13 +52,11 @@ public class StudentReview {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudentReview that = (StudentReview) o;
-        return id.equals(that.id) &&
-                user.equals(that.user) &&
-                review.equals(that.review);
+        return id.equals(that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, user, review);
+        return Objects.hash(id);
     }
 }

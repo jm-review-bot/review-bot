@@ -63,14 +63,11 @@ public class StudentReviewAnswer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudentReviewAnswer that = (StudentReviewAnswer) o;
-        return id.equals(that.id) &&
-                studentReview.equals(that.studentReview) &&
-                question.equals(that.question) &&
-                isRight.equals(that.isRight);
+        return Objects.equals(id, that.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, studentReview, question, isRight);
+        return Objects.hash(id);
     }
 }
