@@ -11,9 +11,9 @@ import spring.app.configuration.initializator.TestDataInit;
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
-@EnableAsync
-@EnableCaching
-public class Main extends WebMvcConfigurerAdapter {
+//@EnableAsync
+//@EnableCaching
+public class Main /*extends WebMvcConfigurerAdapter*/ {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
