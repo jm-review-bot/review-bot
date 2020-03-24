@@ -4,19 +4,16 @@ import spring.app.model.User;
 
 import java.util.List;
 
-
 public interface UserService {
-	User getUserByLogin(String login);
 
-	//User getUserByEmail(String email);
+    void addUser(User user);
 
-	User getUserById(Long id);
+    User getUserById(Long id);
 
-	void addUser(User user);
+    List<User> getAllUsers();
 
-	List<User> getAllUsers();
+    void updateUser(User user);
 
-	void deleteUserById(Long id);
+    void deleteUserById(Long id);
 
-	void updateUser(User user);
 }

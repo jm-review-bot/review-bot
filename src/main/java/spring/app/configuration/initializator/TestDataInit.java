@@ -6,9 +6,6 @@ import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
 
-import java.util.HashSet;
-import java.util.Set;
-
 
 public class TestDataInit {
 
@@ -20,33 +17,28 @@ public class TestDataInit {
 
 	private void init() throws Exception {
 
-		Role roleAdmin = new Role();
-		roleAdmin.setName("ADMIN");
-		roleService.addRole(roleAdmin);
+        Role roleAdmin = new Role();
+        roleAdmin.setRole("ADMIN");
+        roleService.addRole(roleAdmin);
 
-		Role roleUser = new Role();
-		roleUser.setName("USER");
-		roleService.addRole(roleUser);
+        Role roleUser = new Role();
+        roleUser.setRole("USER");
+        roleService.addRole(roleUser);
 
-		User admin = new User();
-		admin.setLogin("admin");
-		admin.setPassword("admin");
-		admin.setEmail("admin@gmail.com");
-		Set<Role> adminRoles = new HashSet<>();
-		adminRoles.add(roleAdmin);
-		adminRoles.add(roleUser);
-		admin.setRoles(adminRoles);
+        User admin = new User();
+        admin.setFirstName("admin");
+        admin.setLastName("admin");
+        admin.setReviewPoint(0);
+        admin.setVkId("98189");
+        admin.setRole(roleAdmin);
+        userService.addUser(admin);
 
-		userService.addUser(admin);
-
-		User user = new User();
-		user.setLogin("user");
-		user.setPassword("user");
-		user.setEmail("user@gmail.com");
-		Set<Role> userRoles = new HashSet<>();
-		userRoles.add(roleUser);
-		user.setRoles(userRoles);
-
-		userService.addUser(user);
-	}
+        User user = new User();
+        user.setFirstName("user");
+        user.setLastName("user");
+        user.setReviewPoint(4);
+        user.setVkId("582532887");
+        user.setRole(roleUser);
+        userService.addUser(user);
+    }
 }
