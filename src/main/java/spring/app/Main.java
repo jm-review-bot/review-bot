@@ -5,15 +5,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import spring.app.configuration.initializator.TestDataInit;
 
 import javax.annotation.PostConstruct;
 
 @SpringBootApplication
-//@EnableAsync
-//@EnableCaching
-public class Main /*extends WebMvcConfigurerAdapter*/ {
+@EnableScheduling
+@EnableAsync
+@EnableCaching
+public class Main  {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Main.class, args);
