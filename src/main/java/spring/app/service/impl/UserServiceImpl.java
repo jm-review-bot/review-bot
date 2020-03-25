@@ -7,6 +7,7 @@ import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -47,4 +48,8 @@ public class UserServiceImpl implements UserService {
         userDao.deleteById(id);
     }
 
+    @Override
+    public List<User> getUsersByReviewDate(LocalDateTime now) {
+        return userDao.getUsersByReviewDate(now);
+    }
 }

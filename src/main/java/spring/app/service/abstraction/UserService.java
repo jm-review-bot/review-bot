@@ -2,6 +2,7 @@ package spring.app.service.abstraction;
 
 import spring.app.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserService {
@@ -16,4 +17,5 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
+    List<User> getUsersByReviewDate(LocalDateTime now);
 }
