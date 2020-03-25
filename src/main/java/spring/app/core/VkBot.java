@@ -78,7 +78,11 @@ public class VkBot implements ChatBot {
 
         for (Message message : messages) {
             body = message.getBody();
+            userId = message.getUserId();
 
+            userService.getByVkId();
+
+            //----------------
             if (body.equals("Начать")){
                 // отправить пользователю две кнопки "Ответить на вопросы" и "Посмотреть результаты"
                 sendMessage("Привет! Выбери один из вариантов", Keyboards.defaultKeyboard, message.getUserId());
@@ -116,7 +120,7 @@ public class VkBot implements ChatBot {
     }
 
     @Override
-    public void sendMessage(String message, int userId) {
+    public void sendMessage(String message, Integer userId) {
         Random random = new Random();
         try {
             this.apiClient.messages()
@@ -131,12 +135,12 @@ public class VkBot implements ChatBot {
     }
 
     @Override
-    public void sendMessage(String message, String keyboard, int userId) {
+    public void sendMessage(String text, String keyboard, Integer userId) {
         Random random = new Random();
         try {
             this.apiClient.messages()
                     .send(groupActor)
-                    .message(message)
+                    .message(text)
                     .unsafeParam("keyboard", keyboard)
                     .userId(userId).randomId(random.nextInt())
                     .execute();

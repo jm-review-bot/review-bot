@@ -19,7 +19,7 @@ public class User {
     private String lastName;
 
     @Column(name = "vk_id")
-    private String vkId;
+    private Integer vkId;
 
     @Column(name = "chat_state")
     private String chatState;
@@ -34,7 +34,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, String vkId, String chatState, Role role) {
+    public User(String firstName, String lastName, Integer vkId, String chatState, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.vkId = vkId;
@@ -66,11 +66,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getVkId() {
+    public Integer getVkId() {
         return vkId;
     }
 
-    public void setVkId(String vkId) {
+    public void setVkId(Integer vkId) {
         this.vkId = vkId;
     }
 
@@ -95,6 +95,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
+        // TODO убрать проверку по имени.
         return id.equals(user.id) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&

@@ -1,16 +1,15 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
-import spring.app.model.User;
 
 public class BotContext {
     private final ChatBot bot;
-    private final User user;
+    private final Integer vkId;
     private final Message message;
 
-    public BotContext(ChatBot bot, User user, Message message) {
+    public BotContext(ChatBot bot, Integer vkId, Message message) {
         this.bot = bot;
-        this.user = user;
+        this.vkId = vkId;
         this.message = message;
     }
 
@@ -18,8 +17,8 @@ public class BotContext {
         return bot;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getVkId() {
+        return vkId;
     }
 
     public Message getMessage() {
