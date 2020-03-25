@@ -21,6 +21,9 @@ public class User {
     @Column(name = "vk_id")
     private String vkId;
 
+    @Column(name = "chat_state")
+    private String chatState;
+
     @Column(name = "review_point")
     private Integer reviewPoint;
 
@@ -29,6 +32,14 @@ public class User {
     private Role role;
 
     public User() {
+    }
+
+    public User(String firstName, String lastName, String vkId, String chatState, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.vkId = vkId;
+        this.chatState = chatState;
+        this.role = role;
     }
 
     public Long getId() {
@@ -93,5 +104,13 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, vkId);
+    }
+
+    public String getChatState() {
+        return chatState;
+    }
+
+    public void setChatState(String chatState) {
+        this.chatState = chatState;
     }
 }

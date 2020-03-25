@@ -29,7 +29,7 @@ public class TestDataInit {
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setReviewPoint(0);
-        admin.setVkId("98189");
+        admin.setVkId("1374221"); // change this to your vkId for testing
         admin.setRole(roleAdmin);
         userService.addUser(admin);
 

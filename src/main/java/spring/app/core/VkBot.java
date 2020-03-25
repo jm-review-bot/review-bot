@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import spring.app.service.abstraction.UserService;
+import spring.app.util.Keyboards;
 import spring.app.util.StringParser;
 
 import javax.annotation.PostConstruct;
@@ -80,7 +81,7 @@ public class VkBot implements ChatBot {
 
             if (body.equals("Начать")){
                 // отправить пользователю две кнопки "Ответить на вопросы" и "Посмотреть результаты"
-                sendMessage("Привет! Выбери один из вариантов", defaultKeyboard, message.getUserId());
+                sendMessage("Привет! Выбери один из вариантов", Keyboards.defaultKeyboard, message.getUserId());
                 return;
             }
             if (body.equals("Пройти опрос")) {
@@ -110,7 +111,7 @@ public class VkBot implements ChatBot {
 
             }
 
-            sendMessage("Команда не распознана:" + message.getBody(), startKeyboard, message.getUserId());
+            sendMessage("Команда не распознана:" + message.getBody(), Keyboards.startKeyboard, message.getUserId());
         }
     }
 
@@ -148,42 +149,4 @@ public class VkBot implements ChatBot {
             "[1] Туризм и путешествия\n" +
             "[2] Программирование и cs\n" +
             "[3] Финансы и бизнес ";
-
-    String defaultKeyboard = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Пройти опрос\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Посмотреть результаты\"\n" +
-            "        },\n" +
-            "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
-
-    String startKeyboard = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-//            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Начать\"\n" +
-            "        },\n" +
-            "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} ";
 }
