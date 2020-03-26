@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import spring.app.core.steps.Step;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
@@ -92,7 +93,7 @@ public class VkBot implements ChatBot {
         String input;
         String userStep;
         boolean isViewed;
-        BotStep currentStep;
+        Step currentStep;
 
 //            Получаем сообщение из вк
         for (Message message : messages) {
@@ -120,7 +121,8 @@ public class VkBot implements ChatBot {
             isViewed = user.isViewed();
             log.debug("VK_ID юзера: {}, роль: {},  шаг: {}, ранее просмотрен: {}", userVkId, role.getName(),
                     userStep, isViewed);
-            currentStep = BotStep.valueOf(userStep);
+            currentStep = StepHolder.steps.get(StepSelector.valueOf(userStep));
+
             if (!isViewed) {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
                 currentStep.enter(context);
@@ -131,7 +133,8 @@ public class VkBot implements ChatBot {
                 try {
                     currentStep.processInput(context);
                     // меняем юзеру на следующий шаг только, если не выпало исключения
-                    user.setChatStep(currentStep.nextStep().name());
+                    StepSelector nextStep = currentStep.nextStep();
+                    user.setChatStep(nextStep.name());
                     user.setViewed(false);
                 } catch (ProcessInputException e) {
                     // отправляем сообщение об ошибке ввода

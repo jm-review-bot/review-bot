@@ -1,6 +1,9 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import spring.app.core.StepSelector;
+import spring.app.core.StepHolder;
+import spring.app.core.steps.*;
 import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
@@ -52,5 +55,11 @@ public class TestDataInit {
         user2.setRole(roleUser);
         admin.setChatStep("Start");
         userService.addUser(user2);
+
+        StepHolder.steps.put(StepSelector.Start, new Start());
+        StepHolder.steps.put(StepSelector.UserMenu, new UserMenu());
+        StepHolder.steps.put(StepSelector.AdminMenu, new AdminMenu());
+        StepHolder.steps.put(StepSelector.AdminAddUser, new AdminAddUser());
+        StepHolder.steps.put(StepSelector.AdminRemoveUser, new AdminRemoveUser());
     }
 }
