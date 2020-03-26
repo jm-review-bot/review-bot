@@ -116,12 +116,12 @@ public class VkBot implements ChatBot {
                 userService.addUser(user);
             }
             Role role = user.getRole();
-            context = new BotContext(this, userVkId, input, role);
+            context = new BotContext(userVkId, input, role);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
             isViewed = user.isViewed();
-            log.debug("VK_ID юзера: {}, роль {},  шаг {}, ранее просмотрен: {}", userVkId, role.getName(),
+            log.debug("VK_ID юзера: {}, роль: {},  шаг: {}, ранее просмотрен: {}", userVkId, role.getName(),
                     userStep, isViewed);
             currentStep = BotStep.valueOf(userStep);
             if (!isViewed) {
@@ -145,21 +145,6 @@ public class VkBot implements ChatBot {
             userService.updateUser(user);
         }
     }
-
-/*    @Override
-    public void sendMessage(String message, Integer userId) {
-        Random random = new Random();
-        try {
-            this.apiClient.messages()
-                    .send(groupActor)
-                    .message(message)
-                    .userId(userId)
-                    .randomId(random.nextInt())
-                    .execute();
-        } catch (ApiException | ClientException e) {
-            log.error("Исключение при отправке сообщения", e);
-        }
-    }*/
 
     @Override
     public void sendMessage(String text, String keyboard, Integer userId) {
