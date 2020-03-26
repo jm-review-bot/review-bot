@@ -37,4 +37,7 @@ public class Keyboards {
             "      }\n" +
             "  ]]\n" +
             "} ";
+
+    public final static String noKeyboard = "{\"buttons\":[],\"one_time\":true}";
+
 }

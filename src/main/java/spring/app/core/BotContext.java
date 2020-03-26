@@ -1,7 +1,5 @@
 package spring.app.core;
 
-import com.vk.api.sdk.objects.messages.Message;
-
 public class BotContext {
     private final ChatBot bot;
     private final Integer vkId;

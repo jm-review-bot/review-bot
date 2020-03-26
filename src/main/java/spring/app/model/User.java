@@ -21,8 +21,19 @@ public class User {
     @Column(name = "vk_id")
     private Integer vkId;
 
-    @Column(name = "chat_state")
-    private String chatState;
+    /**
+     * Текущий(последний) шаг пользователя в чатботе
+     */
+    @Column(name = "chat_step")
+    private String chatStep;
+
+    /**
+     * Факт просмотра пользователем стартового сообщения шага.
+     * false - показываем ему сообщение
+     * true - ждем от него сообщения, обрабатываем его
+     */
+    @Column(name = "is_viewed")
+    private boolean isViewed;
 
     @Column(name = "review_point")
     private Integer reviewPoint;
@@ -34,12 +45,13 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, Integer vkId, String chatState, Role role) {
+    public User(String firstName, String lastName, Integer vkId, String chatStep, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.vkId = vkId;
-        this.chatState = chatState;
+        this.chatStep = chatStep;
         this.role = role;
+        this.isViewed = false;
     }
 
     public Long getId() {
@@ -90,6 +102,22 @@ public class User {
         this.role = role;
     }
 
+    public String getChatStep() {
+        return chatStep;
+    }
+
+    public void setChatStep(String chatStep) {
+        this.chatStep = chatStep;
+    }
+
+    public boolean isViewed() {
+        return isViewed;
+    }
+
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -107,11 +135,5 @@ public class User {
         return Objects.hash(id, firstName, lastName, vkId);
     }
 
-    public String getChatState() {
-        return chatState;
-    }
 
-    public void setChatState(String chatState) {
-        this.chatState = chatState;
-    }
 }

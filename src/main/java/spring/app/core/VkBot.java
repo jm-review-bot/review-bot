@@ -12,11 +12,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
-import spring.app.util.Keyboards;
-import spring.app.util.StringParser;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -60,6 +59,7 @@ public class VkBot implements ChatBot {
         stream.close();
     }
 
+
     @Override
     public List<Message> readMessages() {
         List<Message> result = new ArrayList<>();
@@ -77,22 +77,34 @@ public class VkBot implements ChatBot {
         return result;
     }
 
-
+    /**
+     * Получаем сообщение из вк
+     * Берем vkid пользователя
+     * Достаём самого пользователя
+     * Получаем у пользователя step
+     * Получаем is_viewed
+     * Если is_viewed == false то вызываем у curretStep.getText, curretStep.getKeyBoard и отдаем вк то что получили из step, пользователю ставим user.setStep(curretStep), user.setViewed(true) и выходим из цикла
+     * Если is_viewed == true, то берем step.proccessInput, затем мы берем getNextStep и user.setStep(nextStep), user.isViewed(false) и выходим из цикла
+     * Если мы словили ProccessInputException, то берем текст сообщения и отправляем его пользовтаелю. Пользователь остается на этом же шаге с тем же состоянием view
+     */
     @Override
     public void replyForMessages(List<Message> messages) {
         BotContext context;
-        String input;
         Integer userVkId;
-        String userState;
-        BotState state;
+        String input;
+        String userStep;
+        boolean isViewed;
+        BotStep currentStep;
 
+//            Получаем сообщение из вк
         for (Message message : messages) {
-            input = message.getBody();
+//            Берем vkid пользователя
             userVkId = message.getUserId();
+            input = message.getBody();
             // проверяем есть ли юзер у нас в БД
             User user = userService.getByVkId(userVkId);
             // Если нет - добавляем нового юзера в БД и присваиваем ему стейт Start и роль User
-            // TODO ту логику потом нужно доработать под нужды ТЗ
+            // TODO эту логику потом нужно доработать под нужды ТЗ
             if (user == null) {
                 user = new User(
                         "Роман",
@@ -103,60 +115,37 @@ public class VkBot implements ChatBot {
                 userService.addUser(user);
             }
             context = new BotContext(this, userVkId, input);
-            // выясняем стейт в котором находится User
-            userState = user.getChatState();
-            System.out.println("-----------");
-            System.out.println(userState);
-            System.out.println("-----------");
-            state = BotState.valueOf(userState);
-            // заходим в этот контекст
-            state.enter(context);
+            // выясняем степ в котором находится User
+            userStep = user.getChatStep();
+            // видел ли User этот шаг
+            isViewed = user.isViewed();
 
-            do {
-                state.processInput(context);
-                state = state.nextState();
-//                state.enter(context);
+            log.debug("VK_ID юзера: {}, шаг ранее просмотрен: {}", userVkId, isViewed);
+
+            currentStep = BotStep.valueOf(userStep);
+            if (!isViewed) {
+                // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
+                currentStep.enter(context);
+                sendMessage(currentStep.getText(), currentStep.getKeyboard(), userVkId);
+                // юзеру ставим флаг просмотра true
+                user.setViewed(true);
+            } else { // если шаг просмотрен, то обрабатываем его инпут
+                try {
+                    currentStep.processInput(context);
+                    // меняем юзеру на следующий шаг только, если не выпало исключения
+                    user.setChatStep(currentStep.nextStep().name());
+                    user.setViewed(false);
+                } catch (ProcessInputException e) {
+                    // отправляем сообщение об ошибке ввода
+                    sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);
+                }
             }
-            while (!state.isInputNeeded()); //true
-
-            user.setChatState(state.name());
-            // viewed false
+            // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
             userService.updateUser(user);
-            //----------------
-//            if (body.equals("Начать")){
-//                // отправить пользователю две кнопки "Ответить на вопросы" и "Посмотреть результаты"
-//                sendMessage("Привет! Выбери один из вариантов", Keyboards.defaultKeyboard, message.getUserId());
-//                return;
-//            }
-//            if (body.equals("Пройти опрос")) {
-//                sendMessage("Укажите ваш возраст.", message.getUserId());
-//                return;
-//            }
-//            if (StringParser.isNumeric(body)) {
-//                if (Integer.parseInt(body) < 100) {
-//                    if (Integer.parseInt(body) < 4) {
-//                        // ответ на опрос
-//                        sendMessage("Спасибо за участие в опросе!", message.getUserId());
-//                        return;
-//                    }
-//                    // сохранить возраст
-////                    userId = message.getUserId();
-////                    User user = userService.getById()
-////                    userService.add(new User(userId,));
-//                    sendMessage(poll, message.getUserId());
-//                    return;
-//
-//                }
-//            }
-//            if (body.equals("Посмотреть результаты")) {
-//               // возврат из БД
-//                sendMessage("Результаты из БД:", message.getUserId());
-//                return;
-//            sendMessage("Команда не распознана:" + message.getBody(), Keyboards.startKeyboard, message.getUserId());
         }
     }
 
-    @Override
+/*    @Override
     public void sendMessage(String message, Integer userId) {
         Random random = new Random();
         try {
@@ -169,7 +158,7 @@ public class VkBot implements ChatBot {
         } catch (ApiException | ClientException e) {
             log.error("Исключение при отправке сообщения", e);
         }
-    }
+    }*/
 
     @Override
     public void sendMessage(String text, String keyboard, Integer userId) {
@@ -185,9 +174,4 @@ public class VkBot implements ChatBot {
             log.error("Исключение при отправке сообщения", e);
         }
     }
-
-    String poll = "Выберите интересную вам тему:\n" +
-            "[1] Туризм и путешествия\n" +
-            "[2] Программирование и cs\n" +
-            "[3] Финансы и бизнес ";
 }

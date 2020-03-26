@@ -31,16 +31,18 @@ public class TestDataInit {
         admin.setReviewPoint(0);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
-        admin.setChatState("Start");
+        admin.setChatStep("Start");
         userService.addUser(admin);
 
-        User user = new User();
-        user.setFirstName("user");
-        user.setLastName("user");
-        user.setReviewPoint(4);
-        user.setVkId(582532887);
-        user.setRole(roleUser);
-        admin.setChatState("Start");
-        userService.addUser(user);
+// убрал второго юзера пока, мешает тесту
+
+//        User user = new User();
+//        user.setFirstName("user");
+//        user.setLastName("user");
+//        user.setReviewPoint(4);
+//        user.setVkId(582532887);
+//        user.setRole(roleUser);
+//        admin.setChatStep("Start");
+//        userService.addUser(user);
     }
 }

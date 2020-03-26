@@ -10,7 +10,7 @@ public interface ChatBot {
 
     void replyForMessages(List<Message> messages);
 
-    void sendMessage(String text, Integer userId);
+//    void sendMessage(String text, Integer userId);
 
     void sendMessage(String text, String keyboard, Integer userId);
 
