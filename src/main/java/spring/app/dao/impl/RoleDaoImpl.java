@@ -15,7 +15,7 @@ public class RoleDaoImpl extends AbstractDao<Long, Role> implements RoleDao {
 
     @Override
     public Role getRoleByName(String roleName) {
-        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.role = :name", Role.class);
+        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
         query.setParameter("name", roleName);
         return query.getSingleResult();
     }

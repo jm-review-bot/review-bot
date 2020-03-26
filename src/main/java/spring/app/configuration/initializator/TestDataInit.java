@@ -18,11 +18,11 @@ public class TestDataInit {
     private void init() throws Exception {
 
         Role roleAdmin = new Role();
-        roleAdmin.setRole("ADMIN");
+        roleAdmin.setName("ADMIN");
         roleService.addRole(roleAdmin);
 
         Role roleUser = new Role();
-        roleUser.setRole("USER");
+        roleUser.setName("USER");
         roleService.addRole(roleUser);
 
         User admin = new User();
@@ -41,7 +41,7 @@ public class TestDataInit {
 //        user.setLastName("user");
 //        user.setReviewPoint(4);
 //        user.setVkId(582532887);
-//        user.setRole(roleUser);
+//        user.setName(roleUser);
 //        admin.setChatStep("Start");
 //        userService.addUser(user);
     }

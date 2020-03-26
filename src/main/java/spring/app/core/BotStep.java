@@ -1,6 +1,7 @@
 package spring.app.core;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.Keyboards;
 
@@ -22,10 +23,10 @@ public enum BotStep {
             // вызываем правильный внешний обработчик команд (пока его нет)
             String[] words = context.getInput().trim().split(" ");
             String command = words[0];
-            if (command.equals("/admin")) {
+            if (command.equals("/admin")
+                    && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
                 nextStep = AdminMenu;
             } else {
-                nextStep = Start;
                 throw new ProcessInputException("Введена неверная команда...");
             }
         }

@@ -38,7 +38,7 @@ public class User {
     @Column(name = "review_point")
     private Integer reviewPoint;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 

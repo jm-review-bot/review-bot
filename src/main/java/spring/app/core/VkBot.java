@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
@@ -107,21 +108,21 @@ public class VkBot implements ChatBot {
             // TODO эту логику потом нужно доработать под нужды ТЗ
             if (user == null) {
                 user = new User(
-                        "Роман",
-                        "Евсеев",
+                        "левый",
+                        "юзер",
                         userVkId,
                         "Start",
                         roleService.getRoleByName("USER"));
                 userService.addUser(user);
             }
-            context = new BotContext(this, userVkId, input);
+            Role role = user.getRole();
+            context = new BotContext(this, userVkId, input, role);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
             isViewed = user.isViewed();
-
-            log.debug("VK_ID юзера: {}, шаг ранее просмотрен: {}", userVkId, isViewed);
-
+            log.debug("VK_ID юзера: {}, роль {},  шаг {}, ранее просмотрен: {}", userVkId, role.getName(),
+                    userStep, isViewed);
             currentStep = BotStep.valueOf(userStep);
             if (!isViewed) {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
