@@ -3,9 +3,13 @@ package spring.app.core;
 import com.vk.api.sdk.objects.messages.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import spring.app.model.Review;
+import spring.app.service.abstraction.ReviewService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -14,7 +18,10 @@ public class BotScheduler {
     private final ChatBot bot;
     private long timeCounter;
 
-    public BotScheduler(ChatBot bot){
+    @Autowired
+    private ReviewService reviewService;
+
+    public BotScheduler(ChatBot bot) {
         this.bot = bot;
     }
 
@@ -23,5 +30,18 @@ public class BotScheduler {
         log.trace("Бот работает уже " + (timeCounter++) + " с.");
         List<Message> messages = bot.readMessages();
         bot.replyForMessages(messages);
+    }
+
+    @Scheduled(cron = "${bot.operations_date}")
+    public void scheduleCloseExpiredReview() {
+        log.trace("Скрипт запущен. Началась проверка просроченных ревью.");
+        LocalDateTime localDateTimeNow = LocalDateTime.now();
+        for (Review review : reviewService.getAllReviews()) {
+            if (review.getOpen()) {
+                if (localDateTimeNow.isAfter(review.getDate())) {
+                    review.setOpen(false);
+                }
+            }
+        }
     }
 }
