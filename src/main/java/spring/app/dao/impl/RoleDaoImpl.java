@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.RoleDao;
 import spring.app.model.Role;
 
+import javax.persistence.TypedQuery;
+
 @Repository
 public class RoleDaoImpl extends AbstractDao<Long, Role> implements RoleDao {
 
@@ -11,4 +13,10 @@ public class RoleDaoImpl extends AbstractDao<Long, Role> implements RoleDao {
         super(Role.class);
     }
 
+    @Override
+    public Role getRoleByName(String roleName) {
+        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.role = :name", Role.class);
+        query.setParameter("name", roleName);
+        return query.getSingleResult();
+    }
 }

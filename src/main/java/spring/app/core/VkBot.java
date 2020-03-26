@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+import spring.app.model.User;
+import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
 import spring.app.util.Keyboards;
 import spring.app.util.StringParser;
@@ -34,6 +36,7 @@ public class VkBot implements ChatBot {
     private final VkApiClient apiClient = new VkApiClient(HttpTransportClient.getInstance());
     private GroupActor groupActor;
     private UserService userService;
+    private RoleService roleService;
     @Value("${group_id}")
     private int groupID;
     @Value("${access_token}")
@@ -41,8 +44,9 @@ public class VkBot implements ChatBot {
     private Properties chatProperties = new Properties();
 
 
-    public VkBot(UserService userService) {
+    public VkBot(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     // читаем chat.properties
@@ -62,6 +66,9 @@ public class VkBot implements ChatBot {
         try {
             List<Dialog> dialogs = apiClient.messages().getDialogs(groupActor).unanswered1(true).execute().getItems();
             for (Dialog item : dialogs) {
+                System.out.println("-----------");
+                System.out.println(item.getMessage().getUserId());
+                System.out.println("-----------");
                 result.add(item.getMessage());
             }
         } catch (ApiException | ClientException e) {
@@ -73,49 +80,79 @@ public class VkBot implements ChatBot {
 
     @Override
     public void replyForMessages(List<Message> messages) {
-        String body;
-        Integer userId;
+        BotContext context;
+        String input;
+        Integer userVkId;
+        String userState;
+        BotState state;
 
         for (Message message : messages) {
-            body = message.getBody();
-            userId = message.getUserId();
+            input = message.getBody();
+            userVkId = message.getUserId();
+            // проверяем есть ли юзер у нас в БД
+            User user = userService.getByVkId(userVkId);
+            // Если нет - добавляем нового юзера в БД и присваиваем ему стейт Start и роль User
+            // TODO ту логику потом нужно доработать под нужды ТЗ
+            if (user == null) {
+                user = new User(
+                        "Роман",
+                        "Евсеев",
+                        userVkId,
+                        "Start",
+                        roleService.getRoleByName("USER"));
+                userService.addUser(user);
+            }
+            context = new BotContext(this, userVkId, input);
+            // выясняем стейт в котором находится User
+            userState = user.getChatState();
+            System.out.println("-----------");
+            System.out.println(userState);
+            System.out.println("-----------");
+            state = BotState.valueOf(userState);
+            // заходим в этот контекст
+            state.enter(context);
 
-            userService.getByVkId();
+            do {
+                state.processInput(context);
+                state = state.nextState();
+//                state.enter(context);
+            }
+            while (!state.isInputNeeded()); //true
 
+            user.setChatState(state.name());
+            // viewed false
+            userService.updateUser(user);
             //----------------
-            if (body.equals("Начать")){
-                // отправить пользователю две кнопки "Ответить на вопросы" и "Посмотреть результаты"
-                sendMessage("Привет! Выбери один из вариантов", Keyboards.defaultKeyboard, message.getUserId());
-                return;
-            }
-            if (body.equals("Пройти опрос")) {
-                sendMessage("Укажите ваш возраст.", message.getUserId());
-                return;
-            }
-            if (StringParser.isNumeric(body)) {
-                if (Integer.parseInt(body) < 100) {
-                    if (Integer.parseInt(body) < 4) {
-                        // ответ на опрос
-                        sendMessage("Спасибо за участие в опросе!", message.getUserId());
-                        return;
-                    }
-                    // сохранить возраст
-//                    userId = message.getUserId();
-//                    User user = userService.getById()
-//                    userService.add(new User(userId,));
-                    sendMessage(poll, message.getUserId());
-                    return;
-
-                }
-            }
-            if (body.equals("Посмотреть результаты")) {
-               // возврат из БД
-                sendMessage("Результаты из БД:", message.getUserId());
-                return;
-
-            }
-
-            sendMessage("Команда не распознана:" + message.getBody(), Keyboards.startKeyboard, message.getUserId());
+//            if (body.equals("Начать")){
+//                // отправить пользователю две кнопки "Ответить на вопросы" и "Посмотреть результаты"
+//                sendMessage("Привет! Выбери один из вариантов", Keyboards.defaultKeyboard, message.getUserId());
+//                return;
+//            }
+//            if (body.equals("Пройти опрос")) {
+//                sendMessage("Укажите ваш возраст.", message.getUserId());
+//                return;
+//            }
+//            if (StringParser.isNumeric(body)) {
+//                if (Integer.parseInt(body) < 100) {
+//                    if (Integer.parseInt(body) < 4) {
+//                        // ответ на опрос
+//                        sendMessage("Спасибо за участие в опросе!", message.getUserId());
+//                        return;
+//                    }
+//                    // сохранить возраст
+////                    userId = message.getUserId();
+////                    User user = userService.getById()
+////                    userService.add(new User(userId,));
+//                    sendMessage(poll, message.getUserId());
+//                    return;
+//
+//                }
+//            }
+//            if (body.equals("Посмотреть результаты")) {
+//               // возврат из БД
+//                sendMessage("Результаты из БД:", message.getUserId());
+//                return;
+//            sendMessage("Команда не распознана:" + message.getBody(), Keyboards.startKeyboard, message.getUserId());
         }
     }
 

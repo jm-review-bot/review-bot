@@ -7,6 +7,7 @@ import spring.app.dao.abstraction.RoleDao;
 import spring.app.model.Role;
 import spring.app.service.abstraction.RoleService;
 
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Service
@@ -45,5 +46,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void deleteRoleById(Long id) {
         roleDao.deleteById(id);
+    }
+
+    @Override
+    public Role getRoleByName(String roleName) {
+        return roleDao.getRoleByName(roleName);
     }
 }

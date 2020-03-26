@@ -31,7 +31,6 @@ public class Keyboards {
             "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
-//            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
             "          \"label\": \"Начать\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +

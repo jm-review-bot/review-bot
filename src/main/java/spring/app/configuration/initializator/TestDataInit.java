@@ -9,13 +9,13 @@ import spring.app.service.abstraction.UserService;
 
 public class TestDataInit {
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-	private void init() throws Exception {
+    private void init() throws Exception {
 
         Role roleAdmin = new Role();
         roleAdmin.setRole("ADMIN");
@@ -31,6 +31,7 @@ public class TestDataInit {
         admin.setReviewPoint(0);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
+        admin.setChatState("Start");
         userService.addUser(admin);
 
         User user = new User();
@@ -39,6 +40,7 @@ public class TestDataInit {
         user.setReviewPoint(4);
         user.setVkId(582532887);
         user.setRole(roleUser);
+        admin.setChatState("Start");
         userService.addUser(user);
     }
 }
