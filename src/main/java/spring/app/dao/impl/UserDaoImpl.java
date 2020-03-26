@@ -15,10 +15,11 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
-    public List<User> getUsersByReviewDate(LocalDateTime now) {
-
-        // написать правильный запрос
-        return (List<User>) entityManager.createNativeQuery("select * " +
-                "from users join review where review.is_open = true and (:cur_time - review.date) > 2").setParameter("cur_time", now).getResultList();
+    public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return (List<User>) entityManager.createNativeQuery("select u.* " +
+                "from users u join review r on u.id = r.reviewer_id where r.is_open = true and r.date between :period_start and :period_end", User.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodEnd)
+                .getResultList();
     }
 }

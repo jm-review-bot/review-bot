@@ -1,8 +1,5 @@
 package spring.app.util;
 
-import com.vk.api.sdk.objects.messages.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -11,6 +8,7 @@ import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 @Component
@@ -29,11 +27,17 @@ public class ReviewReminder {
     @Scheduled(fixedDelayString = "60000")
     public void sendReviewReminder() {
         //log.trace("Бот работает уже " + (timeCounter++) + " с.");
-        List<User> users = userService.getUsersByReviewDate(LocalDateTime.now());
 
-        // проверка users на null ?
-        for(User user: users) {
-            bot.sendMessage(user.getFirstName() + ", пора начинать ревью!", Integer.parseInt(user.getVkId()));
+        //todo разобраться, московское время должно учитывать
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(2).minusSeconds(30);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(3).minusSeconds(30);
+
+        List<User> users = userService.getUsersByReviewPeriod(periodStart, periodEnd);
+        //System.out.println(users);
+        if (!users.isEmpty()) {
+            for (User user : users) {
+                bot.sendMessage(user.getFirstName() + ", пора начинать ревью!", Integer.parseInt(user.getVkId()));
+            }
         }
     }
 }

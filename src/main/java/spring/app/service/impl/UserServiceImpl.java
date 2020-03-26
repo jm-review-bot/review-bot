@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersByReviewDate(LocalDateTime now) {
-        return userDao.getUsersByReviewDate(now);
+    public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return userDao.getUsersByReviewPeriod(periodStart, periodEnd);
     }
 }

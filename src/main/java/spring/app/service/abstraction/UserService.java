@@ -17,5 +17,5 @@ public interface UserService {
 
     void deleteUserById(Long id);
 
-    List<User> getUsersByReviewDate(LocalDateTime now);
+    List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 }

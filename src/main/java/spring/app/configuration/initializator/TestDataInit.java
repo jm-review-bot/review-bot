@@ -43,13 +43,13 @@ public class TestDataInit {
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setReviewPoint(0);
-        admin.setVkId("98189");
+        admin.setVkId("98189"); // поменять
         admin.setRole(roleAdmin);
         userService.addUser(admin);
 
         User user1 = new User();
-        user1.setFirstName("user");
-        user1.setLastName("1");
+        user1.setFirstName("Антон");
+        user1.setLastName("Таврель");
         user1.setReviewPoint(4);
         user1.setVkId("582532887");
         user1.setRole(roleUser);
@@ -59,7 +59,7 @@ public class TestDataInit {
         user2.setFirstName("user");
         user2.setLastName("2");
         user2.setReviewPoint(8);
-        user2.setVkId("7");
+        user2.setVkId("7"); // поменять
         user2.setRole(roleUser);
         userService.addUser(user2);
 
@@ -67,13 +67,13 @@ public class TestDataInit {
         user3.setFirstName("user");
         user3.setLastName("3");
         user3.setReviewPoint(20);
-        user3.setVkId("999");
+        user3.setVkId("999"); // поменять
         user3.setRole(roleUser);
         userService.addUser(user3);
 
         //add theme
         Theme core = new Theme();
-        core.setPosition(1); // что такое Position ??
+        core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
         themeService.addTheme(core);
@@ -122,24 +122,26 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 25, 23, 45));
+        coreReview.setDate(LocalDateTime.of(2020, 3, 26, 23, 46));
         coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(user1);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 25, 23, 45));
-        sqlReview.setOpen(true);
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 26, 23, 45));
+        sqlReview.setOpen(false);
         sqlReview.setTheme(sql);
-        sqlReview.setUser(user2);
+        sqlReview.setUser(user1); // потом поменять
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 3, 25, 23, 45));
+        springReview.setDate(LocalDateTime.of(2020, 3, 26, 23, 44));
         springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(user3);
+        springReview.setUser(user1); // потом поменять
         reviewService.addReview(springReview);
+
+
     }
 }
