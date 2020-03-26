@@ -34,15 +34,23 @@ public class TestDataInit {
         admin.setChatStep("Start");
         userService.addUser(admin);
 
-// убрал второго юзера пока, мешает тесту
 
-//        User user = new User();
-//        user.setFirstName("user");
-//        user.setLastName("user");
-//        user.setReviewPoint(4);
-//        user.setVkId(582532887);
-//        user.setName(roleUser);
-//        admin.setChatStep("Start");
-//        userService.addUser(user);
+        User user = new User();
+        user.setFirstName("Иван");
+        user.setLastName("Иванов");
+        user.setReviewPoint(4);
+        user.setVkId(582532887);
+        user.setRole(roleUser);
+        admin.setChatStep("Start");
+        userService.addUser(user);
+
+        User user2 = new User();
+        user2.setFirstName("Петр");
+        user2.setLastName("Петров");
+        user2.setReviewPoint(4);
+        user2.setVkId(1582532887);
+        user2.setRole(roleUser);
+        admin.setChatStep("Start");
+        userService.addUser(user2);
     }
 }
