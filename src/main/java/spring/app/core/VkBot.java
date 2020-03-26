@@ -67,9 +67,6 @@ public class VkBot implements ChatBot {
         try {
             List<Dialog> dialogs = apiClient.messages().getDialogs(groupActor).unanswered1(true).execute().getItems();
             for (Dialog item : dialogs) {
-                System.out.println("-----------");
-                System.out.println(item.getMessage().getUserId());
-                System.out.println("-----------");
                 result.add(item.getMessage());
             }
         } catch (ApiException | ClientException e) {
@@ -116,7 +113,7 @@ public class VkBot implements ChatBot {
                 userService.addUser(user);
             }
             Role role = user.getRole();
-            context = new BotContext(userVkId, input, role);
+            context = new BotContext(userVkId, input, role, userService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг

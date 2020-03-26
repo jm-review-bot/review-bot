@@ -2,7 +2,10 @@ package spring.app.core;
 
 import org.springframework.stereotype.Component;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.User;
 import spring.app.util.Keyboards;
+
+import java.util.Comparator;
 
 @Component
 public enum BotStep {
@@ -12,11 +15,11 @@ public enum BotStep {
 
         @Override
         public void enter(BotContext context) {
-            text = "Привет! Этот Бот создан для прохождения ревью. \nВведи команду /start чтобы начать.";
+            text = "Привет! Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
             keyboard = Keyboards.start;
             if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
                 text = "Привет! Этот Бот создан для прохождения ревью. " +
-                        "\nВведи команду /start чтобы начать или введи команду /admin для перехода в админку.";
+                        "\nНажми \"Начать\" для запуска или введи команду /admin для перехода в админку.";
             }
         }
 
@@ -43,26 +46,6 @@ public enum BotStep {
         }
     },
 
-    AdminMenu {
-        private BotStep nextStep;
-
-        @Override
-        public void enter(BotContext context) {
-            text = "Привет %username%! Ты в админке";
-            keyboard = Keyboards.adminMenu;
-        }
-
-        @Override
-        public void processInput(BotContext context) {
-
-        }
-
-        @Override
-        public BotStep nextStep() {
-            return AdminMenu;
-        }
-    },
-
     UserMenu {
         private BotStep nextStep;
 
@@ -82,45 +65,99 @@ public enum BotStep {
         public BotStep nextStep() {
             return null;
         }
+    },
+
+    AdminMenu {
+        private BotStep nextStep;
+
+        @Override
+        public void enter(BotContext context) {
+            text = "Привет %username%! Ты в админке";
+            keyboard = Keyboards.adminMenu;
+        }
+
+        @Override
+        public void processInput(BotContext context) throws ProcessInputException {
+            String[] words = context.getInput().trim().split(" ");
+            String command = words[0];
+            if ("Добавить".equals(command)) {
+                nextStep = AdminAddUser;
+            } else if ("Удалить".equals(command)) {
+                nextStep = AdminRemoveUser;
+            } else if ("/start".equals(command)) {
+                nextStep = Start;
+            } else {
+                throw new ProcessInputException("Введена неверная команда...");
+            }
+        }
+
+        @Override
+        public BotStep nextStep() {
+            return nextStep;
+        }
+    },
+
+    AdminAddUser {
+        private BotStep nextStep;
+
+        @Override
+        public void enter(BotContext context) {
+            text = "Тут будем добавлять юзеров";
+        }
+
+        @Override
+        public void processInput(BotContext context) throws ProcessInputException {
+
+        }
+
+        @Override
+        public BotStep nextStep() {
+            return null;
+        }
+    },
+
+    AdminRemoveUser {
+        private BotStep nextStep;
+
+        @Override
+        public void enter(BotContext context) {
+            StringBuilder userList = new StringBuilder("Вот список всех пользователей. Для удаления, напиши vkId одного пользователя или нескольких пользователей через пробел.\n\n");
+            context.getUserService().getAllUsers().stream()
+                    .filter(user -> !user.getRole().isAdmin())
+                    .sorted(Comparator.comparing(User::getLastName))
+                    .forEach(user -> userList
+                            .append(user.getLastName())
+                            .append(" ")
+                            .append(user.getFirstName())
+                            .append(". vkId ")
+                            .append(user.getVkId())
+                            .append("\n")
+                    );
+            text = userList.toString();
+        }
+
+        @Override
+        public void processInput(BotContext context) throws ProcessInputException {
+
+        }
+
+        @Override
+        public BotStep nextStep() {
+            return null;
+        }
     };
 
-
-
-    //    AdminAdd {
-    //            private BotStep nextStep;
-    //        private BotStep prevStep;
-    //
-    //        @Override
-    //        public void enter(BotContext context) {
-    //
-    //        }
-    //
-    //        @Override
-    //        public void processInput(BotContext context) throws ProcessInputException {
-    //
-    //        }
-    //
-    //        @Override
-    //        public BotStep nextStep() {
-    //            return null;
-    //        }
-    //
-    //        @Override
-    //        public BotStep prevStep() {
-    //            return null;
-    //        }
-    //        },
-//    AdminDelete {},
 //    AdminDeleteCheck {}
 //    private final boolean inputNeeded;
-
 
     private static String text = "Тут должен быть осмысленный текст, но что-то пошло не так...";
     private static String keyboard = Keyboards.noKeyboard;
 
     // абстрактные методы которые должны быть переопределены в каждом BotStep
     public abstract void enter(BotContext context);
+
     public abstract void processInput(BotContext context) throws ProcessInputException;
+
     public abstract BotStep nextStep();
 
     public String getText() {
