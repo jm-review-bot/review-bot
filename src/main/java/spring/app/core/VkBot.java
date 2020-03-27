@@ -116,7 +116,7 @@ public class VkBot implements ChatBot {
                 userService.addUser(user);
             }
             Role role = user.getRole();
-            context = new BotContext(userVkId, input, role, userService);
+            context = new BotContext(user, userVkId, input, role, userService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
@@ -136,6 +136,7 @@ public class VkBot implements ChatBot {
                     currentStep.processInput(context);
                     // меняем юзеру на следующий шаг только, если не выпало исключения
                     StepSelector nextStep = currentStep.nextStep();
+                    // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
                     user.setChatStep(nextStep.name());
                     user.setViewed(false);
                 } catch (ProcessInputException e) {
@@ -143,7 +144,7 @@ public class VkBot implements ChatBot {
                     sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);
                 }
             }
-            // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
+            // сохраняем изменения
             userService.updateUser(user);
         }
     }

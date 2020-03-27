@@ -4,4 +4,6 @@ import spring.app.model.User;
 
 public interface UserDao extends GenericDao<Long, User> {
     User getByVkId(Integer vkId);
+
+    void deleteUserByVkId(Integer vkId);
 }

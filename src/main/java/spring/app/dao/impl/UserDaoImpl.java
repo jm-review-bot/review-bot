@@ -20,4 +20,10 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         return query.getSingleResult();
     }
 
+    public void deleteUserByVkId(Integer vkId) {
+        entityManager.createQuery("DELETE FROM User u WHERE u.vkId = :id")
+            .setParameter("id", vkId)
+            .executeUpdate();
+        entityManager.flush();
+    }
 }

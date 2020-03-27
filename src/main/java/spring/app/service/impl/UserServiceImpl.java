@@ -52,4 +52,9 @@ public class UserServiceImpl implements UserService {
         return userDao.getByVkId(vkId);
     }
 
+    @Override
+    @Transactional
+    public void deleteUserByVkId(Integer vkId) {
+        userDao.deleteUserByVkId(vkId);
+    }
 }
