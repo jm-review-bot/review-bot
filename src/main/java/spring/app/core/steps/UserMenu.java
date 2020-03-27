@@ -3,7 +3,8 @@ package spring.app.core.steps;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.util.Keyboards;
+
+import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
@@ -14,7 +15,7 @@ public class UserMenu extends Step {
     public void enter(BotContext context) {
         // TODO проверку из ТЗ
         text = "Пользователь с таким vk id не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину";
-        keyboard = Keyboards.defaultKeyboard;
+        keyboard = DEFAULT_KB;
     }
 
     @Override

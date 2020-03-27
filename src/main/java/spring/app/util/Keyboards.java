@@ -1,7 +1,7 @@
 package spring.app.util;
 
 public class Keyboards {
-    public final static String defaultKeyboard = "{\n" +
+    public final static String DEFAULT_KB = "{\n" +
             "  \"one_time\": false,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
@@ -25,7 +25,7 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
-    public final static String start = "{\n" +
+    public final static String START_KB = "{\n" +
             "  \"one_time\": false,\n" +
             "  \"buttons\": [[\n" +
             "      {\n" +
@@ -38,9 +38,9 @@ public class Keyboards {
             "  ]]\n" +
             "} ";
 
-    public final static String noKeyboard = "{\"buttons\":[],\"one_time\":true}";
+    public final static String NO_KB = "{\"buttons\":[],\"one_time\":true}";
 
-    public final static String userStart = "{\n" +
+    public final static String USER_START_KB = "{\n" +
             "  \"one_time\": true,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
@@ -64,7 +64,7 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
-    public final static String adminMenu = "{\n" +
+    public final static String ADMIN_MENU_KB = "{\n" +
             "  \"one_time\": true,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +

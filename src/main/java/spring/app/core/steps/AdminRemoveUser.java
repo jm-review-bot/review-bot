@@ -4,9 +4,10 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
-import spring.app.util.Keyboards;
 
 import java.util.Comparator;
+
+import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
@@ -28,7 +29,7 @@ public class AdminRemoveUser extends Step {
                         .append("\n")
                 );
         text = userList.toString();
-        keyboard = Keyboards.noKeyboard;
+        keyboard = NO_KB;
     }
 
     @Override

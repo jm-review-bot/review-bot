@@ -34,7 +34,7 @@ public class TestDataInit {
         admin.setReviewPoint(0);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
-        admin.setChatStep("Start");
+        admin.setChatStep("START");
         userService.addUser(admin);
 
 
@@ -44,7 +44,7 @@ public class TestDataInit {
         user.setReviewPoint(4);
         user.setVkId(582532887);
         user.setRole(roleUser);
-        admin.setChatStep("Start");
+        admin.setChatStep("START");
         userService.addUser(user);
 
         User user2 = new User();
@@ -53,13 +53,13 @@ public class TestDataInit {
         user2.setReviewPoint(4);
         user2.setVkId(1582532887);
         user2.setRole(roleUser);
-        admin.setChatStep("Start");
+        admin.setChatStep("START");
         userService.addUser(user2);
 
-        StepHolder.steps.put(StepSelector.Start, new Start());
-        StepHolder.steps.put(StepSelector.UserMenu, new UserMenu());
-        StepHolder.steps.put(StepSelector.AdminMenu, new AdminMenu());
-        StepHolder.steps.put(StepSelector.AdminAddUser, new AdminAddUser());
-        StepHolder.steps.put(StepSelector.AdminRemoveUser, new AdminRemoveUser());
+        StepHolder.steps.put(StepSelector.START, new Start());
+        StepHolder.steps.put(StepSelector.USER_MENU, new UserMenu());
+        StepHolder.steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
+        StepHolder.steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
+        StepHolder.steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
     }
 }

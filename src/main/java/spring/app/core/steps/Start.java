@@ -2,9 +2,11 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.Keyboards;
+
+import static spring.app.core.StepSelector.*;
+import static spring.app.util.Keyboards.*;
 
 @Component
 public class Start extends Step {
@@ -14,11 +16,11 @@ public class Start extends Step {
     @Override
     public void enter(BotContext context) {
         text = "Привет! Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
-        keyboard = Keyboards.start;
+        keyboard = Keyboards.START_KB;
         if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             text = "Привет! Этот Бот создан для прохождения ревью. " +
                     "\nНажми \"Начать\" для запуска или введи команду /admin для перехода в админку.";
-            keyboard = Keyboards.noKeyboard;
+            keyboard = NO_KB;
         }
     }
 
@@ -29,13 +31,13 @@ public class Start extends Step {
         String command = words[0];
         if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
-            nextStep = StepSelector.AdminMenu;
+            nextStep = ADMIN_MENU;
         } else if (command.equals("Начать")) {
-            nextStep = StepSelector.UserMenu;
+            nextStep = USER_MENU;
         } else if (command.equals("/start")) {
-            nextStep = StepSelector.Start;
+            nextStep = START;
         } else {
-            keyboard = Keyboards.start;
+            keyboard = Keyboards.START_KB;
             throw new ProcessInputException("Введена неверная команда...");
         }
     }
