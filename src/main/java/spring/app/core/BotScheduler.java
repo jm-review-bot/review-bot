@@ -34,14 +34,14 @@ public class BotScheduler {
 
     @Scheduled(cron = "${bot.operations_date}")
     public void scheduleCloseExpiredReview() {
-        log.trace("Скрипт запущен. Началась проверка просроченных ревью.");
-        LocalDateTime localDateTimeNow = LocalDateTime.now();
-        for (Review review : reviewService.getAllReviews()) {
+        log.info("Скрипт запущен. Началась проверка просроченных ревью.");
+        for (Review review : reviewService.getAllExpiredReviews(LocalDateTime.now().toString())) {
             if (review.getOpen()) {
-                if (localDateTimeNow.isAfter(review.getDate())) {
-                    review.setOpen(false);
-                }
+                log.info("Закрываем ревью с id = {}, т.к. оно просрочено.", review.getId());
+                review.setOpen(false);
+                reviewService.updateReview(review);
             }
         }
     }
+
 }

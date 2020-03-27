@@ -48,4 +48,13 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         TypedQuery<T> query = entityManager.createQuery(hql, persistentClass);
         return query.getResultList();
     }
+
+    public List<T> getAllExpiredReviews(String localDateTime) {
+        String genericClassName = persistentClass.toGenericString();
+        genericClassName = genericClassName.substring(genericClassName.lastIndexOf('.') + 1);
+        String hql = "select a from " + genericClassName + " a where a.date < '" + localDateTime + "'";
+        TypedQuery<T> query = entityManager.createQuery(hql, persistentClass);
+        return query.getResultList();
+    }
+
 }

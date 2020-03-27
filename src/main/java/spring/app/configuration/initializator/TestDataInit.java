@@ -60,7 +60,7 @@ public class TestDataInit {
         themeService.addTheme(theme);
 
         Review review = new Review();
-        review.setDate(LocalDateTime.of(2020, 3, 27, 21, 0, 0));
+        review.setDate(LocalDateTime.of(2020, 3, 26, 21, 0, 0));
         review.setOpen(true);
         review.setTheme(theme);
         review.setUser(user);

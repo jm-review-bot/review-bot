@@ -16,4 +16,6 @@ public interface ReviewService {
 
     void deleteReviewById(Long id);
 
+    List<Review> getAllExpiredReviews(String localDateTime);
+
 }

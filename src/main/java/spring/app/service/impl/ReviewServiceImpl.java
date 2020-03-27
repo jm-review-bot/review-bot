@@ -46,4 +46,9 @@ public class ReviewServiceImpl implements ReviewService {
     public void deleteReviewById(Long id) {
         reviewDao.deleteById(id);
     }
+
+    @Override
+    public List<Review> getAllExpiredReviews(String localDateTime) {
+        return reviewDao.getAllExpiredReviews(localDateTime);
+    }
 }
