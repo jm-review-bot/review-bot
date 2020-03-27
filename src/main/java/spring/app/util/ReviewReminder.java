@@ -1,5 +1,7 @@
 package spring.app.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ public class ReviewReminder {
 
     private final ChatBot bot;
     private UserService userService;
+    private final static Logger log = LoggerFactory.getLogger(ReviewReminder.class);
 
     @Autowired
     public ReviewReminder(ChatBot bot, UserService userService) {
@@ -32,6 +35,7 @@ public class ReviewReminder {
         if (!users.isEmpty()) {
             for (User user : users) {
                 bot.sendMessage(user.getFirstName() + ", пора начинать ревью!", Integer.parseInt(user.getVkId()));
+                log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }
     }

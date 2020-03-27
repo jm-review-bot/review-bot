@@ -43,7 +43,7 @@ public class TestDataInit {
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setReviewPoint(0);
-        admin.setVkId("582532887"); // поменять на свой vkid
+        admin.setVkId("582532887"); // поменять на свой vk_id
         admin.setRole(roleAdmin);
         userService.addUser(admin);
 
@@ -107,21 +107,21 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 8, 2));
+        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 22, 48));
         coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(admin);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 8, 4));
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 22, 49));
         sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
         sqlReview.setTheme(sql);
         sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 3, 27, 8, 5));
+        springReview.setDate(LocalDateTime.of(2020, 3, 27, 22, 50));
         springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(admin);
