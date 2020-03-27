@@ -9,14 +9,21 @@ import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
 
+import java.util.Map;
+
 
 public class TestDataInit {
-
     @Autowired
     private UserService userService;
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private StepHolder stepHolder;
+
+    public TestDataInit() {
+    }
 
     private void init() throws Exception {
 
@@ -37,14 +44,13 @@ public class TestDataInit {
         admin.setChatStep("START");
         userService.addUser(admin);
 
-
         User user = new User();
         user.setFirstName("Иван");
         user.setLastName("Иванов");
         user.setReviewPoint(4);
         user.setVkId(582532887);
         user.setRole(roleUser);
-        admin.setChatStep("START");
+        user.setChatStep("START");
         userService.addUser(user);
 
         User user2 = new User();
@@ -53,13 +59,14 @@ public class TestDataInit {
         user2.setReviewPoint(4);
         user2.setVkId(1582532887);
         user2.setRole(roleUser);
-        admin.setChatStep("START");
+        user2.setChatStep("START");
         userService.addUser(user2);
 
-        StepHolder.steps.put(StepSelector.START, new Start());
-        StepHolder.steps.put(StepSelector.USER_MENU, new UserMenu());
-        StepHolder.steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
-        StepHolder.steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
-        StepHolder.steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
+        Map<StepSelector, Step> steps = stepHolder.getSteps();
+        steps.put(StepSelector.START, new Start());
+        steps.put(StepSelector.USER_MENU, new UserMenu());
+        steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
+        steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
+        steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
     }
 }

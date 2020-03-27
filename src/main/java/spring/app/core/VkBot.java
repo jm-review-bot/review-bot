@@ -38,6 +38,7 @@ public class VkBot implements ChatBot {
     private GroupActor groupActor;
     private UserService userService;
     private RoleService roleService;
+    private StepHolder stepHolder;
     @Value("${group_id}")
     private int groupID;
     @Value("${access_token}")
@@ -45,9 +46,10 @@ public class VkBot implements ChatBot {
     private Properties chatProperties = new Properties();
 
 
-    public VkBot(UserService userService, RoleService roleService) {
+    public VkBot(UserService userService, RoleService roleService, StepHolder stepHolder) {
         this.userService = userService;
         this.roleService = roleService;
+        this.stepHolder = stepHolder;
     }
 
     // читаем chat.properties
@@ -121,7 +123,7 @@ public class VkBot implements ChatBot {
             isViewed = user.isViewed();
             log.debug("VK_ID юзера: {}, роль: {},  шаг: {}, ранее просмотрен: {}", userVkId, role.getName(),
                     userStep, isViewed);
-            currentStep = StepHolder.steps.get(StepSelector.valueOf(userStep));
+            currentStep = stepHolder.getSteps().get(StepSelector.valueOf(userStep));
 
             if (!isViewed) {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
