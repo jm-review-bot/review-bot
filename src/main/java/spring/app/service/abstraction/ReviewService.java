@@ -2,6 +2,7 @@ package spring.app.service.abstraction;
 
 import spring.app.model.Review;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ReviewService {
@@ -16,6 +17,6 @@ public interface ReviewService {
 
     void deleteReviewById(Long id);
 
-    List<Review> getAllExpiredReviews(String localDateTime);
+    void getAllExpiredReviews(LocalDateTime localDateTime);
 
 }

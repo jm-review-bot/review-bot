@@ -16,5 +16,4 @@ public interface GenericDao<PK extends Serializable, T> {
 
 	void deleteById(PK id);
 
-	List<T> getAllExpiredReviews(String localDateTime);
 }

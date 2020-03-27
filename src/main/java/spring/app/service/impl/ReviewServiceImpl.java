@@ -7,6 +7,7 @@ import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
 import spring.app.service.abstraction.ReviewService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -48,7 +49,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getAllExpiredReviews(String localDateTime) {
-        return reviewDao.getAllExpiredReviews(localDateTime);
+    public void getAllExpiredReviews(LocalDateTime localDateTime) {
+        reviewDao.getAllExpiredReviews(localDateTime);
     }
 }
