@@ -49,6 +49,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getByVkId(Integer vkId) {
+        return userDao.getByVkId(vkId);
+    }
+
+    @Override
     public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return userDao.getUsersByReviewPeriod(periodStart, periodEnd);
     }

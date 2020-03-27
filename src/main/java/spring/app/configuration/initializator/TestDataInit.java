@@ -1,6 +1,9 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import spring.app.core.StepSelector;
+import spring.app.core.StepHolder;
+import spring.app.core.steps.*;
 import spring.app.model.Review;
 import spring.app.model.Role;
 import spring.app.model.Theme;
@@ -9,6 +12,8 @@ import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
+
+import java.util.Map;
 
 import java.time.LocalDateTime;
 
@@ -26,16 +31,20 @@ public class TestDataInit {
 
     @Autowired
     private ReviewService reviewService;
+    @Autowired
+    private StepHolder stepHolder;
 
-    private void init() {
+    public TestDataInit() {
+    }
 
-        // add roles
+    private void init() throws Exception {
+
         Role roleAdmin = new Role();
-        roleAdmin.setRole("ADMIN");
+        roleAdmin.setName("ADMIN");
         roleService.addRole(roleAdmin);
 
         Role roleUser = new Role();
-        roleUser.setRole("USER");
+        roleUser.setName("USER");
         roleService.addRole(roleUser);
 
         // add users test data
@@ -43,18 +52,36 @@ public class TestDataInit {
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setReviewPoint(0);
-        admin.setVkId("582532887"); // поменять на свой vk_id
+        admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
+        admin.setChatStep("START");
         userService.addUser(admin);
 
-        User user1 = new User();
-        user1.setFirstName("user");
-        user1.setLastName("user");
-        user1.setReviewPoint(4);
-        user1.setVkId("999");
-        user1.setRole(roleUser);
-        userService.addUser(user1);
+        User user = new User();
+        user.setFirstName("Иван");
+        user.setLastName("Иванов");
+        user.setReviewPoint(4);
+        user.setVkId(582532887);
+        user.setRole(roleUser);
+        user.setChatStep("START");
+        userService.addUser(user);
 
+        User user2 = new User();
+        user2.setFirstName("Петр");
+        user2.setLastName("Петров");
+        user2.setReviewPoint(4);
+        user2.setVkId(1582532887);
+        user2.setRole(roleUser);
+        user2.setChatStep("START");
+        userService.addUser(user2);
+
+        // add steps
+        Map<StepSelector, Step> steps = stepHolder.getSteps();
+        steps.put(StepSelector.START, new Start());
+        steps.put(StepSelector.USER_MENU, new UserMenu());
+        steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
+        steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
+        steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
 
         //add theme
         Theme core = new Theme();

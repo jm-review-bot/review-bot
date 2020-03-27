@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import spring.app.configuration.initializator.TestDataInit;
+import spring.app.core.StepHolder;
+import spring.app.service.abstraction.RoleService;
+import spring.app.service.abstraction.UserService;
 
 import javax.annotation.PostConstruct;
 

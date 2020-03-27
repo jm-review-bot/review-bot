@@ -19,16 +19,39 @@ public class User {
     private String lastName;
 
     @Column(name = "vk_id")
-    private String vkId;
+    private Integer vkId;
+
+    /**
+     * Текущий(последний) шаг пользователя в чатботе
+     */
+    @Column(name = "chat_step")
+    private String chatStep;
+
+    /**
+     * Факт просмотра пользователем стартового сообщения шага.
+     * false - показываем ему сообщение
+     * true - ждем от него сообщения, обрабатываем его input
+     */
+    @Column(name = "is_viewed")
+    private boolean isViewed;
 
     @Column(name = "review_point")
     private Integer reviewPoint;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
     public User() {
+    }
+
+    public User(String firstName, String lastName, Integer vkId, String chatStep, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.vkId = vkId;
+        this.chatStep = chatStep;
+        this.role = role;
+        this.isViewed = false;
     }
 
     public Long getId() {
@@ -55,11 +78,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public String getVkId() {
+    public Integer getVkId() {
         return vkId;
     }
 
-    public void setVkId(String vkId) {
+    public void setVkId(Integer vkId) {
         this.vkId = vkId;
     }
 
@@ -79,11 +102,28 @@ public class User {
         this.role = role;
     }
 
+    public String getChatStep() {
+        return chatStep;
+    }
+
+    public void setChatStep(String chatStep) {
+        this.chatStep = chatStep;
+    }
+
+    public boolean isViewed() {
+        return isViewed;
+    }
+
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
+        // TODO убрать проверку по имени.
         return id.equals(user.id) &&
                 Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
@@ -93,16 +133,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, firstName, lastName, vkId);
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", vkId='" + vkId + '\'' +
-                ", reviewPoint=" + reviewPoint +
-                '}';
     }
 }
