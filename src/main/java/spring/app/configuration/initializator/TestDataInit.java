@@ -43,33 +43,18 @@ public class TestDataInit {
         admin.setFirstName("admin");
         admin.setLastName("admin");
         admin.setReviewPoint(0);
-        admin.setVkId("98189"); // поменять
+        admin.setVkId("582532887"); // поменять на свой vkid
         admin.setRole(roleAdmin);
         userService.addUser(admin);
 
         User user1 = new User();
-        user1.setFirstName("Антон");
-        user1.setLastName("Таврель");
+        user1.setFirstName("user");
+        user1.setLastName("user");
         user1.setReviewPoint(4);
-        user1.setVkId("582532887");
+        user1.setVkId("999");
         user1.setRole(roleUser);
         userService.addUser(user1);
 
-        User user2 = new User();
-        user2.setFirstName("user");
-        user2.setLastName("2");
-        user2.setReviewPoint(8);
-        user2.setVkId("7"); // поменять
-        user2.setRole(roleUser);
-        userService.addUser(user2);
-
-        User user3 = new User();
-        user3.setFirstName("user");
-        user3.setLastName("3");
-        user3.setReviewPoint(20);
-        user3.setVkId("999"); // поменять
-        user3.setRole(roleUser);
-        userService.addUser(user3);
 
         //add theme
         Theme core = new Theme();
@@ -122,24 +107,24 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 26, 23, 46));
+        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 8, 2));
         coreReview.setOpen(true);
         coreReview.setTheme(core);
-        coreReview.setUser(user1);
+        coreReview.setUser(admin);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 26, 23, 45));
-        sqlReview.setOpen(false);
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 8, 4));
+        sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
         sqlReview.setTheme(sql);
-        sqlReview.setUser(user1); // потом поменять
+        sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 3, 26, 23, 44));
+        springReview.setDate(LocalDateTime.of(2020, 3, 27, 8, 5));
         springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(user1); // потом поменять
+        springReview.setUser(admin);
         reviewService.addReview(springReview);
 
 
