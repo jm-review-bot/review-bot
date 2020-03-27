@@ -134,21 +134,21 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 22, 48));
+        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 20));
         coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(admin);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 22, 49));
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 21));
         sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
         sqlReview.setTheme(sql);
         sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 3, 27, 22, 50));
+        springReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 22));
         springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(admin);
