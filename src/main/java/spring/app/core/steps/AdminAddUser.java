@@ -8,8 +8,6 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminAddUser extends Step {
-    private String text;
-    private String keyboard;
 
     @Override
     public void enter(BotContext context) {
@@ -20,15 +18,5 @@ public class AdminAddUser extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
 
-    }
-
-    @Override
-    public String getText() {
-        return text;
-    }
-
-    @Override
-    public String getKeyboard() {
-        return keyboard;
     }
 }

@@ -27,6 +27,13 @@ public class TestDataInit {
 
     private void init() throws Exception {
 
+        //TODO убрать
+        Money money = new Money();
+        System.out.println(money.abba);
+
+
+
+
         Role roleAdmin = new Role();
         roleAdmin.setName("ADMIN");
         roleService.addRole(roleAdmin);

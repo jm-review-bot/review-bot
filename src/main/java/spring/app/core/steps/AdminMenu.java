@@ -3,19 +3,17 @@ package spring.app.core.steps;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.util.Keyboards;
 
 import static spring.app.core.StepSelector.*;
+import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminMenu extends Step {
-    private String text;
-    private String keyboard;
 
     @Override
     public void enter(BotContext context) {
         text = "Привет %username%! Ты в админке";
-        keyboard = Keyboards.ADMIN_MENU_KB;
+        keyboard = ADMIN_MENU_KB;
     }
 
     @Override
@@ -29,18 +27,8 @@ public class AdminMenu extends Step {
         } else if ("/start".equals(command)) {
             nextStep = START;
         } else {
-            keyboard = Keyboards.ADMIN_MENU_KB;
+            keyboard = ADMIN_MENU_KB;
             throw new ProcessInputException("Введена неверная команда...");
         }
-    }
-
-    @Override
-    public String getText() {
-        return text;
-    }
-
-    @Override
-    public String getKeyboard() {
-        return keyboard;
     }
 }
