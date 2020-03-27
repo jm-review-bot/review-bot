@@ -7,12 +7,11 @@ import spring.app.model.User;
 
 import java.util.Comparator;
 
+import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
-    private String text;
-    private String keyboard;
 
     @Override
     public void enter(BotContext context) {
@@ -35,15 +34,5 @@ public class AdminRemoveUser extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
 
-    }
-
-    @Override
-    public String getText() {
-        return text;
-    }
-
-    @Override
-    public String getKeyboard() {
-        return keyboard;
     }
 }
