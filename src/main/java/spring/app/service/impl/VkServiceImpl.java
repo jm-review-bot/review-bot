@@ -1,4 +1,4 @@
-package spring.app.dao.impl;
+package spring.app.service.impl;
 
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.GroupActor;

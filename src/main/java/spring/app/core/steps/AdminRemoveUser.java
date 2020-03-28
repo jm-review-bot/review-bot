@@ -1,6 +1,5 @@
 package spring.app.core.steps;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
