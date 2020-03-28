@@ -18,8 +18,10 @@ import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
+import spring.app.util.Keyboards;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.NoResultException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -102,19 +104,16 @@ public class VkBot implements ChatBot {
 //            Берем vkid пользователя
             userVkId = message.getUserId();
             input = message.getBody();
-            // проверяем есть ли юзер у нас в БД
-            User user = userService.getByVkId(userVkId);
-            // Если нет - добавляем нового юзера в БД и присваиваем ему стейт Start и роль User
-            // TODO эту логику потом нужно доработать под нужды ТЗ
-            if (user == null) {
-                user = new User(
-                        "левый",
-                        "юзер",
-                        userVkId,
-                        "Start",
-                        roleService.getRoleByName("USER"));
-                userService.addUser(user);
+            User user;
+            // проверяем есть ли юзер у нас в БД, если нет, получаем исключение и отправляем Юзеру сообщение и выходим из цикла
+            try {
+                user = userService.getByVkId(userVkId);
+            } catch (NoResultException e) {
+                log.warn("Пришло сообщение от незарегистрированного пользователя c vkId: {}", userVkId);
+                sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
+                return;
             }
+
             Role role = user.getRole();
             context = new BotContext(user, userVkId, input, role, userService);
             // выясняем степ в котором находится User
@@ -141,6 +140,7 @@ public class VkBot implements ChatBot {
                     user.setViewed(false);
                 } catch (ProcessInputException e) {
                     // отправляем сообщение об ошибке ввода
+                    log.debug("Пользователь с vkId: {} ввел неверные данные", userVkId);
                     sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);
                 }
             }

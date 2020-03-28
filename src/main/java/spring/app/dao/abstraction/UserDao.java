@@ -2,8 +2,10 @@ package spring.app.dao.abstraction;
 
 import spring.app.model.User;
 
-public interface UserDao extends GenericDao<Long, User> {
-    User getByVkId(Integer vkId);
+import javax.persistence.NoResultException;
 
-    void deleteUserByVkId(Integer vkId);
+public interface UserDao extends GenericDao<Long, User> {
+    User getByVkId(Integer vkId) throws NoResultException;
+
+    void deleteUserByVkId(Integer vkId) throws NoResultException ;
 }

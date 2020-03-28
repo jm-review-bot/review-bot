@@ -25,7 +25,8 @@ public class StringParser {
     public static Set<Integer> toNumbersSet(String text) {
         // разделение идем по пробелам, переносам и знакам пунктуации и буквам.
         // конвертируем сразу в сет интов
-        return Arrays.stream(text.trim().split("[\\s\\D]+"))
+        return Arrays.stream(text.split("[^0-9]+"))
+                .filter(string -> !string.isEmpty())
                 .map(Integer::parseInt)
                 .collect(Collectors.toSet());
     }

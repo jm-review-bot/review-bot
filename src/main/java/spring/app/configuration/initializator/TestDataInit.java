@@ -44,9 +44,18 @@ public class TestDataInit {
         admin.setChatStep("START");
         userService.addUser(admin);
 
+        User admin2 = new User();
+        admin2.setFirstName("Максим");
+        admin2.setLastName("Ботюк");
+        admin2.setReviewPoint(0);
+        admin2.setVkId(87632583); // change this to your vkId for testing
+        admin2.setRole(roleAdmin);
+        admin2.setChatStep("START");
+        userService.addUser(admin2);
+
         User user = new User();
-        user.setFirstName("Иван");
-        user.setLastName("Иванов");
+        user.setFirstName("Антон");
+        user.setLastName("Таврель");
         user.setReviewPoint(4);
         user.setVkId(582532887);
         user.setRole(roleUser);

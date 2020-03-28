@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -42,6 +43,8 @@ public class AdminRemoveUser extends Step {
             keyboard = NO_KB;
         } else {
             // если в памяти уже есть данные, значит показываем предупреждение об удалении юзеров
+            // оно было подготовлено в processInput и сохранено в памяти,
+            // т.к. там могло выпасть исключение, если юзер вводит заведомо неверные данные
             text = savedInput;
             keyboard = YES_NO_KB;
         }
@@ -49,15 +52,15 @@ public class AdminRemoveUser extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        String input = context.getInput();
+        String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         String savedInput = savedInputs.get(vkId);
         if (savedInput == null || savedInput.isEmpty()) {
-            // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него vkId для удаления input.
-            // сохраняем в память введенный текст
-                StringBuilder userList = new StringBuilder("Вы собираетесь удалить следующих пользователей:\n\n");
+            // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
+            // vkId для удаления input. Сохраняем в память введенный текст
+            StringBuilder userList = new StringBuilder("Вы собираетесь удалить следующих пользователей:\n\n");
             try {
-                StringParser.toNumbersSet(input)
+                StringParser.toNumbersSet(currentInput)
                         .forEach(inputNumber -> {
                             User user = context.getUserService().getByVkId(inputNumber);
                             if (user != null) {
@@ -73,14 +76,15 @@ public class AdminRemoveUser extends Step {
                             }
                         });
                 userList.append("Согласны? (Да/Нет)");
-            } catch (NoResultException e) {
+                savedInputs.put(vkId, userList.toString());
+                nextStep = ADMIN_REMOVE_USER;
+            } catch (NumberFormatException | NoResultException | EmptyResultDataAccessException e) {
+                keyboard = NO_KB;
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
-            savedInputs.put(vkId, userList.toString());
-            nextStep = ADMIN_REMOVE_USER;
         } else {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий
-            String yesOrNo = StringParser.toWordsArray(input)[0];
+            String yesOrNo = StringParser.toWordsArray(currentInput)[0];
             if (yesOrNo.equalsIgnoreCase("да")) {
                 // удаляем юзеров
                 StringParser.toNumbersSet(savedInput)
