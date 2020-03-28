@@ -1,29 +1,6 @@
 package spring.app.util;
 
 public class Keyboards {
-    public final static String DEFAULT_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Пройти опрос\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Посмотреть результаты\"\n" +
-            "        },\n" +
-            "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
 
     public final static String START_KB = "{\n" +
             "  \"one_time\": false,\n" +
@@ -48,7 +25,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Пройти опрос\"\n" +
+            "          \"label\": \"Сдать ревью\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -56,9 +33,9 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Посмотреть результаты\"\n" +
+            "          \"label\": \"Принять ревью\"\n" +
             "        },\n" +
-            "        \"color\": \"default\"\n" +
+            "        \"color\": \"positive\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +

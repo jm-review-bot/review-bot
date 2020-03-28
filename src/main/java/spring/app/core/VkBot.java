@@ -48,10 +48,11 @@ public class VkBot implements ChatBot {
     private Properties chatProperties = new Properties();
 
 
-    public VkBot(UserService userService, RoleService roleService, StepHolder stepHolder) {
+    public VkBot(UserService userService, RoleService roleService, ThemeService themeService, StepHolder stepHolder) {
         this.userService = userService;
         this.roleService = roleService;
         this.stepHolder = stepHolder;
+        this.themeService = themeService;
     }
 
     // читаем chat.properties
