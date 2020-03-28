@@ -1,6 +1,7 @@
 package spring.app.util;
 
 import org.junit.jupiter.api.Test;
+import spring.app.exceptions.NoNumbersEnteredException;
 
 import java.util.*;
 
@@ -15,7 +16,7 @@ class StringParserTest {
     }
 
     @Test
-    void toNumbersSet() {
+    void toNumbersSet() throws NoNumbersEnteredException {
 //        Set<Integer> set = StringParser.toNumbersSet("154,253.dfbks3ad   тдйиг ё\ndw12");
         Set<Integer> set = StringParser.toNumbersSet("щшнаечавя89765");
         System.out.println(set);

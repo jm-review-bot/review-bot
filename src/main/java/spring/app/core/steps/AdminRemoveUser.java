@@ -3,6 +3,7 @@ package spring.app.core.steps;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.util.StringParser;
@@ -51,7 +52,7 @@ public class AdminRemoveUser extends Step {
     }
 
     @Override
-    public void processInput(BotContext context) throws ProcessInputException {
+    public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         String savedInput = savedInputs.get(vkId);
@@ -75,7 +76,6 @@ public class AdminRemoveUser extends Step {
                 StringParser.toNumbersSet(currentInput)
                         .forEach(inputNumber -> {
                             User user = context.getUserService().getByVkId(inputNumber);
-                            if (user != null) {
                                 userList
                                         .append(user.getLastName())
                                         .append(" ")
@@ -85,12 +85,11 @@ public class AdminRemoveUser extends Step {
                                         .append(" https://vk.com/id")
                                         .append(user.getVkId())
                                         .append("\n");
-                            }
                         });
                 userList.append("Согласны? (Да/Нет)");
                 savedInputs.put(vkId, userList.toString());
                 nextStep = ADMIN_REMOVE_USER;
-            } catch (NumberFormatException | NoResultException | EmptyResultDataAccessException e) {
+            } catch (NumberFormatException | NoResultException | NoNumbersEnteredException e) {
                 keyboard = NO_KB;
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }

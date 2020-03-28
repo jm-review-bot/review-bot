@@ -3,6 +3,7 @@ package spring.app.core;
 import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
 
 public class BotContext {
     private final User user;
@@ -10,13 +11,15 @@ public class BotContext {
     private final String input;
     private final Role role;
     private final UserService userService;
+    private final VkService vkService;
 
-    public BotContext(User user, Integer vkId, String input, Role role, UserService userService) {
+    public BotContext(User user, Integer vkId, String input, Role role, UserService userService, VkService vkService) {
         this.user = user;
         this.vkId = vkId;
         this.input = input;
         this.role = role;
         this.userService = userService;
+        this.vkService = vkService;
     }
 
     public Integer getVkId() {
@@ -37,5 +40,9 @@ public class BotContext {
 
     public User getUser() {
         return user;
+    }
+
+    public VkService getVkService() {
+        return vkService;
     }
 }

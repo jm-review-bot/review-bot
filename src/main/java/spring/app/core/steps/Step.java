@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
+import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 
 public abstract class Step {
@@ -12,7 +13,7 @@ public abstract class Step {
     // абстрактные методы которые должны быть переопределены в каждом Step
     public abstract void enter(BotContext context);
 
-    public abstract void processInput(BotContext context) throws ProcessInputException;
+    public abstract void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException;
 
     public StepSelector nextStep() {
         return nextStep;
