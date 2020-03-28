@@ -17,6 +17,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.RoleService;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
 import javax.annotation.PostConstruct;
@@ -38,6 +39,7 @@ public class VkBot implements ChatBot {
     private GroupActor groupActor;
     private UserService userService;
     private RoleService roleService;
+    private ThemeService themeService;
     private StepHolder stepHolder;
     @Value("${group_id}")
     private int groupID;
@@ -116,7 +118,7 @@ public class VkBot implements ChatBot {
                 userService.addUser(user);
             }
             Role role = user.getRole();
-            context = new BotContext(userVkId, input, role, userService);
+            context = new BotContext(userVkId, input, role, userService, themeService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
