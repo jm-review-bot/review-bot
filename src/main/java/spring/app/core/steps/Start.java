@@ -25,12 +25,12 @@ public class Start extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = StringParser.toWordsArray(context.getInput())[0];
-        if (command.equalsIgnoreCase("/admin")
+        if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             nextStep = ADMIN_MENU;
-        } else if (command.equalsIgnoreCase("Начать")) {
+        } else if (command.equals("Начать")) {
             nextStep = USER_MENU;
-        } else if (command.equalsIgnoreCase("/start")) {
+        } else if (command.equals("/start")) {
             nextStep = START;
         } else {
             keyboard = START_KB;

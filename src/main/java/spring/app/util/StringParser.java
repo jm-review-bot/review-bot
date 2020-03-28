@@ -19,7 +19,7 @@ public class StringParser {
 
     public static String[] toWordsArray(String text) {
         // разделение идем по пробелам, переносам и знакам пунктуации
-        return text.trim().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
+        return text.trim().toLowerCase().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
     }
 
     public static Set<Integer> toNumbersSet(String text) {

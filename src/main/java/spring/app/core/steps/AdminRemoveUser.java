@@ -25,7 +25,7 @@ public class AdminRemoveUser extends Step {
         StringBuilder userList;
         if (savedInput == null || savedInput.isEmpty()) {
             // если в памяти пусто, показываем первичный вопрос
-            userList = new StringBuilder("Вот список всех пользователей. Для удаления, напиши vkId одного или нескольких пользователей через пробел или запятую.\n\n");
+            userList = new StringBuilder("Вот список всех пользователей. Для удаления, напиши vkId одного или нескольких пользователей через пробел или запятую.\nДля возврата в меню, введи \"назад\".\n\n");
             context.getUserService().getAllUsers().stream()
                     .filter(user -> !user.getRole().isAdmin())
                     .sorted(Comparator.comparing(User::getLastName))
@@ -55,9 +55,21 @@ public class AdminRemoveUser extends Step {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         String savedInput = savedInputs.get(vkId);
-        if (savedInput == null || savedInput.isEmpty()) {
-            // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
-            // vkId для удаления input. Сохраняем в память введенный текст
+        // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
+        // vkId для удаления input. Сохраняем в память введенный текст
+        // также он  может прислать команду отмены
+        String wordInput = StringParser.toWordsArray(currentInput)[0];
+
+        if (wordInput.equals("назад")
+                || wordInput.equals("нет")
+                || wordInput.equals("отмена")) {
+            savedInputs.remove(vkId);
+            nextStep = ADMIN_MENU;
+        } else if (wordInput.equals("/start")) {
+            savedInputs.remove(vkId);
+            nextStep = START;
+        } else if (savedInput == null || savedInput.isEmpty()) {
+            // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий
             StringBuilder userList = new StringBuilder("Вы собираетесь удалить следующих пользователей:\n\n");
             try {
                 StringParser.toNumbersSet(currentInput)
@@ -82,26 +94,16 @@ public class AdminRemoveUser extends Step {
                 keyboard = NO_KB;
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
+        } else if (wordInput.equals("да")) {
+            // удаляем юзеров
+            StringParser.toNumbersSet(savedInput)
+                    .forEach(savedVkId -> context.getUserService().deleteUserByVkId(savedVkId));
+            // обязательно очищаем память
+            savedInputs.remove(vkId);
+            nextStep = ADMIN_REMOVE_USER;
         } else {
-            // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий
-            String yesOrNo = StringParser.toWordsArray(currentInput)[0];
-            if (yesOrNo.equalsIgnoreCase("да")) {
-                // удаляем юзеров
-                StringParser.toNumbersSet(savedInput)
-                        .forEach(savedVkId -> context.getUserService().deleteUserByVkId(savedVkId));
-                // обязательно очищаем память
-                savedInputs.remove(vkId);
-                nextStep = ADMIN_REMOVE_USER;
-            } else if (yesOrNo.equalsIgnoreCase("нет")) {
-                savedInputs.remove(vkId);
-                nextStep = ADMIN_MENU;
-            } else if (yesOrNo.equalsIgnoreCase("/start")) {
-                savedInputs.remove(vkId);
-                nextStep = START;
-            } else {
-                keyboard = START_KB;
-                throw new ProcessInputException("Введена неверная команда...");
-            }
+            keyboard = START_KB;
+            throw new ProcessInputException("Введена неверная команда...");
         }
     }
 }

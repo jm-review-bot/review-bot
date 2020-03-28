@@ -20,11 +20,11 @@ public class AdminMenu extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = StringParser.toWordsArray(context.getInput())[0];
-        if ("Добавить".equalsIgnoreCase(command)) {
+        if ("добавить".equals(command)) {
             nextStep = ADMIN_ADD_USER;
-        } else if ("Удалить".equalsIgnoreCase(command)) {
+        } else if ("удалить".equals(command)) {
             nextStep = ADMIN_REMOVE_USER;
-        } else if ("/start".equalsIgnoreCase(command)) {
+        } else if ("/start".equals(command)) {
             nextStep = START;
         } else {
             keyboard = ADMIN_MENU_KB;
