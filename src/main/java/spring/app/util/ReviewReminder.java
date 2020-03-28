@@ -30,7 +30,7 @@ public class ReviewReminder {
         this.stepHolder = stepHolder;
     }
 
-    @Scheduled(fixedDelayString = "60000")
+    @Scheduled(fixedDelay = 60000)
     public void sendReviewReminder() {
 
         LocalDateTime periodStart = LocalDateTime.now().plusMinutes(2).plusNanos(1);
@@ -41,7 +41,7 @@ public class ReviewReminder {
             for (User user : users) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(StepSelector.valueOf(user.getChatStep()));
-                bot.sendMessage(user.getFirstName() + ", пора начинать ревью!", step.getKeyboard(), user.getVkId());
+                bot.sendMessage("Напоминание! Если ты готов начать ревью пришли сообщение \"начать ревью\" в чат", step.getKeyboard(), user.getVkId());
                 log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }

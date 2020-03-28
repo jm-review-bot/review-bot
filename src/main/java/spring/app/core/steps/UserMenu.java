@@ -11,8 +11,10 @@ public class UserMenu extends Step {
 
     @Override
     public void enter(BotContext context) {
+        /*
         // TODO проверку из ТЗ
         text = "Пользователь с таким vk id не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину";
+         */
         keyboard = DEFAULT_KB;
     }
 
