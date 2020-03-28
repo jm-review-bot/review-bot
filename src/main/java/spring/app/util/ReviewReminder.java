@@ -33,8 +33,8 @@ public class ReviewReminder {
     @Scheduled(fixedDelayString = "60000")
     public void sendReviewReminder() {
 
-        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(2).minusSeconds(1);
-        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(3).minusSeconds(0);
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(2).plusNanos(1);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(3);
 
         List<User> users = userService.getUsersByReviewPeriod(periodStart, periodEnd);
         if (!users.isEmpty()) {
