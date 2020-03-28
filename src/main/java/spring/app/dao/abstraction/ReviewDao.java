@@ -6,5 +6,5 @@ import java.time.LocalDateTime;
 
 public interface ReviewDao extends GenericDao<Long, Review> {
 
-    void getAllExpiredReviews(LocalDateTime localDateTime);
+    void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 }

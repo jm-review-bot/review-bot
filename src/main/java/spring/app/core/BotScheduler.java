@@ -31,10 +31,10 @@ public class BotScheduler {
         bot.replyForMessages(messages);
     }
 
-    @Scheduled(cron = "${bot.operations_date}")
+    @Scheduled(cron = "${bot.expired_review_check_time}")
     public void scheduleCloseExpiredReview() {
         log.info("Скрипт запущен. Началась проверка просроченных ревью.");
-        reviewService.getAllExpiredReviews(LocalDateTime.now());
+        reviewService.updateAllExpiredReviewsBy(LocalDateTime.now());
     }
 
 }
