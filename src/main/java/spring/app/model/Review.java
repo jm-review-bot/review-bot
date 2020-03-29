@@ -33,6 +33,13 @@ public class Review {
     public Review() {
     }
 
+    //todo убрать если не буду пользоваться
+    public Review(User user, Theme theme, Boolean isOpen) {
+        this.user = user;
+        this.theme = theme;
+        this.isOpen = isOpen;
+    }
+
     public Long getId() {
         return id;
     }

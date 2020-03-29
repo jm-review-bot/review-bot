@@ -80,6 +80,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
         steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
         steps.put(StepSelector.USER_TAKE_REVIEW, new UserTakeReview());
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserAddReviewDate());
 
         //add theme
         Theme hibernate = new Theme();
