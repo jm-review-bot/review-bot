@@ -3,6 +3,8 @@ package spring.app.dao.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 
@@ -29,6 +31,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         }
     }
 
+    @Transactional(propagation= Propagation.MANDATORY)
     public void deleteUserByVkId(Integer vkId) throws NoResultException {
         entityManager.createQuery("DELETE FROM User u WHERE u.vkId = :id")
                 .setParameter("id", vkId)
