@@ -55,8 +55,7 @@ public class AdminRemoveUser extends Step {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         String savedInput = savedInputs.get(vkId);
-        // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
-        // vkId для удаления input. Сохраняем в память введенный текст
+
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
 
@@ -69,7 +68,8 @@ public class AdminRemoveUser extends Step {
             savedInputs.remove(vkId);
             nextStep = START;
         } else if (savedInput == null || savedInput.isEmpty()) {
-            // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий
+            // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
+            // vkId для удаления input. Сохраняем в память введенный текст
             StringBuilder userList = new StringBuilder("Вы собираетесь удалить следующих пользователей:\n\n");
             try {
                 StringParser.toNumbersSet(currentInput)
@@ -93,6 +93,7 @@ public class AdminRemoveUser extends Step {
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
         } else if (wordInput.equals("да")) {
+            // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
             // удаляем юзеров
             StringParser.toNumbersSet(savedInput)
                     .forEach(savedVkId -> context.getUserService().deleteUserByVkId(savedVkId));
