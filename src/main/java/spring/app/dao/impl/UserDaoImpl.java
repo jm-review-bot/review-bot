@@ -31,6 +31,15 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         }
     }
 
+    public boolean isExistByVkId(Integer vkId) {
+        try {
+            entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :id", User.class).setParameter("id", vkId).getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
+
     @Transactional(propagation= Propagation.MANDATORY)
     public void deleteUserByVkId(Integer vkId) throws NoResultException {
         entityManager.createQuery("DELETE FROM User u WHERE u.vkId = :id")

@@ -1,5 +1,6 @@
 package spring.app.util;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import spring.app.exceptions.NoNumbersEnteredException;
 
@@ -25,8 +26,8 @@ class StringParserTest {
     }
 
     @Test
-    void mapTest() {
-        Map<String, String> map = new HashMap<>();
-        map.remove("r");
+    void toVkIdsListTest() {
+        String text = "https://vk.com/romanevseev,https://vk.com/bishunmo1 https://vk.com/id3183318,";
+        Assert.assertEquals(StringParser.toVkIdsList(text), Arrays.asList("romanevseev", "bishunmo1", "3183318"));
     }
 }

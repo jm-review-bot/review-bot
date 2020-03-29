@@ -18,7 +18,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "vk_id")
+    @Column(name = "vk_id", unique = true)
     private Integer vkId;
 
     /**
@@ -52,6 +52,13 @@ public class User {
         this.chatStep = chatStep;
         this.role = role;
         this.isViewed = false;
+    }
+
+    public User(String firstName, String lastName, Integer vkId, String chatStep) {
+        this.vkId = vkId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.chatStep = chatStep;
     }
 
     public Long getId() {

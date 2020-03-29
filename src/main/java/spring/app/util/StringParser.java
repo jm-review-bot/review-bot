@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spring.app.exceptions.NoNumbersEnteredException;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -38,5 +40,16 @@ public class StringParser {
             throw new NoNumbersEnteredException("Введенные данные не содержат чисел.");
         }
         return integerSet;
+    }
+
+    public static List<String> toVkIdsList(String text) {
+        String[] words = text.trim().toLowerCase().split("[\\s,]+");
+        List<String> result = new ArrayList<>();
+        for (String link: words) {
+            link = link.replaceAll("https://vk.com/id", "");
+            link = link.replaceAll("https://vk.com/", "");
+            result.add(link);
+        }
+        return result;
     }
 }
