@@ -12,7 +12,6 @@ import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
