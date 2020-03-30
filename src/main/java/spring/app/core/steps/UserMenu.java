@@ -15,7 +15,7 @@ public class UserMenu extends Step {
         // TODO проверку из ТЗ
         text = "Пользователь с таким vk id не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину";
          */
-        keyboard = DEFAULT_KB;
+        keyboard = USER_MENU_KB;
     }
 
     @Override

@@ -2,8 +2,8 @@ package spring.app.util;
 
 public class Keyboards {
 
-    public final static String DEFAULT_KB = "{\n" +
-            "  \"one_time\": false,\n" +
+    public final static String USER_MENU_KB = "{\n" +
+            "  \"one_time\": true,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
             "      {\n" +
@@ -12,7 +12,7 @@ public class Keyboards {
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
             "          \"label\": \"Сдать ревью\"\n" +
             "        },\n" +
-            "        \"color\": \"positive\"\n" +
+            "        \"color\": \"primary\"\n" +
             "      },\n" +
             "      {\n" +
             "        \"action\": {\n" +
@@ -27,7 +27,7 @@ public class Keyboards {
             "} ";
 
     public final static String START_KB = "{\n" +
-            "  \"one_time\": false,\n" +
+            "  \"one_time\": true,\n" +
             "  \"buttons\": [[\n" +
             "      {\n" +
             "        \"action\": {\n" +
