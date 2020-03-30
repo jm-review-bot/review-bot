@@ -19,4 +19,5 @@ public interface ReviewService {
 
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 
+    List<Review> getOpenReviewsByUserVkId(Integer vkId);
 }

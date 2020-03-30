@@ -8,6 +8,7 @@ import spring.app.model.Review;
 
 import javax.persistence.Query;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDao {
@@ -22,6 +23,11 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         Query query = entityManager.createQuery(CLOSE_EXPIRED_REVIEWS);
         query.setParameter("localDateTime", localDateTime);
         query.executeUpdate();
+    }
+
+    public List<Review> getOpenReviewsByUserVkId(Integer vkId) {
+        return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id", Review.class)
+        .setParameter("id", vkId).getResultList();
     }
 
 }

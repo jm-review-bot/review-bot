@@ -53,4 +53,8 @@ public class ReviewServiceImpl implements ReviewService {
     public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
         reviewDao.updateAllExpiredReviewsBy(localDateTime);
     }
+
+    public List<Review> getOpenReviewsByUserVkId(Integer vkId) {
+        return reviewDao.getOpenReviewsByUserVkId(vkId);
+    }
 }
