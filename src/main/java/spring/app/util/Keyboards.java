@@ -15,6 +15,19 @@ public class Keyboards {
             "  ]]\n" +
             "} ";
 
+    public final static String GO_MAIN_MENU_KB = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [[\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Главное меню\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "  ]]\n" +
+            "} ";
+
     public final static String BACK_KB = "{\n" +
             "  \"one_time\": false,\n" +
             "  \"buttons\": [[\n" +

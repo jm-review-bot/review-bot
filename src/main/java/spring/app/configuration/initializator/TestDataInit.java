@@ -1,10 +1,9 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import spring.app.core.StepSelector;
 import spring.app.core.StepHolder;
+import spring.app.core.StepSelector;
 import spring.app.core.steps.*;
-import spring.app.model.Review;
 import spring.app.model.Role;
 import spring.app.model.Theme;
 import spring.app.model.User;
@@ -13,7 +12,6 @@ import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -56,8 +54,8 @@ public class TestDataInit {
         userService.addUser(admin);
 
         User user = new User();
-        user.setFirstName("Иван");
-        user.setLastName("Иванов");
+        user.setFirstName("Антон");
+        user.setLastName("Таврель");
         user.setReviewPoint(4);
         user.setVkId(582532887);
         user.setRole(roleUser);
@@ -81,6 +79,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
         steps.put(StepSelector.USER_TAKE_REVIEW, new UserTakeReview());
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserAddReviewDate());
+        steps.put(StepSelector.USER_TAKE_REVIEW_SUCCESS, new UserTakeReviewSuccess());
 
         //add theme
         Theme hibernate = new Theme();
@@ -130,27 +129,5 @@ public class TestDataInit {
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
         themeService.addTheme(patterns);
-
-        //add review
-        Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 20));
-        coreReview.setOpen(true);
-        coreReview.setTheme(core);
-        coreReview.setUser(admin);
-        reviewService.addReview(coreReview);
-
-        Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 21));
-        sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
-        sqlReview.setTheme(sql);
-        sqlReview.setUser(admin);
-        reviewService.addReview(sqlReview);
-
-        Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 22));
-        springReview.setOpen(true);
-        springReview.setTheme(spring);
-        springReview.setUser(admin);
-        reviewService.addReview(springReview);
     }
 }

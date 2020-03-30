@@ -33,11 +33,11 @@ public class Review {
     public Review() {
     }
 
-    //todo убрать если не буду пользоваться
-    public Review(User user, Theme theme, Boolean isOpen) {
+    public Review (User user, Theme theme, Boolean isOpen, LocalDateTime date) {
         this.user = user;
         this.theme = theme;
         this.isOpen = isOpen;
+        this.date = date;
     }
 
     public Long getId() {

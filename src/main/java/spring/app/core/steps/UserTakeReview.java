@@ -2,22 +2,23 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.Review;
 import spring.app.model.Theme;
-import spring.app.model.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.USER_START_KB;
 
 @Component
 public class UserTakeReview extends Step {
-    Map<Integer, Theme> themes = new HashMap<>();
+    private final Map<Integer, Theme> themes = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
@@ -41,18 +42,12 @@ public class UserTakeReview extends Step {
         List<String> themePositionsList = themes.keySet().stream().map(Object::toString).collect(toList());
         if (themePositionsList.contains(userInput)) {
 
-            // здесь предположения такие, что у Юзера в 1 момент вреени может быть только 1 ревью, которое он принимает
-            // поэтому получив номер темы, которую он хочет принять мы сохраняем в БД это ревью, но пока без даты,
-            // дату мы введем на следующем этапе
-            // и на следующем этапе апдейтим нашу БД
-
-            // или, в еонтексте бота сделать какое-то временное хранилище и туда между шагами складывать инфу,
-            //т.о. удет меньше запрсов к БД
-            // и вообще это наверное правильное решение
-
-            Theme theme = themes.get(Integer.parseInt(userInput));
-            User user = context.getUserService().getByVkId(context.getVkId());
-            context.getReviewService().addReview(new Review(user, theme, true));
+            //сохраняем номер темы ревью в глобальное хранилище по вкайди пользователя и наименованию шага
+            Map<StepSelector, List<String>> stepStorage = new HashMap<>();
+            List<String> inputStorage = new ArrayList<>();
+            inputStorage.add(userInput);
+            stepStorage.put(USER_TAKE_REVIEW, inputStorage);
+            getStorage().put(context.getVkId(), stepStorage);
 
             nextStep = USER_TAKE_REVIEW_ADD_DATE;
             keyboard = BACK_KB;
@@ -61,11 +56,19 @@ public class UserTakeReview extends Step {
             nextStep = USER_MENU;
             keyboard = USER_START_KB;
             themes.clear();
+
+            // смысла очищать Storage нет, потому что оно используется только на следующем шаге,
+            // на этом шаге мы данные из него не берем
+            // на след шаг попадем только с этого шага, т.е. на этом шаге мы перезатрем данные, которые могут в хранилище быть
+            // проблемы появления некорректных данных я не вижу
+
+            // или все-таки сделать, чтобы было меньше мусора в программе
+
         } else {
             nextStep = USER_TAKE_REVIEW;
             keyboard = BACK_KB;
             throw new ProcessInputException("Введена неверная команда...\n\n " +
-                    "Введите цифру, соответствующую теме рьвью или нажмите на кнопку \"Назад\" для возврата к предыдущему меню");
+                    "Введите цифру, соответствующую теме рьвью или нажмите на кнопку \"Назад\" для возврата в главное меню");
         }
     }
 }
