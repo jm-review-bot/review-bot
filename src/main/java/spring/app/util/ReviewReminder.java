@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import spring.app.core.ChatBot;
+import spring.app.core.abstraction.ChatBot;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.Step;

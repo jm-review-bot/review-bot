@@ -41,7 +41,7 @@ public class Keyboards {
 
     public final static String NO_KB = "{\"buttons\":[],\"one_time\":true}";
 
-    public final static String USER_START_KB = "{\n" +
+    public final static String ADMIN_START_KB = "{\n" +
             "  \"one_time\": true,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
@@ -49,7 +49,31 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Пройти опрос\"\n" +
+            "          \"label\": \"/admin\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Начать\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
+    public final static String YES_NO_KB = "{\n" +
+            "  \"one_time\": true,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Да\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -57,9 +81,9 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Посмотреть результаты\"\n" +
+            "          \"label\": \"Нет\"\n" +
             "        },\n" +
-            "        \"color\": \"default\"\n" +
+            "        \"color\": \"negative\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +

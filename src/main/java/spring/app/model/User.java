@@ -123,15 +123,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        // TODO убрать проверку по имени.
-        return id.equals(user.id) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                vkId.equals(user.vkId);
+
+        return id.equals(user.id) && vkId.equals(user.vkId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, vkId);
+        return Objects.hash(id, vkId);
     }
 }

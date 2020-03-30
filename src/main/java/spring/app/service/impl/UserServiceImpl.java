@@ -54,6 +54,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void deleteUserByVkId(Integer vkId) {
+        userDao.deleteUserByVkId(vkId);
+    }
+
+    @Override
     public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return userDao.getUsersByReviewPeriod(periodStart, periodEnd);
     }
