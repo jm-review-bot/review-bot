@@ -17,7 +17,7 @@ public class Start extends Step {
         keyboard = START_KB;
         if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             text = "Привет! Этот Бот создан для прохождения ревью. " +
-                    "\nНажми \"Начать\" для запуска или введи команду /admin для перехода в админку.";
+                    "\nНажми \"начать\" для запуска или введи команду /admin для перехода в админку.";
             keyboard = ADMIN_START_KB;
         }
     }
@@ -28,7 +28,7 @@ public class Start extends Step {
         if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             nextStep = ADMIN_MENU;
-        } else if (command.equals("Начать")) {
+        } else if (command.equals("начать")) {
             nextStep = USER_MENU;
         } else if (command.equals("/start")) {
             nextStep = START;

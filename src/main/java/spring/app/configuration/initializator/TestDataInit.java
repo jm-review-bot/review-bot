@@ -51,7 +51,7 @@ public class TestDataInit {
         User admin = new User();
         admin.setFirstName("admin");
         admin.setLastName("admin");
-        admin.setReviewPoint(0);
+        admin.setReviewPoint(999);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
         admin.setChatStep("START");
