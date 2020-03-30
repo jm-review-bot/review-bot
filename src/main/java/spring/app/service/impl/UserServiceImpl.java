@@ -7,6 +7,7 @@ import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -52,4 +53,8 @@ public class UserServiceImpl implements UserService {
         return userDao.getByVkId(vkId);
     }
 
+    @Override
+    public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return userDao.getUsersByReviewPeriod(periodStart, periodEnd);
+    }
 }
