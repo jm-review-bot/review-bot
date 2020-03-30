@@ -36,7 +36,7 @@ public class User {
     private boolean isViewed;
 
     @Column(name = "review_point")
-    private Integer reviewPoint;
+    private Integer reviewPoint = 0;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
