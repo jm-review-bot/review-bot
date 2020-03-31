@@ -10,4 +10,6 @@ public interface ReviewDao extends GenericDao<Long, Review> {
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 
     List<Review> getOpenReviewsByUserVkId(Integer vkId);
+
+    Review getOpenReviewByStudentVkId(Integer vkId);
 }

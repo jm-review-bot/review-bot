@@ -25,9 +25,25 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         query.executeUpdate();
     }
 
+    /**
+     * Метод возвращает все открытые ревью, которые юзер с данным vkId будет принимать
+     * @param vkId
+     */
+    @Override
     public List<Review> getOpenReviewsByUserVkId(Integer vkId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id", Review.class)
         .setParameter("id", vkId).getResultList();
     }
 
+    /**
+     * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
+     * @param vkId
+     */
+    @Override
+    public Review getOpenReviewByStudentVkId(Integer vkId) {
+        return entityManager.createQuery(
+                "SELECT r FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE u.vkId =:vkId AND r.isOpen = true", Review.class)
+                .setParameter("vkId", vkId)
+                .getSingleResult();
+    }
 }

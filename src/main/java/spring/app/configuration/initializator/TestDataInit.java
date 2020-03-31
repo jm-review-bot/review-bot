@@ -4,14 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.core.StepSelector;
 import spring.app.core.StepHolder;
 import spring.app.core.steps.*;
-import spring.app.model.Review;
-import spring.app.model.Role;
-import spring.app.model.Theme;
-import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
+import spring.app.model.*;
+import spring.app.service.abstraction.*;
 
 import java.util.Map;
 
@@ -31,6 +25,10 @@ public class TestDataInit {
 
     @Autowired
     private ReviewService reviewService;
+
+    @Autowired
+    private StudentReviewService studentReviewService;
+
     @Autowired
     private StepHolder stepHolder;
 
@@ -143,26 +141,27 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 30, 23, 20));
+        coreReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 20));
         coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(admin);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 30, 23, 21));
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 21));
         sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
         sqlReview.setTheme(sql);
         sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 3, 30, 23, 22));
+        springReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 22));
         springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(admin);
+        springReview.setUser(admin2);
         reviewService.addReview(springReview);
 
-
+        StudentReview studentSpringReview = new StudentReview(admin2, springReview);
+        studentReviewService.addStudentReview(studentSpringReview);
     }
 }

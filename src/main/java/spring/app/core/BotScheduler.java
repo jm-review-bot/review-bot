@@ -16,7 +16,7 @@ import java.util.List;
 public class BotScheduler {
     private final static Logger log = LoggerFactory.getLogger(BotScheduler.class);
     private final VkService vkService;
-    private ReviewService reviewService;
+    private final ReviewService reviewService;
     private final ChatBot bot;
     private long timeCounter;
 

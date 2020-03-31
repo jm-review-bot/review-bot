@@ -20,8 +20,15 @@ public class StudentReview {
     @JoinColumn(name = "review_id")
     private Review review;
 
+
     public StudentReview() {
     }
+
+    public StudentReview(User user, Review review) {
+        this.user = user;
+        this.review = review;
+    }
+
 
     public Long getId() {
         return id;
