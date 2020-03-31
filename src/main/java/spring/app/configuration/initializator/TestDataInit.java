@@ -161,7 +161,7 @@ public class TestDataInit {
         springReview.setUser(admin2);
         reviewService.addReview(springReview);
 
-        StudentReview studentSpringReview = new StudentReview(admin2, springReview);
+        StudentReview studentSpringReview = new StudentReview(admin, springReview);
         studentReviewService.addStudentReview(studentSpringReview);
     }
 }

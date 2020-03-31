@@ -60,6 +60,9 @@ public class UserMenu extends Step {
 //            nextStep = ; TODO
         } else if (command.equals("принять")) { // (Принять ревью)
 //            nextStep = ; TODO
+        } else if (command.equals("/admin")
+                && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
+            nextStep = ADMIN_MENU;
         } else { // любой другой ввод
             throw new ProcessInputException("Введена неверная команда...");
         }
