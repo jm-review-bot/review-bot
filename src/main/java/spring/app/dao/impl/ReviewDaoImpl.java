@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,7 +41,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      * @param vkId
      */
     @Override
-    public Review getOpenReviewByStudentVkId(Integer vkId) {
+    public Review getOpenReviewByStudentVkId(Integer vkId) throws NoResultException {
         return entityManager.createQuery(
                 "SELECT r FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE u.vkId =:vkId AND r.isOpen = true", Review.class)
                 .setParameter("vkId", vkId)
