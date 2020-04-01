@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface UserDao extends GenericDao<Long, User> {
+
     User getByVkId(Integer vkId) throws NoResultException;
 
     boolean isExistByVkId(Integer vkId);

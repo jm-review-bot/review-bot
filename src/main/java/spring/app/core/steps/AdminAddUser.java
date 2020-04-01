@@ -30,10 +30,10 @@ public class AdminAddUser extends Step {
 
         if (savedInput == null || savedInput.isEmpty()) {
             text = "Введите ссылку на профиль пользователя.\nМожно добавить несколько пользователей, введя ссылки через пробел или запятую.";
-            keyboard = NO_KB;
+            keyboard = BACK_KB;
         } else {
             text = savedInput;
-            keyboard = NO_KB;
+            keyboard = BACK_KB;
             savedInputs.remove(vkId);
         }
 
@@ -94,7 +94,7 @@ public class AdminAddUser extends Step {
                     nextStep = ADMIN_ADD_USER;
                 }
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {
-                keyboard = NO_KB;
+                keyboard = BACK_KB;
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
         }
