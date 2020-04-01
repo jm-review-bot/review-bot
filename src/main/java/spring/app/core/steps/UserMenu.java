@@ -23,7 +23,7 @@ public class UserMenu extends Step {
         User user = context.getUser();
         ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
-        List<Review> userReviews = reviewService.getOpenReviewsByUserVkId(vkId);
+        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
         try {

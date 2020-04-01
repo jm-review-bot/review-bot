@@ -55,8 +55,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getOpenReviewsByUserVkId(Integer vkId) {
-        return reviewDao.getOpenReviewsByUserVkId(vkId);
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
+        return reviewDao.getOpenReviewsByReviewerVkId(vkId);
     }
 
     @Override

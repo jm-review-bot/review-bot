@@ -32,7 +32,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      * @param vkId
      */
     @Override
-    public List<Review> getOpenReviewsByUserVkId(Integer vkId) {
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
         .setParameter("id", vkId).getResultList();
     }
