@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -48,6 +45,7 @@ public class StringParser {
     /**
      * Из текста удаляется все, кроме чисел, которые помещаются с сэт.
      * Используется, например, для парсинга нескольких vkId для удаления из БД.
+     *
      * @param text
      * @return
      * @throws NoNumbersEnteredException - его обработка идет в {@link spring.app.core.steps.AdminRemoveUser#processInput(BotContext)}
@@ -67,13 +65,14 @@ public class StringParser {
     /**
      * Этот метод необходим для парсинга vk_Id или onscreen_name из приведенных ссылок
      * для поиска информации о них в ВК перед добавлением в БД.
+     *
      * @param text
      * @return List<String>, который сразу может быть передан в метод запроса информации из ВК о данных юзерах.
      */
     public static List<String> toVkIdsList(String text) {
         String[] words = text.trim().toLowerCase().split("[\\s,]+");
         List<String> result = new ArrayList<>();
-        for (String link: words) {
+        for (String link : words) {
             link = link.replaceAll("https://vk.com/id", "");
             link = link.replaceAll("https://vk.com/", "");
             result.add(link);
@@ -84,11 +83,10 @@ public class StringParser {
     /**
      * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
      * в LocalDateTime
-     * @param strDate
-     *        строковое представление даты в формате dd.MM.uuuu HH:mm
-     * @return
-     *        null - если strDate не является строковым представлением даты в ожидаемом формате
-     *        LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
+     *
+     * @param strDate строковое представление даты в формате dd.MM.uuuu HH:mm
+     * @return null - если strDate не является строковым представлением даты в ожидаемом формате
+     * LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
      */
 
     public static LocalDateTime stringToLocalDateTime(String strDate) {
@@ -96,14 +94,15 @@ public class StringParser {
         LocalDateTime dateTime = null;
         try {
             dateTime = LocalDateTime.parse(strDate, formatter);
-        } catch (DateTimeParseException ignored) {}
+        } catch (DateTimeParseException ignored) {
+        }
         return dateTime;
     }
 
     /**
      * Метод преобразует LocalDateTime в строку с датой в формате dd.MM.uuuu HH:mm
-     * @param localDateTime
-     *        дата и время
+     *
+     * @param localDateTime дата и время
      * @return Строка с датой в формате dd.MM.uuuu HH:mm
      */
 
@@ -111,6 +110,4 @@ public class StringParser {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
         return localDateTime.format(formatter);
     }
-}
-
 }

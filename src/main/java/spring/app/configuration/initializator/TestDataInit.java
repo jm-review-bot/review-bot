@@ -4,14 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.*;
-import spring.app.model.Review;
-import spring.app.model.Role;
-import spring.app.model.Theme;
-import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
+import spring.app.model.*;
+import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -70,7 +64,7 @@ public class TestDataInit {
         user.setLastName("Таврель");
         user.setReviewPoint(4);
         user.setVkId(582532887);
-        user.setRole(roleUser);
+        user.setRole(roleAdmin);
         user.setChatStep("START");
         userService.addUser(user);
 

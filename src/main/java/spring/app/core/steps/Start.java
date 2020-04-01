@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.NO_KB;
+import static spring.app.util.Keyboards.ADMIN_START_KB;
 import static spring.app.util.Keyboards.START_KB;
 
 @Component
