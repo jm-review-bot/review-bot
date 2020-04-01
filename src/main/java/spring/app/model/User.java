@@ -18,7 +18,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "vk_id")
+    @Column(name = "vk_id", unique = true)
     private Integer vkId;
 
     /**
@@ -36,7 +36,7 @@ public class User {
     private boolean isViewed;
 
     @Column(name = "review_point")
-    private Integer reviewPoint;
+    private Integer reviewPoint = 0;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
@@ -52,6 +52,13 @@ public class User {
         this.chatStep = chatStep;
         this.role = role;
         this.isViewed = false;
+    }
+
+    public User(String firstName, String lastName, Integer vkId, String chatStep) {
+        this.vkId = vkId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.chatStep = chatStep;
     }
 
     public Long getId() {
@@ -123,17 +130,12 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        // TODO убрать проверку по имени.
-        return id.equals(user.id) &&
-                Objects.equals(firstName, user.firstName) &&
-                Objects.equals(lastName, user.lastName) &&
-                vkId.equals(user.vkId);
+
+        return id.equals(user.id) && vkId.equals(user.vkId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, vkId);
+        return Objects.hash(id, vkId);
     }
-
-
 }

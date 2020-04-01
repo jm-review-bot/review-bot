@@ -48,4 +48,5 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         TypedQuery<T> query = entityManager.createQuery(hql, persistentClass);
         return query.getResultList();
     }
+
 }

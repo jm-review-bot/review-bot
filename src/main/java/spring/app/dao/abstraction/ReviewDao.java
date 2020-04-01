@@ -8,4 +8,6 @@ import java.util.List;
 public interface ReviewDao extends GenericDao<Long, Review> {
 
     List<Review> getReviewsByUserVkIdAndReviewPeriod(Integer vkId, LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 }

@@ -4,7 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.*;
-import spring.app.model.*;
+import spring.app.model.Review;
+import spring.app.model.Role;
+import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.ThemeService;
@@ -13,8 +16,8 @@ import spring.app.service.abstraction.UserService;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-
 public class TestDataInit {
+
     @Autowired
     private UserService userService;
 
@@ -43,6 +46,7 @@ public class TestDataInit {
         roleUser.setName("USER");
         roleService.addRole(roleUser);
 
+        // add users test data
         User admin = new User();
         admin.setFirstName("admin");
         admin.setLastName("admin");
@@ -51,6 +55,15 @@ public class TestDataInit {
         admin.setRole(roleAdmin);
         admin.setChatStep("START");
         userService.addUser(admin);
+
+        User admin2 = new User();
+        admin2.setFirstName("Максим");
+        admin2.setLastName("Ботюк");
+        admin2.setReviewPoint(0);
+        admin2.setVkId(87632583); // change this to your vkId for testing
+        admin2.setRole(roleAdmin);
+        admin2.setChatStep("START");
+        userService.addUser(admin2);
 
         User user = new User();
         user.setFirstName("Антон");
@@ -70,6 +83,7 @@ public class TestDataInit {
         user2.setChatStep("START");
         userService.addUser(user2);
 
+        // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, new Start());
         steps.put(StepSelector.USER_MENU, new UserMenu());

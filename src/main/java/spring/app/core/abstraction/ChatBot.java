@@ -1,4 +1,4 @@
-package spring.app.core;
+package spring.app.core.abstraction;
 
 import com.vk.api.sdk.objects.messages.Message;
 

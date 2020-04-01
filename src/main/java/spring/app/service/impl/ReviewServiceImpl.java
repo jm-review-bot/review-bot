@@ -48,6 +48,12 @@ public class ReviewServiceImpl implements ReviewService {
         reviewDao.deleteById(id);
     }
 
+    @Transactional
+    @Override
+    public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
+        reviewDao.updateAllExpiredReviewsBy(localDateTime);
+    }
+
     public List<Review> getReviewsByUserVkIdAndReviewPeriod(Integer vkId, LocalDateTime periodStart, LocalDateTime periodEnd) {
         return reviewDao.getReviewsByUserVkIdAndReviewPeriod(vkId, periodStart, periodEnd);
     }
