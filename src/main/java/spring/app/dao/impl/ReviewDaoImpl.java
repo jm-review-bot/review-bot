@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
+import spring.app.model.StudentReview;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
@@ -43,8 +44,9 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     @Override
     public Review getOpenReviewByStudentVkId(Integer vkId) throws NoResultException {
         return entityManager.createQuery(
-                "SELECT r FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE u.vkId =:vkId AND r.isOpen = true", Review.class)
+                "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme JOIN FETCH srr.user JOIN Review r ON r.id = sr.review.id WHERE r.isOpen = true AND sr.user.vkId = :vkId", StudentReview.class)
                 .setParameter("vkId", vkId)
-                .getSingleResult();
+                .getSingleResult()
+                .getReview();
     }
 }
