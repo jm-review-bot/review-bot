@@ -54,6 +54,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isExistByVkId(Integer vkId) {
+        return userDao.isExistByVkId(vkId);
+    }
+
+    @Override
     @Transactional
     public void deleteUserByVkId(Integer vkId) {
         userDao.deleteUserByVkId(vkId);

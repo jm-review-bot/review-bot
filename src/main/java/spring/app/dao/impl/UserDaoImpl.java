@@ -10,9 +10,9 @@ import spring.app.model.User;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
@@ -31,6 +31,15 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         } catch (NoResultException e) {
             log.info("Пользователь с vkId:{} не обнаружен в базе", vkId);
             throw e;
+        }
+    }
+
+    public boolean isExistByVkId(Integer vkId) {
+        try {
+            entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :id", User.class).setParameter("id", vkId).getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
         }
     }
 

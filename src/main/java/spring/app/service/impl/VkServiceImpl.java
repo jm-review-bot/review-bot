@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import spring.app.exceptions.IncorrectVkIdsException;
+import spring.app.model.User;
 import spring.app.service.abstraction.VkService;
 
 import javax.annotation.PostConstruct;
@@ -46,7 +48,7 @@ public class VkServiceImpl implements VkService {
                 result.add(item.getMessage());
             }
         } catch (ApiException | ClientException e) {
-            log.error("Ошибка получении сообщений", e);
+            log.error("Исключение при получении сообщений", e);
         }
         return result;
     }
@@ -64,5 +66,27 @@ public class VkServiceImpl implements VkService {
         } catch (ApiException | ClientException e) {
             log.error("Исключение при отправке сообщения", e);
         }
+    }
+
+    @Override
+    public List<User> newUsersFromVk(List<String> userIds) throws ClientException, ApiException, IncorrectVkIdsException {
+        List<User> newUsers = new ArrayList<>();
+        this.apiClient.users().get(groupActor)
+                .userIds(userIds)
+                .execute()
+                .stream()
+                .filter(userInfo -> !userInfo.getFirstName().equals("DELETED"))
+                .forEach(userInfo -> newUsers.add(new User(
+                        userInfo.getFirstName(),
+                        userInfo.getLastName(),
+                        userInfo.getId(),
+                        "START"))
+                );
+        // эти юзеры без роли, перед вставкой в БД им нужно добавить роль
+        // здесь не стал добавлять им роль, т.к. пришлось бы лезть в базу
+        if (newUsers.isEmpty()) {
+            throw new IncorrectVkIdsException("В предоставленных данных нет активных пользователей.");
+        }
+        return newUsers;
     }
 }

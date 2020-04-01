@@ -40,7 +40,7 @@ public class AdminRemoveUser extends Step {
                             .append("\n")
                     );
             text = userList.toString();
-            keyboard = NO_KB;
+            keyboard = BACK_KB;
         } else {
             // если в памяти уже есть данные, значит показываем предупреждение об удалении юзеров
             // оно было подготовлено в processInput и сохранено в памяти,
@@ -89,7 +89,7 @@ public class AdminRemoveUser extends Step {
                 savedInputs.put(vkId, userList.toString());
                 nextStep = ADMIN_REMOVE_USER;
             } catch (NumberFormatException | NoResultException | NoNumbersEnteredException e) {
-                keyboard = NO_KB;
+                keyboard = BACK_KB;
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
         } else if (wordInput.equals("да")) {
