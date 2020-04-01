@@ -16,5 +16,4 @@ public interface ThemeService {
 
     void deleteThemeById(Long id);
 
-    Theme getThemeByPosition(Integer position);
 }

@@ -34,30 +34,6 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
-    public final static String DEFAULT_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Сдать ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Принять ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
-
     public final static String START_KB = "{\n" +
             "  \"one_time\": false,\n" +
             "  \"buttons\": [[\n" +

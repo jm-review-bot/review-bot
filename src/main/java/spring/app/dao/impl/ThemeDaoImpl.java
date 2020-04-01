@@ -13,11 +13,4 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
         super(Theme.class);
     }
 
-    @Override
-    public Theme getThemeByPosition(Integer position) {
-        TypedQuery<Theme> query = entityManager.createQuery(
-                "SELECT t FROM Theme t WHERE t.position = :position", Theme.class);
-        query.setParameter("position", position);
-        return query.getSingleResult();
-    }
 }

@@ -20,8 +20,8 @@ public class UserTakeReviewAddDate extends Step {
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        Integer themePosition = (Integer.parseInt(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
-        Theme theme = context.getThemeService().getThemeByPosition(themePosition);
+        Long theme_id = (Long.parseLong(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
+        Theme theme = context.getThemeService().getThemeById(theme_id);
         text = "Ты выбрал тему: " + theme.getTitle() + ".\n\n" + "Укажи время и дату для принятия ревью в формате ДД.ММ.ГГГГ ЧЧ:ММ " +
                 "по Московскому часовому поясу.\n Пример корректного ответа 02.06.2020 17:30\n\n" +
                 "Ты можешь объявить о готовности принять ревью не ранее, чем за 1 час до его начала\n" +
@@ -42,11 +42,12 @@ public class UserTakeReviewAddDate extends Step {
                 List<Review> conflictReviews = context.getReviewService().
                         getReviewsByUserVkIdAndReviewPeriod(vkId, plannedStartReviewTime, plannedStartReviewTime.plusMinutes(59));
                 if (conflictReviews.isEmpty()) {
-                    Map<StepSelector, List<String>> stepStorage = getStorage().get(vkId);
-                    List<String> inputStorage = new ArrayList<>();
-                    inputStorage.add(userInput);
-                    stepStorage.put(USER_TAKE_REVIEW_ADD_DATE, inputStorage);
-                    getStorage().put(context.getVkId(), stepStorage);
+
+                    Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
+                    List<String> reviewDateStorage = new ArrayList<>();
+                    reviewDateStorage.add(userInput);
+                    userStorage.put(USER_TAKE_REVIEW_ADD_DATE, reviewDateStorage);
+                    getStorage().put(context.getVkId(), userStorage);
                     nextStep = USER_TAKE_REVIEW_CONFIRMATION;
                 } else {
                     Review conflictReview = conflictReviews.get(0);

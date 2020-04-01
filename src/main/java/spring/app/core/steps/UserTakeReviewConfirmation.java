@@ -18,8 +18,8 @@ public class UserTakeReviewConfirmation extends Step {
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
         //достаем из глобального хранилища номер темы, введенной пользователем на предыдущем шаге
-        Integer themePosition = (Integer.parseInt(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
-        Theme theme = context.getThemeService().getThemeByPosition(themePosition);
+        Long theme_id = (Long.parseLong(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
+        Theme theme = context.getThemeService().getThemeById(theme_id);
         //достаем из глобального хранилища время ревью, выбранное пользователем на предыдущем шаге
         String reviewDate = getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_DATE).get(0);
 
@@ -37,8 +37,8 @@ public class UserTakeReviewConfirmation extends Step {
         Integer vkId = context.getVkId();
         if (context.getInput().equalsIgnoreCase("добавить")) {
             User user = context.getUserService().getByVkId(vkId);
-            Integer themePosition = (Integer.parseInt(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
-            Theme theme = context.getThemeService().getThemeByPosition(themePosition);
+            Long theme_id = (Long.parseLong(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
+            Theme theme = context.getThemeService().getThemeById(theme_id);
             LocalDateTime plannedStartReviewTime = StringParser.stringToLocalDateTime(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_DATE).get(0));
             context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
             nextStep = USER_MENU;

@@ -39,15 +39,16 @@ public class UserTakeReviewAddTheme extends Step {
         Integer vkId = context.getVkId();
         List<String> themePositionsList = themes.keySet().stream().map(Object::toString).collect(toList());
         if (themePositionsList.contains(userInput)) {
-
             //todo проверка на то, что пользователь уже сдал ревью по теме, которую хочет принять
-            //сохраняем номер темы ревью в storage по vk_id пользователя и наименованию Step //todo сохранять не позицию, а айди
 
-            Map<StepSelector, List<String>> stepStorage = getStorage().get(vkId);
-            List<String> inputStorage = new ArrayList<>();
-            inputStorage.add(userInput);
-            stepStorage.put(USER_TAKE_REVIEW_ADD_THEME, inputStorage);
-            getStorage().put(vkId, stepStorage);
+            // вытаскиваем theme_id по позиции, позиция соответствует пользовательскому вводу
+            String themeId = themes.get(Integer.parseInt(userInput)).getId().toString();
+            // складываем в хранилище
+            Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
+            List<String> themeIdStorage = new ArrayList<>();
+            themeIdStorage.add(themeId);
+            userStorage.put(USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
+            getStorage().put(vkId, userStorage);
 
             nextStep = USER_TAKE_REVIEW_ADD_DATE;
             themes.clear();
