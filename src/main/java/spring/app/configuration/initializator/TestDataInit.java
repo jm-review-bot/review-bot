@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.*;
-import spring.app.model.Role;
-import spring.app.model.Theme;
-import spring.app.model.User;
+import spring.app.model.*;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 
@@ -77,9 +76,9 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
         steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
         steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
-        steps.put(StepSelector.USER_TAKE_REVIEW, new UserTakeReview());
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserAddReviewDate());
-        steps.put(StepSelector.USER_TAKE_REVIEW_SUCCESS, new UserTakeReviewSuccess());
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, new UserTakeReviewAddTheme());
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserTakeReviewAddDate());
+        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, new UserTakeReviewConfirmation());
 
         //add theme
         Theme hibernate = new Theme();
@@ -129,5 +128,26 @@ public class TestDataInit {
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
         themeService.addTheme(patterns);
+
+        Review coreReview = new Review();
+        coreReview.setDate(LocalDateTime.of(2020, 3, 31, 20, 0));
+        coreReview.setOpen(true);
+        coreReview.setTheme(core);
+        coreReview.setUser(user);
+        reviewService.addReview(coreReview);
+
+        Review sqlReview = new Review();
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 50));
+        sqlReview.setOpen(true);
+        sqlReview.setTheme(sql);
+        sqlReview.setUser(user);
+        reviewService.addReview(sqlReview);
+
+        Review springReview = new Review();
+        springReview.setDate(LocalDateTime.of(2020, 4, 1, 10, 00));
+        springReview.setOpen(true);
+        springReview.setTheme(spring);
+        springReview.setUser(user);
+        reviewService.addReview(springReview);
     }
 }

@@ -4,16 +4,17 @@ import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public abstract class Step {
 
     protected String text;
     protected String keyboard;
     protected StepSelector nextStep;
-    protected static final Map<Integer, Map<StepSelector, List<String>>> storage = new HashMap<>();
+    private static final ConcurrentMap<Integer, Map<StepSelector, List<String>>> storage = new ConcurrentHashMap<>();
 
     // абстрактные методы которые должны быть переопределены в каждом Step
     public abstract void enter(BotContext context);
@@ -32,7 +33,7 @@ public abstract class Step {
         return keyboard;
     }
 
-    public static Map<Integer, Map<StepSelector, List<String>>> getStorage() {
+    public ConcurrentMap<Integer, Map<StepSelector, List<String>>> getStorage() {
         return storage;
     }
 }

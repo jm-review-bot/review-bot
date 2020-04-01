@@ -1,6 +1,5 @@
 package spring.app.core.steps;
 
-import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
@@ -14,11 +13,9 @@ import java.util.Map;
 import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
-import static spring.app.util.Keyboards.USER_START_KB;
 
-@Component
-public class UserTakeReview extends Step {
-    private final Map<Integer, Theme> themes = new HashMap<>();
+public class UserTakeReviewAddTheme extends Step {
+    private Map<Integer, Theme> themes = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
@@ -39,34 +36,26 @@ public class UserTakeReview extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String userInput = context.getInput();
+        Integer vkId = context.getVkId();
         List<String> themePositionsList = themes.keySet().stream().map(Object::toString).collect(toList());
         if (themePositionsList.contains(userInput)) {
 
-            //сохраняем номер темы ревью в глобальное хранилище по вкайди пользователя и наименованию шага
-            Map<StepSelector, List<String>> stepStorage = new HashMap<>();
+            //todo проверка на то, что пользователь уже сдал ревью по теме, которую хочет принять
+            //сохраняем номер темы ревью в storage по vk_id пользователя и наименованию Step //todo сохранять не позицию, а айди
+
+            Map<StepSelector, List<String>> stepStorage = getStorage().get(vkId);
             List<String> inputStorage = new ArrayList<>();
             inputStorage.add(userInput);
-            stepStorage.put(USER_TAKE_REVIEW, inputStorage);
-            getStorage().put(context.getVkId(), stepStorage);
+            stepStorage.put(USER_TAKE_REVIEW_ADD_THEME, inputStorage);
+            getStorage().put(vkId, stepStorage);
 
             nextStep = USER_TAKE_REVIEW_ADD_DATE;
-            keyboard = BACK_KB;
             themes.clear();
         } else if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
-            keyboard = USER_START_KB;
             themes.clear();
-
-            // смысла очищать Storage нет, потому что оно используется только на следующем шаге,
-            // на этом шаге мы данные из него не берем
-            // на след шаг попадем только с этого шага, т.е. на этом шаге мы перезатрем данные, которые могут в хранилище быть
-            // проблемы появления некорректных данных я не вижу
-
-            // или все-таки сделать, чтобы было меньше мусора в программе
-
         } else {
-            nextStep = USER_TAKE_REVIEW;
-            keyboard = BACK_KB;
+            nextStep = USER_TAKE_REVIEW_ADD_THEME;
             throw new ProcessInputException("Введена неверная команда...\n\n " +
                     "Введите цифру, соответствующую теме рьвью или нажмите на кнопку \"Назад\" для возврата в главное меню");
         }

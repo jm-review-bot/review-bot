@@ -16,9 +16,15 @@ public class StringParser {
         return numeric.matcher(strNum).matches();
     }
 
-    // возращает null, если строка не является датой в корректном формате
-    // возаращает LocalDateTime если является датой в корректном формате
-    // корректный формат - это ДД.ММ.ГГГГ ЧЧ:ММ
+    /**
+     * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
+     * в LocalDateTime
+     * @param strDate
+     *        строковое представление даты в формате dd.MM.uuuu HH:mm
+     * @return
+     *        null - если strDate не является строковым представлением даты в ожидаемом формате
+     *        LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
+     */
 
     public static LocalDateTime stringToLocalDateTime(String strDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
@@ -27,6 +33,18 @@ public class StringParser {
             dateTime = LocalDateTime.parse(strDate, formatter);
         } catch (DateTimeParseException ignored) {}
         return dateTime;
+    }
+
+    /**
+     * Метод преобразует LocalDateTime в строку с датой в формате dd.MM.uuuu HH:mm
+     * @param localDateTime
+     *        дата и время
+     * @return Строка с датой в формате dd.MM.uuuu HH:mm
+     */
+
+    public static String LocalDateTimeToString(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
+        return localDateTime.format(formatter);
     }
 }
 

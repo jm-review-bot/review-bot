@@ -47,7 +47,6 @@ public class ThemeServiceImpl implements ThemeService {
         themeDao.deleteById(id);
     }
 
-    // убрать если не буду пользоваться
     public Theme getThemeByPosition(Integer position) {
        return themeDao.getThemeByPosition(position);
     }

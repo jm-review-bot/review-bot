@@ -7,6 +7,7 @@ import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
 import spring.app.service.abstraction.ReviewService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -45,5 +46,9 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public void deleteReviewById(Long id) {
         reviewDao.deleteById(id);
+    }
+
+    public List<Review> getReviewsByUserVkIdAndReviewPeriod(Integer vkId, LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return reviewDao.getReviewsByUserVkIdAndReviewPeriod(vkId, periodStart, periodEnd);
     }
 }

@@ -5,7 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 
 import static spring.app.core.StepSelector.USER_PASS_REVIEW;
-import static spring.app.core.StepSelector.USER_TAKE_REVIEW;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_THEME;
 import static spring.app.util.Keyboards.USER_START_KB;
 
 @Component
@@ -34,7 +34,7 @@ public class UserMenu extends Step {
         if (userInput.equals(commands[0])) {
             nextStep = USER_PASS_REVIEW;
         } else if (userInput.equals(commands[1])) {
-            nextStep = USER_TAKE_REVIEW;
+            nextStep = USER_TAKE_REVIEW_ADD_THEME;
         } else {
             keyboard = USER_START_KB;
             throw new ProcessInputException("Введена неверная команда...");
