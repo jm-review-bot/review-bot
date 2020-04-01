@@ -45,10 +45,13 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Transactional(propagation= Propagation.MANDATORY)
     public void deleteUserByVkId(Integer vkId) throws NoResultException {
+        // Write all pending changes to the DB
+        entityManager.flush();
+        // Remove all entities from the persistence context
+        entityManager.clear();
         entityManager.createQuery("DELETE FROM User u WHERE u.vkId = :id")
                 .setParameter("id", vkId)
                 .executeUpdate();
-        entityManager.flush();
     }
 
     @Override
