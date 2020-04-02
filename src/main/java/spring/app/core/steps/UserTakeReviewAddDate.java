@@ -1,5 +1,10 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
@@ -42,7 +47,6 @@ public class UserTakeReviewAddDate extends Step {
                 List<Review> conflictReviews = context.getReviewService().
                         getReviewsByUserVkIdAndReviewPeriod(vkId, plannedStartReviewTime, plannedStartReviewTime.plusMinutes(59));
                 if (conflictReviews.isEmpty()) {
-
                     Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
                     List<String> reviewDateStorage = new ArrayList<>();
                     reviewDateStorage.add(userInput);

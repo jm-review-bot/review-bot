@@ -47,4 +47,7 @@ public class ThemeServiceImpl implements ThemeService {
         themeDao.deleteById(id);
     }
 
+    public List<Theme> getPassedThemesByUser(Integer vkId) {
+        return themeDao.getPassedThemesByUser(vkId);
+    }
 }

@@ -25,6 +25,15 @@ public class TestDataInit {
     private ReviewService reviewService;
 
     @Autowired
+    private StudentReviewService studentReviewService;
+
+    @Autowired
+    private StudentReviewAnswerService studentReviewAnswerService;
+
+    @Autowired
+    private QuestionService questionService;
+
+    @Autowired
     private StepHolder stepHolder;
 
     public TestDataInit() {
@@ -40,7 +49,7 @@ public class TestDataInit {
         roleUser.setName("USER");
         roleService.addRole(roleUser);
 
-        // add users test data
+        // add users
         User admin = new User();
         admin.setFirstName("admin");
         admin.setLastName("admin");
@@ -88,7 +97,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserTakeReviewAddDate());
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, new UserTakeReviewConfirmation());
 
-        //add theme
+        //add themes
         Theme hibernate = new Theme();
         hibernate.setPosition(4);
         hibernate.setReviewPoint(4);
@@ -137,25 +146,105 @@ public class TestDataInit {
         patterns.setTitle("Паттерны");
         themeService.addTheme(patterns);
 
+        // add reviews
         Review coreReview = new Review();
         coreReview.setDate(LocalDateTime.of(2020, 3, 31, 20, 0));
-        coreReview.setOpen(true);
+        coreReview.setOpen(false);
         coreReview.setTheme(core);
         coreReview.setUser(user);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
         sqlReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 50));
-        sqlReview.setOpen(true);
+        sqlReview.setOpen(false);
         sqlReview.setTheme(sql);
         sqlReview.setUser(user);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 4, 1, 10, 00));
-        springReview.setOpen(true);
+        springReview.setDate(LocalDateTime.of(2020, 4, 1, 10, 0));
+        springReview.setOpen(false);
         springReview.setTheme(spring);
         springReview.setUser(user);
         reviewService.addReview(springReview);
+
+        // add student reviews
+        StudentReview studentReview = new StudentReview();
+        studentReview.setUser(user);
+        studentReview.setPassed(true);
+        studentReview.setReview(springReview);
+        studentReviewService.addStudentReview(studentReview);
+
+        StudentReview studentReview1 = new StudentReview();
+        studentReview1.setUser(user);
+        studentReview1.setPassed(false);
+        studentReview1.setReview(springReview);
+        studentReviewService.addStudentReview(studentReview1);
+
+        StudentReview studentReview2 = new StudentReview();
+        studentReview2.setUser(user);
+        studentReview2.setPassed(true);
+        studentReview2.setReview(sqlReview);
+        studentReviewService.addStudentReview(studentReview2);
+
+        StudentReview studentReview3 = new StudentReview();
+        studentReview3.setUser(user2);
+        studentReview3.setPassed(true);
+        studentReview3.setReview(sqlReview);
+        studentReviewService.addStudentReview(studentReview3);
+
+        // add Questions
+        Question question1 = new Question();
+        question1.setAnswer("Весна");
+        question1.setPosition(1);
+        question1.setQuestion("Что такое спринг?");
+        question1.setTheme(spring);
+        questionService.addQuestion(question1);
+
+        Question question2 = new Question();
+        question2.setAnswer("Боб");
+        question2.setPosition(2);
+        question2.setQuestion("Что такое Bean?");
+        question2.setTheme(spring);
+        questionService.addQuestion(question2);
+
+        Question question3 = new Question();
+        question3.setAnswer("Инъекция зависимостей");
+        question3.setPosition(3);
+        question3.setQuestion("Что такое Dependency Injection?");
+        question3.setTheme(spring);
+        questionService.addQuestion(question3);
+
+        Question question4 = new Question();
+        question4.setAnswer("Конечно");
+        question4.setPosition(4);
+        question4.setQuestion("Джаву любишь?");
+        question4.setTheme(spring);
+        questionService.addQuestion(question4);
+
+        // add student review answers
+        StudentReviewAnswer answer1 = new StudentReviewAnswer();
+        answer1.setRight(true);
+        answer1.setQuestion(question1);
+        answer1.setStudentReview(studentReview);
+        studentReviewAnswerService.addStudentReviewAnswer(answer1);
+
+        StudentReviewAnswer answer2 = new StudentReviewAnswer();
+        answer2.setRight(true);
+        answer2.setQuestion(question2);
+        answer2.setStudentReview(studentReview);
+        studentReviewAnswerService.addStudentReviewAnswer(answer2);
+
+        StudentReviewAnswer answer3 = new StudentReviewAnswer();
+        answer3.setRight(true);
+        answer3.setQuestion(question3);
+        answer3.setStudentReview(studentReview);
+        studentReviewAnswerService.addStudentReviewAnswer(answer3);
+
+        StudentReviewAnswer answer4 = new StudentReviewAnswer();
+        answer4.setRight(true);
+        answer4.setQuestion(question4);
+        answer4.setStudentReview(studentReview);
+        studentReviewAnswerService.addStudentReviewAnswer(answer4);
     }
 }
