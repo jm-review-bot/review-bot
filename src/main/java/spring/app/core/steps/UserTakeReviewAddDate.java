@@ -1,10 +1,5 @@
 package spring.app.core.steps;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
