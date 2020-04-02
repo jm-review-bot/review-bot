@@ -2,31 +2,31 @@ package spring.app.util;
 
 public class Keyboards {
 
-    public final static StringBuilder HEADER_FR = new StringBuilder("{\"one_time\": true,\n\"buttons\": [\n[\n");
+    public final static String HEADER_FR = "{\"one_time\": true,\n\"buttons\": [\n[\n";
 
-    public final static StringBuilder FOOTER_FR = new StringBuilder("]\n]\n}");
+    public final static String FOOTER_FR = "]\n]\n}";
 
-    public final static StringBuilder ROW_DELIMETER_FR = new StringBuilder("],[");
+    public final static String ROW_DELIMETER_FR = "],[";
 
-    public final static StringBuilder REVIEW_START_FR = new StringBuilder("{\n" +
+    public final static String REVIEW_START_FR = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
             "          \"label\": \"Начать прием ревью\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      }\n");
+            "      }\n";
 
-    public final static StringBuilder REVIEW_CANCEL_FR = new StringBuilder("{\n" +
+    public final static String REVIEW_CANCEL_FR = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Отменить ревью\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n");
+            "      }\n";
 
-    public final static StringBuilder USER_MENU_FR = new StringBuilder("{\n" +
+    public final static String USER_MENU_FR = "{\n" +
             "        \"action\": {\n" +
                     "          \"type\": \"text\",\n" +
                     "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -41,7 +41,7 @@ public class Keyboards {
                     "          \"label\": \"Принять ревью\"\n" +
                     "        },\n" +
                     "        \"color\": \"primary\"\n" +
-                    "      }\n");
+                    "      }\n";
 
     public final static String START_KB = "{\n" +
             "  \"one_time\": true,\n" +

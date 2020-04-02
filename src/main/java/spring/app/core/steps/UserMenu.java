@@ -33,7 +33,7 @@ public class UserMenu extends Step {
             // Если пользователь не записан ни на одно ревью, метод Dao выбросит исключение и нужно скрыть кнопку "Отменить ревью"
         }
         // формируем блок кнопок
-        StringBuilder keys = HEADER_FR;
+        StringBuilder keys = new StringBuilder(HEADER_FR);
         if (!userReviews.isEmpty()) {
             keys
                     .append(REVIEW_START_FR)
