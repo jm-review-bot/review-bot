@@ -8,13 +8,11 @@ import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.util.StringParser;
 
-import static spring.app.core.StepSelector.USER_PASS_REVIEW;
-import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_THEME;
-import static spring.app.util.Keyboards.USER_START_KB;
 import javax.persistence.NoResultException;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_THEME;
 import static spring.app.util.Keyboards.*;
 
 @Component
