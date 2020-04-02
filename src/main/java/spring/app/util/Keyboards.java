@@ -113,4 +113,27 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
+    public final static String USER_MENU_DELETE_STUDENT_REVIEW = "{\n" +
+            "  \"one_time\": true,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена записи\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Начать\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
 }

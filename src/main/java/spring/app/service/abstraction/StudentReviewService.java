@@ -16,4 +16,6 @@ public interface StudentReviewService {
 
     void deleteStudentReviewById(Long id);
 
+    StudentReview getStudentReviewIfAvailableAndOpen(Long idUser);
+
 }

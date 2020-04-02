@@ -4,14 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.core.StepSelector;
 import spring.app.core.StepHolder;
 import spring.app.core.steps.*;
-import spring.app.model.Review;
-import spring.app.model.Role;
-import spring.app.model.Theme;
-import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
+import spring.app.model.*;
+import spring.app.service.abstraction.*;
 
 import java.util.Map;
 
@@ -33,6 +27,9 @@ public class TestDataInit {
     private ReviewService reviewService;
     @Autowired
     private StepHolder stepHolder;
+
+    @Autowired
+    private StudentReviewService studentReviewService;
 
     public TestDataInit() {
     }
@@ -63,7 +60,7 @@ public class TestDataInit {
         admin2.setReviewPoint(0);
         admin2.setVkId(87632583); // change this to your vkId for testing
         admin2.setRole(roleAdmin);
-        admin2.setChatStep("START");
+        admin2.setChatStep("USER_PASS_REVIEW");
         userService.addUser(admin2);
 
         User user = new User();
@@ -88,6 +85,7 @@ public class TestDataInit {
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, new Start());
         steps.put(StepSelector.USER_MENU, new UserMenu());
+        steps.put(StepSelector.USER_PASS_REVIEW, new UserPassReview());
         steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
         steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
         steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
@@ -143,7 +141,7 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 20));
+        coreReview.setDate(LocalDateTime.of(2020, 4, 1, 23, 20));
         coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(admin);
@@ -163,6 +161,10 @@ public class TestDataInit {
         springReview.setUser(admin);
         reviewService.addReview(springReview);
 
+        StudentReview studentReview = new StudentReview();
+        studentReview.setUser(admin2);
+        studentReview.setReview(coreReview);
+        studentReviewService.addStudentReview(studentReview);
 
     }
 }

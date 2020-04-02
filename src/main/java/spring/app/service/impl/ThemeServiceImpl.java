@@ -46,4 +46,9 @@ public class ThemeServiceImpl implements ThemeService {
     public void deleteThemeById(Long id) {
         themeDao.deleteById(id);
     }
+
+    @Override
+    public Theme getByPosition(Integer position){
+        return themeDao.getByPosition(position);
+    }
 }
