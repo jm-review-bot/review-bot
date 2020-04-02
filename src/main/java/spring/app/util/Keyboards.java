@@ -2,40 +2,49 @@ package spring.app.util;
 
 public class Keyboards {
 
-    public final static String USER_TAKE_REVIEW_CONFIRMATION_KB = "{\n" +
-            "  \"one_time\": true,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
+    public final static StringBuilder HEADER_FR = new StringBuilder("{\"one_time\": true,\n\"buttons\": [\n[\n");
+
+    public final static StringBuilder FOOTER_FR = new StringBuilder("]\n]\n}");
+
+    public final static StringBuilder ROW_DELIMETER_FR = new StringBuilder("],[");
+
+    public final static StringBuilder REVIEW_START_FR = new StringBuilder("{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Добавить\"\n" +
+            "          \"label\": \"Начать прием ревью\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Отменить\"\n" +
-            "        },\n" +
-            "        \"color\": \"negative\"\n" +
-            "      },\n" +
-            "      {\n" +
+            "      }\n");
+
+    public final static StringBuilder REVIEW_CANCEL_FR = new StringBuilder("{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Назад\"\n" +
+            "          \"label\": \"Отменить ревью\"\n" +
             "        },\n" +
-            "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "        \"color\": \"negative\"\n" +
+            "      }\n");
+
+    public final static StringBuilder USER_MENU_FR = new StringBuilder("{\n" +
+            "        \"action\": {\n" +
+                    "          \"type\": \"text\",\n" +
+                    "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+                    "          \"label\": \"Сдать ревью\"\n" +
+                    "        },\n" +
+                    "        \"color\": \"primary\"\n" +
+                    "      },\n" +
+                    "      {\n" +
+                    "        \"action\": {\n" +
+                    "          \"type\": \"text\",\n" +
+                    "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+                    "          \"label\": \"Принять ревью\"\n" +
+                    "        },\n" +
+                    "        \"color\": \"primary\"\n" +
+                    "      }\n");
 
     public final static String START_KB = "{\n" +
-            "  \"one_time\": false,\n" +
+            "  \"one_time\": true,\n" +
             "  \"buttons\": [[\n" +
             "      {\n" +
             "        \"action\": {\n" +
@@ -81,30 +90,6 @@ public class Keyboards {
             "          \"label\": \"Начать\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
-
-    public final static String USER_START_KB = "{\n" +
-            "  \"one_time\": true,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Сдать ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Принять ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +
@@ -157,5 +142,37 @@ public class Keyboards {
             "    ]\n" +
             "  ]\n" +
             "} ";
+    public final static String USER_TAKE_REVIEW_CONFIRMATION_KB = "{\n" +
+            "  \"one_time\": true,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Добавить\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отменить\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
 
 }

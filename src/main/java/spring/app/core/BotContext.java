@@ -27,8 +27,8 @@ public class BotContext {
         this.userService = userService;
         this.roleService = roleService;
         this.vkService = vkService;
-        this.themeService = themeService;
         this.reviewService = reviewService;
+        this.themeService = themeService;
     }
 
     public Integer getVkId() {

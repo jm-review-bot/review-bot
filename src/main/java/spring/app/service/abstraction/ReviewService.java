@@ -21,4 +21,7 @@ public interface ReviewService {
 
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 
+    List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
+
+    Review getOpenReviewByStudentVkId(Integer vkId);
 }

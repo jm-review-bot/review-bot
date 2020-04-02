@@ -57,4 +57,14 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> getReviewsByUserVkIdAndReviewPeriod(Integer vkId, LocalDateTime periodStart, LocalDateTime periodEnd) {
         return reviewDao.getReviewsByUserVkIdAndReviewPeriod(vkId, periodStart, periodEnd);
     }
+
+    @Override
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
+        return reviewDao.getOpenReviewsByReviewerVkId(vkId);
+    }
+
+    @Override
+    public Review getOpenReviewByStudentVkId(Integer vkId) {
+        return reviewDao.getOpenReviewByStudentVkId(vkId);
+    }
 }

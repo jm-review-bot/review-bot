@@ -25,6 +25,12 @@ public class StudentReview {
     public StudentReview() {
     }
 
+    public StudentReview(User user, Review review) {
+        this.user = user;
+        this.review = review;
+    }
+
+
     public Long getId() {
         return id;
     }

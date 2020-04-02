@@ -53,7 +53,7 @@ public class TestDataInit {
         User admin = new User();
         admin.setFirstName("admin");
         admin.setLastName("admin");
-        admin.setReviewPoint(0);
+        admin.setReviewPoint(999);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
         admin.setChatStep("START");
@@ -97,24 +97,12 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserTakeReviewAddDate());
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, new UserTakeReviewConfirmation());
 
-        //add themes
-        Theme hibernate = new Theme();
-        hibernate.setPosition(4);
-        hibernate.setReviewPoint(4);
-        hibernate.setTitle("Hibernate");
-        themeService.addTheme(hibernate);
-
+        //add theme
         Theme core = new Theme();
         core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
         themeService.addTheme(core);
-
-        Theme algorithm = new Theme();
-        algorithm.setPosition(7);
-        algorithm.setReviewPoint(4);
-        algorithm.setTitle("Алгоритмы");
-        themeService.addTheme(algorithm);
 
         Theme multithreading = new Theme();
         multithreading.setPosition(2);
@@ -128,17 +116,17 @@ public class TestDataInit {
         sql.setTitle("SQL");
         themeService.addTheme(sql);
 
+        Theme hibernate = new Theme();
+        hibernate.setPosition(4);
+        hibernate.setReviewPoint(4);
+        hibernate.setTitle("Hibernate");
+        themeService.addTheme(hibernate);
+
         Theme spring = new Theme();
         spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
         themeService.addTheme(spring);
-
-        Theme finalReview = new Theme();
-        finalReview.setPosition(8);
-        finalReview.setReviewPoint(4);
-        finalReview.setTitle("Финальное ревью");
-        themeService.addTheme(finalReview);
 
         Theme patterns = new Theme();
         patterns.setPosition(6);
@@ -146,7 +134,19 @@ public class TestDataInit {
         patterns.setTitle("Паттерны");
         themeService.addTheme(patterns);
 
-        // add reviews
+        Theme algorithm = new Theme();
+        algorithm.setPosition(7);
+        algorithm.setReviewPoint(4);
+        algorithm.setTitle("Алгоритмы");
+        themeService.addTheme(algorithm);
+
+        Theme finalReview = new Theme();
+        finalReview.setPosition(8);
+        finalReview.setReviewPoint(4);
+        finalReview.setTitle("Финальное ревью");
+        themeService.addTheme(finalReview);
+
+        //add review
         Review coreReview = new Review();
         coreReview.setDate(LocalDateTime.of(2020, 3, 31, 20, 0));
         coreReview.setOpen(false);
