@@ -10,6 +10,7 @@ public class BotContext {
     private final String input;
     private final Role role;
     private final UserService userService;
+    private final RoleService roleService;
     private final VkService vkService;
     private final StudentReviewService studentReviewService;
     private final ThemeService themeService;
@@ -17,12 +18,13 @@ public class BotContext {
 
     public BotContext(User user, Integer vkId, String input, Role role, UserService userService,
                       VkService vkService, StudentReviewService studentReviewService, ThemeService themeService,
-                      ReviewService reviewService) {
+                      ReviewService reviewService, RoleService roleService) {
         this.user = user;
         this.vkId = vkId;
         this.input = input;
         this.role = role;
         this.userService = userService;
+        this.roleService = roleService;
         this.vkService = vkService;
         this.studentReviewService = studentReviewService;
         this.themeService = themeService;
@@ -52,6 +54,10 @@ public class BotContext {
 
     public VkService getVkService() {
         return vkService;
+    }
+
+    public RoleService getRoleService() {
+        return roleService;
     }
 
     public StudentReviewService getStudentReviewService() {

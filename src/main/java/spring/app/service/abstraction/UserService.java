@@ -19,6 +19,8 @@ public interface UserService {
 
     User getByVkId(Integer vkId);
 
+    boolean isExistByVkId(Integer vkId);
+
     void deleteUserByVkId(Integer vkId);
 
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);

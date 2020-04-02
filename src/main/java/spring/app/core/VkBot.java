@@ -10,7 +10,13 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.RoleService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.ReviewService;
+
 import spring.app.util.Keyboards;
 
 import javax.persistence.NoResultException;
@@ -80,7 +86,7 @@ public class VkBot implements ChatBot {
 
             Role role = user.getRole();
             context = new BotContext(user, userVkId, input, role, userService, vkService, studentReviewService,
-                                    themeService, reviewService);
+                                    themeService, reviewService, roleService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг

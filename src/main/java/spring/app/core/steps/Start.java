@@ -28,7 +28,7 @@ public class Start extends Step {
         if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             nextStep = ADMIN_MENU;
-        } else if (command.equals("Начать")) {
+        } else if (command.equals("начать")) {
             nextStep = USER_MENU;
         } else if (command.equals("/start")) {
             nextStep = START;
