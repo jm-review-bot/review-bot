@@ -51,7 +51,7 @@ public class TestDataInit {
         admin.setReviewPoint(0);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
-        admin.setChatStep("START");
+        admin.setChatStep("USER_PASS_REVIEW");
         userService.addUser(admin);
 
         User admin2 = new User();
@@ -69,7 +69,7 @@ public class TestDataInit {
         user.setReviewPoint(4);
         user.setVkId(582532887);
         user.setRole(roleUser);
-        user.setChatStep("START");
+        user.setChatStep("USER_PASS_REVIEW");
         userService.addUser(user);
 
         User user2 = new User();
@@ -162,7 +162,7 @@ public class TestDataInit {
         reviewService.addReview(springReview);
 
         StudentReview studentReview = new StudentReview();
-        studentReview.setUser(admin2);
+        studentReview.setUser(admin);
         studentReview.setReview(coreReview);
         studentReviewService.addStudentReview(studentReview);
 

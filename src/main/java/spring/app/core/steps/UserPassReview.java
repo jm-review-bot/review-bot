@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -18,6 +20,7 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserPassReview extends Step {
+    private final static Logger log = LoggerFactory.getLogger(UserPassReview.class);
 
     private StudentReview studentReview;
     private List<Review> reviews;
@@ -31,26 +34,29 @@ public class UserPassReview extends Step {
                 enterStepOne(context);
                 break;
             case (2):
-                enterStepSecond(context);
+                enterStepTwo(context);
                 step++;
                 break;
             case (3):
-                enterStepThird(context);
+                enterStepThree(context);
                 break;
         }
     }
 
     private void enterStepOne(BotContext context) {
+        log.debug("Юзер: {}, метод: enterStepOne, step: {}", context.getVkId(), this.step);
         studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         if (studentReview != null) {
             text = String.format("Вы уже записаны на ревью:\n" +
                     "Тема: %s\n" +
                     "Дата: %s\n" +
-                    "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(), studentReview.getReview().getDate().toString());
+                    "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”",
+                    studentReview.getReview().getTheme().getTitle(),
+                    studentReview.getReview().getDate().toString());
 
             keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
         } else {
-            text = "\"Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n" +
+            text = "Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n" +
                     "[1] Java Core, стоимость 0 RP\n" +
                     "[2] Многопоточность, стоимость 4 RP\n" +
                     "[3] SQL, стоимость 4 RP\n" +
@@ -58,13 +64,14 @@ public class UserPassReview extends Step {
                     "[5] Spring, стоимость 4 RP\n" +
                     "[6] Паттерны, стоимость 4 RP\n" +
                     "[7] Алгоритмы, стоимость 4 RP\n" +
-                    "[8] Финальное ревью, стоимость 4 RP\"";
+                    "[8] Финальное ревью, стоимость 4 RP";
             step++;
             keyboard = NO_KB;
         }
     }
 
-    private void enterStepSecond(BotContext context) {
+    private void enterStepTwo(BotContext context) {
+        log.debug("Юзер: {}, метод: enterStepTwo, step: {}", context.getVkId(), this.step);
         StringBuilder reviewList = new StringBuilder("Список доступных ревью: \n\n");
         reviews.stream()
                 .sorted(Comparator.comparing(Review::getDate))
@@ -83,7 +90,9 @@ public class UserPassReview extends Step {
         text = reviewList.toString();
     }
 
-    private void enterStepThird(BotContext context) {
+    private void enterStepThree(BotContext context) {
+        log.debug("Юзер: {}, метод: enterStepThree, step: {}", context.getVkId(), this.step);
+
         text = String.format("Ты записан на ревью в %s, для отмены записи на ревью напиши " +
                 "\"отмена записи\" в чат или нажми кнопку \"Отмена записи\". В момент, когда ревью начнётся - " +
                 "тебе придёт сюда ссылка для подключения к разговору.", reviewForDate.getDate());
