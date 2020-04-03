@@ -149,50 +149,50 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 4, 1, 23, 20));
-        coreReview.setOpen(true);
+        coreReview.setDate(LocalDateTime.of(2020, 5, 1, 23, 20));
+        coreReview.setOpen(false);
         coreReview.setTheme(core);
-        coreReview.setUser(admin);
+        coreReview.setReviewer(admin);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 21));
+        sqlReview.setDate(LocalDateTime.of(2020, 4, 2, 23, 21));
         sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
         sqlReview.setTheme(sql);
-        sqlReview.setUser(admin);
+        sqlReview.setReviewer(user);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 4, 1, 10, 0));
-        springReview.setOpen(true);
+        springReview.setDate(LocalDateTime.of(2020, 5, 1, 10, 0));
+        springReview.setOpen(false);
         springReview.setTheme(spring);
-        springReview.setUser(admin);
+        springReview.setReviewer(admin);
         reviewService.addReview(springReview);
 
         // add student reviews
         StudentReview studentReview = new StudentReview();
-        studentReview.setUser(user);
+        studentReview.setStudent(user);
         studentReview.setPassed(true);
         studentReview.setReview(coreReview);
         studentReviewService.addStudentReview(studentReview);
 
         StudentReview studentReview1 = new StudentReview();
-        studentReview1.setUser(user);
-        studentReview1.setPassed(false);
-        studentReview1.setReview(springReview);
+        studentReview1.setStudent(admin);
+        studentReview1.setPassed(true);
+        studentReview1.setReview(sqlReview);
         studentReviewService.addStudentReview(studentReview1);
 
         StudentReview studentReview2 = new StudentReview();
-        studentReview2.setUser(user);
+        studentReview2.setStudent(admin2);
         studentReview2.setPassed(true);
         studentReview2.setReview(sqlReview);
         studentReviewService.addStudentReview(studentReview2);
 
-        StudentReview studentReview3 = new StudentReview();
-        studentReview3.setUser(user2);
-        studentReview3.setPassed(true);
-        studentReview3.setReview(sqlReview);
-        studentReviewService.addStudentReview(studentReview3);
+//        StudentReview studentReview3 = new StudentReview();
+//        studentReview3.setStudent(user);
+//        studentReview3.
+//        studentReview3.setReview(sqlReview);
+//        studentReviewService.addStudentReview(studentReview3);
 
         // add Questions
         Question question1 = new Question();

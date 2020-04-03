@@ -64,11 +64,11 @@ public class Review {
         isOpen = open;
     }
 
-    public User getUser() {
+    public User getReviewer() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setReviewer(User user) {
         this.user = user;
     }
 

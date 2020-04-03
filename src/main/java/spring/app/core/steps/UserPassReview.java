@@ -105,9 +105,9 @@ public class UserPassReview extends Step {
                         .append(" дата: ")
                         .append(review.getDate())
                         .append(", принимающий: ")
-                        .append(review.getUser().getFirstName())
+                        .append(review.getReviewer().getFirstName())
                         .append(" ")
-                        .append(review.getUser().getLastName())
+                        .append(review.getReviewer().getLastName())
                         .append("\n")
                 );
         text = reviewList.toString();
@@ -127,7 +127,7 @@ public class UserPassReview extends Step {
         savedStudentReviews.put(vkId,
                 context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId())
         );
-        savedAvailableReviews.remove(vkId);
+//        savedAvailableReviews.remove(vkId);
         savedReviewsForDate.remove(vkId);
     }
 
@@ -193,7 +193,7 @@ public class UserPassReview extends Step {
                     savedReviewsForDate.put(vkId, reviewForDate);
 
                     studentReview.setReview(reviewForDate);
-                    studentReview.setUser(context.getUser());
+                    studentReview.setStudent(context.getUser());
                     context.getStudentReviewService().addStudentReview(studentReview);
                     break;
                 } else {
