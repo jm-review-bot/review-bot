@@ -13,7 +13,9 @@ import spring.app.model.User;
 import spring.app.util.StringParser;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
@@ -22,30 +24,48 @@ import static spring.app.util.Keyboards.*;
 public class UserPassReview extends Step {
     private final static Logger log = LoggerFactory.getLogger(UserPassReview.class);
 
-    private StudentReview studentReview;
-    private List<Review> reviews;
-    private Review reviewForDate;
-    private int step = 1;
+    private final Map<Integer, StudentReview> savedStudentReviews = new HashMap<>();
+    private final Map<Integer, List<Review>> savedAvailableReviews = new HashMap<>();
+    private final Map<Integer, Review> savedReviewsForDate = new HashMap<>();
+    private final Map<Integer, Integer> userSteps = new HashMap<>();
+
+//    private StudentReview studentReview;
+//    private List<Review> reviews;
+//    private Review reviewForDate;
+//    private int step = 1;
 
     @Override
     public void enter(BotContext context) {
+        Integer vkId = context.getVkId();
+        // если записи нет, т.е. юзер тут впервые, помещаем 1 шаг
+        userSteps.putIfAbsent(vkId, 1);
+
+        Integer step = userSteps.get(vkId);
         switch (step) {
             case (1):
                 enterStepOne(context);
                 break;
             case (2):
                 enterStepTwo(context);
-                step++;
+                userSteps.put(vkId,3);
                 break;
             case (3):
                 enterStepThree(context);
+                 // ?
                 break;
         }
     }
 
     private void enterStepOne(BotContext context) {
-        log.debug("Юзер: {}, метод: enterStepOne, step: {}", context.getVkId(), this.step);
-        studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        Integer vkId = context.getVkId();
+        Integer step = userSteps.get(vkId);
+        log.debug("Юзер: {}, метод: enterStepOne, step: {}", context.getVkId(), step);
+
+        savedStudentReviews.putIfAbsent(vkId,
+                context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId())
+        );
+        StudentReview studentReview = savedStudentReviews.get(vkId);
+
         if (studentReview != null) {
             text = String.format("Вы уже записаны на ревью:\n" +
                     "Тема: %s\n" +
@@ -65,15 +85,18 @@ public class UserPassReview extends Step {
                     "[6] Паттерны, стоимость 4 RP\n" +
                     "[7] Алгоритмы, стоимость 4 RP\n" +
                     "[8] Финальное ревью, стоимость 4 RP";
-            step++;
+            userSteps.put(vkId,2);
             keyboard = NO_KB;
         }
     }
 
     private void enterStepTwo(BotContext context) {
-        log.debug("Юзер: {}, метод: enterStepTwo, step: {}", context.getVkId(), this.step);
+        Integer vkId = context.getVkId();
+        Integer step = userSteps.get(vkId);
+        log.debug("Юзер: {}, метод: enterStepTwo, step: {}", context.getVkId(), step);
+
         StringBuilder reviewList = new StringBuilder("Список доступных ревью: \n\n");
-        reviews.stream()
+        savedAvailableReviews.get(vkId).stream()
                 .sorted(Comparator.comparing(Review::getDate))
                 .forEach(review -> reviewList
                         .append("[")
@@ -91,21 +114,26 @@ public class UserPassReview extends Step {
     }
 
     private void enterStepThree(BotContext context) {
-        log.debug("Юзер: {}, метод: enterStepThree, step: {}", context.getVkId(), this.step);
+        Integer vkId = context.getVkId();
+        Integer step = userSteps.get(vkId);
+        log.debug("Юзер: {}, метод: enterStepThree, step: {}", context.getVkId(), step);
 
         text = String.format("Ты записан на ревью в %s, для отмены записи на ревью напиши " +
                 "\"отмена записи\" в чат или нажми кнопку \"Отмена записи\". В момент, когда ревью начнётся - " +
-                "тебе придёт сюда ссылка для подключения к разговору.", reviewForDate.getDate());
+                "тебе придёт сюда ссылка для подключения к разговору.", savedReviewsForDate.get(vkId).getDate());
         keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
-        step = 1;
-        studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-        reviews = null;
-        reviewForDate = null;
+        userSteps.put(vkId, 1);
+
+        savedStudentReviews.put(vkId,
+                context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId())
+        );
+        savedAvailableReviews.remove(vkId);
+        savedReviewsForDate.remove(vkId);
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
-        if (reviews == null) {
+        if (savedAvailableReviews.get(context.getVkId()) == null) {
             processInputStepFirst(context);
         } else {
             processInputStepSecond(context);
@@ -113,14 +141,17 @@ public class UserPassReview extends Step {
     }
 
     private void processInputStepFirst(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
-        if (studentReview == null) {
+        Integer vkId = context.getVkId();
+        if (savedStudentReviews.get(vkId) == null) {
             Integer command = StringParser.toNumbersSet(context.getInput()).iterator().next();
             if (command > 0 & command < 9) {
                 Theme theme = context.getThemeService().getByPosition(command);
                 User user = context.getUser();
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
-                    reviews = context.getReviewService().getAllReviewsByTheme(theme);
-                    if (reviews.isEmpty()) {
+                    List<Review> availableReviews = context.getReviewService().getAllReviewsByTheme(theme);
+                    savedAvailableReviews.put(vkId, availableReviews);
+
+                    if (availableReviews.isEmpty()) {
                         // TODO решить на который шаг отбросить
                         nextStep = START;
                         throw new ProcessInputException("К сожалению, сейчас никто не готов принять " +
@@ -138,9 +169,11 @@ public class UserPassReview extends Step {
         } else {
             String command = StringParser.toWordsArray(context.getInput())[0];
             if ("отмена".equals(command)) {
-                context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
+                context.getStudentReviewService()
+                            .deleteStudentReviewById(savedStudentReviews.get(vkId).getId()
+                        );
                 nextStep = USER_PASS_REVIEW;
-            } else if ("начать".equals(command)) {
+            } else if ("/start".equals(command)) {
                 nextStep = START;
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
@@ -149,12 +182,16 @@ public class UserPassReview extends Step {
     }
 
     private void processInputStepSecond(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
+        Integer vkId = context.getVkId();
+
         if (StringParser.isNumeric(context.getInput())) {
             Long command = StringParser.toNumbersSet(context.getInput()).iterator().next().longValue();
-            for (Review review : reviews) {
+            for (Review review : savedAvailableReviews.get(vkId)) {
                 if (review.getId() == command) {
                     StudentReview studentReview = new StudentReview();
-                    reviewForDate = context.getReviewService().getReviewById(command);
+                    Review reviewForDate = context.getReviewService().getReviewById(command);
+                    savedReviewsForDate.put(vkId, reviewForDate);
+
                     studentReview.setReview(reviewForDate);
                     studentReview.setUser(context.getUser());
                     context.getStudentReviewService().addStudentReview(studentReview);
