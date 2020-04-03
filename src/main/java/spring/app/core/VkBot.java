@@ -10,6 +10,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
+import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
@@ -25,13 +26,15 @@ public class VkBot implements ChatBot {
     private UserService userService;
     private RoleService roleService;
     private StepHolder stepHolder;
+    private ReviewService reviewService;
 
 
-    public VkBot(VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder) {
+    public VkBot(VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder, ReviewService reviewService) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
         this.stepHolder = stepHolder;
+        this.reviewService = reviewService;
     }
 
     @Override
@@ -74,7 +77,8 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, roleService, vkService);
+
+            context = new BotContext(user, userVkId, input, role, userService, roleService, vkService, reviewService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
