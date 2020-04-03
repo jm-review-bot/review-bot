@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReviewDao extends GenericDao<Long, Review> {
 
-    List<Review> getReviewsByUserVkIdAndReviewPeriod(Integer vkId, LocalDateTime periodStart, LocalDateTime periodEnd);
+    List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 

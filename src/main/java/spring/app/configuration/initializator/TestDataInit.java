@@ -1,8 +1,8 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import spring.app.core.StepSelector;
 import spring.app.core.StepHolder;
+import spring.app.core.StepSelector;
 import spring.app.core.steps.*;
 import spring.app.model.*;
 import spring.app.service.abstraction.*;
@@ -35,6 +35,30 @@ public class TestDataInit {
 
     @Autowired
     private StepHolder stepHolder;
+
+    @Autowired
+    private Step start;
+
+    @Autowired
+    private Step userMenu;
+
+    @Autowired
+    private Step adminMenu;
+
+    @Autowired
+    private Step adminAddUser;
+
+    @Autowired
+    private Step adminRemoveUser;
+
+    @Autowired
+    private Step userTakeReviewAddDate;
+
+    @Autowired
+    private Step userTakeReviewAddTheme;
+
+    @Autowired
+    private Step userTakeReviewConfirmation;
 
     public TestDataInit() {
     }
@@ -88,17 +112,17 @@ public class TestDataInit {
 
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
-        steps.put(StepSelector.START, new Start());
-        steps.put(StepSelector.USER_MENU, new UserMenu());
-        steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
-        steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
-        steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
+        steps.put(StepSelector.START, start);
+        steps.put(StepSelector.USER_MENU, userMenu);
+        steps.put(StepSelector.ADMIN_MENU, adminMenu);
+        steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
+        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
         steps.put(StepSelector.USER_PASS_REVIEW, new UserPassReview());
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, new UserTakeReviewAddTheme());
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserTakeReviewAddDate());
-        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, new UserTakeReviewConfirmation());
 
-        //add theme
+        //add themes
         Theme core = new Theme();
         core.setPosition(1);
         core.setReviewPoint(0);
@@ -147,7 +171,7 @@ public class TestDataInit {
         finalReview.setTitle("Финальное ревью");
         themeService.addTheme(finalReview);
 
-        //add review
+        // add reviews
         Review coreReview = new Review();
         coreReview.setDate(LocalDateTime.of(2020, 5, 1, 23, 20));
         coreReview.setOpen(false);
