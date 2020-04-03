@@ -52,7 +52,7 @@ public class UserTakeReviewAddDate extends Step {
                     Review conflictReview = conflictReviews.get(0);
                     throw new ProcessInputException("Новое ревью пересекается с другим ревью, которое ты проводишь." +
                             "\nОбрати внимание, что длительность ревью 1 час.\n\n"
-                            + "Пересечение с ревью:\nТема: " + conflictReview.getTheme() +
+                            + "Пересечение с ревью:\nТема: " + context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle() +
                             "\nДата начала ревью: " + StringParser.LocalDateTimeToString(conflictReview.getDate()) +
                             "\nДата окончания ревью: " + StringParser.LocalDateTimeToString(conflictReview.getDate().plusHours(1)) + "\n\n" +
                             "Повтори ввод или вернись назад к выбору темы ревью");

@@ -56,4 +56,8 @@ public class ThemeServiceImpl implements ThemeService {
     public Theme getByPosition(Integer position){
         return themeDao.getByPosition(position);
     }
+
+    public Theme getThemeByReviewId(Long reviewId) {
+        return themeDao.getThemeByReviewId(reviewId);
+    }
 }
