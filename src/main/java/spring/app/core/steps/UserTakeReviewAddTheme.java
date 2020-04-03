@@ -21,7 +21,7 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public void enter(BotContext context) {
-        context.getThemeService().getAllThemes().forEach(theme -> themes.put(theme.getPosition(), theme));
+        context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n ");
         themeList.append("Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         for (Integer position : themes.keySet()) {
@@ -44,7 +44,7 @@ public class UserTakeReviewAddTheme extends Step {
                 .map(Object::toString)
                 .collect(toList());
         if (themePositionsList.contains(userInput)) {
-            // вытаскиваем theme_id по позиции, позиция соответствует пользовательскому вводу
+            // вытаскиваем themeId по позиции, позиция соответствует пользовательскому вводу
             String themeId = themes.get(Integer.parseInt(userInput)).getId().toString();
             // проверяем, что сдали ревью по теме, которую хотим принять
             List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()
@@ -58,7 +58,6 @@ public class UserTakeReviewAddTheme extends Step {
                 userStorage.put(USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
                 getStorage().put(vkId, userStorage);
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
-                themes.clear();
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_THEME;
                 throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
@@ -66,10 +65,8 @@ public class UserTakeReviewAddTheme extends Step {
             }
         } else if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
-            themes.clear();
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
-            themes.clear();
         } else {
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
             throw new ProcessInputException("Введена неверная команда...\n\n Введи цифру, соответствующую теме рьвью или нажми на кнопку \"Назад\" для возврата в главное меню");
