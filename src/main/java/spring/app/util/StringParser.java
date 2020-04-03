@@ -81,14 +81,12 @@ public class StringParser {
         return result;
     }
 
-    // todo переписать джавадок
     /**
      * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
      * в LocalDateTime
-     *
      * @param strDate строковое представление даты в формате dd.MM.uuuu HH:mm
-     * @return null - если strDate не является строковым представлением даты в ожидаемом формате
-     * LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
+     * @return LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
+     * @throws NoDataEnteredException если strDate не является строковым представлением даты в ожидаемом формате
      */
 
     public static LocalDateTime stringToLocalDateTime(String strDate) throws NoDataEnteredException {
