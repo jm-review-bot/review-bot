@@ -53,7 +53,7 @@ public class UserTakeReviewAddTheme extends Step {
                 userStorage.put(USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
                 getStorage().put(vkId, userStorage);
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
-                themes.clear();
+//                themes.clear();  // выключено специально
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_THEME;
                 throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n " +
