@@ -19,7 +19,7 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public void enter(BotContext context) {
-        context.getThemeService().getAllThemes().forEach(theme -> themes.put(theme.getPosition(), theme));
+        context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять," +
                 "в качестве ответа пришли цифру (номер темы):\n" +
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
@@ -61,7 +61,7 @@ public class UserTakeReviewAddTheme extends Step {
             }
         } else if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
-            themes.clear();
+//            themes.clear();
         } else {
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
             throw new ProcessInputException("Введена неверная команда...\n\n " +
