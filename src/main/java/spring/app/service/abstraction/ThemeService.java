@@ -17,4 +17,6 @@ public interface ThemeService {
     void deleteThemeById(Long id);
 
     List<Theme> getPassedThemesByUser(Integer vkId);
+
+    Theme getThemeByReviewId(Long reviewId);
 }

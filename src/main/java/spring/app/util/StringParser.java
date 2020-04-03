@@ -3,6 +3,7 @@ package spring.app.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spring.app.core.BotContext;
+import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 
 import java.time.LocalDateTime;
@@ -80,6 +81,7 @@ public class StringParser {
         return result;
     }
 
+    // todo переписать джавадок
     /**
      * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
      * в LocalDateTime
@@ -89,12 +91,13 @@ public class StringParser {
      * LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
      */
 
-    public static LocalDateTime stringToLocalDateTime(String strDate) {
+    public static LocalDateTime stringToLocalDateTime(String strDate) throws NoDataEnteredException {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
-        LocalDateTime dateTime = null;
+        LocalDateTime dateTime;
         try {
             dateTime = LocalDateTime.parse(strDate, formatter);
-        } catch (DateTimeParseException ignored) {
+        } catch (DateTimeParseException e) {
+            throw new NoDataEnteredException("\"Некорректный ввод данных...\\n\\n Пример корректного ответа 02.06.2020 17:30\"");
         }
         return dateTime;
     }

@@ -50,4 +50,8 @@ public class ThemeServiceImpl implements ThemeService {
     public List<Theme> getPassedThemesByUser(Integer vkId) {
         return themeDao.getPassedThemesByUser(vkId);
     }
+
+    public Theme getThemeByReviewId(Long reviewId) {
+        return themeDao.getThemeByReviewId(reviewId);
+    }
 }

@@ -21,4 +21,11 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("vk_id", vkId)
                 .getResultList();
     }
+
+    @Override
+    public Theme getThemeByReviewId(Long reviewId) {
+        return entityManager.createQuery("SELECT t FROM Review r JOIN r.theme t WHERE r.id =:id", Theme.class)
+                .setParameter("id", reviewId)
+                .getSingleResult();
+    }
 }

@@ -36,6 +36,30 @@ public class TestDataInit {
     @Autowired
     private StepHolder stepHolder;
 
+    @Autowired
+    private Step start;
+
+    @Autowired
+    private Step userMenu;
+
+    @Autowired
+    private Step adminMenu;
+
+    @Autowired
+    private Step adminAddUser;
+
+    @Autowired
+    private Step adminRemoveUser;
+
+    @Autowired
+    private Step userTakeReviewAddDate;
+
+    @Autowired
+    private Step userTakeReviewAddTheme;
+
+    @Autowired
+    private Step userTakeReviewConfirmation;
+
     public TestDataInit() {
     }
 
@@ -88,33 +112,21 @@ public class TestDataInit {
 
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
-        steps.put(StepSelector.START, new Start());
-        steps.put(StepSelector.USER_MENU, new UserMenu());
-        steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
-        steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
-        steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, new UserTakeReviewAddTheme());
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserTakeReviewAddDate());
-        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, new UserTakeReviewConfirmation());
+        steps.put(StepSelector.START, start);
+        steps.put(StepSelector.USER_MENU, userMenu);
+        steps.put(StepSelector.ADMIN_MENU, adminMenu);
+        steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
+        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
+        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
 
         //add themes
-        Theme hibernate = new Theme();
-        hibernate.setPosition(4);
-        hibernate.setReviewPoint(4);
-        hibernate.setTitle("Hibernate");
-        themeService.addTheme(hibernate);
-
         Theme core = new Theme();
         core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
         themeService.addTheme(core);
-
-        Theme algorithm = new Theme();
-        algorithm.setPosition(7);
-        algorithm.setReviewPoint(4);
-        algorithm.setTitle("Алгоритмы");
-        themeService.addTheme(algorithm);
 
         Theme multithreading = new Theme();
         multithreading.setPosition(2);
@@ -128,17 +140,17 @@ public class TestDataInit {
         sql.setTitle("SQL");
         themeService.addTheme(sql);
 
+        Theme hibernate = new Theme();
+        hibernate.setPosition(4);
+        hibernate.setReviewPoint(4);
+        hibernate.setTitle("Hibernate");
+        themeService.addTheme(hibernate);
+
         Theme spring = new Theme();
         spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
         themeService.addTheme(spring);
-
-        Theme finalReview = new Theme();
-        finalReview.setPosition(8);
-        finalReview.setReviewPoint(4);
-        finalReview.setTitle("Финальное ревью");
-        themeService.addTheme(finalReview);
 
         Theme patterns = new Theme();
         patterns.setPosition(6);
@@ -146,24 +158,36 @@ public class TestDataInit {
         patterns.setTitle("Паттерны");
         themeService.addTheme(patterns);
 
+        Theme algorithm = new Theme();
+        algorithm.setPosition(7);
+        algorithm.setReviewPoint(4);
+        algorithm.setTitle("Алгоритмы");
+        themeService.addTheme(algorithm);
+
+        Theme finalReview = new Theme();
+        finalReview.setPosition(8);
+        finalReview.setReviewPoint(4);
+        finalReview.setTitle("Финальное ревью");
+        themeService.addTheme(finalReview);
+
         // add reviews
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 31, 20, 0));
-        coreReview.setOpen(false);
+        coreReview.setDate(LocalDateTime.of(2020, 4, 3, 21, 0));
+        coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(user);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 50));
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
         sqlReview.setOpen(false);
         sqlReview.setTheme(sql);
         sqlReview.setUser(user);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 4, 1, 10, 0));
-        springReview.setOpen(false);
+        springReview.setDate(LocalDateTime.of(2020, 4, 3, 22, 0));
+        springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(user);
         reviewService.addReview(springReview);
