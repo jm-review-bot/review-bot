@@ -1,6 +1,7 @@
 package spring.app.service.abstraction;
 
 import spring.app.model.Review;
+import spring.app.model.Theme;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +21,8 @@ public interface ReviewService {
     List<Review> getReviewsByUserVkIdAndReviewPeriod(Integer vkId, LocalDateTime periodStart, LocalDateTime periodEnd);
 
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
+
+    List<Review> getAllReviewsByTheme(Theme theme);
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 

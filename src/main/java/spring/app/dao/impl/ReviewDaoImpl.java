@@ -6,12 +6,13 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
+import spring.app.model.Theme;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
-
 
 @Repository
 public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDao {
@@ -37,6 +38,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("vk_id", vkId)
                 .getResultList();
     }
+
     /**
      * Метод возвращает все открытые ревью, которые юзер с данным vkId будет принимать
      * @param vkId
@@ -45,6 +47,24 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
         .setParameter("id", vkId).getResultList();
+    }
+
+    @Override
+    public List<Review> getAllReviewsByTheme(Theme theme) {
+//        String hql = "SELECT r FROM Review r INNER JOIN (SELECT COUNT(*) AS all FROM StudentReview sr) b ON b.all < 3 WHERE r.theme = :theme AND r.isOpen = true";
+        /*
+        SELECT r,COUNT(*) AS all
+FROM Review r
+join student_review sr ON sr.review.id = r.id
+where r.theme_id = :theme and r.is_open = true
+group by r
+having count(*) <3
+        */
+        // TODO добавить проверку на количество записей в таблице StudentReview
+        String hql = "SELECT r FROM Review r JOIN FETCH r.user WHERE r.theme.id = :theme AND r.isOpen = true";
+        TypedQuery<Review> query = entityManager.createQuery(hql, Review.class);
+        query.setParameter("theme", theme.getId());
+        return query.getResultList();
     }
 
     /**

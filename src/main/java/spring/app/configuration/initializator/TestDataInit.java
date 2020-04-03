@@ -1,8 +1,8 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
+import spring.app.core.StepHolder;
 import spring.app.core.steps.*;
 import spring.app.model.*;
 import spring.app.service.abstraction.*;
@@ -93,6 +93,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_MENU, new AdminMenu());
         steps.put(StepSelector.ADMIN_ADD_USER, new AdminAddUser());
         steps.put(StepSelector.ADMIN_REMOVE_USER, new AdminRemoveUser());
+        steps.put(StepSelector.USER_PASS_REVIEW, new UserPassReview());
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, new UserTakeReviewAddTheme());
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, new UserTakeReviewAddDate());
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, new UserTakeReviewConfirmation());
@@ -148,31 +149,31 @@ public class TestDataInit {
 
         //add review
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 3, 31, 20, 0));
-        coreReview.setOpen(false);
+        coreReview.setDate(LocalDateTime.of(2020, 4, 1, 23, 20));
+        coreReview.setOpen(true);
         coreReview.setTheme(core);
-        coreReview.setUser(user);
+        coreReview.setUser(admin);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 31, 23, 50));
-        sqlReview.setOpen(false);
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 27, 23, 21));
+        sqlReview.setOpen(false); // не должен выводить reminder на это сообщение
         sqlReview.setTheme(sql);
-        sqlReview.setUser(user);
+        sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
         springReview.setDate(LocalDateTime.of(2020, 4, 1, 10, 0));
-        springReview.setOpen(false);
+        springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(user);
+        springReview.setUser(admin);
         reviewService.addReview(springReview);
 
         // add student reviews
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(user);
         studentReview.setPassed(true);
-        studentReview.setReview(springReview);
+        studentReview.setReview(coreReview);
         studentReviewService.addStudentReview(studentReview);
 
         StudentReview studentReview1 = new StudentReview();

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
+import spring.app.model.Theme;
 import spring.app.service.abstraction.ReviewService;
 
 import java.time.LocalDateTime;
@@ -66,5 +67,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Review getOpenReviewByStudentVkId(Integer vkId) {
         return reviewDao.getOpenReviewByStudentVkId(vkId);
+    }
+
+    @Override
+    public List<Review> getAllReviewsByTheme(Theme theme){
+        return reviewDao.getAllReviewsByTheme(theme);
     }
 }
