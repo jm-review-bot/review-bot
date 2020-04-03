@@ -31,9 +31,12 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
 
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
-        return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE u.vk_id =:vk_id AND " +
-                "r.date BETWEEN :period_start AND :period_end AND r.is_open = true OR" +
-                " (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true", Review.class)
+        return (List<Review>) entityManager.createNativeQuery(
+//                "SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE u.vk_id =:vk_id AND " +
+//                "r.date BETWEEN :period_start AND :period_end AND r.is_open = true OR" +
+//                " (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true"
+                "SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE r.date BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id OR (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id"
+                , Review.class)
                 .setParameter("period_start", periodStart)
                 .setParameter("period_end", periodStart.plusMinutes(reviewDuration))
                 .setParameter("vk_id", vkId)

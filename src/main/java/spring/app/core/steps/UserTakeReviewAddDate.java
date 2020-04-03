@@ -72,10 +72,15 @@ public class UserTakeReviewAddDate extends Step {
                     Review conflictReview = conflictReviews.get(0);
                     StringBuilder conflictExceptionMessage = new StringBuilder();
                     conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, которое ты проводишь.")
-                            .append("\n\nОбрати внимание, что длительность ревью ").append(reviewDuration + 1).append(" минут.\n\n")
-                            .append("Пересечение с ревью:\nТема: ").append(context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle())
-                            .append("\nДата начала ревью: ").append(StringParser.LocalDateTimeToString(conflictReview.getDate()))
-                            .append("\nДата окончания ревью: ").append(StringParser.LocalDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1)))
+                            .append("\n\nОбрати внимание, что длительность ревью ")
+                            .append(reviewDuration + 1)
+                            .append(" минут.\n\n")
+                            .append("Пересечение с ревью:\nТема: ")
+                            .append(context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle())
+                            .append("\nДата начала ревью: ")
+                            .append(StringParser.LocalDateTimeToString(conflictReview.getDate()))
+                            .append("\nДата окончания ревью: ")
+                            .append(StringParser.LocalDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1)))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
                     throw new ProcessInputException(conflictExceptionMessage.toString());
                 }
@@ -83,7 +88,8 @@ public class UserTakeReviewAddDate extends Step {
                 throw new ProcessInputException("Время принятия нового ревью не может быть в прошлом :)\n Повтори ввод или вернись назад к выбору темы ревью");
             } else if (plannedStartReviewTime.isBefore(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
                 StringBuilder timeLimitExceptionMessage = new StringBuilder();
-                timeLimitExceptionMessage.append("Ты можешь объявить о готовности принять, ревью не ранее, чем за ").append(timeLimitBeforeReview + 1)
+                timeLimitExceptionMessage.append("Ты можешь объявить о готовности принять, ревью не ранее, чем за ")
+                        .append(timeLimitBeforeReview + 1)
                         .append(" минут до его начала\n Повтори ввод или вернись назад к выбору темы ревью");
                 throw new ProcessInputException(timeLimitExceptionMessage.toString());
             }

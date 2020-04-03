@@ -97,7 +97,7 @@ public class TestDataInit {
         user.setLastName("Таврель");
         user.setReviewPoint(4);
         user.setVkId(582532887);
-        user.setRole(roleUser);
+        user.setRole(roleAdmin);
         user.setChatStep("START");
         userService.addUser(user);
 
