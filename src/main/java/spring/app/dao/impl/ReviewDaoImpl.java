@@ -5,11 +5,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
+import spring.app.model.StudentReview;
 
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
-
-import javax.persistence.Query;
 
 @Repository
 public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDao {
@@ -36,5 +37,27 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("vk_id", vkId)
                 .setParameter("review_duration", reviewDuration)
                 .getResultList();
+    }
+    /**
+     * Метод возвращает все открытые ревью, которые юзер с данным vkId будет принимать
+     * @param vkId
+     */
+    @Override
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
+        return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
+        .setParameter("id", vkId).getResultList();
+    }
+
+    /**
+     * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
+     * @param vkId
+     */
+    @Override
+    public Review getOpenReviewByStudentVkId(Integer vkId) throws NoResultException {
+        return entityManager.createQuery(
+                "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme JOIN FETCH srr.user JOIN Review r ON r.id = sr.review.id WHERE r.isOpen = true AND sr.user.vkId = :vkId", StudentReview.class)
+                .setParameter("vkId", vkId)
+                .getSingleResult()
+                .getReview();
     }
 }

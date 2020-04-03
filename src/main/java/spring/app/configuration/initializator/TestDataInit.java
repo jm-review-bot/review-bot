@@ -1,14 +1,15 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
+import spring.app.core.StepHolder;
 import spring.app.core.steps.*;
 import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
-import java.time.LocalDateTime;
 import java.util.Map;
+
+import java.time.LocalDateTime;
 
 public class TestDataInit {
 
@@ -77,7 +78,7 @@ public class TestDataInit {
         User admin = new User();
         admin.setFirstName("admin");
         admin.setLastName("admin");
-        admin.setReviewPoint(0);
+        admin.setReviewPoint(999);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
         admin.setChatStep("START");
@@ -182,7 +183,7 @@ public class TestDataInit {
         sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
         sqlReview.setOpen(false);
         sqlReview.setTheme(sql);
-        sqlReview.setUser(user);
+        sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
