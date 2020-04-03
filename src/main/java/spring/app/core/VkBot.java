@@ -6,12 +6,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
+import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.RoleService;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 import spring.app.util.Keyboards;
@@ -25,16 +27,18 @@ public class VkBot implements ChatBot {
     private VkService vkService;
     private UserService userService;
     private RoleService roleService;
-    private StepHolder stepHolder;
+    private ThemeService themeService;
     private ReviewService reviewService;
+    private StepHolder stepHolder;
 
 
-    public VkBot(VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder, ReviewService reviewService) {
+    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
         this.stepHolder = stepHolder;
         this.reviewService = reviewService;
+        this.themeService = themeService;
     }
 
     @Override
@@ -77,8 +81,7 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-
-            context = new BotContext(user, userVkId, input, role, userService, roleService, vkService, reviewService);
+            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
@@ -101,7 +104,7 @@ public class VkBot implements ChatBot {
                     // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
                     user.setChatStep(nextStep.name());
                     user.setViewed(false);
-                } catch (ProcessInputException | NoNumbersEnteredException e) {
+                } catch (ProcessInputException | NoNumbersEnteredException | NoDataEnteredException e) {
                     // отправляем сообщение об ошибке ввода
                     log.info("Пользователь с vkId: {} ввел неверные данные", userVkId);
                     sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);

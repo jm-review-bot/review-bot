@@ -59,7 +59,7 @@ public class UserMenu extends Step {
         } else if (command.equals("сдать")) { // (Сдать ревью)
 //            nextStep = ; TODO
         } else if (command.equals("принять")) { // (Принять ревью)
-//            nextStep = ; TODO
+            nextStep = USER_TAKE_REVIEW_ADD_THEME;
         } else if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             nextStep = ADMIN_MENU;
