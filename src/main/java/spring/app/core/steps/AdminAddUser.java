@@ -12,6 +12,7 @@ import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,20 +22,19 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminAddUser extends Step {
-    private final Map<Integer, String> savedInputs = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        String savedInput = savedInputs.get(vkId);
+        List<String> savedInput = getUserStorage(vkId, ADMIN_ADD_USER);
 
         if (savedInput == null || savedInput.isEmpty()) {
             text = "Введите ссылку на профиль пользователя.\nМожно добавить несколько пользователей, введя ссылки через пробел или запятую.";
             keyboard = BACK_KB;
         } else {
-            text = savedInput;
+            text = savedInput.get(0);
             keyboard = BACK_KB;
-            savedInputs.remove(vkId);
+            removeUserStorage(vkId, ADMIN_ADD_USER);
         }
     }
 
@@ -53,10 +53,10 @@ public class AdminAddUser extends Step {
                 || wordInput.equals("нет")
                 || wordInput.equals("отмена")
                 || wordInput.equals("/admin")) {
-            savedInputs.remove(vkId);
+            removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
-            savedInputs.remove(vkId);
+            removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = START;
         } else {
             // мы ожидаем от него ссылки на профили добавляемых  юзеров
@@ -85,10 +85,10 @@ public class AdminAddUser extends Step {
 
                     });
                     addedUserText.append("\nВы можете прислать еще ссылки на профили или вернуться в Меню, введя \"назад\".");
-                    savedInputs.put(vkId, addedUserText.toString());
+                    updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(addedUserText.toString()));
                     nextStep = ADMIN_ADD_USER;
                 } else {
-                    savedInputs.put(vkId, "Пользователь(и) уже в базе.");
+                    updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList("Пользователь(и) уже в базе."));
                     nextStep = ADMIN_ADD_USER;
                 }
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {

@@ -8,20 +8,18 @@ import spring.app.model.User;
 import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
-    private final Map<Integer, String> savedInputs = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
-        String savedInput = savedInputs.get(context.getVkId());
+        Integer vkId = context.getVkId();
+        List<String> savedInput = getUserStorage(vkId, ADMIN_REMOVE_USER);
         StringBuilder userList;
         if (savedInput == null || savedInput.isEmpty()) {
             // если в памяти пусто, показываем первичный вопрос
@@ -45,7 +43,7 @@ public class AdminRemoveUser extends Step {
             // если в памяти уже есть данные, значит показываем предупреждение об удалении юзеров
             // оно было подготовлено в processInput и сохранено в памяти,
             // т.к. там могло выпасть исключение, если юзер вводит заведомо неверные данные
-            text = savedInput;
+            text = savedInput.get(0);
             keyboard = YES_NO_KB;
         }
     }
@@ -54,7 +52,7 @@ public class AdminRemoveUser extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
-        String savedInput = savedInputs.get(vkId);
+        List<String> savedInput = getUserStorage(vkId, ADMIN_REMOVE_USER);
 
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
@@ -62,10 +60,10 @@ public class AdminRemoveUser extends Step {
         if (wordInput.equals("назад")
                 || wordInput.equals("нет")
                 || wordInput.equals("отмена")) {
-            savedInputs.remove(vkId);
+            removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
-            savedInputs.remove(vkId);
+            removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = START;
         } else if (savedInput == null || savedInput.isEmpty()) {
             // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
@@ -86,7 +84,7 @@ public class AdminRemoveUser extends Step {
                                         .append("\n");
                         });
                 userList.append("Согласны? (Да/Нет)");
-                savedInputs.put(vkId, userList.toString());
+                updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(userList.toString()));
                 nextStep = ADMIN_REMOVE_USER;
             } catch (NumberFormatException | NoResultException | NoNumbersEnteredException e) {
                 keyboard = BACK_KB;
@@ -95,10 +93,10 @@ public class AdminRemoveUser extends Step {
         } else if (wordInput.equals("да")) {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
             // удаляем юзеров
-            StringParser.toNumbersSet(savedInput)
+            StringParser.toNumbersSet(savedInput.get(0))
                     .forEach(savedVkId -> context.getUserService().deleteUserByVkId(savedVkId));
             // обязательно очищаем память
-            savedInputs.remove(vkId);
+            removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = ADMIN_REMOVE_USER;
         } else {
             keyboard = START_KB;
