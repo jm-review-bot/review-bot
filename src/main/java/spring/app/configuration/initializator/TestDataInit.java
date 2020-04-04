@@ -248,25 +248,25 @@ public class TestDataInit {
         StudentReviewAnswer answer1 = new StudentReviewAnswer();
         answer1.setRight(true);
         answer1.setQuestion(question1);
-        answer1.setStudentReview(studentReview);
+        answer1.setStudentReview(studentReview3);
         studentReviewAnswerService.addStudentReviewAnswer(answer1);
 
         StudentReviewAnswer answer2 = new StudentReviewAnswer();
         answer2.setRight(true);
         answer2.setQuestion(question2);
-        answer2.setStudentReview(studentReview);
+        answer2.setStudentReview(studentReview3);
         studentReviewAnswerService.addStudentReviewAnswer(answer2);
 
         StudentReviewAnswer answer3 = new StudentReviewAnswer();
         answer3.setRight(true);
         answer3.setQuestion(question3);
-        answer3.setStudentReview(studentReview);
+        answer3.setStudentReview(studentReview3);
         studentReviewAnswerService.addStudentReviewAnswer(answer3);
 
         StudentReviewAnswer answer4 = new StudentReviewAnswer();
         answer4.setRight(true);
         answer4.setQuestion(question4);
-        answer4.setStudentReview(studentReview);
+        answer4.setStudentReview(studentReview3);
         studentReviewAnswerService.addStudentReviewAnswer(answer4);
     }
 }
