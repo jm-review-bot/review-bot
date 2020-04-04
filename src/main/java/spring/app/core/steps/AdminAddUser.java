@@ -36,8 +36,6 @@ public class AdminAddUser extends Step {
             keyboard = BACK_KB;
             savedInputs.remove(vkId);
         }
-
-
     }
 
     @Override

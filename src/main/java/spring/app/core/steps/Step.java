@@ -59,4 +59,13 @@ public abstract class Step {
         userStorage.put(step, listToSave);
         STORAGE.put(vkId, userStorage);
     }
+
+    /**
+     * Очищает сохраненные данные указанного шага для указанного юзера
+     */
+    public void removeUserStorage(Integer vkId, StepSelector step) {
+        if (getUserStorage(vkId, step) != null) {
+            STORAGE.get(vkId).remove(step);
+        }
+    }
 }
