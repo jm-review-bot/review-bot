@@ -84,6 +84,7 @@ public class StringParser {
     /**
      * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
      * в LocalDateTime
+     *
      * @param strDate строковое представление даты в формате dd.MM.uuuu HH:mm
      * @return LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
      * @throws NoDataEnteredException если strDate не является строковым представлением даты в ожидаемом формате
@@ -110,5 +111,15 @@ public class StringParser {
     public static String LocalDateTimeToString(LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
         return localDateTime.format(formatter);
+    }
+
+    /**
+     * Метод проверяет является ли переданная строка ссылкой на разговор в Google Hangouts
+     */
+
+    public static boolean isHangoutsLink(String link) {
+        String prefix = "https://hangouts.google.com/call/";
+        String suffix = link.trim().substring(prefix.length());
+        return link.trim().startsWith(prefix) && suffix.length() == 24;
     }
 }

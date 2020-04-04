@@ -61,6 +61,9 @@ public class TestDataInit {
     @Autowired
     private Step userTakeReviewConfirmation;
 
+    @Autowired
+    private Step userStartReview;
+
     public TestDataInit() {
     }
 
@@ -121,6 +124,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
+        steps.put(StepSelector.USER_START_REVIEW, userStartReview);
 
         //add themes
         Theme core = new Theme();
@@ -172,50 +176,37 @@ public class TestDataInit {
         themeService.addTheme(finalReview);
 
         // add reviews
-        Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 4, 3, 21, 0));
-        coreReview.setOpen(false);
-        coreReview.setTheme(core);
-        coreReview.setUser(user);
-        reviewService.addReview(coreReview);
+        Review springReviewPassed = new Review(); // ревью, которое я сдал
+        springReviewPassed.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
+        springReviewPassed.setOpen(false);
+        springReviewPassed.setTheme(spring);
+        springReviewPassed.setUser(admin);
+        reviewService.addReview(springReviewPassed);
 
-        Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
-        sqlReview.setOpen(false);
-        sqlReview.setTheme(sql);
-        sqlReview.setUser(admin);
-        reviewService.addReview(sqlReview);
-
-        Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 4, 3, 22, 0));
-        springReview.setOpen(false);
+        Review springReview = new Review(); // ревью по спрингу которое я буду принимать
+        springReview.setDate(LocalDateTime.of(2020, 5, 20, 15, 0));
+        springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(user);
         reviewService.addReview(springReview);
 
         // add student reviews
-        StudentReview studentReview = new StudentReview();
+        StudentReview studentReview = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг
         studentReview.setUser(user);
         studentReview.setPassed(true);
-        studentReview.setReview(springReview);
+        studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
 
-        StudentReview studentReview1 = new StudentReview();
-        studentReview1.setUser(user);
-        studentReview1.setPassed(false);
-        studentReview1.setReview(springReview);
-        studentReviewService.addStudentReview(studentReview1);
-
-        StudentReview studentReview2 = new StudentReview();
-        studentReview2.setUser(user);
-        studentReview2.setPassed(true);
-        studentReview2.setReview(sqlReview);
+        StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
+        studentReview2.setUser(admin2);
+        //studentReview2.setPassed(true);
+        studentReview2.setReview(springReview);
         studentReviewService.addStudentReview(studentReview2);
 
-        StudentReview studentReview3 = new StudentReview();
-        studentReview3.setUser(user2);
-        studentReview3.setPassed(true);
-        studentReview3.setReview(sqlReview);
+        StudentReview studentReview3 = new StudentReview(); // чувак 2, котороый записался ко мне на ревью
+        studentReview3.setUser(admin);
+        //studentReview3.setPassed(true);
+        studentReview3.setReview(springReview);
         studentReviewService.addStudentReview(studentReview3);
 
         // add Questions
@@ -247,6 +238,7 @@ public class TestDataInit {
         question4.setTheme(spring);
         questionService.addQuestion(question4);
 
+        /*
         // add student review answers
         StudentReviewAnswer answer1 = new StudentReviewAnswer();
         answer1.setRight(true);
@@ -271,5 +263,7 @@ public class TestDataInit {
         answer4.setQuestion(question4);
         answer4.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer4);
+
+         */
     }
 }

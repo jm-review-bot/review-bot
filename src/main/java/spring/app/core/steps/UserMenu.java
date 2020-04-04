@@ -51,9 +51,16 @@ public class UserMenu extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
+        Integer vkId = context.getVkId();
         String command = StringParser.toWordsArray(context.getInput())[0];
         if (command.equals("начать")) { // (Начать прием ревью)
-//            nextStep = ; TODO
+            List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
+            if (!userReviews.isEmpty()) {
+                nextStep = USER_START_REVIEW;
+            } else {
+                nextStep = USER_MENU;
+                throw new ProcessInputException("Ты не проводишь ни одно ревью"); // TODO написать красивое сообщение об ошибке
+            }
         } else if (command.equals("отменить")) { // (Отменить ревью)
 //            nextStep = ; TODO
         } else if (command.equals("сдать")) { // (Сдать ревью)

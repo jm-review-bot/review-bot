@@ -11,11 +11,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
-import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.*;
 import spring.app.util.Keyboards;
 
 import javax.persistence.NoResultException;
@@ -70,6 +66,11 @@ public class VkBot implements ChatBot {
             // Берем vkid пользователя
             userVkId = message.getUserId();
             input = message.getBody();
+            // 3 строчки ниже для парсинга ссылки на хэнгаутс
+            // в качестве пользовательского ввода берем ссылку из вложения к сообщению
+            if (message.getAttachments() != null) {
+                input = message.getAttachments().get(0).getLink().getUrl();
+            }
             User user;
             // проверяем есть ли юзер у нас в БД, если нет, получаем исключение и отправляем Юзеру сообщение и выходим из цикла
             try {

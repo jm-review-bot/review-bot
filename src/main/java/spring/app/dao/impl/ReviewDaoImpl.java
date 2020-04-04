@@ -27,6 +27,17 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         query.executeUpdate();
     }
 
+
+    /**
+     * Метод возвращает все открытые ревью, которые будут пересекаться по времени с новым ревью, которое юзер хочет принять.
+     * Например, если юзер планирует провести ревью 10:00 02.06.2020, продолжительностью 59 минут,
+     * то метод вернет список всех открытых этим пользователем ревью в интервале с 09:01 по 10:59 02.06.2020
+     * @param vkId - id юзера в vk.com
+     * @param periodStart - запланированное юзером время начала ревью
+     * @param reviewDuration - продолжительность ревью в минутах
+     * @return
+     */
+
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
         return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE " +
