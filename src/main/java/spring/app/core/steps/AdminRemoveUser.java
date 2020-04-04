@@ -9,6 +9,7 @@ import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
@@ -23,22 +24,27 @@ public class AdminRemoveUser extends Step {
         StringBuilder userList;
         if (savedInput == null || savedInput.isEmpty()) {
             // если в памяти пусто, показываем первичный вопрос
-            userList = new StringBuilder("Вот список всех пользователей. Для удаления, напиши vkId одного или нескольких пользователей через пробел или запятую.\nДля возврата в меню, введи \"назад\".\n\n");
+            userList = new StringBuilder("Вот список всех пользователей. Для удаления, напиши указанные номера одного или нескольких пользователей через пробел или запятую.\nДля возврата в меню, введи \"назад\".\n\n");
+            // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
+            List<String> usersToDelete = new ArrayList<>();
+            final int[] i = {1};
             context.getUserService().getAllUsers().stream()
                     .filter(user -> !user.getRole().isAdmin())
                     .sorted(Comparator.comparing(User::getLastName))
-                    .forEach(user -> userList
-                            .append(user.getLastName())
-                            .append(" ")
-                            .append(user.getFirstName())
-                            .append(", vkId: ")
-                            .append(user.getVkId())
-                            .append(", https://vk.com/id")
-                            .append(user.getVkId())
-                            .append("\n")
-                    );
+                    .forEach(user -> {
+                        userList.append("[").append(i[0]++).append("] ")
+                                .append(user.getLastName())
+                                .append(" ")
+                                .append(user.getFirstName())
+                                .append(", https://vk.com/id")
+                                .append(user.getVkId())
+                                .append("\n");
+                        // сохраняем ID юзера в лист
+                        usersToDelete.add(user.getId().toString());
+                    });
             text = userList.toString();
             keyboard = BACK_KB;
+            updateUserStorage(vkId, ADMIN_USERS_LIST, usersToDelete);
         } else {
             // если в памяти уже есть данные, значит показываем предупреждение об удалении юзеров
             // оно было подготовлено в processInput и сохранено в памяти,
@@ -53,6 +59,7 @@ public class AdminRemoveUser extends Step {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         List<String> savedInput = getUserStorage(vkId, ADMIN_REMOVE_USER);
+        List<String> usesToDelete = getUserStorage(vkId, ADMIN_USERS_LIST);
 
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
@@ -68,23 +75,26 @@ public class AdminRemoveUser extends Step {
         } else if (savedInput == null || savedInput.isEmpty()) {
             // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
             // vkId для удаления input. Сохраняем в память введенный текст
-            StringBuilder userList = new StringBuilder("Вы собираетесь удалить следующих пользователей:\n\n");
+            StringBuilder confirmMessage = new StringBuilder("Вы собираетесь удалить пользователей:\n\n");
             try {
+                List<String> selectedUsers = new ArrayList<>();
+
                 StringParser.toNumbersSet(currentInput)
                         .forEach(inputNumber -> {
-                            User user = context.getUserService().getByVkId(inputNumber);
-                                userList
-                                        .append(user.getLastName())
-                                        .append(" ")
-                                        .append(user.getFirstName())
-                                        .append(". vkId ")
-                                        .append(user.getVkId())
-                                        .append(" https://vk.com/id")
-                                        .append(user.getVkId())
-                                        .append("\n");
+                            Long userId = Long.parseLong(usesToDelete.get(inputNumber - 1));
+                            User user = context.getUserService().getUserById(userId);
+                            confirmMessage
+                                    .append(user.getLastName())
+                                    .append(" ")
+                                    .append(user.getFirstName())
+                                    .append(", https://vk.com/id")
+                                    .append(user.getVkId())
+                                    .append("\n");
+                            selectedUsers.add(user.getId().toString());
                         });
-                userList.append("Согласны? (Да/Нет)");
-                updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(userList.toString()));
+                confirmMessage.append("\nСогласны? (Да/Нет)");
+                updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(confirmMessage.toString()));
+                updateUserStorage(vkId, ADMIN_USERS_LIST, selectedUsers);
                 nextStep = ADMIN_REMOVE_USER;
             } catch (NumberFormatException | NoResultException | NoNumbersEnteredException e) {
                 keyboard = BACK_KB;
@@ -93,10 +103,13 @@ public class AdminRemoveUser extends Step {
         } else if (wordInput.equals("да")) {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
             // удаляем юзеров
-            StringParser.toNumbersSet(savedInput.get(0))
-                    .forEach(savedVkId -> context.getUserService().deleteUserByVkId(savedVkId));
+            usesToDelete.forEach(userIdString ->
+                    context.getUserService()
+                            .deleteUserById(Long.parseLong(userIdString))
+            );
             // обязательно очищаем память
             removeUserStorage(vkId, ADMIN_REMOVE_USER);
+            removeUserStorage(vkId, ADMIN_USERS_LIST);
             nextStep = ADMIN_REMOVE_USER;
         } else {
             keyboard = START_KB;
