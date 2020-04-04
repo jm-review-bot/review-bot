@@ -2,7 +2,12 @@ package spring.app.core;
 
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.RoleService;
+import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.StudentReviewService;
 
 public class BotContext {
     private final User user;
@@ -26,9 +31,9 @@ public class BotContext {
         this.userService = userService;
         this.roleService = roleService;
         this.vkService = vkService;
-        this.studentReviewService = studentReviewService;
         this.themeService = themeService;
         this.reviewService = reviewService;
+        this.studentReviewService = studentReviewService;
 
     }
 
@@ -48,6 +53,14 @@ public class BotContext {
         return userService;
     }
 
+    public ThemeService getThemeService() {
+        return themeService;
+    }
+
+    public ReviewService getReviewService() {
+        return reviewService;
+    }
+
     public User getUser() {
         return user;
     }
@@ -62,13 +75,5 @@ public class BotContext {
 
     public StudentReviewService getStudentReviewService() {
         return studentReviewService;
-    }
-
-    public ThemeService getThemeService() {
-        return themeService;
-    }
-
-    public ReviewService getReviewService() {
-        return reviewService;
     }
 }

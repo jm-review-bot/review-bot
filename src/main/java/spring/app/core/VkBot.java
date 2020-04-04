@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
+import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
@@ -109,7 +110,7 @@ public class VkBot implements ChatBot {
                     // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
                     user.setChatStep(nextStep.name());
                     user.setViewed(false);
-                } catch (ProcessInputException | NoNumbersEnteredException e) {
+                } catch (ProcessInputException | NoNumbersEnteredException | NoDataEnteredException e) {
                     // отправляем сообщение об ошибке ввода
                     log.info("Пользователь с vkId: {} ввел неверные данные", userVkId);
                     sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);

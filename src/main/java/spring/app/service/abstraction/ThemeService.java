@@ -18,4 +18,7 @@ public interface ThemeService {
 
     Theme getByPosition(Integer position);
 
+    List<Theme> getPassedThemesByUser(Integer vkId);
+
+    Theme getThemeByReviewId(Long reviewId);
 }

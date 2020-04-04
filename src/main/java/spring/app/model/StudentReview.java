@@ -20,7 +20,14 @@ public class StudentReview {
     @JoinColumn(name = "review_id")
     private Review review;
 
+    private Boolean isPassed;
+
     public StudentReview() {
+    }
+
+    public StudentReview(User user, Review review) {
+        this.user = user;
+        this.review = review;
     }
 
     public Long getId() {
@@ -45,6 +52,14 @@ public class StudentReview {
 
     public void setReview(Review review) {
         this.review = review;
+    }
+
+    public Boolean getPassed() {
+        return isPassed;
+    }
+
+    public void setPassed(Boolean passed) {
+        isPassed = passed;
     }
 
     @Override

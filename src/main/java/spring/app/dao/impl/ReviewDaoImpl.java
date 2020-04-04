@@ -6,7 +6,9 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.model.Review;
 import spring.app.model.Theme;
+import spring.app.model.StudentReview;
 
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
@@ -44,4 +46,38 @@ having count(*) <3
         return query.getResultList();
     }
 
+}
+    @Override
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
+        return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE " +
+                "r.date BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id OR" +
+                " (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id", Review.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodStart.plusMinutes(reviewDuration))
+                .setParameter("vk_id", vkId)
+                .setParameter("review_duration", reviewDuration)
+                .getResultList();
+    }
+    /**
+     * Метод возвращает все открытые ревью, которые юзер с данным vkId будет принимать
+     * @param vkId
+     */
+    @Override
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
+        return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
+        .setParameter("id", vkId).getResultList();
+    }
+
+    /**
+     * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
+     * @param vkId
+     */
+    @Override
+    public Review getOpenReviewByStudentVkId(Integer vkId) throws NoResultException {
+        return entityManager.createQuery(
+                "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme JOIN FETCH srr.user JOIN Review r ON r.id = sr.review.id WHERE r.isOpen = true AND sr.user.vkId = :vkId", StudentReview.class)
+                .setParameter("vkId", vkId)
+                .getSingleResult()
+                .getReview();
+    }
 }

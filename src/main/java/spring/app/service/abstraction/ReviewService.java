@@ -18,8 +18,13 @@ public interface ReviewService {
 
     void deleteReviewById(Long id);
 
+    List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
+
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 
     List<Review> getAllReviewsByTheme(Theme theme);
 
+    List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
+
+    Review getOpenReviewByStudentVkId(Integer vkId);
 }
