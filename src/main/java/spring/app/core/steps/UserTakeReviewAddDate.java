@@ -12,6 +12,7 @@ import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +31,7 @@ public class UserTakeReviewAddDate extends Step {
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        Long themeId = (Long.parseLong(getStorage().get(vkId).get(USER_TAKE_REVIEW_ADD_THEME).get(0)));
+        Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
         Theme theme = context.getThemeService().getThemeById(themeId);
         StringBuilder textBuilder = new StringBuilder();
         textBuilder.append("Ты выбрал тему: ")
@@ -66,11 +67,9 @@ public class UserTakeReviewAddDate extends Step {
                 Integer vkId = context.getVkId();
                 List<Review> conflictReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId, plannedStartReviewTime, reviewDuration);
                 if (conflictReviews.isEmpty()) {
-                    Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
                     List<String> reviewDateStorage = new ArrayList<>();
                     reviewDateStorage.add(userInput);
-                    userStorage.put(USER_TAKE_REVIEW_ADD_DATE, reviewDateStorage);
-                    getStorage().put(context.getVkId(), userStorage);
+                    updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE, reviewDateStorage);
                     nextStep = USER_TAKE_REVIEW_CONFIRMATION;
                 } else {
                     Review conflictReview = conflictReviews.get(0);

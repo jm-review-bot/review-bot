@@ -52,11 +52,9 @@ public class UserTakeReviewAddTheme extends Step {
                     .collect(toList());
             if (passedThemesIds.contains(themeId)) {
                 // складываем в хранилище
-                Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
                 List<String> themeIdStorage = new ArrayList<>();
                 themeIdStorage.add(themeId);
-                userStorage.put(USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
-                getStorage().put(vkId, userStorage);
+                updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_THEME;

@@ -18,11 +18,6 @@ public class Start extends Step {
 
     @Override
     public void enter(BotContext context) {
-        // Этот шаг - точка входа в приложение, каждый пользователь через него проходит
-        // потому на этом шаге инициализируем map для пользователя, к которой будем обращаться в дальнейших шагах.
-        Map<StepSelector, List<String>> stepStorage = new HashMap<>();
-        getStorage().put(context.getVkId(), stepStorage);
-
         text = "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
         keyboard = START_KB;
         if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
