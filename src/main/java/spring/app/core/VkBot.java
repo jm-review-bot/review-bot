@@ -82,7 +82,7 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService);
+            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, stepHolder);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг

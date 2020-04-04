@@ -24,4 +24,6 @@ public interface UserService {
     void deleteUserByVkId(Integer vkId);
 
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    List<User> getStudentsByReviewId(Long reviewId);
 }

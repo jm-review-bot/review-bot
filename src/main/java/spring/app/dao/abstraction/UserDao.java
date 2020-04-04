@@ -16,4 +16,6 @@ public interface UserDao extends GenericDao<Long, User> {
     void deleteUserByVkId(Integer vkId) throws NoResultException;
 
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    List<User> getStudentsByReviewId(Long reviewId);
 }

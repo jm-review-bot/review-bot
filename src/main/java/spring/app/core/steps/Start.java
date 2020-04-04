@@ -2,28 +2,18 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.ADMIN_START_KB;
+import static spring.app.util.Keyboards.START_KB;
 
 @Component
 public class Start extends Step {
 
     @Override
     public void enter(BotContext context) {
-
-        // т.к. это шаг - точка входа в приложение, то здесь
-        // инициализируем Map для пользователя, к которой будем обращаться в дальнейших шагах.
-
-        Map<StepSelector, List<String>> stepStorage = new HashMap<>();
-        getStorage().put(context.getVkId(), stepStorage);
 
         text = "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
         keyboard = START_KB;

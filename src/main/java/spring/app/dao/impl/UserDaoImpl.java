@@ -10,7 +10,6 @@ import spring.app.model.User;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,6 +21,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         super(User.class);
     }
 
+    @Override
     public User getByVkId(Integer vkId) throws NoResultException {
         try {
             TypedQuery<User> query = entityManager.createQuery(
@@ -34,6 +34,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         }
     }
 
+    @Override
     public boolean isExistByVkId(Integer vkId) {
         try {
             entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :id", User.class).setParameter("id", vkId).getSingleResult();
@@ -43,7 +44,8 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         }
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public void deleteUserByVkId(Integer vkId) throws NoResultException {
         // Write all pending changes to the DB
         entityManager.flush();
@@ -61,5 +63,11 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .setParameter("period_start", periodStart)
                 .setParameter("period_end", periodEnd)
                 .getResultList();
+    }
+
+    @Override
+    public List<User> getStudentsByReviewId(Long reviewId) {
+        return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id", User.class)
+                .setParameter("review_id", reviewId).getResultList();
     }
 }

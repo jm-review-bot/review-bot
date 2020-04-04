@@ -2,11 +2,7 @@ package spring.app.core;
 
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
-import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.*;
 
 public class BotContext {
     private final User user;
@@ -18,8 +14,9 @@ public class BotContext {
     private final VkService vkService;
     private final ThemeService themeService;
     private final ReviewService reviewService;
+    private final StepHolder stepHolder;
 
-    public BotContext(User user, Integer vkId, String input, Role role, UserService userService, ThemeService themeService, ReviewService reviewService, RoleService roleService, VkService vkService) {
+    public BotContext(User user, Integer vkId, String input, Role role, UserService userService, ThemeService themeService, ReviewService reviewService, RoleService roleService, VkService vkService, StepHolder stepHolder) {
         this.user = user;
         this.vkId = vkId;
         this.input = input;
@@ -29,6 +26,7 @@ public class BotContext {
         this.vkService = vkService;
         this.themeService = themeService;
         this.reviewService = reviewService;
+        this.stepHolder = stepHolder;
     }
 
     public Integer getVkId() {
@@ -65,5 +63,9 @@ public class BotContext {
 
     public RoleService getRoleService() {
         return roleService;
+    }
+
+    public StepHolder getStepHolder() {
+        return stepHolder;
     }
 }

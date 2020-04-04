@@ -68,4 +68,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return userDao.getUsersByReviewPeriod(periodStart, periodEnd);
     }
+
+    @Override
+    public List<User> getStudentsByReviewId(Long reviewId) {
+        return userDao.getStudentsByReviewId(reviewId);
+    }
 }

@@ -1,15 +1,14 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import spring.app.core.StepSelector;
 import spring.app.core.StepHolder;
-import spring.app.core.steps.*;
+import spring.app.core.StepSelector;
+import spring.app.core.steps.Step;
 import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
-import java.util.Map;
-
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class TestDataInit {
 
@@ -62,7 +61,13 @@ public class TestDataInit {
     private Step userTakeReviewConfirmation;
 
     @Autowired
-    private Step userStartReview;
+    private Step userStartReviewStepOne;
+
+    @Autowired
+    private Step userStartReviewStepTwo;
+
+    @Autowired
+    private Step userStartReviewStepThree;
 
     public TestDataInit() {
     }
@@ -124,7 +129,9 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
-        steps.put(StepSelector.USER_START_REVIEW, userStartReview);
+        steps.put(StepSelector.USER_START_REVIEW_STEP_ONE, userStartReviewStepOne);
+        steps.put(StepSelector.USER_START_REVIEW_STEP_TWO, userStartReviewStepTwo);
+        steps.put(StepSelector.USER_START_REVIEW_STEP_THREE, userStartReviewStepThree);
 
         //add themes
         Theme core = new Theme();
@@ -184,7 +191,7 @@ public class TestDataInit {
         reviewService.addReview(springReviewPassed);
 
         Review springReview = new Review(); // ревью по спрингу которое я буду принимать
-        springReview.setDate(LocalDateTime.of(2020, 5, 20, 15, 0));
+        springReview.setDate(LocalDateTime.of(2020, 4, 4, 23, 0));
         springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(user);
@@ -196,6 +203,7 @@ public class TestDataInit {
         studentReview.setPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
+
 
         StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
         studentReview2.setUser(admin2);
