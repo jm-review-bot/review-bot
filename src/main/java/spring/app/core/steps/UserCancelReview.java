@@ -2,8 +2,6 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.exceptions.NoDataEnteredException;
-import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.util.StringParser;
@@ -39,7 +37,7 @@ public class UserCancelReview extends Step {
             // показываем клаву c кнопками Да и Нет
             keyboard = YES_NO_KB;
         } else {
-            // если зафиксирован инпут на этом шаге - это "да",
+            // если зафиксирован инпут на этом шаге, и это "да"
             // говорим, что запись на данное ревью удалена
             text = savedInput.get(0);
             keyboard = BACK_KB;
