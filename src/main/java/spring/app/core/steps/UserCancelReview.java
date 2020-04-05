@@ -39,7 +39,7 @@ public class UserCancelReview extends Step {
             // показываем клаву c кнопками Да и Нет
             keyboard = YES_NO_KB;
         } else {
-            // если зафиксирован инпут на этом шаге - это "да",
+            // если зафиксирован инпут на этом шаге, и это "да"
             // говорим, что запись на данное ревью удалена
             text = savedInput.get(0);
             keyboard = BACK_KB;
