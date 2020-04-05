@@ -32,7 +32,7 @@ public class UserCancelReview extends Step {
                     .append("Дата: ")
                     .append(review.getDate())
                     .append(". \n\n")
-                    .append("Вы действительно хотите отменить записть? (Да/Нет)");
+                    .append("Вы действительно хотите отменить запись? (Да/Нет)");
             text = message.toString();
             // показываем клаву c кнопками Да и Нет
             keyboard = YES_NO_KB;
