@@ -55,7 +55,7 @@ public class UserMenu extends Step {
         if (command.equals("начать")) { // (Начать прием ревью)
 //            nextStep = ; TODO
         } else if (command.equals("отменить")) { // (Отменить ревью)
-//            nextStep = ; TODO
+            nextStep = USER_CANCEL_REVIEW;
         } else if (command.equals("сдать")) { // (Сдать ревью)
 //            nextStep = ; TODO
         } else if (command.equals("принять")) { // (Принять ревью)
