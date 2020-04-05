@@ -11,11 +11,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
-import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.*;
 import spring.app.util.Keyboards;
 
 import javax.persistence.NoResultException;
@@ -30,15 +26,17 @@ public class VkBot implements ChatBot {
     private ThemeService themeService;
     private ReviewService reviewService;
     private StepHolder stepHolder;
+    private StudentReviewService studentReviewService;
 
 
-    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder) {
+    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder, StudentReviewService studentReviewService) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
         this.stepHolder = stepHolder;
         this.reviewService = reviewService;
         this.themeService = themeService;
+        this.studentReviewService = studentReviewService;
     }
 
     @Override
@@ -81,7 +79,7 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService);
+            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, studentReviewService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
