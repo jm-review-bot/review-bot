@@ -38,39 +38,39 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        String userInput = context.getInput();
-        Integer vkId = context.getVkId();
-        List<String> themePositionsList = themes.keySet().stream()
-                .map(Object::toString)
-                .collect(toList());
-        if (themePositionsList.contains(userInput)) {
-            // вытаскиваем themeId по позиции, позиция соответствует пользовательскому вводу
-            String themeId = themes.get(Integer.parseInt(userInput)).getId().toString();
-            // проверяем, что сдали ревью по теме, которую хотим принять
-            List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()
-                    .map(theme -> theme.getId().toString())
-                    .collect(toList());
-            if (passedThemesIds.contains(themeId)) {
-                // складываем в хранилище
-                Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
-                List<String> themeIdStorage = new ArrayList<>();
-                themeIdStorage.add(themeId);
-                userStorage.put(USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
-                getStorage().put(vkId, userStorage);
-                nextStep = USER_TAKE_REVIEW_ADD_DATE;
-            } else {
-                nextStep = USER_TAKE_REVIEW_ADD_THEME;
-                throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
-                        "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
-            }
-        } else if (userInput.equalsIgnoreCase("назад")) {
-            nextStep = USER_MENU;
-        } else if (userInput.equalsIgnoreCase("/start")) {
-            nextStep = START;
-        } else {
-            nextStep = USER_TAKE_REVIEW_ADD_THEME;
-            throw new ProcessInputException("Введена неверная команда...\n\n Введи цифру, соответствующую теме рьвью или нажми на кнопку \"Назад\" для возврата в главное меню");
-        }
+//        String userInput = context.getInput();
+//        Integer vkId = context.getVkId();
+//        List<String> themePositionsList = themes.keySet().stream()
+//                .map(Object::toString)
+//                .collect(toList());
+//        if (themePositionsList.contains(userInput)) {
+//            // вытаскиваем themeId по позиции, позиция соответствует пользовательскому вводу
+//            String themeId = themes.get(Integer.parseInt(userInput)).getId().toString();
+//            // проверяем, что сдали ревью по теме, которую хотим принять
+//            List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()
+//                    .map(theme -> theme.getId().toString())
+//                    .collect(toList());
+//            if (passedThemesIds.contains(themeId)) {
+//                // складываем в хранилище
+//                Map<StepSelector, List<String>> userStorage = getStorage().get(vkId);
+//                List<String> themeIdStorage = new ArrayList<>();
+//                themeIdStorage.add(themeId);
+//                userStorage.put(USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
+//                getStorage().put(vkId, userStorage);
+//                nextStep = USER_TAKE_REVIEW_ADD_DATE;
+//            } else {
+//                nextStep = USER_TAKE_REVIEW_ADD_THEME;
+//                throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
+//                        "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
+//            }
+//        } else if (userInput.equalsIgnoreCase("назад")) {
+//            nextStep = USER_MENU;
+//        } else if (userInput.equalsIgnoreCase("/start")) {
+//            nextStep = START;
+//        } else {
+//            nextStep = USER_TAKE_REVIEW_ADD_THEME;
+//            throw new ProcessInputException("Введена неверная команда...\n\n Введи цифру, соответствующую теме рьвью или нажми на кнопку \"Назад\" для возврата в главное меню");
+//        }
     }
 }
 

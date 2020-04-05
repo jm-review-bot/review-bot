@@ -155,18 +155,27 @@ public class Keyboards {
             "          \"label\": \"Отмена записи\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Начать\"\n" +
-            "        },\n" +
-            "        \"color\": \"default\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +
             "} ";
+
+    public final static String USER_GO_MENU = "{\n" +
+            "  \"one_time\": true,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Вернутся в меню\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
     public final static String USER_TAKE_REVIEW_CONFIRMATION_KB = "{\n" +
             "  \"one_time\": true,\n" +
             "  \"buttons\": [\n" +

@@ -11,12 +11,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.RoleService;
-import spring.app.service.abstraction.UserService;
-import spring.app.service.abstraction.VkService;
-import spring.app.service.abstraction.StudentReviewService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.*;
 
 import spring.app.util.Keyboards;
 
@@ -33,10 +28,12 @@ public class VkBot implements ChatBot {
     private StudentReviewService studentReviewService;
     private ThemeService themeService;
     private ReviewService reviewService;
+    private StudentReviewAnswerService studentReviewAnswerService;
 
 
     public VkBot(VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder,
-                 StudentReviewService studentReviewService, ThemeService themeService, ReviewService reviewService) {
+                 StudentReviewService studentReviewService, ThemeService themeService, ReviewService reviewService,
+                 StudentReviewAnswerService studentReviewAnswerService) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
@@ -44,6 +41,7 @@ public class VkBot implements ChatBot {
         this.studentReviewService = studentReviewService;
         this.themeService = themeService;
         this.reviewService = reviewService;
+        this.studentReviewAnswerService = studentReviewAnswerService;
     }
 
     @Override
@@ -87,7 +85,7 @@ public class VkBot implements ChatBot {
 
             Role role = user.getRole();
             context = new BotContext(user, userVkId, input, role, userService, vkService, studentReviewService,
-                                    themeService, reviewService, roleService);
+                                    themeService, reviewService, roleService, studentReviewAnswerService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг

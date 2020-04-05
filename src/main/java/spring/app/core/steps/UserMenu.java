@@ -57,7 +57,7 @@ public class UserMenu extends Step {
         } else if (command.equals("отменить")) { // (Отменить ревью)
 //            nextStep = ; TODO
         } else if (command.equals("сдать")) { // (Сдать ревью)
-//            nextStep = ; TODO
+            nextStep = USER_PASS_REVIEW_ADD_THEME;
         } else if (command.equals("принять")) { // (Принять ревью)
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
         } else if (command.equals("/admin")

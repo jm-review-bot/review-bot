@@ -61,6 +61,15 @@ public class TestDataInit {
     @Autowired
     private Step userTakeReviewConfirmation;
 
+    @Autowired
+    private Step userPassReviewAddTheme;
+
+    @Autowired
+    private Step userPassReviewGetListReview;
+
+    @Autowired
+    private Step userPassReviewAddStudentReview;
+
     public TestDataInit() {
     }
 
@@ -121,6 +130,9 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
+        steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
+        steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
+        steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
 
         //add themes
         Theme core = new Theme();
@@ -173,29 +185,29 @@ public class TestDataInit {
 
         // add reviews
         Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 4, 3, 21, 0));
-        coreReview.setOpen(false);
+        coreReview.setDate(LocalDateTime.of(2020, 5, 13, 21, 0));
+        coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(user);
         reviewService.addReview(coreReview);
 
         Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
-        sqlReview.setOpen(false);
-        sqlReview.setTheme(sql);
+        sqlReview.setDate(LocalDateTime.of(2020, 5, 3, 23, 0));
+        sqlReview.setOpen(true);
+        sqlReview.setTheme(core);
         sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 
         Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 4, 3, 22, 0));
-        springReview.setOpen(false);
+        springReview.setDate(LocalDateTime.of(2020, 5, 3, 22, 0));
+        springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(user);
         reviewService.addReview(springReview);
 
         // add student reviews
         StudentReview studentReview = new StudentReview();
-        studentReview.setUser(user);
+        studentReview.setUser(admin2);
         studentReview.setPassed(true);
         studentReview.setReview(springReview);
         studentReviewService.addStudentReview(studentReview);

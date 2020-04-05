@@ -21,6 +21,10 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         super(Review.class);
     }
 
+    /**
+     * Метод закрывает просроченные ревью в указанное время
+     * @param localDateTime
+     */
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
         final String CLOSE_EXPIRED_REVIEWS = "UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true";
@@ -29,16 +33,11 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         query.executeUpdate();
     }
 
+    /**
+     * Метод еще до конца не рабочий, нужно добавить проверку на количество записей в таблице StudentReview
+     * @param theme
+     */
     public List<Review> getAllReviewsByTheme(Theme theme) {
-//        String hql = "SELECT r FROM Review r INNER JOIN (SELECT COUNT(*) AS all FROM StudentReview sr) b ON b.all < 3 WHERE r.theme = :theme AND r.isOpen = true";
-        /*
-        SELECT r,COUNT(*) AS all
-FROM Review r
-join student_review sr ON sr.review.id = r.id
-where r.theme_id = :theme and r.is_open = true
-group by r
-having count(*) <3
-        */
         // TODO добавить проверку на количество записей в таблице StudentReview
         String hql = "SELECT r FROM Review r JOIN FETCH r.user WHERE r.theme.id = :theme AND r.isOpen = true";
         TypedQuery<Review> query = entityManager.createQuery(hql, Review.class);
@@ -46,7 +45,6 @@ having count(*) <3
         return query.getResultList();
     }
 
-}
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
         return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE " +

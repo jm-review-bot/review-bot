@@ -8,6 +8,7 @@ import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.StudentReviewAnswerService;
 
 public class BotContext {
     private final User user;
@@ -20,10 +21,11 @@ public class BotContext {
     private final StudentReviewService studentReviewService;
     private final ThemeService themeService;
     private final ReviewService reviewService;
+    private final StudentReviewAnswerService studentReviewAnswerService;
 
     public BotContext(User user, Integer vkId, String input, Role role, UserService userService,
                       VkService vkService, StudentReviewService studentReviewService, ThemeService themeService,
-                      ReviewService reviewService, RoleService roleService) {
+                      ReviewService reviewService, RoleService roleService, StudentReviewAnswerService studentReviewAnswerService) {
         this.user = user;
         this.vkId = vkId;
         this.input = input;
@@ -34,6 +36,7 @@ public class BotContext {
         this.themeService = themeService;
         this.reviewService = reviewService;
         this.studentReviewService = studentReviewService;
+        this.studentReviewAnswerService = studentReviewAnswerService;
 
     }
 
@@ -75,5 +78,9 @@ public class BotContext {
 
     public StudentReviewService getStudentReviewService() {
         return studentReviewService;
+    }
+
+    public StudentReviewAnswerService getStudentReviewAnswerService() {
+        return studentReviewAnswerService;
     }
 }
