@@ -37,12 +37,13 @@ public class UserStartReviewStepOne extends Step {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
             Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
             List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+            // отправляем каждому участнику ревью ссылку на ревью
             for (User user : students) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
                 context.getVkService().sendMessage(userInput, userStep.getKeyboard(), user.getVkId()); // TODO обрабатывать исключение ?
             }
-            nextStep = USER_START_REVIEW_STEP_TWO; // поменять на значение для следующего шага
+            nextStep = USER_START_REVIEW_STEP_TWO;
         } else {
             throw new ProcessInputException("Некорректный ввод данных...");
         }

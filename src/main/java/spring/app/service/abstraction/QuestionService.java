@@ -16,4 +16,5 @@ public interface QuestionService {
 
     void deleteQuestionById(Long id);
 
+    List<Question> getQuestionsByReviewId(Long reviewId);
 }

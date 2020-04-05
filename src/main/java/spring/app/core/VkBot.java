@@ -25,16 +25,18 @@ public class VkBot implements ChatBot {
     private RoleService roleService;
     private ThemeService themeService;
     private ReviewService reviewService;
+    private QuestionService questionService;
     private StepHolder stepHolder;
 
 
-    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, StepHolder stepHolder) {
+    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
         this.stepHolder = stepHolder;
         this.reviewService = reviewService;
         this.themeService = themeService;
+        this.questionService = questionService;
     }
 
     @Override
@@ -82,7 +84,7 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, stepHolder);
+            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, questionService, stepHolder);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
@@ -95,8 +97,12 @@ public class VkBot implements ChatBot {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
                 currentStep.enter(context);
                 sendMessage(currentStep.getText(), currentStep.getKeyboard(), userVkId);
+                // подтягиваем юзера из БД, чтобы обновить РП
+                user = context.getUserService().getByVkId(userVkId);
                 // юзеру ставим флаг просмотра true
                 user.setViewed(true);
+                // сохраняем изменения
+                userService.updateUser(user);
             } else { // если шаг просмотрен, то обрабатываем его инпут
                 try {
                     currentStep.processInput(context);
@@ -105,14 +111,14 @@ public class VkBot implements ChatBot {
                     // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
                     user.setChatStep(nextStep.name());
                     user.setViewed(false);
+                    // сохраняем изменения
+                    userService.updateUser(user);
                 } catch (ProcessInputException | NoNumbersEnteredException | NoDataEnteredException e) {
                     // отправляем сообщение об ошибке ввода
                     log.info("Пользователь с vkId: {} ввел неверные данные", userVkId);
                     sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);
                 }
             }
-            // сохраняем изменения
-            userService.updateUser(user);
         }
     }
 

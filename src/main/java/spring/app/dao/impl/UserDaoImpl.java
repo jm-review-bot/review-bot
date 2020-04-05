@@ -68,6 +68,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     @Override
     public List<User> getStudentsByReviewId(Long reviewId) {
         return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id", User.class)
-                .setParameter("review_id", reviewId).getResultList();
+                .setParameter("review_id", reviewId)
+                .getResultList();
     }
 }

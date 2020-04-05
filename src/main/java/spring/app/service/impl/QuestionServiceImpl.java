@@ -46,5 +46,10 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestionById(Long id) {
         questionDao.deleteById(id);
     }
+
+    @Override
+    public List<Question> getQuestionsByReviewId(Long reviewId) {
+        return questionDao.getQuestionsByReviewId(reviewId);
+    }
 }
 
