@@ -15,9 +15,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static spring.app.core.StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
-import static spring.app.core.StepSelector.USER_PASS_REVIEW_ADD_THEME;
-import static spring.app.util.Keyboards.NO_KB;
+import static spring.app.core.StepSelector.*;
+import static spring.app.util.Keyboards.BACK_KB;
 
 
 @Component
@@ -46,7 +45,7 @@ public class UserPassReviewGetListReview extends Step {
                         .append("\n")
                 );
         text = reviewList.toString();
-        keyboard = NO_KB;
+        keyboard = BACK_KB;
     }
 
     @Override
@@ -55,14 +54,12 @@ public class UserPassReviewGetListReview extends Step {
         Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(context.getVkId(),
                 StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW).get(0)));
         List<Review> reviews = context.getReviewService().getAllReviewsByTheme(theme);
-        //ожидаем только число, поэтому все остальные варианты обрабатываем как исключение
         if (StringParser.isNumeric(context.getInput())) {
             Long command = StringParser.toNumbersSet(context.getInput()).iterator().next().longValue();
             //перебираем все ревью и сравниваем ID с введенным числом и так по кругу, пока не получим нужный результат
             for (Review review : reviews) {
                 if (review.getId() == command) {
                     StudentReview studentReview = new StudentReview();
-//                    Review reviewForDate = context.getReviewService().getReviewById(command);
                     studentReview.setReview(review);
                     studentReview.setUser(context.getUser());
                     context.getStudentReviewService().addStudentReview(studentReview);
@@ -70,7 +67,7 @@ public class UserPassReviewGetListReview extends Step {
                     List<String> list = new ArrayList<>();
                     list.add(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                     updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_STUDENT_REVIEW, list);
-                    removeUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME);
+                    removeUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW);
                     nextStep = USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
                     break;
                 }
@@ -79,7 +76,17 @@ public class UserPassReviewGetListReview extends Step {
                 throw new ProcessInputException("Введен неверный номер ревью...");
             }
         } else {
-            throw new ProcessInputException("Введена неверная команда...");
+            //определяем нажатую кнопку или сообщаем о неверной команде
+            String command = StringParser.toWordsArray(context.getInput())[0];
+            if ("/start".equals(command)) {
+                nextStep = START;
+                removeUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW);
+            } else if ("назад".equals(command)) {
+                nextStep = USER_PASS_REVIEW_ADD_THEME;
+                removeUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW);
+            } else {
+                throw new ProcessInputException("Введена неверная команда...");
+            }
         }
     }
 }

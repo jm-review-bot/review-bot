@@ -11,16 +11,18 @@ import java.util.List;
 @Repository
 public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
-    private static final String THEME_T_WHERE_T_POSITION_POSITION = "SELECT t FROM Theme t WHERE t.position = :position";
-
     public ThemeDaoImpl() {
         super(Theme.class);
     }
 
+    /**
+     * Метод возвращает тему по ее порядковому номеру
+     * @param position
+     */
     public Theme getByPosition(Integer position) {
-        TypedQuery<Theme> query = entityManager.createQuery(THEME_T_WHERE_T_POSITION_POSITION, Theme.class);
-        query.setParameter("position", position);
-        return query.getSingleResult();
+        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.position = :position", Theme.class)
+        .setParameter("position", position)
+        .getSingleResult();
     }
 
     @Override

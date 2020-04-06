@@ -25,18 +25,14 @@ public class UserPassReviewAddStudentReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        if (!StringParser.isNumeric(context.getInput())) {
             String command = StringParser.toWordsArray(context.getInput())[0];
             if ("вернутся".equals(command)) {
                 nextStep = USER_MENU;
-            } else if ("start".equals(command)) {
+            } else if ("/start".equals(command)) {
                 nextStep = START;
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
             }
             removeUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_STUDENT_REVIEW);
-        } else {
-            throw new ProcessInputException("Введена неверная команда...");
-        }
     }
 }

@@ -155,6 +155,14 @@ public class Keyboards {
             "          \"label\": \"Отмена записи\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +

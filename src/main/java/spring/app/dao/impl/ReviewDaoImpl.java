@@ -27,8 +27,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      */
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
-        final String CLOSE_EXPIRED_REVIEWS = "UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true";
-        Query query = entityManager.createQuery(CLOSE_EXPIRED_REVIEWS);
+        Query query = entityManager.createQuery("UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true");
         query.setParameter("localDateTime", localDateTime);
         query.executeUpdate();
     }
@@ -39,10 +38,9 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      */
     public List<Review> getAllReviewsByTheme(Theme theme) {
         // TODO добавить проверку на количество записей в таблице StudentReview
-        String hql = "SELECT r FROM Review r JOIN FETCH r.user WHERE r.theme.id = :theme AND r.isOpen = true";
-        TypedQuery<Review> query = entityManager.createQuery(hql, Review.class);
-        query.setParameter("theme", theme.getId());
-        return query.getResultList();
+        return entityManager.createQuery("SELECT r FROM Review r JOIN FETCH r.user WHERE r.theme.id = :theme AND r.isOpen = true", Review.class)
+        .setParameter("theme", theme.getId())
+        .getResultList();
     }
 
     @Override

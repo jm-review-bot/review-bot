@@ -90,7 +90,7 @@ public class UserPassReviewAddTheme extends Step {
             if ("отмена".equals(command)) {
                 context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
-            } else if ("start".equals(command)) {
+            } else if ("/start".equals(command)) {
                 nextStep = START;
             } else if ("назад".equals(command)) {
                 nextStep = USER_MENU;;
