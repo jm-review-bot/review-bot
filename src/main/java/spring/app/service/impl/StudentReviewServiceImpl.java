@@ -46,4 +46,10 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public void deleteStudentReviewById(Long id) {
         studentReviewDao.deleteById(id);
     }
+
+    @Transactional
+    @Override
+    public void deleteStudentReviewByVkId(Integer vkId) {
+        studentReviewDao.deleteStudentReviewByVkId(vkId);
+    }
 }

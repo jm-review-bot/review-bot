@@ -61,6 +61,9 @@ public class TestDataInit {
     @Autowired
     private Step userTakeReviewConfirmation;
 
+    @Autowired
+    private Step userCancelReview;
+
     public TestDataInit() {
     }
 
@@ -121,6 +124,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
+        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
 
         //add themes
         Theme core = new Theme();
@@ -183,7 +187,7 @@ public class TestDataInit {
         springReview.setDate(LocalDateTime.of(2020, 5, 20, 15, 0));
         springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(admin);
+        springReview.setUser(admin2);
         reviewService.addReview(springReview);
 
         Review springReviewPassed2 = new Review(); // ревью, которое сдал User
@@ -201,7 +205,7 @@ public class TestDataInit {
         studentReviewService.addStudentReview(studentReview);
 
         StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
-        studentReview2.setUser(admin2);
+        studentReview2.setUser(admin);
         //studentReview2.setPassed(true);
         studentReview2.setReview(springReview);
         studentReviewService.addStudentReview(studentReview2);
