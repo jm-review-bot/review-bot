@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static spring.app.core.StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
-import static spring.app.core.StepSelector.USER_PASS_REVIEW_ADD_THEME;
+import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.NO_KB;
 
 
@@ -26,8 +25,8 @@ public class UserPassReviewGetListReview extends Step {
     @Override
     public void enter(BotContext context) {
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
-        Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(context.getVkId(),
-                StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW).get(0)));
+        Integer vkId = context.getVkId();
+        Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW).get(0)));
         List<Review> reviews = context.getReviewService().getAllReviewsByTheme(theme);
         //получаем список возможных ревью по выбранной теме
         StringBuilder reviewList = new StringBuilder("Выберите ревью, на которое вы хотите записаться, в качестве ответа пришлите цифру (номер ревью) \n\n");
@@ -52,12 +51,15 @@ public class UserPassReviewGetListReview extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         //TODO ВАЖНО возможно могут выбранное выше ревью уже занять
-        Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(context.getVkId(),
-                StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW).get(0)));
+        Integer vkId = context.getVkId();
+        String currentInput = context.getInput();
+        Theme theme = context.getThemeService().getThemeById(
+                Long.parseLong(getUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW).get(0))
+        );
         List<Review> reviews = context.getReviewService().getAllReviewsByTheme(theme);
         //ожидаем только число, поэтому все остальные варианты обрабатываем как исключение
-        if (StringParser.isNumeric(context.getInput())) {
-            Long command = StringParser.toNumbersSet(context.getInput()).iterator().next().longValue();
+        if (StringParser.isNumeric(currentInput)) {
+            Long command = StringParser.toNumbersSet(currentInput).iterator().next().longValue();
             //перебираем все ревью и сравниваем ID с введенным числом и так по кругу, пока не получим нужный результат
             for (Review review : reviews) {
                 if (review.getId() == command) {
@@ -69,8 +71,8 @@ public class UserPassReviewGetListReview extends Step {
                     //сохраняю дату ревью для следующего шага и очищаю данные в Storage для этого шага
                     List<String> list = new ArrayList<>();
                     list.add(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                    updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_STUDENT_REVIEW, list);
-                    removeUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME);
+                    updateUserStorage(vkId, USER_PASS_REVIEW_ADD_STUDENT_REVIEW, list);
+                    removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
                     nextStep = USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
                     break;
                 }

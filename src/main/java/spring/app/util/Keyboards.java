@@ -90,7 +90,7 @@ public class Keyboards {
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Начать\"\n" +
             "        },\n" +
-            "        \"color\": \"default\"\n" +
+            "        \"color\": \"primary\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +
@@ -160,7 +160,7 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
-    public final static String USER_GO_MENU = "{\n" +
+    public final static String BACK_TO_MENU = "{\n" +
             "  \"one_time\": true,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
@@ -168,9 +168,9 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Вернутся в меню\"\n" +
+            "          \"label\": \"Вернуться в меню\"\n" +
             "        },\n" +
-            "        \"color\": \"negative\"\n" +
+            "        \"color\": \"default\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +
