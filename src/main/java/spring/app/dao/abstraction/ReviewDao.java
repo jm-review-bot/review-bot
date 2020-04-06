@@ -14,4 +14,6 @@ public interface ReviewDao extends GenericDao<Long, Review> {
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
     Review getOpenReviewByStudentVkId(Integer vkId);
+
+    void bulkDeleteByUserId(Long id);
 }
