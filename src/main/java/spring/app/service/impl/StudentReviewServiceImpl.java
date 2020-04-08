@@ -56,4 +56,10 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public Long getNumberStudentReviewByIdReview(Long idReview) {
         return studentReviewDao.getNumberStudentReviewByIdReview(idReview);
     }
+
+    @Transactional
+    @Override
+    public void deleteStudentReviewByVkId(Integer vkId) {
+        studentReviewDao.deleteStudentReviewByVkId(vkId);
+    }
 }

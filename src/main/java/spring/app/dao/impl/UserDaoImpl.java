@@ -43,6 +43,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         }
     }
 
+    @Override
     @Transactional(propagation= Propagation.MANDATORY)
     public void deleteUserByVkId(Integer vkId) throws NoResultException {
         // Write all pending changes to the DB

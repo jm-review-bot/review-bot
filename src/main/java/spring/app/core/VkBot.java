@@ -12,7 +12,6 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
-
 import spring.app.util.Keyboards;
 
 import javax.persistence.NoResultException;
