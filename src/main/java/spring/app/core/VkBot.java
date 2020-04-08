@@ -26,10 +26,12 @@ public class VkBot implements ChatBot {
     private ThemeService themeService;
     private ReviewService reviewService;
     private QuestionService questionService;
+    private StudentReviewService studentReviewService;
+    private StudentReviewAnswerService studentReviewAnswerService;
     private StepHolder stepHolder;
 
 
-    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder) {
+    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
@@ -37,6 +39,8 @@ public class VkBot implements ChatBot {
         this.reviewService = reviewService;
         this.themeService = themeService;
         this.questionService = questionService;
+        this.studentReviewService = studentReviewService;
+        this.studentReviewAnswerService = studentReviewAnswerService;
     }
 
     @Override
@@ -84,7 +88,7 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, questionService, stepHolder);
+            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, questionService, stepHolder, studentReviewAnswerService, studentReviewService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг

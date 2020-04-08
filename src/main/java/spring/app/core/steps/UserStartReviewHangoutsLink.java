@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -12,11 +14,13 @@ import spring.app.util.StringParser;
 import java.util.List;
 
 import static spring.app.core.StepSelector.USER_MENU;
-import static spring.app.core.StepSelector.USER_START_REVIEW_STEP_TWO;
+import static spring.app.core.StepSelector.USER_START_REVIEW_RULES;
 import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
-public class UserStartReviewStepOne extends Step {
+public class UserStartReviewHangoutsLink extends Step {
+
+    private final static Logger log = LoggerFactory.getLogger(UserStartReviewHangoutsLink.class);
 
     @Override
     public void enter(BotContext context) {
@@ -37,13 +41,15 @@ public class UserStartReviewStepOne extends Step {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
             Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
             List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
-            // отправляем каждому участнику ревью ссылку на ревью
+            // отправляем ссылку на ревью каждому участнику
             for (User user : students) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
-                context.getVkService().sendMessage(userInput, userStep.getKeyboard(), user.getVkId()); // TODO обрабатывать исключение ?
+                String hangoutsLink = "Ревью началось, вот ссылка для подключения: " + userInput;
+                context.getVkService().sendMessage(hangoutsLink, userStep.getKeyboard(), user.getVkId());
+                log.warn("Студенту с id {} отправлено сообщение: {}", user.getVkId(), hangoutsLink);
             }
-            nextStep = USER_START_REVIEW_STEP_TWO;
+            nextStep = USER_START_REVIEW_RULES;
         } else {
             throw new ProcessInputException("Некорректный ввод данных...");
         }

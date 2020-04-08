@@ -19,4 +19,11 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
                 .setParameter("review_id", reviewId)
                 .getResultList();
     }
+
+    @Override
+    public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
+        return entityManager.createQuery("select q FROM Question q JOIN StudentReviewAnswer sra ON sra.question.id = q.id WHERE sra.id = :student_review_answer_id", Question.class)
+                .setParameter("student_review_answer_id", studentReviewAnswerId)
+                .getSingleResult();
+    }
 }

@@ -51,5 +51,10 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> getQuestionsByReviewId(Long reviewId) {
         return questionDao.getQuestionsByReviewId(reviewId);
     }
+
+    @Override
+    public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
+        return questionDao.getQuestionByStudentReviewAnswerId(studentReviewAnswerId);
+    }
 }
 

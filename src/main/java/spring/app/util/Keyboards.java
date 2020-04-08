@@ -175,4 +175,17 @@ public class Keyboards {
             "    ]\n" +
             "  ]\n" +
             "} ";
+
+    public final static String USER_MENU_KB = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [[\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Главное меню\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "  ]]\n" +
+            "} ";
 }

@@ -11,4 +11,11 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
         super(StudentReview.class);
     }
 
+    @Override
+    public StudentReview getStudentReviewByReviewIdAndStudentId (Long reviewId, Long studentId) {
+       return entityManager.createQuery("SELECT sr FROM StudentReview sr JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :student_id AND r.id = :review_id", StudentReview.class)
+               .setParameter("review_id", reviewId)
+               .setParameter("student_id", studentId)
+               .getSingleResult();
+    }
 }

@@ -7,41 +7,39 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.User;
+import spring.app.util.StringParser;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static spring.app.core.StepSelector.USER_MENU;
-import static spring.app.core.StepSelector.USER_START_REVIEW_STEP_THREE;
+import static spring.app.core.StepSelector.USER_START_REVIEW_CORE;
 import static spring.app.util.Keyboards.START_KB;
 
 @Component
-public class UserStartReviewStepTwo extends Step {
+public class UserStartReviewRules extends Step {
 
     @Override
     public void enter(BotContext context) {
-        Integer vkId = context.getVkId();
-        // Получаю reviewId из хранилища
-        Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
-        // Достаю список студентов, записанных на ревью
+
+        // Получаю reviewId из хранилища и список студентов, записанных на ревью
+        Long reviewId = Long.parseLong(getUserStorage(context.getVkId(), USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
-        // формирую информационное сообщение
+        // формирую список участников
         StringBuilder textBuilder = new StringBuilder("На твоём ревью сегодня присутствуют:\n\n");
         final int[] i = {1};
-        students.stream()
-                .sorted(Comparator.comparing(User::getLastName))
-                .forEach(user -> {
-                    textBuilder.append("[").append(i[0]++).append("] ")
-                            .append(user.getLastName())
-                            .append(" ")
-                            .append(user.getFirstName())
-                            .append(", https://vk.com/id")
-                            .append(user.getVkId())
-                            .append("\n");
+        students.forEach(user -> {
+            textBuilder.append("[").append(i[0]++).append("] ")
+                    .append(user.getLastName())
+                    .append(" ")
+                    .append(user.getFirstName())
+                    .append(", https://vk.com/id")
+                    .append(user.getVkId())
+                    .append("\n");
+        });
 
-                });
-        //TODO настроить текст информационного сообщения, зависящий от количества участников
-        // ставить минус за неправильный ответ ?
+        //TODO Подгонка инструкции под количество участников ревью
+
         textBuilder.append("\nСистема будет выдавать вопрос из списка, который тебе необходимо задать," +
                 " ты сам выбираешь кому задать данный вопрос," +
                 " если человек не отвечает на вопрос - отправь его номер в чат" +
@@ -62,14 +60,21 @@ public class UserStartReviewStepTwo extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
+        // по нажатию на кнопку "Начать" закрываем ревью и переходим на следующий шаг
         if (userInput.equalsIgnoreCase("Начать")) {
-            //TODO делать ли проверку на время начала ревью перед нажатием на "Начать" ?
-            // т.к. здесь мы меняем review isOpen на false
             Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
             Review review = context.getReviewService().getReviewById(reviewId);
-            review.setOpen(false);
-            context.getReviewService().updateReview(review);
-            nextStep = USER_START_REVIEW_STEP_THREE;
+            // не даем начать ревью раньше его официального начала (вдруг кто-то присоединится в последний момент)
+            if (LocalDateTime.now().isAfter(review.getDate())) {
+                review.setOpen(false);
+                context.getReviewService().updateReview(review);
+                nextStep = USER_START_REVIEW_CORE;
+            } else {
+                throw new ProcessInputException("Ты не можешь начать ревью раньше его официального начала.\n Дождись " +
+                        StringParser.localDateTimeToString(review.getDate()) + " и нажми на кнопку \"Начать\" снова.");
+            }
+        } else if (userInput.equalsIgnoreCase("/start")) {
+            nextStep = USER_MENU;
         } else {
             throw new ProcessInputException("Неверная команда, нажми на нопку \"Начать\"");
         }

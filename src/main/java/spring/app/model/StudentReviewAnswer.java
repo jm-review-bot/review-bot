@@ -26,6 +26,12 @@ public class StudentReviewAnswer {
     public StudentReviewAnswer() {
     }
 
+    public StudentReviewAnswer (StudentReview studentReview, Question question, Boolean isRight) {
+        this.studentReview = studentReview;
+        this.question = question;
+        this.isRight = isRight;
+    }
+
     public Long getId() {
         return id;
     }

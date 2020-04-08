@@ -61,13 +61,13 @@ public class TestDataInit {
     private Step userTakeReviewConfirmation;
 
     @Autowired
-    private Step userStartReviewStepOne;
+    private Step userStartReviewHangoutsLink;
 
     @Autowired
-    private Step userStartReviewStepTwo;
+    private Step userStartReviewRules;
 
     @Autowired
-    private Step userStartReviewStepThree;
+    private Step userStartReviewCore;
 
     public TestDataInit() {
     }
@@ -95,8 +95,8 @@ public class TestDataInit {
         User admin2 = new User();
         admin2.setFirstName("Максим");
         admin2.setLastName("Ботюк");
-        admin2.setReviewPoint(0);
-        admin2.setVkId(87632583); // change this to your vkId for testing
+        admin2.setReviewPoint(8);
+        admin2.setVkId(87632583);
         admin2.setRole(roleAdmin);
         admin2.setChatStep("START");
         userService.addUser(admin2);
@@ -129,9 +129,9 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
-        steps.put(StepSelector.USER_START_REVIEW_STEP_ONE, userStartReviewStepOne);
-        steps.put(StepSelector.USER_START_REVIEW_STEP_TWO, userStartReviewStepTwo);
-        steps.put(StepSelector.USER_START_REVIEW_STEP_THREE, userStartReviewStepThree);
+        steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
+        steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
+        steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
 
         //add themes
         Theme core = new Theme();
@@ -191,7 +191,7 @@ public class TestDataInit {
         reviewService.addReview(springReviewPassed);
 
         Review springReview = new Review(); // ревью по спрингу которое я буду принимать
-        springReview.setDate(LocalDateTime.of(2020, 4, 5, 22, 0));
+        springReview.setDate(LocalDateTime.of(2020, 4, 8, 23, 38));
         springReview.setOpen(true);
         springReview.setTheme(spring);
         springReview.setUser(user);
@@ -207,13 +207,11 @@ public class TestDataInit {
 
         StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
         studentReview2.setUser(admin2);
-        //studentReview2.setPassed(true);
         studentReview2.setReview(springReview);
         studentReviewService.addStudentReview(studentReview2);
 
         StudentReview studentReview3 = new StudentReview(); // чувак 2, котороый записался ко мне на ревью
         studentReview3.setUser(user2);
-        //studentReview3.setPassed(true);
         studentReview3.setReview(springReview);
         studentReviewService.addStudentReview(studentReview3);
 
@@ -239,6 +237,7 @@ public class TestDataInit {
         question3.setTheme(spring);
         questionService.addQuestion(question3);
 
+        /*
         Question question4 = new Question();
         question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
         question4.setPosition(4);
@@ -287,5 +286,7 @@ public class TestDataInit {
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
         questionService.addQuestion(question10);
+
+         */
     }
 }

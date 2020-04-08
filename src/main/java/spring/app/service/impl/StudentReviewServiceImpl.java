@@ -46,4 +46,9 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public void deleteStudentReviewById(Long id) {
         studentReviewDao.deleteById(id);
     }
+
+    @Override
+    public StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
+        return studentReviewDao.getStudentReviewByReviewIdAndStudentId(reviewId, studentId);
+    }
 }
