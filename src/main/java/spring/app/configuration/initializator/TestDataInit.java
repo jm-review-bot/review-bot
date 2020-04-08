@@ -62,7 +62,13 @@ public class TestDataInit {
     private Step userTakeReviewConfirmation;
 
     @Autowired
-    private Step userCancelReview;
+    private Step userPassReviewAddTheme;
+
+    @Autowired
+    private Step userPassReviewGetListReview;
+
+    @Autowired
+    private Step userPassReviewAddStudentReview;
 
     public TestDataInit() {
     }
@@ -124,7 +130,9 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
-        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
+        steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
+        steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
+        steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
 
         //add themes
         Theme core = new Theme();
@@ -176,48 +184,51 @@ public class TestDataInit {
         themeService.addTheme(finalReview);
 
         // add reviews
-        Review springReviewPassed = new Review(); // ревью, которое я сдал
-        springReviewPassed.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
-        springReviewPassed.setOpen(false);
-        springReviewPassed.setTheme(spring);
-        springReviewPassed.setUser(user);
-        reviewService.addReview(springReviewPassed);
+        Review coreReview = new Review();
+        coreReview.setDate(LocalDateTime.of(2020, 4, 3, 21, 0));
+        coreReview.setOpen(false);
+        coreReview.setTheme(core);
+        coreReview.setUser(user);
+        reviewService.addReview(coreReview);
 
-        Review springReview = new Review(); // ревью по спрингу которое я буду принимать
-        springReview.setDate(LocalDateTime.of(2020, 5, 20, 15, 0));
-        springReview.setOpen(true);
+        Review sqlReview = new Review();
+        sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
+        sqlReview.setOpen(false);
+        sqlReview.setTheme(sql);
+        sqlReview.setUser(admin);
+        reviewService.addReview(sqlReview);
+
+        Review springReview = new Review();
+        springReview.setDate(LocalDateTime.of(2020, 4, 3, 22, 0));
+        springReview.setOpen(false);
         springReview.setTheme(spring);
-        springReview.setUser(admin2);
+        springReview.setUser(user);
         reviewService.addReview(springReview);
 
-        Review springReviewPassed2 = new Review(); // ревью, которое сдал User
-        springReviewPassed2.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
-        springReviewPassed2.setOpen(false);
-        springReviewPassed2.setTheme(spring);
-        springReviewPassed2.setUser(user);
-        reviewService.addReview(springReviewPassed2);
-
         // add student reviews
-        StudentReview studentReview = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг
-        studentReview.setUser(admin);
+        StudentReview studentReview = new StudentReview();
+        studentReview.setUser(user);
         studentReview.setPassed(true);
-        studentReview.setReview(springReviewPassed);
+        studentReview.setReview(springReview);
         studentReviewService.addStudentReview(studentReview);
 
-        StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
-        studentReview2.setUser(admin);
-        //studentReview2.setPassed(true);
-        studentReview2.setReview(springReview);
+        StudentReview studentReview1 = new StudentReview();
+        studentReview1.setUser(user);
+        studentReview1.setPassed(false);
+        studentReview1.setReview(springReview);
+        studentReviewService.addStudentReview(studentReview1);
+
+        StudentReview studentReview2 = new StudentReview();
+        studentReview2.setUser(user);
+        studentReview2.setPassed(true);
+        studentReview2.setReview(sqlReview);
         studentReviewService.addStudentReview(studentReview2);
 
-        StudentReview studentReview3 = new StudentReview(); // чувак 2, котороый записался ко мне на ревью
-        studentReview3.setUser(user);
+        StudentReview studentReview3 = new StudentReview();
+        studentReview3.setUser(user2);
         studentReview3.setPassed(true);
-        studentReview3.setReview(springReviewPassed2);
+        studentReview3.setReview(sqlReview);
         studentReviewService.addStudentReview(studentReview3);
-
-
-
 
         // add Questions
         Question question1 = new Question();
@@ -252,25 +263,25 @@ public class TestDataInit {
         StudentReviewAnswer answer1 = new StudentReviewAnswer();
         answer1.setRight(true);
         answer1.setQuestion(question1);
-        answer1.setStudentReview(studentReview3);
+        answer1.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer1);
 
         StudentReviewAnswer answer2 = new StudentReviewAnswer();
         answer2.setRight(true);
         answer2.setQuestion(question2);
-        answer2.setStudentReview(studentReview3);
+        answer2.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer2);
 
         StudentReviewAnswer answer3 = new StudentReviewAnswer();
         answer3.setRight(true);
         answer3.setQuestion(question3);
-        answer3.setStudentReview(studentReview3);
+        answer3.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer3);
 
         StudentReviewAnswer answer4 = new StudentReviewAnswer();
         answer4.setRight(true);
         answer4.setQuestion(question4);
-        answer4.setStudentReview(studentReview3);
+        answer4.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer4);
     }
 }
