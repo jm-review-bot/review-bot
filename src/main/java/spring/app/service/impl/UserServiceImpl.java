@@ -3,6 +3,9 @@ package spring.app.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.app.dao.abstraction.ReviewDao;
+import spring.app.dao.abstraction.StudentReviewAnswerDao;
+import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
@@ -13,11 +16,18 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private UserDao userDao;
+    private final UserDao userDao;
+    private final StudentReviewAnswerDao studentReviewAnswerDao;
+    private final StudentReviewDao studentReviewDao;
+    private final ReviewDao reviewDao;
+
 
     @Autowired
-    public UserServiceImpl(UserDao userDao) {
+    public UserServiceImpl(UserDao userDao, StudentReviewAnswerDao studentReviewAnswerDao, StudentReviewDao studentReviewDao, ReviewDao reviewDao) {
         this.userDao = userDao;
+        this.studentReviewAnswerDao = studentReviewAnswerDao;
+        this.studentReviewDao = studentReviewDao;
+        this.reviewDao = reviewDao;
     }
 
     @Transactional
@@ -45,6 +55,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUserById(Long id) {
+        // удаляем StudentReviewAnswer
+        studentReviewAnswerDao.bulkDeleteByUserId(id);
+        // удаляем StudentReview
+        studentReviewDao.bulkDeleteByUserId(id);
+        // удаляем Review
+        reviewDao.bulkDeleteByUserId(id);
+        // удаляем юзера
         userDao.deleteById(id);
     }
 

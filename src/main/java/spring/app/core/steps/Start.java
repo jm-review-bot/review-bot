@@ -6,8 +6,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.ADMIN_START_KB;
-import static spring.app.util.Keyboards.START_KB;
+import static spring.app.util.Keyboards.*;
 
 @Component
 public class Start extends Step {

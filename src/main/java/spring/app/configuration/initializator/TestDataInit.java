@@ -61,6 +61,9 @@ public class TestDataInit {
     private Step userTakeReviewConfirmation;
 
     @Autowired
+    private Step userCancelReview;
+
+    @Autowired
     private Step userStartReviewHangoutsLink;
 
     @Autowired
@@ -129,6 +132,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
+        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
@@ -204,7 +208,6 @@ public class TestDataInit {
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
 
-
         StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
         studentReview2.setUser(admin2);
         studentReview2.setReview(springReview);
@@ -237,7 +240,6 @@ public class TestDataInit {
         question3.setTheme(spring);
         questionService.addQuestion(question3);
 
-        /*
         Question question4 = new Question();
         question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
         question4.setPosition(4);
@@ -286,7 +288,5 @@ public class TestDataInit {
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
         questionService.addQuestion(question10);
-
-         */
     }
 }

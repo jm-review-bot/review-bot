@@ -1,5 +1,8 @@
 package spring.app.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -18,6 +21,7 @@ public class StudentReview {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Review review;
 
     private Boolean isPassed;

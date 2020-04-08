@@ -6,6 +6,7 @@ import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 public abstract class Step {
-
     protected String text;
     protected String keyboard;
     protected StepSelector nextStep;
+    /** Мапа для хранения данных, структурированных по vkId юзера и указанному шагу */
     private static final ConcurrentMap<Integer, Map<StepSelector, List<String>>> STORAGE = new ConcurrentHashMap<>();
 
     // абстрактные методы которые должны быть переопределены в каждом Step
@@ -47,6 +48,7 @@ public abstract class Step {
             return null;
         }
     }
+
     /**
      * Сохраняет указанный List<String> в ячейку данному юзеру, для указанного шага.
      * Создает пустой Map (ячейку) для данного юзера, если раньше для него не было создана ячейка.

@@ -92,7 +92,7 @@ public class UserMenu extends Step {
                 throw new ProcessInputException("Ты еще не объявлял о принятии ревью!\n Сначала ты должен его объвить, для этого нажми на кнопку \"Принять ревью\" и следуй дальнейшим указаниям.");
             }
         } else if (command.equals("отменить")) { // (Отменить ревью)
-//            nextStep = ; TODO
+            nextStep = USER_CANCEL_REVIEW;
         } else if (command.equals("сдать")) { // (Сдать ревью)
 //            nextStep = ; TODO
         } else if (command.equals("принять")) { // (Принять ревью)

@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface StudentReviewAnswerDao extends GenericDao<Long, StudentReviewAnswer> {
 
+    void bulkDeleteByUserId(Long id);
+
     List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId(Long studentReviewId);
 }
