@@ -23,6 +23,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
 
     /**
      * Метод закрывает просроченные ревью в указанное время
+     *
      * @param localDateTime
      */
     @Transactional(propagation = Propagation.MANDATORY)
@@ -33,14 +34,15 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     }
 
     /**
-     * Метод еще до конца не рабочий, нужно добавить проверку на количество записей в таблице StudentReview
+     * Метод возвращает ревью по выбранной теме при условии, что записанных на ревью менее трех
+     *
      * @param theme
      */
     public List<Review> getAllReviewsByTheme(Theme theme) {
         // TODO добавить проверку на количество записей в таблице StudentReview
-        return entityManager.createQuery("SELECT r FROM Review r JOIN FETCH r.user WHERE r.theme.id = :theme AND r.isOpen = true", Review.class)
-        .setParameter("theme", theme.getId())
-        .getResultList();
+        return entityManager.createQuery("SELECT r FROM Review r join fetch r.user ru LEFT JOIN StudentReview sr ON r.id = sr.review.id WHERE r.theme = :theme AND r.isOpen = true group by r, ru having count(all r) < 3", Review.class)
+                .setParameter("theme", theme)
+                .getResultList();
     }
 
     @Override
@@ -54,18 +56,21 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("review_duration", reviewDuration)
                 .getResultList();
     }
+
     /**
      * Метод возвращает все открытые ревью, которые юзер с данным vkId будет принимать
+     *
      * @param vkId
      */
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
-        .setParameter("id", vkId).getResultList();
+                .setParameter("id", vkId).getResultList();
     }
 
     /**
      * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
+     *
      * @param vkId
      */
     @Override

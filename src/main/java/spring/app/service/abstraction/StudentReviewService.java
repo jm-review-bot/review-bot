@@ -18,4 +18,6 @@ public interface StudentReviewService {
 
     StudentReview getStudentReviewIfAvailableAndOpen(Long idUser);
 
+    Long getNumberStudentReviewByIdReview(Long idReview);
+
 }

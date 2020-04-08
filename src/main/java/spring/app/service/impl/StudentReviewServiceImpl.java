@@ -51,4 +51,9 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser){
         return studentReviewDao.getStudentReviewIfAvailableAndOpen(idUser);
     }
+
+    @Override
+    public Long getNumberStudentReviewByIdReview(Long idReview) {
+        return studentReviewDao.getNumberStudentReviewByIdReview(idReview);
+    }
 }

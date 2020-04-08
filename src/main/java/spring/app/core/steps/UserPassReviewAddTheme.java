@@ -50,11 +50,12 @@ public class UserPassReviewAddTheme extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
+        Integer vkId = context.getVkId();
+        String currentInput = context.getInput();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
-//        if (studentReview == null) {
-        if (StringParser.isNumeric(context.getInput())) {
-            Integer command = StringParser.toNumbersSet(context.getInput()).iterator().next();
+        if (StringParser.isNumeric(currentInput)) {
+            Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             //проверяем или номер темы не выходит за рамки
             if (command > 0 & command < 9) {
                 Theme theme = context.getThemeService().getByPosition(command);
@@ -64,7 +65,6 @@ public class UserPassReviewAddTheme extends Step {
                     List<Review> reviews = context.getReviewService().getAllReviewsByTheme(theme);
                     //проверяем наличие открытых ревью по данной теме
                     if (reviews.isEmpty()) {
-                        // TODO решить на который шаг отбросить
                         nextStep = USER_MENU;
                         throw new ProcessInputException("К сожалению, сейчас никто не готов принять " +
                                 "ревью, напиши в общее обсуждение сообщение с просьбой добавить кого-то " +
@@ -74,7 +74,7 @@ public class UserPassReviewAddTheme extends Step {
                         //если нашли хоть одно открытое ревью по выбранной теме, сохраняем ID темы для следующего шага
                         List<String> list = new ArrayList<>();
                         list.add(theme.getId().toString());
-                        updateUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW, list);
+                        updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
                         nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
                     }
                 } else {
@@ -86,7 +86,7 @@ public class UserPassReviewAddTheme extends Step {
             }
         } else {
             //определяем нажатую кнопку или сообщаем о неверной команде
-            String command = StringParser.toWordsArray(context.getInput())[0];
+            String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command)) {
                 context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
                 nextStep = USER_PASS_REVIEW_ADD_THEME;

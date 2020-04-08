@@ -176,7 +176,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Вернутся в меню\"\n" +
+            "          \"label\": \"Вернуться в меню\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n" +
