@@ -218,6 +218,11 @@ public class TestDataInit {
         studentReview3.setReview(springReview);
         studentReviewService.addStudentReview(studentReview3);
 
+        StudentReview studentReview4 = new StudentReview(); // чувак 3, котороый записался ко мне на ревью
+        studentReview4.setUser(admin);
+        studentReview4.setReview(springReview);
+        studentReviewService.addStudentReview(studentReview4);
+
         // add Questions
         Question question1 = new Question();
         question1.setAnswer("«Bean» – это объект, который интегрируется и конфигурируется контейнером IOC.");

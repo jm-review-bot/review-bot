@@ -30,7 +30,7 @@ public class UserCancelReview extends Step {
                     .append(review.getTheme().getTitle())
                     .append(".\n")
                     .append("Дата: ")
-                    .append(StringParser.LocalDateTimeToString(review.getDate()))
+                    .append(StringParser.localDateTimeToString(review.getDate()))
                     .append(". \n\n")
                     .append("Вы действительно хотите отменить запись? (Да/Нет)");
             text = message.toString();
