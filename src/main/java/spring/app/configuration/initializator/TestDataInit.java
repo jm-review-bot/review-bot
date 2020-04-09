@@ -186,7 +186,7 @@ public class TestDataInit {
         // add reviews
         Review coreReview = new Review();
         coreReview.setDate(LocalDateTime.of(2020, 4, 3, 21, 0));
-        coreReview.setOpen(false);
+        coreReview.setOpen(true);
         coreReview.setTheme(core);
         coreReview.setUser(user);
         reviewService.addReview(coreReview);
@@ -194,7 +194,7 @@ public class TestDataInit {
         Review sqlReview = new Review();
         sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
         sqlReview.setOpen(false);
-        sqlReview.setTheme(sql);
+        sqlReview.setTheme(core);
         sqlReview.setUser(admin);
         reviewService.addReview(sqlReview);
 

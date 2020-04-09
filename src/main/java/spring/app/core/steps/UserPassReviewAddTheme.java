@@ -13,6 +13,8 @@ import spring.app.util.StringParser;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
@@ -20,9 +22,11 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class UserPassReviewAddTheme extends Step {
+    private Map<Integer, Integer> flag = new ConcurrentHashMap<>();
 
     @Override
     public void enter(BotContext context) {
+        Integer vkId = context.getVkId();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
 
         if (studentReview != null) {
@@ -34,7 +38,18 @@ public class UserPassReviewAddTheme extends Step {
 
             keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
         } else {
-            text = "\"Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n\n" +
+            if (flag.get(vkId) != null){ //НЕ РАБОТАЕТ
+                text = "Ревью отменено.\n\nВыберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n\n" +
+                        "[1] Java Core, стоимость 0 RP\n" +
+                        "[2] Многопоточность, стоимость 4 RP\n" +
+                        "[3] SQL, стоимость 4 RP\n" +
+                        "[4] Hibernate, стоимость 4 RP\n" +
+                        "[5] Spring, стоимость 4 RP\n" +
+                        "[6] Паттерны, стоимость 4 RP\n" +
+                        "[7] Алгоритмы, стоимость 4 RP\n" +
+                        "[8] Финальное ревью, стоимость 4 RP";
+            }
+            text = "Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n\n" +
                     "[1] Java Core, стоимость 0 RP\n" +
                     "[2] Многопоточность, стоимость 4 RP\n" +
                     "[3] SQL, стоимость 4 RP\n" +
@@ -42,7 +57,7 @@ public class UserPassReviewAddTheme extends Step {
                     "[5] Spring, стоимость 4 RP\n" +
                     "[6] Паттерны, стоимость 4 RP\n" +
                     "[7] Алгоритмы, стоимость 4 RP\n" +
-                    "[8] Финальное ревью, стоимость 4 RP\"";
+                    "[8] Финальное ревью, стоимость 4 RP";
 
             keyboard = BACK_KB;
         }
@@ -89,6 +104,7 @@ public class UserPassReviewAddTheme extends Step {
             String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command)) {
                 context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
+                flag.putIfAbsent(vkId, 1);
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
             } else if ("/start".equals(command)) {
                 nextStep = START;

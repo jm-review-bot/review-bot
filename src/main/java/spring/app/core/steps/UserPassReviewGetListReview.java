@@ -19,7 +19,7 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class UserPassReviewGetListReview extends Step {
-    private Map<Integer, Map<Long, Review>> reviewsIndex = new ConcurrentHashMap<>();
+    private Map<Integer, Map<Integer, Long>> reviewsIndex = new ConcurrentHashMap<>();
 
     @Override
     public void enter(BotContext context) {
@@ -35,27 +35,25 @@ public class UserPassReviewGetListReview extends Step {
         //если пользователь повторно заходит в данный шаг, значит выбранное ревью уже занято
         StringBuilder reviewList = new StringBuilder();
         if(reviewsIndex.get(vkId) == null) {
-            reviewList.append("Выберите ревью, на которое вы хотите записаться, в качестве ответа пришлите цифру (номер ревью) \n\n");
+            reviewList.append("Выбери удобное время и дату для записи, всё время и дата указывается в МСК часовом поясе, для выбора отправь в " +
+                    "ответе число соответствующее удобному для тебя времени.\n\n");
         } else {
-            reviewList.append("Выбранное Вами ревью уже заполнено!\n\nВыберите ревью, на которое вы хотите записаться, в качестве ответа пришлите цифру (номер ревью) \n\n");
-            reviewsIndex.clear();
+            reviewList.append("Выбранное Вами ревью уже заполнено!\n\nВыбери удобное время и дату для записи, всё время и дата указывается в МСК " +
+                    "часовом поясе, для выбора отправь в ответе число соответствующее удобному для тебя времени.\n\n");
+            reviewsIndex.keySet().remove(vkId);
         }
 
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
-        Long i = 1L;
-        Map<Long, Review> indexList = new ConcurrentHashMap<>();
+        Integer i = 1;
+        Map<Integer, Long> indexList = new ConcurrentHashMap<>();
         for (Review review : reviews) {
-            indexList.put(i, review);
+            indexList.put(i, review.getId());
             reviewsIndex.putIfAbsent(vkId, indexList);
             reviewList.append("[")
                     .append(i)
                     .append("]")
                     .append(" дата: ")
                     .append(review.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
-                    .append(", принимающий: ")
-                    .append(review.getUser().getFirstName())
-                    .append(" ")
-                    .append(review.getUser().getLastName())
                     .append("\n");
             i++;
         }
@@ -69,12 +67,12 @@ public class UserPassReviewGetListReview extends Step {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
         if (StringParser.isNumeric(currentInput)) {
-            Long command = StringParser.toNumbersSet(currentInput).iterator().next().longValue();
+            Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             //получаю список ревью, которые вывелись пользователю
-            Map<Long, Review> allReviewsAndIndex = reviewsIndex.get(vkId);
+            Map<Integer, Long> allReviewsAndIndex = reviewsIndex.get(vkId);
             //из списка ревью по порядковому номеру получаю id ревью, если null - значит введен номер ревью не доступный в списке
-            Long idReview = allReviewsAndIndex.get(command) != null ? reviewsIndex.get(vkId).get(command).getId() : 0;
-            if (idReview != 0){
+            Long idReview = allReviewsAndIndex.get(command) != null ? reviewsIndex.get(vkId).get(command) : 0L;
+            if (idReview != 0L){
                 Review review = context.getReviewService().getReviewById(idReview);
                 //проверяю остались ли свободные места в выбранном ревью
                 if (context.getStudentReviewService().getNumberStudentReviewByIdReview(review.getId()) < 3) {
@@ -88,6 +86,9 @@ public class UserPassReviewGetListReview extends Step {
                     updateUserStorage(vkId, USER_PASS_REVIEW_ADD_STUDENT_REVIEW, list);
                     removeUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW);
                     nextStep = USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
+                    //удаляю запись по id из списка, т.к. при удалении записи на ревью и повторной записи, выводится
+                    //сообщение: Выбранное Вами ревью уже заполнено!
+                    reviewsIndex.keySet().remove(vkId);
                 } else {
                     //если выбранном ревью не осталось свободных мест, занчит повторяем данный шаг
                     nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
@@ -101,9 +102,11 @@ public class UserPassReviewGetListReview extends Step {
             String command = StringParser.toWordsArray(context.getInput())[0];
             if ("/start".equals(command)) {
                 nextStep = START;
+                reviewsIndex.keySet().remove(vkId);
                 removeUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW);
             } else if ("назад".equals(command)) {
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
+                reviewsIndex.keySet().remove(vkId);
                 removeUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW);
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
