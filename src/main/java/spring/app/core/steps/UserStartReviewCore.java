@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -26,6 +27,10 @@ import static spring.app.util.Keyboards.USER_MENU_KB;
 
 @Component
 public class UserStartReviewCore extends Step {
+
+    @Value("${review.point_for_take_review}")
+    int pointForTakeReview;
+
     private final static Logger log = LoggerFactory.getLogger(UserStartReviewCore.class);
 
     // Map хранит vkId ревьюера и индекс вопроса из List<Question> questions, который сейчас задает ревьюер
@@ -104,7 +109,7 @@ public class UserStartReviewCore extends Step {
 
                 // добавляем очки за прием ревью
                 User user = context.getUserService().getByVkId(vkId);
-                user.setReviewPoint(user.getReviewPoint() + 2); // TODO вынести кол-во очков за принятие ревью в проперти
+                user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);
                 context.getUserService().updateUser(user);
                 // формируем сообщение об окончании ревью для ревьюера
                 String reviewResultMessage = String.format("Вопросы закончились, ревью окончено!\n Результаты ревью будут отправлены каждому участнику.\nВам начислено 2 RP, теперь Ваш баланс %d RP", user.getReviewPoint());

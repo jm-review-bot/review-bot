@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -18,6 +19,15 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
+
+    @Value("${review.point_for_empty_review}")
+    int pointForEmptyReview;
+
+    @Value("${review.delay}")
+    int reviewDelay;
+
+    @Value("${review.early_start}")
+    int reviewEarlyStart;
 
     @Override
     public void enter(BotContext context) {
@@ -51,7 +61,6 @@ public class UserMenu extends Step {
         text = String.format("Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, для удобного использования бота воспользуйтесь кнопками + скрин. \nНа данный момент у вас %d очков RP (Review Points) для сдачи ревью.\nRP используются для записи на ревью, когда вы хотите записаться на ревью вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, если вы дали возможность вам сдать, но никто не записался на сдачу (те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.", user.getFirstName(), user.getReviewPoint());
     }
 
-    // TODO вынести правила ревью в проперти (начало за +- 10 минут, кол-во очков за ревью в котором не было участников)
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         Integer vkId = context.getVkId();
@@ -60,13 +69,14 @@ public class UserMenu extends Step {
             // получаем список всех ревью, которые проводит пользователь
             List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
-                // берем из списка то ревью, которое находится в диапазоне +- 10 минут от текущего времени
+                // берем из списка то ревью, которое находится в диапазоне 5 минут от текущего времени до начала ревью и 10 минут после начала ревью
                 Review nearestReview = userReviews.stream()
-                        .filter(review -> review.getDate().plusMinutes(10).isAfter(LocalDateTime.now()) && review.getDate().minusMinutes(10).isBefore(LocalDateTime.now()))
+                        .filter(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()) && review.getDate().minusMinutes(reviewEarlyStart).isBefore(LocalDateTime.now()))
                         .findFirst().orElse(null);
-                // если такого ревью нет, сообщаем, что начать ты можешь либо за 10 минут до его начала, либо в течение 10 минут после начала
+                // если такого ревью нет, сообщаем, что начать ты можешь либо за 5 минут до его начала, либо в течение 10 минут после начала
                 if (nearestReview == null) {
-                    throw new ProcessInputException("Ты можешь начать проведение ревью не ранее 10 минут до его начала, либо в течение 10 минут после начала ревью");
+                    String notification = String.format("Ты можешь начать проведение ревью не ранее %d минут до его начала, либо в течение %d минут после начала ревью", reviewEarlyStart, reviewDelay);
+                    throw new ProcessInputException(notification);
                     // если ревью есть в этом временном диапазоне
                 } else {
                     // то смотрим записан ли кто-то на него
@@ -74,16 +84,16 @@ public class UserMenu extends Step {
                     List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
                     if (!students.isEmpty()) {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
-                        List<String> reviewIds =  new ArrayList<>();
+                        List<String> reviewIds = new ArrayList<>();
                         reviewIds.add(reviewId.toString());
                         updateUserStorage(vkId, USER_MENU, reviewIds);
                         nextStep = USER_START_REVIEW_HANGOUTS_LINK;
                     } else {
-                        // если никто не записался на ревью, то добавялем 1 очко пользователю и закрываем ревью
+                        // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
                         nearestReview.setOpen(false);
                         context.getReviewService().updateReview(nearestReview);
                         User user = context.getUserService().getByVkId(vkId);
-                        user.setReviewPoint(user.getReviewPoint() + 1);
+                        user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
                     }
                 }
