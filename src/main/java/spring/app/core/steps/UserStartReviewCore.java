@@ -99,8 +99,6 @@ public class UserStartReviewCore extends Step {
                         }
                     }
                 }
-                // удаляем ключ с vkId ревьюера из questionNumbers
-                questionNumbers.keySet().remove(vkId);
                 // очищаем ввод ревьюера из STORAGE
                 removeUserStorage(vkId, USER_START_REVIEW_CORE);
 
@@ -171,13 +169,22 @@ public class UserStartReviewCore extends Step {
         String userInput = context.getInput();
         Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+        List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
-        // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
-        if (userInput.equalsIgnoreCase("/start")) {
+        if (userInput.equalsIgnoreCase("/start")) { // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
             nextStep = START;
             questionNumbers.keySet().remove(vkId);
-        } else if (userInput.equalsIgnoreCase("главное меню") && keyboard.equals(USER_MENU_KB)) {
-            nextStep = USER_MENU;
+            // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
+        } else if (questionNumbers.get(vkId) == questions.size()) {
+            if (userInput.equalsIgnoreCase("главное меню")) {
+                nextStep = USER_MENU;
+                questionNumbers.keySet().remove(vkId);
+            } else if (userInput.equalsIgnoreCase("/start")) {
+                nextStep = START;
+                questionNumbers.keySet().remove(vkId);
+            } else {
+                throw new ProcessInputException("Для выхода в главное меню нажми кнопку \"Главное меню\"");
+            }
             // проверяем, является ли ввод ревьюера корректным
         } else if (StringParser.isValidReviewerInput(userInput, students.size())) {
             // определяем какой вопрос мы задаем
