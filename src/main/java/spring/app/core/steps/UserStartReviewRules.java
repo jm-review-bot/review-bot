@@ -12,8 +12,7 @@ import spring.app.util.StringParser;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static spring.app.core.StepSelector.USER_MENU;
-import static spring.app.core.StepSelector.USER_START_REVIEW_CORE;
+import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.START_KB;
 
 @Component
@@ -74,7 +73,7 @@ public class UserStartReviewRules extends Step {
                         StringParser.localDateTimeToString(review.getDate()) + " и нажми на кнопку \"Начать\" снова.");
             }
         } else if (userInput.equalsIgnoreCase("/start")) {
-            nextStep = USER_MENU;
+            nextStep = START;
         } else {
             throw new ProcessInputException("Неверная команда, нажми на нопку \"Начать\"");
         }

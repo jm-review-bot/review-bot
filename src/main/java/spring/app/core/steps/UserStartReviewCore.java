@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static spring.app.core.StepSelector.USER_MENU;
-import static spring.app.core.StepSelector.USER_START_REVIEW_CORE;
+import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.NO_KB;
 import static spring.app.util.Keyboards.USER_MENU_KB;
 
@@ -173,7 +172,11 @@ public class UserStartReviewCore extends Step {
         Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
 
-        if ((userInput.equalsIgnoreCase("/start") || userInput.equalsIgnoreCase("главное меню")) && keyboard.equals(USER_MENU_KB)) {
+        // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
+        if (userInput.equalsIgnoreCase("/start")) {
+            nextStep = START;
+            questionNumbers.keySet().remove(vkId);
+        } else if (userInput.equalsIgnoreCase("главное меню") && keyboard.equals(USER_MENU_KB)) {
             nextStep = USER_MENU;
             // проверяем, является ли ввод ревьюера корректным
         } else if (StringParser.isValidReviewerInput(userInput, students.size())) {

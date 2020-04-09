@@ -13,8 +13,7 @@ import spring.app.util.StringParser;
 
 import java.util.List;
 
-import static spring.app.core.StepSelector.USER_MENU;
-import static spring.app.core.StepSelector.USER_START_REVIEW_RULES;
+import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
@@ -35,8 +34,10 @@ public class UserStartReviewHangoutsLink extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
-        if (userInput.equalsIgnoreCase("назад") || userInput.equalsIgnoreCase("/start")) {
+        if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
+        } else if (userInput.equalsIgnoreCase("/start")) {
+            nextStep = START;
         } else if (StringParser.isHangoutsLink(userInput)) {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
             Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
