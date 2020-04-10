@@ -11,7 +11,6 @@ import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
@@ -31,8 +30,13 @@ public class UserTakeReviewAddDate extends Step {
         Integer vkId = context.getVkId();
         Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
         Theme theme = context.getThemeService().getThemeById(themeId);
-        StringBuilder textBuilder = new StringBuilder("Ты выбрал тему: ");
-        textBuilder
+        List<String> errorMessages = getUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
+        StringBuilder textBuilder = new StringBuilder();
+        if (errorMessages != null) {
+            textBuilder.append(errorMessages.get(0));
+            removeUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
+        }
+        textBuilder.append("Ты выбрал тему: ")
                 .append(theme.getTitle())
                 .append(".\n\n Укажи время и дату для принятия ревью в формате ДД.ММ.ГГГГ ЧЧ:ММ ")
                 .append("по Московскому часовому поясу.\n Пример корректного ответа 02.06.2020 17:30\n\n")
