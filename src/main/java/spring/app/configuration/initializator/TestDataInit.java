@@ -70,6 +70,9 @@ public class TestDataInit {
     private Step userPassReviewAddStudentReview;
 
     @Autowired
+    private Step userCancelReview;
+
+    @Autowired
     private Step userStartReviewHangoutsLink;
 
     @Autowired

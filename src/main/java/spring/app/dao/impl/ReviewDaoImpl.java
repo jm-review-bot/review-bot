@@ -9,8 +9,6 @@ import spring.app.model.Theme;
 import spring.app.model.StudentReview;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,10 +26,6 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      */
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
-        Query query = entityManager.createQuery("UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true");
-        query.setParameter("localDateTime", localDateTime);
-        query.executeUpdate();
     public void updateAllExpiredReviewsByDate(LocalDateTime localDateTime) {
         entityManager.createQuery("UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true")
                 .setParameter("localDateTime", localDateTime)
