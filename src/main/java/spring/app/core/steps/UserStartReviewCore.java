@@ -106,7 +106,6 @@ public class UserStartReviewCore extends Step {
                 }
                 // очищаем ввод ревьюера из STORAGE
                 removeUserStorage(vkId, USER_START_REVIEW_CORE);
-
                 // добавляем очки за прием ревью
                 User user = context.getUserService().getByVkId(vkId);
                 user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);
@@ -152,11 +151,7 @@ public class UserStartReviewCore extends Step {
                                     .append("\n");
                         }
                     }
-                    reviewResults.append("\nЗа участие в ревью списано: ")
-                            .append(reviewPoint)
-                            .append(" RP, твой баланс теперь составляет: ")
-                            .append(student.getReviewPoint())
-                            .append(" RP");
+                    reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", reviewPoint, student.getReviewPoint()));
                     // отправляем студенту результаты ревью
                     Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
                     context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
@@ -179,14 +174,17 @@ public class UserStartReviewCore extends Step {
         if (userInput.equalsIgnoreCase("/start")) { // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
             nextStep = START;
             questionNumbers.keySet().remove(vkId);
+            removeUserStorage(vkId, USER_MENU);
             // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
         } else if (questionNumbers.get(vkId) == questions.size()) {
             if (userInput.equalsIgnoreCase("главное меню")) {
                 nextStep = USER_MENU;
                 questionNumbers.keySet().remove(vkId);
+                removeUserStorage(vkId, USER_MENU);
             } else if (userInput.equalsIgnoreCase("/start")) {
                 nextStep = START;
                 questionNumbers.keySet().remove(vkId);
+                removeUserStorage(vkId, USER_MENU);
             } else {
                 throw new ProcessInputException("Для выхода в главное меню нажми кнопку \"Главное меню\"");
             }

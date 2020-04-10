@@ -31,9 +31,10 @@ public class UserTakeReviewConfirmation extends Step {
         Theme theme = context.getThemeService().getThemeById(themeId);
         //достаем из глобального хранилища время ревью, выбранное пользователем на предыдущем шаге
         String reviewDate = getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE).get(0);
+
         StringBuilder textBiulder = new StringBuilder();
-        textBiulder.append("Ты собираешься провести ревью по теме: ").append(theme.getTitle())
-                .append("\nДата начала ревью: ").append(reviewDate)
+        textBiulder.append(String.format("Ты собираешься провести ревью по теме: %s", theme.getTitle()))
+                .append(String.format("\nДата начала ревью: %s", reviewDate))
                 .append("\n\nВ день и время когда оно наступит напиши в чат сообщение \"начать ревью\" или нажми на кнопку \"Начать ревью\"\n\n ")
                 .append("Для добавления ревью в сетку расписания и выхода в главное меню нажми \"Добавить\"\n\n")
                 .append("Для выхода в главное меню без сохранения ревью нажми \"Отменить\"\n\n")
@@ -56,6 +57,8 @@ public class UserTakeReviewConfirmation extends Step {
                 Theme theme = context.getThemeService().getThemeById(themeId);
                 context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
                 nextStep = USER_MENU;
+                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
                 String errorMessage = "Ты долго думал прежде чем добавить ревью в сетку расписания. Введи дату и время ревью еще раз\n\n";
@@ -67,8 +70,12 @@ public class UserTakeReviewConfirmation extends Step {
             nextStep = USER_TAKE_REVIEW_ADD_DATE;
         } else if (userInput.equalsIgnoreCase("отменить")) {
             nextStep = USER_MENU;
+            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
+            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

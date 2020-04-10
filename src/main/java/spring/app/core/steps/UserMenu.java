@@ -11,7 +11,7 @@ import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
@@ -84,9 +84,7 @@ public class UserMenu extends Step {
                     List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
                     if (!students.isEmpty()) {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
-                        List<String> reviewIds = new ArrayList<>();
-                        reviewIds.add(reviewId.toString());
-                        updateUserStorage(vkId, USER_MENU, reviewIds);
+                        updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
                         nextStep = USER_START_REVIEW_HANGOUTS_LINK;
                     } else {
                         // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
@@ -103,13 +101,17 @@ public class UserMenu extends Step {
             }
         } else if (command.equals("отменить")) { // (Отменить ревью)
             nextStep = USER_CANCEL_REVIEW;
+            removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("сдать")) { // (Сдать ревью)
-//            nextStep = ; TODO
+//          nextStep = ; TODO
+            removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
+            removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
             nextStep = ADMIN_MENU;
+            removeUserStorage(vkId, USER_MENU);
         } else { // любой другой ввод
             throw new ProcessInputException("Введена неверная команда...");
         }

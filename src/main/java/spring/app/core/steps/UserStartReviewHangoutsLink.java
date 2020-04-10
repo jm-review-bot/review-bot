@@ -36,8 +36,10 @@ public class UserStartReviewHangoutsLink extends Step {
         String userInput = context.getInput();
         if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
+            removeUserStorage(vkId, USER_MENU);
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
+            removeUserStorage(vkId, USER_MENU);
         } else if (StringParser.isHangoutsLink(userInput)) {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
             Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));

@@ -36,43 +36,28 @@ public class UserStartReviewRules extends Step {
                     .append(user.getVkId())
                     .append("\n");
         });
-
         // формируем информационное сообщение , которое зависит от кол-ва участников ревью
         textBuilder.append("\nСистема будет выдавать вопрос из списка, который тебе необходимо задать.\n\n");
+        String studentName1 = students.get(0).getFirstName();
         if (students.size() == 1) {
-            textBuilder.append("Если ")
-                    .append(students.get(0).getFirstName())
-                    .append(" ответил правильно на вопрос - напиши в чат 1+ \nЕсли ")
-                    .append(students.get(0).getFirstName())
-                    .append(" неправильно ответил на вопрос - напиши в чат 1 ");
+            textBuilder.append(String.format("Если %s ответил правильно на вопрос - напиши в чат 1+ \nЕсли %s неправильно ответил на вопрос - напиши в чат 1", studentName1, studentName1));
         } else if (students.size() > 1) {
-            textBuilder.append("Ты сам выбираешь кому задать данный вопрос, если человек не отвечает на вопрос - отправь его номер в чат " +
-                    "и задай вопрос другому человеку, если он тоже не ответит - так же напиши его номер, если кто-то ответил правильно " +
-                    "на вопрос напиши его номер и добавь + после номера.\n\n")
-                    .append("Если ")
-                    .append(students.get(0).getFirstName())
-                    .append(" и ")
-                    .append(students.get(1).getFirstName())
-                    .append(" не ответили на вопрос ");
+            String studentName2 = students.get(1).getFirstName();
+            String studentName3 = students.get(2).getFirstName();
+            textBuilder.append("Ты сам выбираешь кому задать данный вопрос, если человек не отвечает на вопрос - отправь его номер в чат ")
+                    .append("и задай вопрос другому человеку, если он тоже не ответит - так же напиши его номер, если кто-то ответил правильно ")
+                    .append("на вопрос напиши его номер и добавь + после номера.\n\n")
+                    .append(String.format("Если %s и %s не ответили на вопрос ", studentName1, studentName2));
             if (students.size() == 3) {
-                textBuilder.append("а ")
-                        .append(students.get(2).getFirstName())
-                        .append(" ответил");
+                textBuilder.append(String.format("а %s ответил", studentName3));
             }
             textBuilder.append(", то надо написать в чат 1 2 ");
             if (students.size() == 3) {
                 textBuilder.append("3+");
             }
-            textBuilder.append("\nЕсли ")
-                    .append(students.get(0).getFirstName())
-                    .append(" ответил на вопрос то дальше этот вопрос не задаем и пишем в чат 1+\n")
-                    .append("Если ")
-                    .append(students.get(0).getFirstName())
-                    .append(" не ответил на вопрос, а ")
-                    .append(students.get(1).getFirstName())
-                    .append(" ответил, то ");
+            textBuilder.append(String.format("\nЕсли %s ответил на вопрос то дальше этот вопрос не задаем и пишем в чат 1+\nЕсли %s  не ответил на вопрос, а %s ответил, то ", studentName1, studentName1 ,studentName2));
             if (students.size() == 3) {
-                textBuilder.append(students.get(2).getFirstName()).append(" уже не отвечает на этот вопрос - ");
+                textBuilder.append(String.format("%s уже не отвечает на этот вопрос - ", studentName3));
             }
             textBuilder.append("пишем в чат 1 2+\n");
             if (students.size() == 3) {
@@ -98,11 +83,11 @@ public class UserStartReviewRules extends Step {
                 context.getReviewService().updateReview(review);
                 nextStep = USER_START_REVIEW_CORE;
             } else {
-                throw new ProcessInputException("Ты не можешь начать ревью раньше его официального начала.\n Дождись " +
-                        StringParser.localDateTimeToString(review.getDate()) + " и нажми на кнопку \"Начать\" снова.");
+                throw new ProcessInputException(String.format("Ты не можешь начать ревью раньше его официального начала.\n Дождись %s и нажми на кнопку \"Начать\" снова.", StringParser.localDateTimeToString(review.getDate())));
             }
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
+            removeUserStorage(vkId, USER_MENU);
         } else {
             throw new ProcessInputException("Неверная команда, нажми на нопку \"Начать\"");
         }
