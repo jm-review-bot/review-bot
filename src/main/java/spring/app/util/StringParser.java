@@ -24,6 +24,9 @@ public class StringParser {
 
     private static Pattern numeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
+    //обязательно первая цифра от 0 до 9, далее только цифры с + или без него, разделенные пробелом, max 3 цифры
+    private static Pattern validReviewerInputFormat = Pattern.compile("^\\d\\+?\\s?\\d?\\+?\\s?\\d?\\+?");
+
     /**
      * Проверка что введены только числовые данные. На данный момент метод не используется, вместо него есть {@link #toNumbersSet(String)}.
      */
@@ -84,6 +87,7 @@ public class StringParser {
     /**
      * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
      * в LocalDateTime
+     *
      * @param strDate строковое представление даты в формате dd.MM.uuuu HH:mm
      * @return LocalDateTime - если strDate является строковым представлением даты в ожидаемом формате
      * @throws NoDataEnteredException если strDate не является строковым представлением даты в ожидаемом формате
@@ -107,8 +111,42 @@ public class StringParser {
      * @return Строка с датой в формате dd.MM.uuuu HH:mm
      */
 
-    public static String LocalDateTimeToString(LocalDateTime localDateTime) {
+    public static String localDateTimeToString(LocalDateTime localDateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu HH:mm");
         return localDateTime.format(formatter);
+    }
+
+    /**
+     * Метод проверяет является ли переданная строка ссылкой на разговор в Google Hangouts
+     */
+
+    public static boolean isHangoutsLink(String link) {
+        String prefix = "https://hangouts.google.com/call/";
+        String suffix = link.trim().substring(prefix.length());
+        return link.trim().startsWith(prefix) && suffix.length() == 24;
+    }
+
+    public static boolean isValidReviewerInput(String input, int numberOfStudents) {
+        if (validReviewerInputFormat.matcher(input).matches()) {
+            Set<Integer> uniqueNumbers = Arrays.stream(input.split("[^0-9]+"))
+                    .filter(string -> !string.isEmpty())
+                    .map(Integer::parseInt)
+                    .collect(Collectors.toSet()); // множество уникальных чисел в input
+            int numbersWithPluses = input.split(" ").length; // кол-во чисел в input со знаком + или без него
+            int plusesLength = input.replaceAll("[1-9 ]", "").length(); // кол-во плюсов в input
+            for (Integer integer : uniqueNumbers) {
+                if (integer < 1 || integer > numberOfStudents) {
+                    return false;
+                }
+            }
+            if (plusesLength <= 1 && numbersWithPluses >= 1 && numbersWithPluses <= numberOfStudents && uniqueNumbers.size() == numbersWithPluses) {
+                if (numbersWithPluses < numberOfStudents && plusesLength == 1 || numberOfStudents == 1 || numbersWithPluses == numberOfStudents) {
+                    if (plusesLength == 0 || input.lastIndexOf("+") == input.length() - 1) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

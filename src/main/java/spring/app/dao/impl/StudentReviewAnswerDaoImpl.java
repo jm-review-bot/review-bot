@@ -4,7 +4,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewAnswerDao;
+import spring.app.model.StudentReview;
 import spring.app.model.StudentReviewAnswer;
+
+import java.util.List;
 
 @Repository
 public class StudentReviewAnswerDaoImpl extends AbstractDao<Long, StudentReviewAnswer> implements StudentReviewAnswerDao {
@@ -26,5 +29,12 @@ public class StudentReviewAnswerDaoImpl extends AbstractDao<Long, StudentReviewA
                                              "WHERE sr.user.id =:id)")
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId (Long studentReviewId) {
+        return entityManager.createQuery("SELECT sra FROM StudentReviewAnswer sra WHERE sra.studentReview.id = :student_review_id", StudentReviewAnswer.class)
+                .setParameter("student_review_id", studentReviewId)
+                .getResultList();
     }
 }

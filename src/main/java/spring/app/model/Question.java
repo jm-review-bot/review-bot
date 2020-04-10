@@ -16,7 +16,7 @@ public class Question {
     @Column(name = "question")
     private String question;
 
-    @Column(name = "answer")
+    @Column(name = "answer", columnDefinition = "TEXT")
     private String answer;
 
     @Column(name = "position")

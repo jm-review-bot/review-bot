@@ -20,7 +20,7 @@ public interface ReviewService {
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
-    void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
+    void updateAllExpiredReviewsByDate(LocalDateTime localDateTime);
 
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 

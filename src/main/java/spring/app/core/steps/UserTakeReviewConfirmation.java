@@ -44,7 +44,7 @@ public class UserTakeReviewConfirmation extends Step {
             User user = context.getUserService().getByVkId(vkId);
             Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
             Theme theme = context.getThemeService().getThemeById(themeId);
-            LocalDateTime plannedStartReviewTime = StringParser.stringToLocalDateTime(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE).get(0));
+            LocalDateTime plannedStartReviewTime = StringParser.stringToLocalDateTime(getUserStorage(vkId,USER_TAKE_REVIEW_ADD_DATE).get(0));
             context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
             nextStep = USER_MENU;
         } else if (userInput.equalsIgnoreCase("назад")) {

@@ -52,10 +52,12 @@ public class ThemeServiceImpl implements ThemeService {
         return themeDao.getByPosition(position);
     }
 
+    @Override
     public List<Theme> getPassedThemesByUser(Integer vkId) {
         return themeDao.getPassedThemesByUser(vkId);
     }
 
+    @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
     }

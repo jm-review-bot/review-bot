@@ -26,12 +26,28 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      *
      * @param localDateTime
      */
+    @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
         Query query = entityManager.createQuery("UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true");
         query.setParameter("localDateTime", localDateTime);
         query.executeUpdate();
+    public void updateAllExpiredReviewsByDate(LocalDateTime localDateTime) {
+        entityManager.createQuery("UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true")
+                .setParameter("localDateTime", localDateTime)
+                .executeUpdate();
     }
+
+    /**
+     * Метод возвращает все открытые ревью, которые будут пересекаться по времени с новым ревью, которое юзер хочет принять.
+     * Например, если юзер планирует провести ревью 10:00 02.06.2020, продолжительностью 59 минут,
+     * то метод вернет список всех открытых этим пользователем ревью в интервале с 09:01 по 10:59 02.06.2020
+     *
+     * @param vkId           - id юзера в vk.com
+     * @param periodStart    - запланированное юзером время начала ревью
+     * @param reviewDuration - продолжительность ревью в минутах
+     * @return
+     */
 
     /**
      * Метод возвращает ревью по выбранной теме при условии, что записанных на ревью менее трех
@@ -66,12 +82,11 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
-                .setParameter("id", vkId).getResultList();
+        .setParameter("id", vkId).getResultList();
     }
 
     /**
      * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
-     *
      * @param vkId
      */
     @Override

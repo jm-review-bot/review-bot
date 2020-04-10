@@ -3,7 +3,6 @@ package spring.app.core.steps;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.core.StepSelector;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
@@ -14,7 +13,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
@@ -33,8 +31,8 @@ public class UserTakeReviewAddDate extends Step {
         Integer vkId = context.getVkId();
         Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
         Theme theme = context.getThemeService().getThemeById(themeId);
-        StringBuilder textBuilder = new StringBuilder();
-        textBuilder.append("Ты выбрал тему: ")
+        StringBuilder textBuilder = new StringBuilder("Ты выбрал тему: ");
+        textBuilder
                 .append(theme.getTitle())
                 .append(".\n\n Укажи время и дату для принятия ревью в формате ДД.ММ.ГГГГ ЧЧ:ММ ")
                 .append("по Московскому часовому поясу.\n Пример корректного ответа 02.06.2020 17:30\n\n")
@@ -80,9 +78,9 @@ public class UserTakeReviewAddDate extends Step {
                             .append("Пересечение с ревью:\nТема: ")
                             .append(context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle())
                             .append("\nДата начала ревью: ")
-                            .append(StringParser.LocalDateTimeToString(conflictReview.getDate()))
+                            .append(StringParser.localDateTimeToString(conflictReview.getDate()))
                             .append("\nДата окончания ревью: ")
-                            .append(StringParser.LocalDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1)))
+                            .append(StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1)))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
                     throw new ProcessInputException(conflictExceptionMessage.toString());
                 }

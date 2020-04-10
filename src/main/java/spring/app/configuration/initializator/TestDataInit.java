@@ -1,15 +1,14 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import spring.app.core.StepSelector;
 import spring.app.core.StepHolder;
-import spring.app.core.steps.*;
+import spring.app.core.StepSelector;
+import spring.app.core.steps.Step;
 import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
-import java.util.Map;
-
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class TestDataInit {
 
@@ -70,6 +69,15 @@ public class TestDataInit {
     @Autowired
     private Step userPassReviewAddStudentReview;
 
+    @Autowired
+    private Step userStartReviewHangoutsLink;
+
+    @Autowired
+    private Step userStartReviewRules;
+
+    @Autowired
+    private Step userStartReviewCore;
+
     public TestDataInit() {
     }
 
@@ -96,8 +104,8 @@ public class TestDataInit {
         User admin2 = new User();
         admin2.setFirstName("Максим");
         admin2.setLastName("Ботюк");
-        admin2.setReviewPoint(0);
-        admin2.setVkId(87632583); // change this to your vkId for testing
+        admin2.setReviewPoint(8);
+        admin2.setVkId(87632583);
         admin2.setRole(roleAdmin);
         admin2.setChatStep("START");
         userService.addUser(admin2);
@@ -105,7 +113,7 @@ public class TestDataInit {
         User user = new User();
         user.setFirstName("Антон");
         user.setLastName("Таврель");
-        user.setReviewPoint(4);
+        user.setReviewPoint(0);
         user.setVkId(582532887);
         user.setRole(roleUser);
         user.setChatStep("START");
@@ -133,6 +141,10 @@ public class TestDataInit {
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
         steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
+        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
+        steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
+        steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
+        steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
 
         //add themes
         Theme core = new Theme();
@@ -184,81 +196,91 @@ public class TestDataInit {
         themeService.addTheme(finalReview);
 
         // add reviews
-        Review coreReview = new Review();
-        coreReview.setDate(LocalDateTime.of(2020, 4, 3, 21, 0));
-        coreReview.setOpen(true);
-        coreReview.setTheme(core);
-        coreReview.setUser(user);
-        reviewService.addReview(coreReview);
+        Review springReviewPassed = new Review(); // ревью, которое я сдал
+        springReviewPassed.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
+        springReviewPassed.setOpen(false);
+        springReviewPassed.setTheme(spring);
+        springReviewPassed.setUser(admin);
+        reviewService.addReview(springReviewPassed);
 
-        Review sqlReview = new Review();
-        sqlReview.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
-        sqlReview.setOpen(false);
-        sqlReview.setTheme(core);
-        sqlReview.setUser(admin);
-        reviewService.addReview(sqlReview);
-
-        Review springReview = new Review();
-        springReview.setDate(LocalDateTime.of(2020, 4, 3, 22, 0));
-        springReview.setOpen(false);
+        Review springReview = new Review(); // ревью по спрингу которое я буду принимать
+        springReview.setDate(LocalDateTime.of(2020, 4, 8, 23, 38));
+        springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(user);
+        springReview.setUser(admin2);
         reviewService.addReview(springReview);
 
+        Review springReviewPassed2 = new Review(); // ревью, которое сдал User
+        springReviewPassed2.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
+        springReviewPassed2.setOpen(false);
+        springReviewPassed2.setTheme(spring);
+        springReviewPassed2.setUser(user);
+        reviewService.addReview(springReviewPassed2);
+
         // add student reviews
-        StudentReview studentReview = new StudentReview();
+        StudentReview studentReview = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг
         studentReview.setUser(user);
         studentReview.setPassed(true);
-        studentReview.setReview(springReview);
+        studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
 
-        StudentReview studentReview1 = new StudentReview();
-        studentReview1.setUser(user);
-        studentReview1.setPassed(false);
-        studentReview1.setReview(springReview);
-        studentReviewService.addStudentReview(studentReview1);
-
-        StudentReview studentReview2 = new StudentReview();
-        studentReview2.setUser(user);
-        studentReview2.setPassed(true);
-        studentReview2.setReview(sqlReview);
+        StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
+        studentReview2.setUser(admin2);
+        studentReview2.setReview(springReview);
         studentReviewService.addStudentReview(studentReview2);
 
-        StudentReview studentReview3 = new StudentReview();
+        StudentReview studentReview3 = new StudentReview(); // чувак 2, котороый записался ко мне на ревью
         studentReview3.setUser(user2);
-        studentReview3.setPassed(true);
-        studentReview3.setReview(sqlReview);
+        studentReview3.setReview(springReview);
         studentReviewService.addStudentReview(studentReview3);
+
+        StudentReview studentReview4 = new StudentReview(); // чувак 3, котороый записался ко мне на ревью
+        studentReview4.setUser(admin);
+        studentReview4.setReview(springReview);
+        studentReviewService.addStudentReview(studentReview4);
 
         // add Questions
         Question question1 = new Question();
-        question1.setAnswer("Весна");
+        question1.setAnswer("«Bean» – это объект, который интегрируется и конфигурируется контейнером IOC.");
         question1.setPosition(1);
-        question1.setQuestion("Что такое спринг?");
+        question1.setQuestion("Что такое bean??");
         question1.setTheme(spring);
         questionService.addQuestion(question1);
 
         Question question2 = new Question();
-        question2.setAnswer("Боб");
+        question2.setAnswer("IOC означает инверсию контроля. Это основной контейнер Java Spring. Он использует вышеупомянутое внедрение зависимостей для управления и настройки различных интегрированных приложений. В настоящее время в Spring может быть два типа IOC – ApplicationContext и BeanFactory.");
         question2.setPosition(2);
-        question2.setQuestion("Что такое Bean?");
+        question2.setQuestion("Опишите IOC своими словами");
         question2.setTheme(spring);
         questionService.addQuestion(question2);
 
         Question question3 = new Question();
-        question3.setAnswer("Инъекция зависимостей");
+        question3.setAnswer("Dependency injection (внедрение зависимостей) используется для предоставления определенных специфических зависимостей для объектов. Это шаблон проектирования, который делает ваши проекты более плавными и более подходящими для таких действий, как тестирование.");
         question3.setPosition(3);
         question3.setQuestion("Что такое Dependency Injection?");
         question3.setTheme(spring);
         questionService.addQuestion(question3);
 
         Question question4 = new Question();
-        question4.setAnswer("Конечно");
+        question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
         question4.setPosition(4);
-        question4.setQuestion("Джаву любишь?");
+        question4.setQuestion("Что такое Spring Boot?");
         question4.setTheme(spring);
         questionService.addQuestion(question4);
 
+        Question question5 = new Question();
+        question5.setAnswer("АОП расшифровывается как Аспектно-ориентированное программирование (Aspect-Oriented Programming). Он отличается от ООП (объектно-ориентированного программирования) тем, что ООП фокусируется на классах, в то время как ключевым модульным модулем АОП является аспект. В АОП аспекты реализуют и подчеркивают сквозные проблемы.");
+        question5.setPosition(5);
+        question5.setQuestion("Что такое AOP?");
+        question5.setTheme(spring);
+        questionService.addQuestion(question5);
+
+        Question question6 = new Question();
+        question6.setAnswer("‘Autowriting‘ позволяет разработчику вводить bean-компоненты в свое приложение автоматически, без необходимости ручного вмешательства.");
+        question6.setPosition(6);
+        question6.setQuestion("Что такое autowriting?");
+        question6.setTheme(spring);
+        questionService.addQuestion(question6);
         // add student review answers
         StudentReviewAnswer answer1 = new StudentReviewAnswer();
         answer1.setRight(true);
@@ -266,18 +288,43 @@ public class TestDataInit {
         answer1.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer1);
 
+        Question question7 = new Question();
+        question7.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
+        question7.setPosition(7);
+        question7.setQuestion("Что такое target object?");
+        question7.setTheme(spring);
+        questionService.addQuestion(question7);
         StudentReviewAnswer answer2 = new StudentReviewAnswer();
         answer2.setRight(true);
         answer2.setQuestion(question2);
         answer2.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer2);
 
+        Question question8 = new Question();
+        question8.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
+        question8.setPosition(8);
+        question8.setQuestion("Что такое DAO?");
+        question8.setTheme(spring);
+        questionService.addQuestion(question8);
         StudentReviewAnswer answer3 = new StudentReviewAnswer();
         answer3.setRight(true);
         answer3.setQuestion(question3);
         answer3.setStudentReview(studentReview);
         studentReviewAnswerService.addStudentReviewAnswer(answer3);
 
+        Question question9 = new Question();
+        question9.setAnswer("Эта команда используется, когда вы хотите сопоставить определенный метод HTTP с определенным классом. Вы можете использовать эту команду как на уровне класса, так и на уровне метода.");
+        question9.setPosition(9);
+        question9.setQuestion("Что делает @RequestMapping?");
+        question9.setTheme(spring);
+        questionService.addQuestion(question9);
+
+        Question question10 = new Question();
+        question10.setAnswer("В Spring MVC Interceptor может использоваться для обработки запроса клиента до, во время и даже после обработки. Это отличный инструмент, позволяющий избежать нежелательных повторений кода.");
+        question10.setPosition(10);
+        question10.setQuestion("Что такое MVC Interceptor?");
+        question10.setTheme(spring);
+        questionService.addQuestion(question10);
         StudentReviewAnswer answer4 = new StudentReviewAnswer();
         answer4.setRight(true);
         answer4.setQuestion(question4);
