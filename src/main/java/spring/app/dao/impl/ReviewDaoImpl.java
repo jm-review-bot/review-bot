@@ -38,10 +38,11 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      *
      * @param theme
      */
-    public List<Review> getAllReviewsByTheme(Theme theme) {
-        // TODO добавить проверку на количество записей в таблице StudentReview
-        return entityManager.createQuery("SELECT r FROM Review r join fetch r.user ru LEFT JOIN StudentReview sr ON r.id = sr.review.id WHERE r.theme = :theme AND r.isOpen = true group by r, ru having count(all r) < 3", Review.class)
+    public List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime) {
+        return entityManager.createQuery("SELECT r FROM Review r join fetch r.user ru LEFT JOIN StudentReview sr ON r.id = sr.review.id WHERE r.theme = :theme AND r.isOpen = true AND r.date > :date AND r.user.id <> :id group by r, ru having count(all r) < 3", Review.class)
+                .setParameter("id", id)
                 .setParameter("theme", theme)
+                .setParameter("date", localDateTime)
                 .getResultList();
     }
 

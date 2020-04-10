@@ -16,7 +16,7 @@ public interface ReviewDao extends GenericDao<Long, Review> {
 
     Review getOpenReviewByStudentVkId(Integer vkId);
 
-    List<Review> getAllReviewsByTheme(Theme theme);
+    List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
     void bulkDeleteByUserId(Long id);
 }

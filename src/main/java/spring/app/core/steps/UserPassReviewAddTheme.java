@@ -10,8 +10,10 @@ import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.util.StringParser;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,7 +24,8 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class UserPassReviewAddTheme extends Step {
-    private Map<Integer, Integer> flag = new ConcurrentHashMap<>();
+    private Map<Integer, Boolean> saveMap = new ConcurrentHashMap<>();
+    private Map<Integer, Theme> themes = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
@@ -34,30 +37,32 @@ public class UserPassReviewAddTheme extends Step {
                             "Тема: %s\n" +
                             "Дата: %s\n" +
                             "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
-                    studentReview.getReview().getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    studentReview.getReview().getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
 
             keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
+
         } else {
-            if (flag.get(vkId) != null){ //НЕ РАБОТАЕТ
-                text = "Ревью отменено.\n\nВыберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n\n" +
-                        "[1] Java Core, стоимость 0 RP\n" +
-                        "[2] Многопоточность, стоимость 4 RP\n" +
-                        "[3] SQL, стоимость 4 RP\n" +
-                        "[4] Hibernate, стоимость 4 RP\n" +
-                        "[5] Spring, стоимость 4 RP\n" +
-                        "[6] Паттерны, стоимость 4 RP\n" +
-                        "[7] Алгоритмы, стоимость 4 RP\n" +
-                        "[8] Финальное ревью, стоимость 4 RP";
+            //формирую список тем и вывожу его как нумерованный список
+            context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
+            StringBuilder themeList = new StringBuilder("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
+
+            for (Integer position : themes.keySet()) {
+                themeList.append("[")
+                        .append(position)
+                        .append("] ")
+                        .append(themes.get(position).getTitle())
+                        .append(", стоимость ")
+                        .append(themes.get(position).getReviewPoint())
+                        .append(" RP")
+                        .append("\n");
             }
-            text = "Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы) \n\n" +
-                    "[1] Java Core, стоимость 0 RP\n" +
-                    "[2] Многопоточность, стоимость 4 RP\n" +
-                    "[3] SQL, стоимость 4 RP\n" +
-                    "[4] Hibernate, стоимость 4 RP\n" +
-                    "[5] Spring, стоимость 4 RP\n" +
-                    "[6] Паттерны, стоимость 4 RP\n" +
-                    "[7] Алгоритмы, стоимость 4 RP\n" +
-                    "[8] Финальное ревью, стоимость 4 RP";
+
+            text = themeList.toString();
+
+            if (saveMap.get(vkId) != null) {
+                text = "Ревью отменено.\n\n" + text;
+                saveMap.keySet().remove(vkId);
+            }
 
             keyboard = BACK_KB;
         }
@@ -72,12 +77,12 @@ public class UserPassReviewAddTheme extends Step {
         if (StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             //проверяем или номер темы не выходит за рамки
-            if (command > 0 & command < 9) {
+            if (command > 0 & command <= themes.size()) {
                 Theme theme = context.getThemeService().getByPosition(command);
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
-                    List<Review> reviews = context.getReviewService().getAllReviewsByTheme(theme);
+                    List<Review> reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
                     //проверяем наличие открытых ревью по данной теме
                     if (reviews.isEmpty()) {
                         nextStep = USER_MENU;
@@ -89,7 +94,7 @@ public class UserPassReviewAddTheme extends Step {
                         //если нашли хоть одно открытое ревью по выбранной теме, сохраняем ID темы для следующего шага
                         List<String> list = new ArrayList<>();
                         list.add(theme.getId().toString());
-                        updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
+                        updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
                         nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
                     }
                 } else {
@@ -97,19 +102,19 @@ public class UserPassReviewAddTheme extends Step {
                             "количество РП, необходимо провести ревью.");
                 }
             } else {
-                throw new ProcessInputException("Введена неверная команда...");
+                throw new ProcessInputException("Введен неверный номер темы...");
             }
         } else {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command)) {
                 context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
-                flag.putIfAbsent(vkId, 1);
+                saveMap.putIfAbsent(vkId, true);
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
             } else if ("/start".equals(command)) {
                 nextStep = START;
             } else if ("назад".equals(command)) {
-                nextStep = USER_MENU;;
+                nextStep = USER_MENU;
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
             }

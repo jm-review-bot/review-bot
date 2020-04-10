@@ -22,7 +22,7 @@ public interface ReviewService {
 
     void updateAllExpiredReviewsBy(LocalDateTime localDateTime);
 
-    List<Review> getAllReviewsByTheme(Theme theme);
+    List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
