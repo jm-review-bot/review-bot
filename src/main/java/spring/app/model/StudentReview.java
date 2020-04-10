@@ -29,9 +29,10 @@ public class StudentReview {
     public StudentReview() {
     }
 
-    public StudentReview(User user, Review review) {
+    public StudentReview(User user, Review review, Boolean isPassed) {
         this.user = user;
         this.review = review;
+        this.isPassed = isPassed;
     }
 
     public Long getId() {

@@ -16,4 +16,6 @@ public interface StudentReviewAnswerService {
 
     void deleteStudentReviewAnswerById(Long id);
 
+    List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId (Long studentReviewId);
+
 }

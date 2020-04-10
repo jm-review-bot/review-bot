@@ -8,7 +8,6 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 
 import javax.persistence.NoResultException;
-import javax.persistence.Query;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,13 +18,24 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         super(Review.class);
     }
 
+    @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
-        final String CLOSE_EXPIRED_REVIEWS = "UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true";
-        Query query = entityManager.createQuery(CLOSE_EXPIRED_REVIEWS);
-        query.setParameter("localDateTime", localDateTime);
-        query.executeUpdate();
+    public void updateAllExpiredReviewsByDate(LocalDateTime localDateTime) {
+        entityManager.createQuery("UPDATE Review e SET e.isOpen = false WHERE e.date < :localDateTime and e.isOpen = true")
+                .setParameter("localDateTime", localDateTime)
+                .executeUpdate();
     }
+
+    /**
+     * Метод возвращает все открытые ревью, которые будут пересекаться по времени с новым ревью, которое юзер хочет принять.
+     * Например, если юзер планирует провести ревью 10:00 02.06.2020, продолжительностью 59 минут,
+     * то метод вернет список всех открытых этим пользователем ревью в интервале с 09:01 по 10:59 02.06.2020
+     *
+     * @param vkId           - id юзера в vk.com
+     * @param periodStart    - запланированное юзером время начала ревью
+     * @param reviewDuration - продолжительность ревью в минутах
+     * @return
+     */
 
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
@@ -38,18 +48,21 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("review_duration", reviewDuration)
                 .getResultList();
     }
+
     /**
      * Метод возвращает все открытые ревью, которые юзер с данным vkId будет принимать
+     *
      * @param vkId
      */
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :id AND r.isOpen = true", Review.class)
-        .setParameter("id", vkId).getResultList();
+                .setParameter("id", vkId).getResultList();
     }
 
     /**
      * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
+     *
      * @param vkId
      */
     @Override

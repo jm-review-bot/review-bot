@@ -13,7 +13,6 @@ public class StepHolder {
     public StepHolder() {
     }
 
-
     public Map<StepSelector, Step> getSteps() {
         return steps;
     }

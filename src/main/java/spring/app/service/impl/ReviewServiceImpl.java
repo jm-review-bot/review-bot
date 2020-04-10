@@ -50,8 +50,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void updateAllExpiredReviewsBy(LocalDateTime localDateTime) {
-        reviewDao.updateAllExpiredReviewsBy(localDateTime);
+    public void updateAllExpiredReviewsByDate(LocalDateTime localDateTime) {
+        reviewDao.updateAllExpiredReviewsByDate(localDateTime);
     }
 
     @Override

@@ -2,7 +2,7 @@ package spring.app.util;
 
 public class Keyboards {
 
-    public final static String HEADER_FR = "{\"one_time\": true,\n\"buttons\": [\n[\n";
+    public final static String HEADER_FR = "{\"one_time\": false,\n\"buttons\": [\n[\n";
 
     public final static String FOOTER_FR = "]\n]\n}";
 
@@ -45,7 +45,7 @@ public class Keyboards {
 
 
     public final static String START_KB = "{\n" +
-            "  \"one_time\": true,\n" +
+            "  \"one_time\": false,\n" +
             "  \"buttons\": [[\n" +
             "      {\n" +
             "        \"action\": {\n" +
@@ -70,10 +70,10 @@ public class Keyboards {
             "  ]]\n" +
             "} ";
 
-    public final static String NO_KB = "{\"buttons\":[],\"one_time\":true}";
+    public final static String NO_KB = "{\"buttons\":[],\"one_time\":false}";
 
     public final static String ADMIN_START_KB = "{\n" +
-            "  \"one_time\": true,\n" +
+            "  \"one_time\": false,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
             "      {\n" +
@@ -97,7 +97,7 @@ public class Keyboards {
             "} ";
 
     public final static String YES_NO_KB = "{\n" +
-            "  \"one_time\": true,\n" +
+            "  \"one_time\": false,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
             "      {\n" +
@@ -121,7 +121,7 @@ public class Keyboards {
             "} ";
 
     public final static String ADMIN_MENU_KB = "{\n" +
-            "  \"one_time\": true,\n" +
+            "  \"one_time\": false,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
             "      {\n" +
@@ -145,7 +145,7 @@ public class Keyboards {
             "} ";
 
     public final static String USER_TAKE_REVIEW_CONFIRMATION_KB = "{\n" +
-            "  \"one_time\": true,\n" +
+            "  \"one_time\": false,\n" +
             "  \"buttons\": [\n" +
             "    [\n" +
             "      {\n" +
@@ -174,5 +174,18 @@ public class Keyboards {
             "      }\n" +
             "    ]\n" +
             "  ]\n" +
+            "} ";
+
+    public final static String USER_MENU_KB = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [[\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Главное меню\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "  ]]\n" +
             "} ";
 }
