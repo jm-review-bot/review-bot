@@ -110,6 +110,7 @@ public class AdminRemoveUser extends Step {
             // обязательно очищаем память
             removeUserStorage(vkId, ADMIN_REMOVE_USER);
             removeUserStorage(vkId, ADMIN_USERS_LIST);
+            clearUsersOfStorage(usesToDelete);
             nextStep = ADMIN_REMOVE_USER;
         } else {
             keyboard = START_KB;

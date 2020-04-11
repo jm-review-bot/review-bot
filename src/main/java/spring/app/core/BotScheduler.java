@@ -7,6 +7,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
+import spring.app.core.steps.Storage;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.UserService;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-public class BotScheduler {
+public class BotScheduler implements Storage {
     private final static Logger log = LoggerFactory.getLogger(BotScheduler.class);
     private final VkService vkService;
     private final ReviewService reviewService;
@@ -69,5 +70,11 @@ public class BotScheduler {
                 log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }
+    }
+
+    @Scheduled(cron = "${bot.clear_cache}")
+    public void scheduleClearCache() {
+        log.info("Скрипт запущен. Началась очистка кэша.");
+        clearStorage();
     }
 }
