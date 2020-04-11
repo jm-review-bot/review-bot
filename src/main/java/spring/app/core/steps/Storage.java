@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentMap;
 public interface Storage {
 
     /** Мапа для хранения данных, структурированных по vkId юзера и указанному шагу */
-    static final ConcurrentMap<Integer, Map<StepSelector, List<String>>> STORAGE = new ConcurrentHashMap<>();
+    ConcurrentMap<Integer, Map<StepSelector, List<String>>> STORAGE = new ConcurrentHashMap<>();
 
     /**
      * Возвращает List<String> данного юзера соответствующий указанному шагу.
@@ -45,11 +45,15 @@ public interface Storage {
         }
     }
 
+    // метод который полностью очищает кэш
     default void clearStorage(){
         STORAGE.clear();
     }
 
-    default void clearUsersOfStorage(List<String> usesToDelete){
-        //тут буду по списку проходить и очищать
+    // метод для удаления из кэша пользователей, после того как они будут удалены админом
+    default void clearUsersOfStorage(List<String> usersToDelete){
+        usersToDelete.forEach(userIdString ->
+                STORAGE.keySet().remove(Long.parseLong(userIdString))
+        );
     }
 }
