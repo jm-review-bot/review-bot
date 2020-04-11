@@ -43,12 +43,13 @@ public class UserStartReviewRules extends Step {
             textBuilder.append(String.format("Если %s ответил правильно на вопрос - напиши в чат 1+ \nЕсли %s неправильно ответил на вопрос - напиши в чат 1", studentName1, studentName1));
         } else if (students.size() > 1) {
             String studentName2 = students.get(1).getFirstName();
-            String studentName3 = students.get(2).getFirstName();
+            String studentName3;
             textBuilder.append("Ты сам выбираешь кому задать данный вопрос, если человек не отвечает на вопрос - отправь его номер в чат ")
                     .append("и задай вопрос другому человеку, если он тоже не ответит - так же напиши его номер, если кто-то ответил правильно ")
                     .append("на вопрос напиши его номер и добавь + после номера.\n\n")
                     .append(String.format("Если %s и %s не ответили на вопрос ", studentName1, studentName2));
             if (students.size() == 3) {
+                studentName3 = students.get(2).getFirstName();
                 textBuilder.append(String.format("а %s ответил", studentName3));
             }
             textBuilder.append(", то надо написать в чат 1 2 ");
@@ -57,6 +58,7 @@ public class UserStartReviewRules extends Step {
             }
             textBuilder.append(String.format("\nЕсли %s ответил на вопрос то дальше этот вопрос не задаем и пишем в чат 1+\nЕсли %s  не ответил на вопрос, а %s ответил, то ", studentName1, studentName1 ,studentName2));
             if (students.size() == 3) {
+                studentName3 = students.get(2).getFirstName();
                 textBuilder.append(String.format("%s уже не отвечает на этот вопрос - ", studentName3));
             }
             textBuilder.append("пишем в чат 1 2+\n");
