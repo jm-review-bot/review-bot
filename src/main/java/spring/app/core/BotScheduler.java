@@ -61,7 +61,7 @@ public class BotScheduler {
         if (!users.isEmpty()) {
             for (User user : users) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
-                Step step = stepHolder.getSteps().get(StepSelector.valueOf(user.getChatStep()));
+                Step step = stepHolder.getSteps().get(user.getChatStep());
                 //todo пришли сообщение \"начать ревью\" в чат"
                 // разобраться с этим, либо написать сообщение о переходе в главное меню по команде /старт и нажания на кнопку начать ревью
                 // либо на каждом шаге реализовать эту команду

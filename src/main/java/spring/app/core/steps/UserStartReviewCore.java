@@ -155,7 +155,7 @@ public class UserStartReviewCore extends Step {
                             .append(student.getReviewPoint())
                             .append(" RP");
                     // отправляем студенту результаты ревью
-                    Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
+                    Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                     context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
                     log.warn("Студенту с id {} отправлено сообщение {}", student.getVkId(), reviewResults.toString());
                 }

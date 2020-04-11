@@ -92,7 +92,7 @@ public class TestDataInit {
         admin.setReviewPoint(999);
         admin.setVkId(1374221); // change this to your vkId for testing
         admin.setRole(roleAdmin);
-        admin.setChatStep("START");
+        admin.setChatStep(StepSelector.START);
         userService.addUser(admin);
 
         User admin2 = new User();
@@ -101,7 +101,7 @@ public class TestDataInit {
         admin2.setReviewPoint(8);
         admin2.setVkId(87632583);
         admin2.setRole(roleAdmin);
-        admin2.setChatStep("START");
+        admin2.setChatStep(StepSelector.START);
         userService.addUser(admin2);
 
         User user = new User();
@@ -110,7 +110,7 @@ public class TestDataInit {
         user.setReviewPoint(0);
         user.setVkId(582532887);
         user.setRole(roleUser);
-        user.setChatStep("START");
+        user.setChatStep(StepSelector.START);
         userService.addUser(user);
 
         User user2 = new User();
@@ -119,7 +119,7 @@ public class TestDataInit {
         user2.setReviewPoint(4);
         user2.setVkId(1582532887);
         user2.setRole(roleUser);
-        user2.setChatStep("START");
+        user2.setChatStep(StepSelector.START);
         userService.addUser(user2);
 
         // add steps

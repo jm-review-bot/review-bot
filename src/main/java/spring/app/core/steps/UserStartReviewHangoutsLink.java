@@ -45,7 +45,7 @@ public class UserStartReviewHangoutsLink extends Step {
             // отправляем ссылку на ревью каждому участнику
             for (User user : students) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
-                Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
+                Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                 String hangoutsLink = "Ревью началось, вот ссылка для подключения: " + userInput;
                 context.getVkService().sendMessage(hangoutsLink, userStep.getKeyboard(), user.getVkId());
                 log.warn("Студенту с id {} отправлено сообщение: {}", user.getVkId(), hangoutsLink);
