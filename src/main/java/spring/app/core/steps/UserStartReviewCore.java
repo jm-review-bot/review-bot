@@ -46,37 +46,22 @@ public class UserStartReviewCore extends Step {
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
         // формирую сообщение со списком участников
-        StringBuilder textBuilder = new StringBuilder("На твоём ревью сегодня присутствуют:\n\n");
-        final int[] i = {1};
-        students.forEach(user -> {
-            textBuilder.append("[").append(i[0]++).append("] ")
-                    .append(user.getLastName())
-                    .append(" ")
-                    .append(user.getFirstName())
-                    .append(", https://vk.com/id")
-                    .append(user.getVkId())
-                    .append("\n");
-        });
-
+        StringBuilder textBuilder = new StringBuilder(getUserStorage(vkId, USER_START_REVIEW_RULES).get(0));
         // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
         // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
         if (!questionNumbers.containsKey(vkId)) {
             int questionNumber = 0;
-            textBuilder.append("\nВопрос: ")
-                    .append(questions.get(questionNumber).getQuestion())
-                    .append("\n\nОтвет: ")
-                    .append(questions.get(questionNumber).getAnswer());
-            text = textBuilder.toString();
+            textBuilder.append(String.format("\nВопрос: %s", questions.get(questionNumber).getQuestion()))
+                    .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
             questionNumbers.put(vkId, questionNumber);
             keyboard = NO_KB;
         } else {
             int questionNumber = questionNumbers.get(vkId);
             if (questionNumber != questions.size()) {
-                textBuilder.append("\nВопрос: ")
-                        .append(questions.get(questionNumber).getQuestion())
-                        .append("\n\nОтвет: ")
-                        .append(questions.get(questionNumber).getAnswer());
+                textBuilder.append(String.format("\nВопрос: %s", questions.get(questionNumber).getQuestion()))
+                        .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
                 keyboard = NO_KB;
+
                 // если вопросы кончились
             } else {
                 // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer
@@ -106,6 +91,7 @@ public class UserStartReviewCore extends Step {
                 }
                 // очищаем ввод ревьюера из STORAGE
                 removeUserStorage(vkId, USER_START_REVIEW_CORE);
+                removeUserStorage(vkId, USER_START_REVIEW_RULES);
                 // добавляем очки за прием ревью
                 User user = context.getUserService().getByVkId(vkId);
                 user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);

@@ -10,6 +10,7 @@ import spring.app.model.User;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
@@ -20,22 +21,20 @@ public class UserStartReviewRules extends Step {
 
     @Override
     public void enter(BotContext context) {
-
+        Integer vkId = context.getVkId();
         // Получаю reviewId из хранилища и список студентов, записанных на ревью
         Long reviewId = Long.parseLong(getUserStorage(context.getVkId(), USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
         // формирую список участников
-        StringBuilder textBuilder = new StringBuilder("На твоём ревью сегодня присутствуют:\n\n");
+        StringBuilder studentsList = new StringBuilder("На твоём ревью сегодня присутствуют:\n\n");
         final int[] i = {1};
         students.forEach(user -> {
-            textBuilder.append("[").append(i[0]++).append("] ")
-                    .append(user.getLastName())
-                    .append(" ")
-                    .append(user.getFirstName())
-                    .append(", https://vk.com/id")
-                    .append(user.getVkId())
-                    .append("\n");
+            studentsList.append(String.format("[%d] %s %s, https://vk.com/id%d\n", i[0]++, user.getFirstName(), user.getLastName(), user.getVkId()));
         });
+        // запоминаем список студентов для использования на следующем шаге
+        updateUserStorage(vkId, USER_START_REVIEW_RULES, Arrays.asList(studentsList.toString()));
+
+        StringBuilder textBuilder = new StringBuilder(studentsList);
         // формируем информационное сообщение , которое зависит от кол-ва участников ревью
         textBuilder.append("\nСистема будет выдавать вопрос из списка, который тебе необходимо задать.\n\n");
         String studentName1 = students.get(0).getFirstName();
@@ -56,7 +55,7 @@ public class UserStartReviewRules extends Step {
             if (students.size() == 3) {
                 textBuilder.append("3+");
             }
-            textBuilder.append(String.format("\nЕсли %s ответил на вопрос то дальше этот вопрос не задаем и пишем в чат 1+\nЕсли %s  не ответил на вопрос, а %s ответил, то ", studentName1, studentName1 ,studentName2));
+            textBuilder.append(String.format("\nЕсли %s ответил на вопрос то дальше этот вопрос не задаем и пишем в чат 1+\nЕсли %s  не ответил на вопрос, а %s ответил, то ", studentName1, studentName1, studentName2));
             if (students.size() == 3) {
                 studentName3 = students.get(2).getFirstName();
                 textBuilder.append(String.format("%s уже не отвечает на этот вопрос - ", studentName3));
@@ -90,6 +89,7 @@ public class UserStartReviewRules extends Step {
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
             removeUserStorage(vkId, USER_MENU);
+            removeUserStorage(vkId, USER_START_REVIEW_RULES);
         } else {
             throw new ProcessInputException("Неверная команда, нажми на нопку \"Начать\"");
         }
