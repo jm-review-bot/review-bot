@@ -13,6 +13,7 @@ import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
@@ -35,7 +36,10 @@ public class UserMenu extends Step {
         User user = context.getUser();
         ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
-        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
+        // если ревью открыто, но прошло более 10 минут с момента его начала, то кнопка отображаться не будет
+        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId).stream()
+                .filter(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()))
+                .collect(Collectors.toList());
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
         try {
@@ -69,7 +73,7 @@ public class UserMenu extends Step {
             // получаем список всех ревью, которые проводит пользователь
             List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
-                // берем из списка то ревью, которое находится в диапазоне 5 минут от текущего времени до начала ревью и 10 минут после начала ревью
+                // берем из списка то ревью, которое находится в диапазоне 5 минут до начала ревью и 10 минут после начала ревью
                 Review nearestReview = userReviews.stream()
                         .filter(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()) && review.getDate().minusMinutes(reviewEarlyStart).isBefore(LocalDateTime.now()))
                         .findFirst().orElse(null);
