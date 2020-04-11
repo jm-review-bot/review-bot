@@ -12,7 +12,6 @@ import spring.app.util.StringParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
@@ -20,7 +19,7 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class UserPassReviewGetListReview extends Step {
-    private Map<Integer, Map<Integer, Long>> reviewsIndex = new ConcurrentHashMap<>();
+    private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
@@ -46,7 +45,7 @@ public class UserPassReviewGetListReview extends Step {
 
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
         Integer i = 1;
-        Map<Integer, Long> indexList = new ConcurrentHashMap<>();
+        Map<Integer, Long> indexList = new HashMap<>();
         for (Review review : reviews) {
             indexList.put(i, review.getId());
             reviewsIndex.putIfAbsent(vkId, indexList);
@@ -58,7 +57,6 @@ public class UserPassReviewGetListReview extends Step {
                     .append("\n");
             i++;
         }
-
         text = reviewList.toString();
         keyboard = BACK_KB;
     }
@@ -77,13 +75,10 @@ public class UserPassReviewGetListReview extends Step {
                 Review review = context.getReviewService().getReviewById(idReview);
                 //проверяю остались ли свободные места в выбранном ревью
                 if (context.getStudentReviewService().getNumberStudentReviewByIdReview(review.getId()) < 3) {
-                    StudentReview studentReview = new StudentReview();
-                    studentReview.setReview(review);
-                    studentReview.setUser(context.getUser());
-                    context.getStudentReviewService().addStudentReview(studentReview);
+                    context.getStudentReviewService().addStudentReview(new StudentReview(context.getUser(), review));
                     //сохраняю дату ревью для следующего шага и очищаю данные в Storage для этого шага
                     List<String> list = new ArrayList<>();
-                    list.add(review.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                    list.add(StringParser.localDateTimeToString(review.getDate()));
                     updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
                     removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
                     nextStep = USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
@@ -97,7 +92,6 @@ public class UserPassReviewGetListReview extends Step {
             } else {
                 throw new ProcessInputException("Введен неверный номер ревью...");
             }
-
         } else {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(context.getInput())[0];

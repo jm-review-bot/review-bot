@@ -7,7 +7,7 @@ import spring.app.util.StringParser;
 
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.USER_GO_MENU;
+import static spring.app.util.Keyboards.USER_MENU_KB;
 
 @Component
 public class UserPassReviewAddStudentReview extends Step {
@@ -19,13 +19,13 @@ public class UserPassReviewAddStudentReview extends Step {
         text = String.format("Ты записан на ревью в %s, для отмены записи - в меню нажми кнопку \"Отменить ревью\". " +
                 "В момент, когда ревью начнётся - тебе придёт сюда ссылка для подключения к разговору.", date);
 
-        keyboard = USER_GO_MENU;
+        keyboard = USER_MENU_KB;
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = StringParser.toWordsArray(context.getInput())[0];
-        if ("вернуться".equals(command)) {
+        if ("главное".equals(command)) {
             nextStep = USER_MENU;
             removeUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW);
         } else if ("/start".equals(command)) {

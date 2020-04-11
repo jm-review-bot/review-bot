@@ -11,20 +11,15 @@ import spring.app.model.User;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.*;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
 import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
 
 @Component
 public class UserPassReviewAddTheme extends Step {
-    private Map<Integer, Boolean> saveMap = new ConcurrentHashMap<>();
+    private Set<Integer> idsIfCancelStudentReview = new HashSet<>();
     private Map<Integer, Theme> themes = new HashMap<>();
 
     @Override
@@ -37,7 +32,7 @@ public class UserPassReviewAddTheme extends Step {
                             "Тема: %s\n" +
                             "Дата: %s\n" +
                             "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
-                    studentReview.getReview().getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+                    StringParser.localDateTimeToString(studentReview.getReview().getDate()));
 
             keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
 
@@ -59,9 +54,9 @@ public class UserPassReviewAddTheme extends Step {
 
             text = themeList.toString();
 
-            if (saveMap.get(vkId) != null) {
+            if (idsIfCancelStudentReview.contains(vkId)) {
                 text = "Ревью отменено.\n\n" + text;
-                saveMap.keySet().remove(vkId);
+                idsIfCancelStudentReview.remove(vkId);
             }
 
             keyboard = BACK_KB;
@@ -107,9 +102,9 @@ public class UserPassReviewAddTheme extends Step {
         } else {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
-            if ("отмена".equals(command)) {
+            if ("отмена".equals(command) && studentReview != null) {
                 context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
-                saveMap.putIfAbsent(vkId, true);
+                idsIfCancelStudentReview.add(vkId);
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
             } else if ("/start".equals(command)) {
                 nextStep = START;
