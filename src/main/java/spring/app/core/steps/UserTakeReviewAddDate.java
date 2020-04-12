@@ -74,7 +74,7 @@ public class UserTakeReviewAddDate extends Step {
                     StringBuilder conflictExceptionMessage = new StringBuilder();
                     conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, которое ты планируешь провести.")
                             .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
-                            .append(String.format("Пересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
+                            .append(String.format("\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
                             .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
                             .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
