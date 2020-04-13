@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -26,6 +27,10 @@ import static spring.app.util.Keyboards.USER_MENU_KB;
 
 @Component
 public class UserStartReviewCore extends Step {
+
+    @Value("${review.point_for_take_review}")
+    int pointForTakeReview;
+
     private final static Logger log = LoggerFactory.getLogger(UserStartReviewCore.class);
 
     // Map хранит vkId ревьюера и индекс вопроса из List<Question> questions, который сейчас задает ревьюер
@@ -41,37 +46,22 @@ public class UserStartReviewCore extends Step {
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
         // формирую сообщение со списком участников
-        StringBuilder textBuilder = new StringBuilder("На твоём ревью сегодня присутствуют:\n\n");
-        final int[] i = {1};
-        students.forEach(user -> {
-            textBuilder.append("[").append(i[0]++).append("] ")
-                    .append(user.getLastName())
-                    .append(" ")
-                    .append(user.getFirstName())
-                    .append(", https://vk.com/id")
-                    .append(user.getVkId())
-                    .append("\n");
-        });
-
+        StringBuilder textBuilder = new StringBuilder(getUserStorage(vkId, USER_START_REVIEW_RULES).get(0));
         // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
         // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
         if (!questionNumbers.containsKey(vkId)) {
             int questionNumber = 0;
-            textBuilder.append("\nВопрос: ")
-                    .append(questions.get(questionNumber).getQuestion())
-                    .append("\n\nОтвет: ")
-                    .append(questions.get(questionNumber).getAnswer());
-            text = textBuilder.toString();
+            textBuilder.append(String.format("\nВопрос: %s", questions.get(questionNumber).getQuestion()))
+                    .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
             questionNumbers.put(vkId, questionNumber);
             keyboard = NO_KB;
         } else {
             int questionNumber = questionNumbers.get(vkId);
             if (questionNumber != questions.size()) {
-                textBuilder.append("\nВопрос: ")
-                        .append(questions.get(questionNumber).getQuestion())
-                        .append("\n\nОтвет: ")
-                        .append(questions.get(questionNumber).getAnswer());
+                textBuilder.append(String.format("\nВопрос: %s", questions.get(questionNumber).getQuestion()))
+                        .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
                 keyboard = NO_KB;
+
                 // если вопросы кончились
             } else {
                 // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer
@@ -99,14 +89,12 @@ public class UserStartReviewCore extends Step {
                         }
                     }
                 }
-                // удаляем ключ с vkId ревьюера из questionNumbers
-                questionNumbers.keySet().remove(vkId);
                 // очищаем ввод ревьюера из STORAGE
                 removeUserStorage(vkId, USER_START_REVIEW_CORE);
-
+                removeUserStorage(vkId, USER_START_REVIEW_RULES);
                 // добавляем очки за прием ревью
                 User user = context.getUserService().getByVkId(vkId);
-                user.setReviewPoint(user.getReviewPoint() + 2); // TODO вынести кол-во очков за принятие ревью в проперти
+                user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);
                 context.getUserService().updateUser(user);
                 // формируем сообщение об окончании ревью для ревьюера
                 String reviewResultMessage = String.format("Вопросы закончились, ревью окончено!\n Результаты ревью будут отправлены каждому участнику.\nВам начислено 2 RP, теперь Ваш баланс %d RP", user.getReviewPoint());
@@ -149,11 +137,7 @@ public class UserStartReviewCore extends Step {
                                     .append("\n");
                         }
                     }
-                    reviewResults.append("\nЗа участие в ревью списано: ")
-                            .append(reviewPoint)
-                            .append(" RP, твой баланс теперь составляет: ")
-                            .append(student.getReviewPoint())
-                            .append(" RP");
+                    reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", reviewPoint, student.getReviewPoint()));
                     // отправляем студенту результаты ревью
                     Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
                     context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
@@ -171,13 +155,25 @@ public class UserStartReviewCore extends Step {
         String userInput = context.getInput();
         Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+        List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
-        // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
-        if (userInput.equalsIgnoreCase("/start")) {
+        if (userInput.equalsIgnoreCase("/start")) { // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
             nextStep = START;
             questionNumbers.keySet().remove(vkId);
-        } else if (userInput.equalsIgnoreCase("главное меню") && keyboard.equals(USER_MENU_KB)) {
-            nextStep = USER_MENU;
+            removeUserStorage(vkId, USER_MENU);
+            // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
+        } else if (questionNumbers.get(vkId) == questions.size()) {
+            if (userInput.equalsIgnoreCase("главное меню")) {
+                nextStep = USER_MENU;
+                questionNumbers.keySet().remove(vkId);
+                removeUserStorage(vkId, USER_MENU);
+            } else if (userInput.equalsIgnoreCase("/start")) {
+                nextStep = START;
+                questionNumbers.keySet().remove(vkId);
+                removeUserStorage(vkId, USER_MENU);
+            } else {
+                throw new ProcessInputException("Для выхода в главное меню нажми кнопку \"Главное меню\"");
+            }
             // проверяем, является ли ввод ревьюера корректным
         } else if (StringParser.isValidReviewerInput(userInput, students.size())) {
             // определяем какой вопрос мы задаем

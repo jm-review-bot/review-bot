@@ -122,8 +122,11 @@ public class StringParser {
 
     public static boolean isHangoutsLink(String link) {
         String prefix = "https://hangouts.google.com/call/";
-        String suffix = link.trim().substring(prefix.length());
-        return link.trim().startsWith(prefix) && suffix.length() == 24;
+        if (link.startsWith(prefix)){
+            String suffix = link.trim().substring(prefix.length());
+            return suffix.length() == 24 && suffix.endsWith("AEEI");
+        }
+        return false;
     }
 
     public static boolean isValidReviewerInput(String input, int numberOfStudents) {
