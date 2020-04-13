@@ -13,12 +13,10 @@ import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
