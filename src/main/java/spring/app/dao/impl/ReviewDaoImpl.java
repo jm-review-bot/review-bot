@@ -33,7 +33,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     }
 
     /**
-     * Метод возвращает все открытые ревью, которые будут пересекаться по времени с новым ревью, которое юзер хочет принять.
+     * Метод возвращает все открытые ревью, которые принимает юзер, которые будут пересекаться по времени с новым ревью, которое юзер хочет принять.
      * Например, если юзер планирует провести ревью 10:00 02.06.2020, продолжительностью 59 минут,
      * то метод вернет список всех открытых этим пользователем ревью в интервале с 09:01 по 10:59 02.06.2020
      *
@@ -42,6 +42,39 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      * @param reviewDuration - продолжительность ревью в минутах
      * @return
      */
+    @Override
+    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
+        return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE " +
+                "r.date BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id OR" +
+                " (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id", Review.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodStart.plusMinutes(reviewDuration))
+                .setParameter("vk_id", vkId)
+                .setParameter("review_duration", reviewDuration)
+                .getResultList();
+    }
+
+    /**
+     * Метод возвращает все открытые ревью, в которых участвует юзер(как студент), которые будут пересекаться по времени с новым ревью, которое юзер хочет принять.
+     * Например, если юзер планирует провести ревью 10:00 02.06.2020, продолжительностью 59 минут,
+     * то метод вернет список всех ревью в которых принимает участие юзер(как студент) в интервале с 09:01 по 10:59 02.06.2020
+     *
+     * @param vkId           - id юзера в vk.com
+     * @param periodStart    - запланированное юзером время начала ревью
+     * @param reviewDuration - продолжительность ревью в минутах
+     * @return
+     */
+    @Override
+    public List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
+        return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN student_review sr ON sr.review_id = r.id JOIN users u ON sr.student_id = u.id WHERE " +
+                "r.date BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id OR" +
+                " (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id", Review.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodStart.plusMinutes(reviewDuration))
+                .setParameter("vk_id", vkId)
+                .setParameter("review_duration", reviewDuration)
+                .getResultList();
+    }
 
     /**
      * Метод возвращает ревью по выбранной теме при условии, что записанных на ревью менее трех
@@ -53,18 +86,6 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("id", id)
                 .setParameter("theme", theme)
                 .setParameter("date", localDateTime)
-                .getResultList();
-    }
-
-    @Override
-    public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
-        return (List<Review>) entityManager.createNativeQuery("SELECT r.* FROM review r JOIN users u ON r.reviewer_id = u.id WHERE " +
-                "r.date BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id OR" +
-                " (r.date + (INTERVAL '1' MINUTE * :review_duration)) BETWEEN :period_start AND :period_end AND r.is_open = true AND u.vk_id =:vk_id", Review.class)
-                .setParameter("period_start", periodStart)
-                .setParameter("period_end", periodStart.plusMinutes(reviewDuration))
-                .setParameter("vk_id", vkId)
-                .setParameter("review_duration", reviewDuration)
                 .getResultList();
     }
 

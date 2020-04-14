@@ -56,13 +56,18 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime){
+    public List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime) {
         return reviewDao.getAllReviewsByTheme(id, theme, localDateTime);
     }
 
     @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId, periodStart, reviewDuration);
+    }
+
+    @Override
+    public List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
+        return reviewDao.getOpenReviewsByStudentVkId(vkId, periodStart, reviewDuration);
     }
 
     @Override
