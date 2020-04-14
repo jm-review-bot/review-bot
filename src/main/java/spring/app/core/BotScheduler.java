@@ -61,7 +61,7 @@ public class BotScheduler {
         if (!users.isEmpty()) {
             for (User user : users) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
-                Step step = stepHolder.getSteps().get(StepSelector.valueOf(user.getChatStep()));
+                Step step = stepHolder.getSteps().get(user.getChatStep());
                 bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать прием ревью\"", step.getKeyboard(), user.getVkId());
                 log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }

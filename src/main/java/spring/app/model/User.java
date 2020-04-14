@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import spring.app.core.StepSelector;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -25,7 +27,8 @@ public class User {
      * Текущий(последний) шаг пользователя в чатботе
      */
     @Column(name = "chat_step")
-    private String chatStep;
+    @Enumerated(EnumType.ORDINAL)
+    private StepSelector chatStep;
 
     /**
      * Факт просмотра пользователем стартового сообщения шага.
@@ -45,7 +48,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String lastName, Integer vkId, String chatStep, Role role) {
+    public User(String firstName, String lastName, Integer vkId, StepSelector chatStep, Role role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.vkId = vkId;
@@ -54,7 +57,7 @@ public class User {
         this.isViewed = false;
     }
 
-    public User(String firstName, String lastName, Integer vkId, String chatStep) {
+    public User(String firstName, String lastName, Integer vkId, StepSelector chatStep) {
         this.vkId = vkId;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -109,11 +112,11 @@ public class User {
         this.role = role;
     }
 
-    public String getChatStep() {
+    public StepSelector getChatStep() {
         return chatStep;
     }
 
-    public void setChatStep(String chatStep) {
+    public void setChatStep(StepSelector chatStep) {
         this.chatStep = chatStep;
     }
 
