@@ -6,10 +6,7 @@ import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
@@ -25,11 +22,7 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n ");
         themeList.append("Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         for (Integer position : themes.keySet()) {
-            themeList.append("[")
-                    .append(position)
-                    .append("] ")
-                    .append(themes.get(position).getTitle())
-                    .append("\n");
+            themeList.append(String.format("[%d] %s\n", position, themes.get(position).getTitle()));
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         text = themeList.toString();
@@ -51,10 +44,8 @@ public class UserTakeReviewAddTheme extends Step {
                     .map(theme -> theme.getId().toString())
                     .collect(toList());
             if (passedThemesIds.contains(themeId)) {
-                // складываем в хранилище
-                List<String> themeIdStorage = new ArrayList<>();
-                themeIdStorage.add(themeId);
-                updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, themeIdStorage);
+                // складываем в хранилище для использования в следующих шагах
+                updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(themeId));
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_THEME;
@@ -63,8 +54,18 @@ public class UserTakeReviewAddTheme extends Step {
             }
         } else if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
+            // очищаем данные с этого шага и со следующего, если они есть
+            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            if (getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE) != null) {
+                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            }
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
+            // очищаем данные с этого шага и со следующего, если они есть
+            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            if (getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE) != null) {
+                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            }
         } else {
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
             throw new ProcessInputException("Введена неверная команда...\n\n Введи цифру, соответствующую теме рьвью или нажми на кнопку \"Назад\" для возврата в главное меню");
