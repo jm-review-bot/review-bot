@@ -66,19 +66,30 @@ public class UserTakeReviewAddDate extends Step {
             }
             if (plannedStartReviewTime.isAfter(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
                 List<Review> conflictReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId, plannedStartReviewTime, reviewDuration);
-                if (conflictReviews.isEmpty()) {
-                    updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE, Arrays.asList(userInput));
-                    nextStep = USER_TAKE_REVIEW_CONFIRMATION;
-                } else {
+                List<Review> conflictStudentReviews = context.getReviewService().getOpenReviewsByStudentVkId(vkId, plannedStartReviewTime, reviewDuration);
+                if (!conflictReviews.isEmpty()) {
                     Review conflictReview = conflictReviews.get(0);
                     StringBuilder conflictExceptionMessage = new StringBuilder();
                     conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, которое ты планируешь провести.")
                             .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
-                            .append(String.format("\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
+                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
                             .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
                             .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
                     throw new ProcessInputException(conflictExceptionMessage.toString());
+                } else if (!conflictStudentReviews.isEmpty()) {
+                    Review conflictReview = conflictStudentReviews.get(0);
+                    StringBuilder conflictExceptionMessage = new StringBuilder();
+                    conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, в котором ты участвуешь.")
+                            .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
+                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
+                            .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
+                            .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
+                            .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
+                    throw new ProcessInputException(conflictExceptionMessage.toString());
+                } else {
+                    updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE, Arrays.asList(userInput));
+                    nextStep = USER_TAKE_REVIEW_CONFIRMATION;
                 }
             } else if (plannedStartReviewTime.isBefore(LocalDateTime.now())) {
                 throw new ProcessInputException("Время принятия нового ревью не может быть в прошлом :)\n Повтори ввод или вернись назад к выбору темы ревью");

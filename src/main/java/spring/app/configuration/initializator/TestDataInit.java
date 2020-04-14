@@ -284,12 +284,6 @@ public class TestDataInit {
         question6.setQuestion("Что такое autowriting?");
         question6.setTheme(spring);
         questionService.addQuestion(question6);
-        // add student review answers
-        StudentReviewAnswer answer1 = new StudentReviewAnswer();
-        answer1.setRight(true);
-        answer1.setQuestion(question1);
-        answer1.setStudentReview(studentReview);
-        studentReviewAnswerService.addStudentReviewAnswer(answer1);
 
         Question question7 = new Question();
         question7.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
@@ -297,11 +291,6 @@ public class TestDataInit {
         question7.setQuestion("Что такое target object?");
         question7.setTheme(spring);
         questionService.addQuestion(question7);
-        StudentReviewAnswer answer2 = new StudentReviewAnswer();
-        answer2.setRight(true);
-        answer2.setQuestion(question2);
-        answer2.setStudentReview(studentReview);
-        studentReviewAnswerService.addStudentReviewAnswer(answer2);
 
         Question question8 = new Question();
         question8.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
@@ -309,11 +298,6 @@ public class TestDataInit {
         question8.setQuestion("Что такое DAO?");
         question8.setTheme(spring);
         questionService.addQuestion(question8);
-        StudentReviewAnswer answer3 = new StudentReviewAnswer();
-        answer3.setRight(true);
-        answer3.setQuestion(question3);
-        answer3.setStudentReview(studentReview);
-        studentReviewAnswerService.addStudentReviewAnswer(answer3);
 
         Question question9 = new Question();
         question9.setAnswer("Эта команда используется, когда вы хотите сопоставить определенный метод HTTP с определенным классом. Вы можете использовать эту команду как на уровне класса, так и на уровне метода.");
@@ -328,10 +312,5 @@ public class TestDataInit {
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
         questionService.addQuestion(question10);
-        StudentReviewAnswer answer4 = new StudentReviewAnswer();
-        answer4.setRight(true);
-        answer4.setQuestion(question4);
-        answer4.setStudentReview(studentReview);
-        studentReviewAnswerService.addStudentReviewAnswer(answer4);
     }
 }
