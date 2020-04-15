@@ -12,6 +12,7 @@ import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
 
 import javax.annotation.PostConstruct;
+import java.util.TimeZone;
 
 @SpringBootApplication
 @EnableScheduling
@@ -27,6 +28,11 @@ public class Main {
 	@PostConstruct
 	public TestDataInit initTestData() {
 		return new TestDataInit();
+	}
+
+	@PostConstruct
+	public void init(){
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
 	}
 
 }
