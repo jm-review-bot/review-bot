@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
+import spring.app.core.StepSelector;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.model.User;
 import spring.app.service.abstraction.VkService;
@@ -80,7 +81,7 @@ public class VkServiceImpl implements VkService {
                         userInfo.getFirstName(),
                         userInfo.getLastName(),
                         userInfo.getId(),
-                        "START"))
+                        StepSelector.START))
                 );
         // эти юзеры без роли, перед вставкой в БД им нужно добавить роль
         // здесь не стал добавлять им роль, т.к. пришлось бы лезть в базу

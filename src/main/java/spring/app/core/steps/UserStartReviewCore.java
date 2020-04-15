@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.core.StepSelector;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
@@ -139,7 +138,7 @@ public class UserStartReviewCore extends Step {
                     }
                     reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", reviewPoint, student.getReviewPoint()));
                     // отправляем студенту результаты ревью
-                    Step userStep = context.getStepHolder().getSteps().get(StepSelector.valueOf(user.getChatStep()));
+                    Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                     context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
                     log.warn("Студенту с id {} отправлено сообщение {}", student.getVkId(), reviewResults.toString());
                 }

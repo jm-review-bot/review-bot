@@ -63,7 +63,7 @@ public class VkBot implements ChatBot {
         BotContext context;
         Integer userVkId;
         String input;
-        String userStep;
+        StepSelector userStep;
         boolean isViewed;
         Step currentStep;
 
@@ -95,7 +95,7 @@ public class VkBot implements ChatBot {
             isViewed = user.isViewed();
             log.debug("VK_ID юзера: {}, роль: {},  шаг: {}, ранее просмотрен: {}", userVkId, role.getName(),
                     userStep, isViewed);
-            currentStep = stepHolder.getSteps().get(StepSelector.valueOf(userStep));
+            currentStep = stepHolder.getSteps().get(userStep);
 
             if (!isViewed) {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
@@ -113,7 +113,7 @@ public class VkBot implements ChatBot {
                     // меняем юзеру на следующий шаг только, если не выпало исключения
                     StepSelector nextStep = currentStep.nextStep();
                     // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
-                    user.setChatStep(nextStep.name());
+                    user.setChatStep(nextStep);
                     user.setViewed(false);
                     // сохраняем изменения
                     userService.updateUser(user);
