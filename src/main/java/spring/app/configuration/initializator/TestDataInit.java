@@ -100,7 +100,7 @@ public class TestDataInit {
         admin.setLastName("admin");
         admin.setReviewPoint(999);
         admin.setVkId(1374221); // change this to your vkId for testing
-        admin.setRole(roleAdmin);
+        admin.setRole(roleUser);
         admin.setChatStep(StepSelector.START);
         userService.addUser(admin);
 
@@ -116,9 +116,9 @@ public class TestDataInit {
         User user = new User();
         user.setFirstName("Антон");
         user.setLastName("Таврель");
-        user.setReviewPoint(0);
+        user.setReviewPoint(8);
         user.setVkId(582532887);
-        user.setRole(roleUser);
+        user.setRole(roleAdmin);
         user.setChatStep(StepSelector.START);
         userService.addUser(user);
 
@@ -207,9 +207,9 @@ public class TestDataInit {
         reviewService.addReview(springReviewPassed);
 
         Review springReview = new Review(); // ревью по спрингу которое я буду принимать
-        springReview.setDate(LocalDateTime.of(2020, 4, 8, 23, 38));
+        springReview.setDate(LocalDateTime.of(2020, 4, 15, 15, 0));
         springReview.setOpen(true);
-        springReview.setTheme(spring);
+        springReview.setTheme(sql);
         springReview.setUser(admin2);
         reviewService.addReview(springReview);
 
@@ -220,12 +220,25 @@ public class TestDataInit {
         springReviewPassed2.setUser(user);
         reviewService.addReview(springReviewPassed2);
 
+        Review coreReviewPassed = new Review(); // ревью, которое сдал User
+        coreReviewPassed.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
+        coreReviewPassed.setOpen(false);
+        coreReviewPassed.setTheme(spring);
+        coreReviewPassed.setUser(admin);
+        reviewService.addReview(coreReviewPassed);
+
         // add student reviews
         StudentReview studentReview = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг
         studentReview.setUser(user);
         studentReview.setPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
+
+        StudentReview studentReview10  = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг
+        studentReview10.setUser(admin2);
+        studentReview10.setPassed(true);
+        studentReview10.setReview(coreReviewPassed);
+        studentReviewService.addStudentReview(studentReview10);
 
         StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
         studentReview2.setUser(admin2);
