@@ -26,6 +26,8 @@ public class AdminMenu extends Step {
             nextStep = ADMIN_REMOVE_USER;
         } else if ("/start".equals(command)) {
             nextStep = START;
+        } else if ("главное".equalsIgnoreCase(command)) {
+            nextStep = USER_MENU;
         } else {
             keyboard = ADMIN_MENU_KB;
             throw new ProcessInputException("Введена неверная команда...");
