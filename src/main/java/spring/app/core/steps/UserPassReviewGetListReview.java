@@ -7,6 +7,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -21,11 +22,13 @@ import static spring.app.util.Keyboards.BACK_KB;
 public class UserPassReviewGetListReview extends Step {
     private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();
 
+
     @Override
     public void enter(BotContext context) {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
-        Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
+        Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
         //получаю список ревью по теме
         List<Review> reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
         //список ревью сортирую по дате
@@ -63,6 +66,7 @@ public class UserPassReviewGetListReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
         if (StringParser.isNumeric(currentInput)) {
@@ -79,8 +83,8 @@ public class UserPassReviewGetListReview extends Step {
                     //сохраняю дату ревью для следующего шага и очищаю данные в Storage для этого шага
                     List<String> list = new ArrayList<>();
                     list.add(StringParser.localDateTimeToString(review.getDate()));
-                    updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
-                    removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                    storageService.updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
+                    storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
                     nextStep = USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
                     //удаляю запись по id из списка, т.к. при удалении записи на ревью и повторной записи, выводится
                     //сообщение: Выбранное Вами ревью уже заполнено!
@@ -98,11 +102,11 @@ public class UserPassReviewGetListReview extends Step {
             if ("/start".equals(command)) {
                 nextStep = START;
                 reviewsIndex.keySet().remove(vkId);
-                removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
             } else if ("назад".equals(command)) {
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
                 reviewsIndex.keySet().remove(vkId);
-                removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
             }

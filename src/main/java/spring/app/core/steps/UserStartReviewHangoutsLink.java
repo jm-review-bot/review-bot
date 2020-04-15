@@ -8,6 +8,7 @@ import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.List;
@@ -31,17 +32,18 @@ public class UserStartReviewHangoutsLink extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
         if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
-            removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
-            removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (StringParser.isHangoutsLink(userInput)) {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
-            Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
+            Long reviewId = Long.parseLong(storageService.getUserStorage(vkId, USER_MENU).get(0));
             List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
             // отправляем ссылку на ревью каждому участнику
             for (User user : students) {

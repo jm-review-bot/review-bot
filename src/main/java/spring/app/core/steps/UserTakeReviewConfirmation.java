@@ -8,6 +8,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.Theme;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -25,12 +26,13 @@ public class UserTakeReviewConfirmation extends Step {
 
     @Override
     public void enter(BotContext context) {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //достаем из глобального хранилища номер темы, введенной пользователем на предыдущем шаге
-        Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
+        Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
         Theme theme = context.getThemeService().getThemeById(themeId);
         //достаем из глобального хранилища время ревью, выбранное пользователем на предыдущем шаге
-        String reviewDate = getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE).get(0);
+        String reviewDate = storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE).get(0);
 
         StringBuilder textBiulder = new StringBuilder();
         textBiulder.append(String.format("Ты собираешься провести ревью по теме: %s", theme.getTitle()))
@@ -45,37 +47,38 @@ public class UserTakeReviewConfirmation extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoDataEnteredException {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
         if (userInput.equalsIgnoreCase("добавить")) {
-            LocalDateTime plannedStartReviewTime = StringParser.stringToLocalDateTime(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE).get(0));
+            LocalDateTime plannedStartReviewTime = StringParser.stringToLocalDateTime(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE).get(0));
             // делаем проверку сколько времени прошло от ввода даты ревью до даты ревью, которое начнется через час
             // если прошло более 3х минут, то просим повторно выбрать дату и время ревью
             if (LocalDateTime.now().isBefore(plannedStartReviewTime.minusMinutes(timeLimitBeforeAddReview))) {
                 User user = context.getUserService().getByVkId(vkId);
-                Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
+                Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
                 Theme theme = context.getThemeService().getThemeById(themeId);
                 context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
                 nextStep = USER_MENU;
-                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
-                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+                storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+                storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
                 String errorMessage = "Ты долго думал прежде чем добавить ревью в сетку расписания. Введи дату и время ревью еще раз\n\n";
                 List<String> errorMessages = new ArrayList<>();
                 errorMessages.add(errorMessage);
-                updateUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION, errorMessages);
+                storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION, errorMessages);
             }
         } else if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_TAKE_REVIEW_ADD_DATE;
         } else if (userInput.equalsIgnoreCase("отменить")) {
             nextStep = USER_MENU;
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
@@ -22,7 +23,8 @@ public class AdminRemoveUser extends Step {
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        List<String> savedInput = getUserStorage(vkId, ADMIN_REMOVE_USER);
+        StorageService storageService = context.getStorageService();
+        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER);
         StringBuilder userList;
         if (savedInput == null || savedInput.isEmpty()) {
             // если в памяти пусто, показываем первичный вопрос
@@ -46,7 +48,7 @@ public class AdminRemoveUser extends Step {
                     });
             text = userList.toString();
             keyboard = BACK_KB;
-            updateUserStorage(vkId, ADMIN_USERS_LIST, usersToDelete);
+            storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, usersToDelete);
         } else {
             // если в памяти уже есть данные, значит показываем предупреждение об удалении юзеров
             // оно было подготовлено в processInput и сохранено в памяти,
@@ -59,9 +61,10 @@ public class AdminRemoveUser extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         String currentInput = context.getInput();
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
-        List<String> savedInput = getUserStorage(vkId, ADMIN_REMOVE_USER);
-        List<String> usesToDelete = getUserStorage(vkId, ADMIN_USERS_LIST);
+        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER);
+        List<String> usesToDelete = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
 
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
@@ -69,10 +72,10 @@ public class AdminRemoveUser extends Step {
         if (wordInput.equals("назад")
                 || wordInput.equals("нет")
                 || wordInput.equals("отмена")) {
-            removeUserStorage(vkId, ADMIN_REMOVE_USER);
+            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
-            removeUserStorage(vkId, ADMIN_REMOVE_USER);
+            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = START;
         } else if (savedInput == null || savedInput.isEmpty()) {
             // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
@@ -95,8 +98,8 @@ public class AdminRemoveUser extends Step {
                             selectedUsers.add(user.getId().toString());
                         });
                 confirmMessage.append("\nСогласны? (Да/Нет)");
-                updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(confirmMessage.toString()));
-                updateUserStorage(vkId, ADMIN_USERS_LIST, selectedUsers);
+                storageService.updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(confirmMessage.toString()));
+                storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, selectedUsers);
                 nextStep = ADMIN_REMOVE_USER;
             } catch (NumberFormatException | NoResultException | NoNumbersEnteredException e) {
                 keyboard = BACK_KB;
@@ -110,8 +113,8 @@ public class AdminRemoveUser extends Step {
                             .deleteUserById(Long.parseLong(userIdString))
             );
             // обязательно очищаем память
-            removeUserStorage(vkId, ADMIN_REMOVE_USER);
-            removeUserStorage(vkId, ADMIN_USERS_LIST);
+            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
+            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             nextStep = ADMIN_REMOVE_USER;
         } else {
             keyboard = START_KB;

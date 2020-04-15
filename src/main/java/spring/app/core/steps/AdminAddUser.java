@@ -8,6 +8,7 @@ import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
@@ -24,7 +25,9 @@ public class AdminAddUser extends Step {
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        List<String> savedInput = getUserStorage(vkId, ADMIN_ADD_USER);
+        StorageService storageService = context.getStorageService();
+
+        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_ADD_USER);
 
         if (savedInput == null || savedInput.isEmpty()) {
             text = "Введите ссылку на профиль пользователя.\nМожно добавить несколько пользователей, введя ссылки через пробел или запятую.";
@@ -32,7 +35,7 @@ public class AdminAddUser extends Step {
         } else {
             text = savedInput.get(0);
             keyboard = BACK_KB;
-            removeUserStorage(vkId, ADMIN_ADD_USER);
+            storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
         }
     }
 
@@ -40,6 +43,7 @@ public class AdminAddUser extends Step {
     public void processInput(BotContext context) throws ProcessInputException {
         VkService vkService = context.getVkService();
         UserService userService = context.getUserService();
+        StorageService storageService = context.getStorageService();
         Role userRole = context.getRoleService().getRoleByName("USER");
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
@@ -51,10 +55,10 @@ public class AdminAddUser extends Step {
                 || wordInput.equals("нет")
                 || wordInput.equals("отмена")
                 || wordInput.equals("/admin")) {
-            removeUserStorage(vkId, ADMIN_ADD_USER);
+            storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
-            removeUserStorage(vkId, ADMIN_ADD_USER);
+            storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = START;
         } else {
             // мы ожидаем от него ссылки на профили добавляемых  юзеров
@@ -83,10 +87,10 @@ public class AdminAddUser extends Step {
 
                     });
                     addedUserText.append("\nВы можете прислать еще ссылки на профили или вернуться в Меню, введя \"назад\".");
-                    updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(addedUserText.toString()));
+                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(addedUserText.toString()));
                     nextStep = ADMIN_ADD_USER;
                 } else {
-                    updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList("Пользователь(и) уже в базе."));
+                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList("Пользователь(и) уже в базе."));
                     nextStep = ADMIN_ADD_USER;
                 }
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {
