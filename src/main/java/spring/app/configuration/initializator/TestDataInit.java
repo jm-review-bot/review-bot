@@ -61,6 +61,15 @@ public class TestDataInit {
     private Step userTakeReviewConfirmation;
 
     @Autowired
+    private Step userPassReviewAddTheme;
+
+    @Autowired
+    private Step userPassReviewGetListReview;
+
+    @Autowired
+    private Step userPassReviewAddStudentReview;
+
+    @Autowired
     private Step userCancelReview;
 
     @Autowired
@@ -132,6 +141,9 @@ public class TestDataInit {
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
+        steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
+        steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
+        steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
         steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
@@ -198,8 +210,15 @@ public class TestDataInit {
         springReview.setDate(LocalDateTime.of(2020, 4, 8, 23, 38));
         springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(user);
+        springReview.setUser(admin2);
         reviewService.addReview(springReview);
+
+        Review springReviewPassed2 = new Review(); // ревью, которое сдал User
+        springReviewPassed2.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
+        springReviewPassed2.setOpen(false);
+        springReviewPassed2.setTheme(spring);
+        springReviewPassed2.setUser(user);
+        reviewService.addReview(springReviewPassed2);
 
         // add student reviews
         StudentReview studentReview = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг

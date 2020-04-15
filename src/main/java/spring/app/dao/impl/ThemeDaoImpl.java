@@ -4,6 +4,8 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.model.Theme;
 
+import javax.persistence.TypedQuery;
+
 import java.util.List;
 
 @Repository
@@ -11,6 +13,16 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     public ThemeDaoImpl() {
         super(Theme.class);
+    }
+
+    /**
+     * Метод возвращает тему по ее порядковому номеру
+     * @param position
+     */
+    public Theme getByPosition(Integer position) {
+        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.position = :position", Theme.class)
+        .setParameter("position", position)
+        .getSingleResult();
     }
 
     @Override

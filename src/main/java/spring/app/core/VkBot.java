@@ -26,9 +26,9 @@ public class VkBot implements ChatBot {
     private ThemeService themeService;
     private ReviewService reviewService;
     private QuestionService questionService;
+    private StepHolder stepHolder;
     private StudentReviewService studentReviewService;
     private StudentReviewAnswerService studentReviewAnswerService;
-    private StepHolder stepHolder;
 
 
     public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService) {

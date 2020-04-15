@@ -48,6 +48,11 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public Theme getByPosition(Integer position){
+        return themeDao.getByPosition(position);
+    }
+
+    @Override
     public List<Theme> getPassedThemesByUser(Integer vkId) {
         return themeDao.getPassedThemesByUser(vkId);
     }

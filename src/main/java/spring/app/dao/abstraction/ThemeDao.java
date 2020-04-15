@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ThemeDao extends GenericDao<Long, Theme> {
 
+    Theme getByPosition(Integer position);
+
     List<Theme> getPassedThemesByUser(Integer vkId);
 
     Theme getThemeByReviewId(Long reviewId);
