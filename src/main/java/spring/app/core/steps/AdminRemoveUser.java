@@ -61,7 +61,7 @@ public class AdminRemoveUser extends Step {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         List<String> savedInput = getUserStorage(vkId, ADMIN_REMOVE_USER);
-        List<String> usesToDelete = getUserStorage(vkId, ADMIN_USERS_LIST);
+        List<String> usersToDelete = getUserStorage(vkId, ADMIN_USERS_LIST);
 
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
@@ -83,7 +83,7 @@ public class AdminRemoveUser extends Step {
 
                 StringParser.toNumbersSet(currentInput)
                         .forEach(inputNumber -> {
-                            Long userId = Long.parseLong(usesToDelete.get(inputNumber - 1));
+                            Long userId = Long.parseLong(usersToDelete.get(inputNumber - 1));
                             User user = context.getUserService().getUserById(userId);
                             confirmMessage
                                     .append(user.getLastName())
@@ -98,14 +98,13 @@ public class AdminRemoveUser extends Step {
                 updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(confirmMessage.toString()));
                 updateUserStorage(vkId, ADMIN_USERS_LIST, selectedUsers);
                 nextStep = ADMIN_REMOVE_USER;
-            } catch (NumberFormatException | NoResultException | NoNumbersEnteredException e) {
-                keyboard = BACK_KB;
+            } catch (NumberFormatException | NoResultException | NoNumbersEnteredException | IndexOutOfBoundsException e) {
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
         } else if (wordInput.equals("да")) {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
             // удаляем юзеров
-            usesToDelete.forEach(userIdString ->
+            usersToDelete.forEach(userIdString ->
                     context.getUserService()
                             .deleteUserById(Long.parseLong(userIdString))
             );
@@ -114,7 +113,6 @@ public class AdminRemoveUser extends Step {
             removeUserStorage(vkId, ADMIN_USERS_LIST);
             nextStep = ADMIN_REMOVE_USER;
         } else {
-            keyboard = START_KB;
             throw new ProcessInputException("Введена неверная команда...");
         }
     }
