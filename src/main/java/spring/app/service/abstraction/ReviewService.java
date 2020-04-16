@@ -24,6 +24,10 @@ public interface ReviewService {
 
     void updateAllExpiredReviewsByDate(LocalDateTime localDateTime);
 
+    Review getMyReview(Integer vkId, LocalDateTime localDateTime);
+
+    List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes);
+
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
