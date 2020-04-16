@@ -24,10 +24,13 @@ public class UserPassReviewGetListReview extends Step {
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
-        Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
-        //получаю список ревью по теме
-        List<Review> reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+        //с прошлошо шага получаю строку с id ревью
+        List<String> reviewListLastStep = Arrays.asList(getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0).split(" "));
+        //из строки извлекаю id и получаю список ревью
+        List<Review> reviews = new ArrayList<>();
+        for (String id : reviewListLastStep){
+            reviews.add(context.getReviewService().getReviewById(Long.parseLong(id)));
+        }
         //список ревью сортирую по дате
         reviews.sort(Comparator.comparing(Review::getDate));
 

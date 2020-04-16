@@ -77,7 +77,14 @@ public class UserPassReviewAddTheme extends Step {
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
-                    List<Review> reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                    Review reviewMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+                    List<Review> reviews;
+                    //получаю список ревью по теме
+                    if (reviewMy == null) {
+                        reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                    }else{
+                        reviews = context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewMy.getDate(), 60);
+                    }
                     //проверяем наличие открытых ревью по данной теме
                     if (reviews.isEmpty()) {
                         nextStep = USER_MENU;
@@ -88,7 +95,9 @@ public class UserPassReviewAddTheme extends Step {
                     } else {
                         //если нашли хоть одно открытое ревью по выбранной теме, сохраняем ID темы для следующего шага
                         List<String> list = new ArrayList<>();
-                        list.add(theme.getId().toString());
+                        StringBuilder reviewList = new StringBuilder();
+                        reviews.stream().forEach(review -> reviewList.append(review.getId() + " "));
+                        list.add(reviewList.toString());
                         updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
                         nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
                     }
