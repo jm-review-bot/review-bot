@@ -37,9 +37,14 @@ public class UserPassReviewAddTheme extends Step {
             keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
 
         } else {
+            StringBuilder themeList = new StringBuilder();
+            if (getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME) != null){
+                themeList.append("Выбранное Вами ревью уже заполнено!\n\n");
+                removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+            }
             //формирую список тем и вывожу его как нумерованный список
             context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
-            StringBuilder themeList = new StringBuilder("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
+            themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
 
             for (Integer position : themes.keySet()) {
                 themeList.append("[")
@@ -69,7 +74,7 @@ public class UserPassReviewAddTheme extends Step {
         String currentInput = context.getInput();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
-        if (StringParser.isNumeric(currentInput)) {
+        if (studentReview == null && StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             //проверяем или номер темы не выходит за рамки
             if (command > 0 & command <= themes.size()) {
@@ -77,7 +82,15 @@ public class UserPassReviewAddTheme extends Step {
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
-                    List<Review> reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                    // получаю созданное мною ревью, если оно имеется
+                    Review reviewMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+                    List<Review> reviews;
+                    //получаю список ревью по теме
+                    if (reviewMy == null) {
+                        reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                    }else{
+                        reviews = context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewMy.getDate(), 60);
+                    }
                     //проверяем наличие открытых ревью по данной теме
                     if (reviews.isEmpty()) {
                         nextStep = USER_MENU;
