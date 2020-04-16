@@ -130,7 +130,7 @@ public class Keyboards {
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
             "          \"label\": \"Добавить пользователя\"\n" +
             "        },\n" +
-            "        \"color\": \"positive\"\n" +
+            "        \"color\": \"primary\"\n" +
             "      },\n" +
             "      {\n" +
             "        \"action\": {\n" +
@@ -138,7 +138,16 @@ public class Keyboards {
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Удалить пользователя\"\n" +
             "        },\n" +
-            "        \"color\": \"negative\"\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n" +
+            "     ],[" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"3\\\"}\",\n" +
+            "          \"label\": \"Главное меню\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
             "      }\n" +
             "    ]\n" +
             "  ]\n" +
