@@ -95,41 +95,41 @@ public class TestDataInit {
         roleService.addRole(roleUser);
 
         // add users
-        User admin = new User();
-        admin.setFirstName("admin");
-        admin.setLastName("admin");
-        admin.setReviewPoint(999);
-        admin.setVkId(1374221); // change this to your vkId for testing
-        admin.setRole(roleAdmin);
-        admin.setChatStep(StepSelector.START);
-        userService.addUser(admin);
+        User testUser = new User();
+        testUser.setFirstName("Петр");
+        testUser.setLastName("Петров");
+        testUser.setReviewPoint(4);
+        testUser.setVkId(1582532887); // change this to your vkId for testing
+        testUser.setRole(roleUser);  // change role for testing
+        testUser.setChatStep(StepSelector.START);
+        userService.addUser(testUser);
 
-        User admin2 = new User();
-        admin2.setFirstName("Максим");
-        admin2.setLastName("Ботюк");
-        admin2.setReviewPoint(8);
-        admin2.setVkId(87632583);
-        admin2.setRole(roleAdmin);
-        admin2.setChatStep(StepSelector.START);
-        userService.addUser(admin2);
+        User roman = new User();
+        roman.setFirstName("Роман");
+        roman.setLastName("Евсеев");
+        roman.setReviewPoint(16);
+        roman.setVkId(1374221);
+        roman.setRole(roleUser);
+        roman.setChatStep(StepSelector.START);
+        userService.addUser(roman);
 
-        User user = new User();
-        user.setFirstName("Антон");
-        user.setLastName("Таврель");
-        user.setReviewPoint(0);
-        user.setVkId(582532887);
-        user.setRole(roleUser);
-        user.setChatStep(StepSelector.START);
-        userService.addUser(user);
+        User maksim = new User();
+        maksim.setFirstName("Максим");
+        maksim.setLastName("Ботюк");
+        maksim.setReviewPoint(8);
+        maksim.setVkId(87632583);
+        maksim.setRole(roleAdmin);
+        maksim.setChatStep(StepSelector.START);
+        userService.addUser(maksim);
 
-        User user2 = new User();
-        user2.setFirstName("Петр");
-        user2.setLastName("Петров");
-        user2.setReviewPoint(4);
-        user2.setVkId(1582532887);
-        user2.setRole(roleUser);
-        user2.setChatStep(StepSelector.START);
-        userService.addUser(user2);
+        User anton = new User();
+        anton.setFirstName("Антон");
+        anton.setLastName("Таврель");
+        anton.setReviewPoint(4);
+        anton.setVkId(582532887);
+        anton.setRole(roleAdmin);
+        anton.setChatStep(StepSelector.START);
+        userService.addUser(anton);
 
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
@@ -199,46 +199,46 @@ public class TestDataInit {
         themeService.addTheme(finalReview);
 
         // add reviews
-        Review springReviewPassed = new Review(); // ревью, которое я сдал
+        Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
         springReviewPassed.setOpen(false);
         springReviewPassed.setTheme(spring);
-        springReviewPassed.setUser(admin);
+        springReviewPassed.setUser(roman);
         reviewService.addReview(springReviewPassed);
 
-        Review springReview = new Review(); // ревью по спрингу которое я буду принимать
-        springReview.setDate(LocalDateTime.of(2020, 4, 8, 23, 38));
+        Review springReview = new Review();
+        springReview.setDate(LocalDateTime.of(2020, 4, 16, 23, 38));
         springReview.setOpen(true);
         springReview.setTheme(spring);
-        springReview.setUser(admin2);
+        springReview.setUser(maksim);
         reviewService.addReview(springReview);
 
-        Review springReviewPassed2 = new Review(); // ревью, которое сдал User
+        Review springReviewPassed2 = new Review();
         springReviewPassed2.setDate(LocalDateTime.of(2020, 3, 3, 23, 0));
         springReviewPassed2.setOpen(false);
         springReviewPassed2.setTheme(spring);
-        springReviewPassed2.setUser(user);
+        springReviewPassed2.setUser(anton);
         reviewService.addReview(springReviewPassed2);
 
         // add student reviews
-        StudentReview studentReview = new StudentReview(); // студент-ревью, которое я прошел, чтобы теперь принимать спринг
-        studentReview.setUser(user);
+        StudentReview studentReview = new StudentReview();
+        studentReview.setUser(anton);
         studentReview.setPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
 
-        StudentReview studentReview2 = new StudentReview(); // чувак 1, который записался ко мне на ревью
-        studentReview2.setUser(admin2);
+        StudentReview studentReview2 = new StudentReview();
+        studentReview2.setUser(anton);
         studentReview2.setReview(springReview);
         studentReviewService.addStudentReview(studentReview2);
 
-        StudentReview studentReview3 = new StudentReview(); // чувак 2, котороый записался ко мне на ревью
-        studentReview3.setUser(user2);
+        StudentReview studentReview3 = new StudentReview();
+        studentReview3.setUser(testUser);
         studentReview3.setReview(springReview);
         studentReviewService.addStudentReview(studentReview3);
 
-        StudentReview studentReview4 = new StudentReview(); // чувак 3, котороый записался ко мне на ревью
-        studentReview4.setUser(admin);
+        StudentReview studentReview4 = new StudentReview();
+        studentReview4.setUser(roman);
         studentReview4.setReview(springReview);
         studentReviewService.addStudentReview(studentReview4);
 

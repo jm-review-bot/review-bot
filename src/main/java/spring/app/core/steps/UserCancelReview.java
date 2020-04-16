@@ -10,7 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.USER_MENU_KB;
+import static spring.app.util.Keyboards.YES_NO_KB;
 
 
 @Component
@@ -40,8 +41,7 @@ public class UserCancelReview extends Step {
             // если зафиксирован инпут на этом шаге, и это "да"
             // говорим, что запись на данное ревью удалена
             text = savedInput.get(0);
-            keyboard = BACK_KB;
-            removeUserStorage(vkId, USER_CANCEL_REVIEW);
+            keyboard = USER_MENU_KB;
         }
     }
 
@@ -49,24 +49,33 @@ public class UserCancelReview extends Step {
     public void processInput(BotContext context) throws ProcessInputException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
-        // на этом шаге мы ждем либо "Да" либо "Нет"
-        // + стандартные команды на выход в начало или назад
+
         String wordInput = StringParser.toWordsArray(currentInput)[0];
-        if (wordInput.equals("назад")
-                || wordInput.equals("нет")
-                || wordInput.equals("отмена")) {
-            removeUserStorage(vkId, USER_CANCEL_REVIEW);
-            nextStep = USER_MENU;
-        } else if (wordInput.equals("/start")) {
-            removeUserStorage(vkId, USER_CANCEL_REVIEW);
-            nextStep = START;
-        } else if (wordInput.equals("да")) {
-            context.getStudentReviewService().deleteStudentReviewByVkId(vkId);
-            List<String> savedMessage = Arrays.asList("Запись на ревью была удалена.");
-            updateUserStorage(vkId, USER_CANCEL_REVIEW, savedMessage);
-            nextStep = USER_CANCEL_REVIEW;
+        if (getUserStorage(vkId, USER_CANCEL_REVIEW) == null) {
+            if (wordInput.equals("нет")) {
+                removeUserStorage(vkId, USER_CANCEL_REVIEW);
+                nextStep = USER_MENU;
+            } else if (wordInput.equals("/start")) {
+                removeUserStorage(vkId, USER_CANCEL_REVIEW);
+                nextStep = START;
+            } else if (wordInput.equals("да")) {
+                context.getStudentReviewService().deleteStudentReviewByVkId(vkId);
+                List<String> savedMessage = Arrays.asList("Запись на ревью была удалена.");
+                updateUserStorage(vkId, USER_CANCEL_REVIEW, savedMessage);
+                nextStep = USER_CANCEL_REVIEW;
+            } else {
+                throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" для удаления записи на ревью или \"Нет\" для выхода в главное меню.");
+            }
         } else {
-            throw new ProcessInputException("Введена неверная команда. Введите \"Да\" или \"Нет\" или \"/start\" чтобы вернуться в начало ...");
+            if (wordInput.equals("главное")) {
+                removeUserStorage(vkId, USER_CANCEL_REVIEW);
+                nextStep = USER_MENU;
+            } else if (wordInput.equals("/start")) {
+                removeUserStorage(vkId, USER_CANCEL_REVIEW);
+                nextStep = START;
+            } else {
+                throw new ProcessInputException("Введена неверная команда. Для выхода нажми на кнопку \"Главное меню\"");
+            }
         }
     }
 }
