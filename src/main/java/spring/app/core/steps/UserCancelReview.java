@@ -43,7 +43,6 @@ public class UserCancelReview extends Step {
             // если зафиксирован инпут на этом шаге, и это "да"
             // говорим, что запись на данное ревью удалена
             text = savedInput.get(0);
-            storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
             keyboard = USER_MENU_KB;
         }
     }
