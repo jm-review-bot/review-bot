@@ -69,7 +69,7 @@ public class UserPassReviewAddTheme extends Step {
         String currentInput = context.getInput();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
-        if (StringParser.isNumeric(currentInput)) {
+        if (studentReview == null && StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             //проверяем или номер темы не выходит за рамки
             if (command > 0 & command <= themes.size()) {
