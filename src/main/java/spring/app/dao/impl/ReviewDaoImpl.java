@@ -9,6 +9,7 @@ import spring.app.model.Theme;
 import spring.app.model.StudentReview;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,11 +77,12 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .getResultList();
     }
 
-    public Review getMyReview(Integer vkId, LocalDateTime localDateTime){
+    public List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime){
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :vkId AND r.isOpen = true AND r.date > :date", Review.class)
                 .setParameter("vkId", vkId)
                 .setParameter("date", localDateTime)
-                .getSingleResult();
+                .getResultList();
+//        return org.springframework.dao.support.DataAccessUtils.singleResult(query.getResultList());
     }
 
     /**

@@ -53,7 +53,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
         entityManager.flush();
         entityManager.clear();
         entityManager.createQuery("DELETE FROM StudentReview x WHERE x IN (" +
-                "SELECT sr FROM StudentReview sr JOIN User u ON u.id = sr.user.id WHERE sr.user.vkId =:id)")
+                "SELECT sr FROM StudentReview sr JOIN User u ON u.id = sr.user.id WHERE sr.user.vkId =:id AND sr.review.isOpen = true)")
                 .setParameter("id", vkId)
                 .executeUpdate();
     }

@@ -12,6 +12,7 @@ import spring.app.util.StringParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
@@ -27,13 +28,28 @@ public class UserPassReviewGetListReview extends Step {
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
         Theme theme = context.getThemeService().getThemeById(Long.parseLong(getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
         // получаю созданное мною ревью, если оно имеется
-        Review reviewMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+        List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
         List<Review> reviews;
         //получаю список ревью по теме
-        if (reviewMy == null) {
+        if (reviewsMy.size() == 0) {
             reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
         }else{
-            reviews = context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewMy.getDate(), 60);
+            reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+            Set<Review> reviewList = new HashSet<>();
+            Set<Review> reviewListNew = new HashSet<>();
+            reviewList.addAll(reviews);
+            for (Review reviewOneMy : reviewsMy){
+//                            reviewList.removeAll(context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), review.getDate(), 59));
+                for (Review review : context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)){
+                    if(reviewList.contains(review)){
+                        reviewListNew.add(review);
+                    }
+                }
+                reviewList.clear();
+                reviewList.addAll(reviewListNew);
+                reviewListNew.clear();
+            }
+            reviews = reviewList.stream().collect(Collectors.toList());
         }
         //список ревью сортирую по дате
         reviews.sort(Comparator.comparing(Review::getDate));
