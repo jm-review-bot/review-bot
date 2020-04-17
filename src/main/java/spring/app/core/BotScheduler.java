@@ -9,6 +9,7 @@ import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 
@@ -23,14 +24,16 @@ public class BotScheduler {
     private final UserService userService;
     private final StepHolder stepHolder;
     private final ChatBot bot;
+    private final StorageService storageService;
     private long timeCounter;
 
-    public BotScheduler(VkService vkService, ReviewService reviewService, ChatBot bot, UserService userService, StepHolder stepHolder) {
+    public BotScheduler(VkService vkService, ReviewService reviewService, ChatBot bot, UserService userService, StepHolder stepHolder, StorageService storageService) {
         this.vkService = vkService;
         this.reviewService = reviewService;
         this.bot = bot;
         this.userService = userService;
         this.stepHolder = stepHolder;
+        this.storageService = storageService;
     }
 
     @Scheduled(fixedDelayString = "${bot.operations_interval}")
