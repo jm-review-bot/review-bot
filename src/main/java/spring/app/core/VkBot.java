@@ -73,11 +73,19 @@ public class VkBot implements ChatBot {
         for (Message message : messages) {
             // Берем vkid пользователя
             userVkId = message.getUserId();
-            input = message.getBody();
-            // 3 строчки ниже для парсинга ссылки на хэнгаутс
-            // в качестве пользовательского ввода берем ссылку из вложения к сообщению
-            if (message.getAttachments() != null) {
-                input = message.getAttachments().get(0).getLink().getUrl();
+            // Первая проверка: Если пользователь выслал смайл, заменяем его на пустую строку
+            // Вторая проверка: Если в сообщении есть вложение, проверяю на наличие ссылки на хэнгаутс
+            if (message.getEmoji() == true) {
+                input = "";
+            } else if (message.getAttachments() != null) {
+                // в качестве пользовательского ввода берем ссылку из вложения к сообщению
+                if (message.getAttachments().get(0).getLink() != null) {
+                    input = message.getAttachments().get(0).getLink().getUrl();
+                } else {
+                    input = message.getBody();
+                }
+            } else {
+                input = message.getBody();
             }
             User user;
             // проверяем есть ли юзер у нас в БД, если нет, получаем исключение и отправляем Юзеру сообщение и выходим из цикла
