@@ -12,4 +12,8 @@ public interface StorageService {
 
     void removeUserStorage(Integer vkId, StepSelector step);
 
+    void clearStorage();
+
+    void clearUsersOfStorage(Integer userToDelete);
+
 }

@@ -70,4 +70,11 @@ public class BotScheduler {
             }
         }
     }
+
+    // задание для полного очищения кэша в заданное время
+    @Scheduled(cron = "${bot.clear_cache}")
+    public void scheduleClearCache() {
+        log.info("Скрипт запущен. Началась очистка кэша.");
+        storageService.clearStorage();
+    }
 }

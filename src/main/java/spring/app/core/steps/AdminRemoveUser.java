@@ -106,11 +106,11 @@ public class AdminRemoveUser extends Step {
             }
         } else if (wordInput.equals("да")) {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
-            // удаляем юзеров
-            usersToDelete.forEach(userIdString ->
-                    context.getUserService()
-                            .deleteUserById(Long.parseLong(userIdString))
-            );
+            // удаляем юзеров и удаляем записи данных юзеров из кэша
+            usersToDelete.forEach(userIdString -> {
+                storageService.clearUsersOfStorage(context.getUserService().getUserById(Long.parseLong(userIdString)).getVkId());
+                context.getUserService().deleteUserById(Long.parseLong(userIdString));
+            });
             // обязательно очищаем память
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
