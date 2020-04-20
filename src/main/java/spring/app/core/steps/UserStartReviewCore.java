@@ -12,6 +12,7 @@ import spring.app.model.Question;
 import spring.app.model.StudentReview;
 import spring.app.model.StudentReviewAnswer;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
@@ -37,15 +38,16 @@ public class UserStartReviewCore extends Step {
 
     @Override
     public void enter(BotContext context) {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         // Получаю reviewId из хранилища и список студентов, записанных на ревью
-        Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
+        Long reviewId = Long.parseLong(storageService.getUserStorage(vkId, USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
         // получаем список вопросов, отсортированных по позиции, которые соответствуют теме ревью
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
         // формирую сообщение со списком участников
-        StringBuilder textBuilder = new StringBuilder(getUserStorage(vkId, USER_START_REVIEW_RULES).get(0));
+        StringBuilder textBuilder = new StringBuilder(storageService.getUserStorage(vkId, USER_START_REVIEW_RULES).get(0));
         // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
         // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
         if (!questionNumbers.containsKey(vkId)) {
@@ -65,7 +67,7 @@ public class UserStartReviewCore extends Step {
             } else {
                 // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer
                 // строки корректные, мы их проверяли в processInput()
-                List<String> reviewerInput = getUserStorage(vkId, USER_START_REVIEW_CORE);
+                List<String> reviewerInput = storageService.getUserStorage(vkId, USER_START_REVIEW_CORE);
                 for (int j = 0; j < reviewerInput.size(); j++) {
                     String[] studentAnswers = reviewerInput.get(j).split(" ");
                     for (String answer : studentAnswers) {
@@ -89,8 +91,8 @@ public class UserStartReviewCore extends Step {
                     }
                 }
                 // очищаем ввод ревьюера из STORAGE
-                removeUserStorage(vkId, USER_START_REVIEW_CORE);
-                removeUserStorage(vkId, USER_START_REVIEW_RULES);
+                storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
+                storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
                 // добавляем очки за прием ревью
                 User user = context.getUserService().getByVkId(vkId);
                 user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);
@@ -150,26 +152,27 @@ public class UserStartReviewCore extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
-        Long reviewId = Long.parseLong(getUserStorage(vkId, USER_MENU).get(0));
+        Long reviewId = Long.parseLong(storageService.getUserStorage(vkId, USER_MENU).get(0));
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
         if (userInput.equalsIgnoreCase("/start")) { // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
             nextStep = START;
             questionNumbers.keySet().remove(vkId);
-            removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_MENU);
             // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
         } else if (questionNumbers.get(vkId) == questions.size()) {
             if (userInput.equalsIgnoreCase("главное меню")) {
                 nextStep = USER_MENU;
                 questionNumbers.keySet().remove(vkId);
-                removeUserStorage(vkId, USER_MENU);
+                storageService.removeUserStorage(vkId, USER_MENU);
             } else if (userInput.equalsIgnoreCase("/start")) {
                 nextStep = START;
                 questionNumbers.keySet().remove(vkId);
-                removeUserStorage(vkId, USER_MENU);
+                storageService.removeUserStorage(vkId, USER_MENU);
             } else {
                 throw new ProcessInputException("Для выхода в главное меню нажми кнопку \"Главное меню\"");
             }
@@ -181,12 +184,12 @@ public class UserStartReviewCore extends Step {
             if (questionNumber == 0) {
                 List<String> results = new ArrayList<>();
                 results.add(questionNumber, userInput);
-                updateUserStorage(vkId, USER_START_REVIEW_CORE, results);
+                storageService.updateUserStorage(vkId, USER_START_REVIEW_CORE, results);
                 log.warn("Сохранен ответ {} на вопрос по индексу {}", userInput, questionNumber);
             } else {
-                List<String> results = getUserStorage(vkId, USER_START_REVIEW_CORE);
+                List<String> results = storageService.getUserStorage(vkId, USER_START_REVIEW_CORE);
                 results.add(questionNumber, userInput);
-                updateUserStorage(vkId, USER_START_REVIEW_CORE, results);
+                storageService.updateUserStorage(vkId, USER_START_REVIEW_CORE, results);
                 log.warn("Сохранен ответ {} на вопрос по индексу {}", userInput, questionNumber);
             }
             // увеличиваем номер вопроса на 1, т.о. переходя к следующему

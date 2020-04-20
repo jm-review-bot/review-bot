@@ -8,6 +8,7 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ public class UserPassReviewAddTheme extends Step {
 
     @Override
     public void enter(BotContext context) {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
 
@@ -39,9 +41,9 @@ public class UserPassReviewAddTheme extends Step {
 
         } else {
             StringBuilder themeList = new StringBuilder();
-            if (getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME) != null){
+            if (storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME) != null){
                 themeList.append("Выбранное Вами ревью уже заполнено!\n\n");
-                removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
             }
             //формирую список тем и вывожу его как нумерованный список
             context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
@@ -73,6 +75,7 @@ public class UserPassReviewAddTheme extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
+        StorageService storageService = context.getStorageService();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
         if (studentReview == null && StringParser.isNumeric(currentInput)) {
@@ -123,7 +126,7 @@ public class UserPassReviewAddTheme extends Step {
                         //если нашли хоть одно открытое ревью по выбранной теме, сохраняем ID темы для следующего шага
                         List<String> list = new ArrayList<>();
                         list.add(theme.getId().toString());
-                        updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
+                        storageService.updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
                         nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
                     }
                 } else {

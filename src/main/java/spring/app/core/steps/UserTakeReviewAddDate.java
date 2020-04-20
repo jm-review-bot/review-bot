@@ -7,6 +7,7 @@ import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.Theme;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -27,14 +28,15 @@ public class UserTakeReviewAddDate extends Step {
 
     @Override
     public void enter(BotContext context) {
+        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
-        Long themeId = (Long.parseLong(getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
+        Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
         Theme theme = context.getThemeService().getThemeById(themeId);
-        List<String> errorMessages = getUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
+        List<String> errorMessages = storageService.getUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
         StringBuilder textBuilder = new StringBuilder();
         if (errorMessages != null) {
             textBuilder.append(errorMessages.get(0));
-            removeUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
         }
         textBuilder.append(String.format("Ты выбрал тему: %s", theme.getTitle()))
                 .append(".\n\n Укажи время и дату для принятия ревью в формате ДД.ММ.ГГГГ ЧЧ:ММ по Московскому часовому поясу.\n Пример корректного ответа 02.06.2020 17:30\n\n")
@@ -47,17 +49,18 @@ public class UserTakeReviewAddDate extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
+        StorageService storageService = context.getStorageService();
         String userInput = context.getInput();
         Integer vkId = context.getVkId();
         LocalDateTime plannedStartReviewTime;
         if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
             // очищаем данные, введенные этом шаге
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
             // очищаем данные, введенные этом шаге
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
         } else {
             try {
                 plannedStartReviewTime = StringParser.stringToLocalDateTime(userInput);
@@ -88,7 +91,7 @@ public class UserTakeReviewAddDate extends Step {
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
                     throw new ProcessInputException(conflictExceptionMessage.toString());
                 } else {
-                    updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE, Arrays.asList(userInput));
+                    storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE, Arrays.asList(userInput));
                     nextStep = USER_TAKE_REVIEW_CONFIRMATION;
                 }
             } else if (plannedStartReviewTime.isBefore(LocalDateTime.now())) {

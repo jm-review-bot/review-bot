@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
+import spring.app.service.abstraction.StorageService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,6 +34,7 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
+        StorageService storageService = context.getStorageService();
         String userInput = context.getInput();
         Integer vkId = context.getVkId();
         List<String> themePositionsList = themes.keySet().stream()
@@ -47,7 +49,7 @@ public class UserTakeReviewAddTheme extends Step {
                     .collect(toList());
             if (passedThemesIds.contains(themeId)) {
                 // складываем в хранилище для использования в следующих шагах
-                updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(themeId));
+                storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(themeId));
                 nextStep = USER_TAKE_REVIEW_ADD_DATE;
             } else {
                 nextStep = USER_TAKE_REVIEW_ADD_THEME;
@@ -57,16 +59,16 @@ public class UserTakeReviewAddTheme extends Step {
         } else if (userInput.equalsIgnoreCase("назад")) {
             nextStep = USER_MENU;
             // очищаем данные с этого шага и со следующего, если они есть
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
-            if (getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE) != null) {
-                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            if (storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE) != null) {
+                storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
             }
         } else if (userInput.equalsIgnoreCase("/start")) {
             nextStep = START;
             // очищаем данные с этого шага и со следующего, если они есть
-            removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
-            if (getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE) != null) {
-                removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
+            storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
+            if (storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE) != null) {
+                storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
             }
         } else {
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
