@@ -9,6 +9,7 @@ import spring.app.model.Theme;
 import spring.app.model.StudentReview;
 
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -73,6 +74,29 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("period_end", periodStart.plusMinutes(reviewDuration))
                 .setParameter("vk_id", vkId)
                 .setParameter("review_duration", reviewDuration)
+                .getResultList();
+    }
+
+    public List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime){
+        return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :vkId AND r.isOpen = true AND r.date > :date", Review.class)
+                .setParameter("vkId", vkId)
+                .setParameter("date", localDateTime)
+                .getResultList();
+//        return org.springframework.dao.support.DataAccessUtils.singleResult(query.getResultList());
+    }
+
+    /**
+     * Метод возвращает ревью по выбранной теме при условии, что записанных на ревью менее трех
+     *
+     * @param theme
+     */
+    public List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes) {
+        return entityManager.createQuery("SELECT r FROM Review r join fetch r.user ru LEFT JOIN StudentReview sr ON r.id = sr.review.id WHERE r.theme = :theme AND r.isOpen = true AND r.date > :date AND r.date < :date_start OR r.date > :date_end AND r.user.id <> :id group by r, ru having count(all r) < 3", Review.class)
+                .setParameter("id", id)
+                .setParameter("theme", theme)
+                .setParameter("date", localDateTime)
+                .setParameter("date_start", dateTimeMyReview.minusMinutes(numberOfMinutes))
+                .setParameter("date_end", dateTimeMyReview.plusMinutes(numberOfMinutes))
                 .getResultList();
     }
 

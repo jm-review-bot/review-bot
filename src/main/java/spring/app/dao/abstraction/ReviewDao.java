@@ -16,6 +16,10 @@ public interface ReviewDao extends GenericDao<Long, Review> {
 
     Review getOpenReviewByStudentVkId(Integer vkId);
 
+    List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime);
+
+    List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes);
+
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
     List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);

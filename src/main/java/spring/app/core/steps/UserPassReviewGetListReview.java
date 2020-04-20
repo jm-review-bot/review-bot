@@ -13,6 +13,7 @@ import spring.app.util.StringParser;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
@@ -22,15 +23,35 @@ import static spring.app.util.Keyboards.BACK_KB;
 public class UserPassReviewGetListReview extends Step {
     private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();
 
-
     @Override
     public void enter(BotContext context) {
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
         Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
+        // получаю созданное мною ревью, если оно имеется
+        List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+        List<Review> reviews;
         //получаю список ревью по теме
-        List<Review> reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+        if (reviewsMy.size() == 0) {
+            reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+        }else{
+            reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+            Set<Review> reviewList = new HashSet<>();
+            Set<Review> reviewListNew = new HashSet<>();
+            reviewList.addAll(reviews);
+            for (Review reviewOneMy : reviewsMy){
+                for (Review review : context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)){
+                    if(reviewList.contains(review)){
+                        reviewListNew.add(review);
+                    }
+                }
+                reviewList.clear();
+                reviewList.addAll(reviewListNew);
+                reviewListNew.clear();
+            }
+            reviews = reviewList.stream().collect(Collectors.toList());
+        }
         //список ревью сортирую по дате
         reviews.sort(Comparator.comparing(Review::getDate));
 
@@ -90,8 +111,14 @@ public class UserPassReviewGetListReview extends Step {
                     //сообщение: Выбранное Вами ревью уже заполнено!
                     reviewsIndex.keySet().remove(vkId);
                 } else {
-                    //если выбранном ревью не осталось свободных мест, занчит повторяем данный шаг
-                    nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
+                    // если количество ревью по выбранной теме меньше однго, возвращаюсь на прошлый шаг
+                    if (allReviewsAndIndex.size() == 1) {
+                        nextStep = USER_PASS_REVIEW_ADD_THEME;
+                        reviewsIndex.keySet().remove(vkId);
+                    } else {
+                        // если выбранном ревью не осталось свободных мест, занчит повторяем данный шаг
+                        nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
+                    }
                 }
             } else {
                 throw new ProcessInputException("Введен неверный номер ревью...");
