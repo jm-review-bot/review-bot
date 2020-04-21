@@ -13,7 +13,6 @@ import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
@@ -86,37 +85,10 @@ public class UserPassReviewAddTheme extends Step {
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
-                    // получаю список созданных мною ревью, если они имеется
-                    List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
-                    List<Review> reviews;
                     //получаю список ревью по теме
-                    if (reviewsMy.size() == 0) {
-                        // т.к. созданных мною ревью нету, тогда в запросе не учитываю время созданных мною ревью
-                        reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
-                    }else{
-                        // т.к. имеются созданныю мною ревью, нужно отфильтровать список ревью по теме, чтобы они не пересекались с моими ревью
-                        reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
-                        // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
-                        Set<Review> reviewList = new HashSet<>();
-                        Set<Review> reviewListNew = new HashSet<>();
-                        reviewList.addAll(reviews);
-                        // перебор списка моих ревью
-                        for (Review reviewOneMy : reviewsMy){
-                            // получаю список ревью которые не пересекаются с моим ревью и перебираю их поштучно
-                            for (Review review : context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)){
-                                // если такое ревью встречалось на прошлом проходе, добавляю его в множество
-                                if(reviewList.contains(review)){
-                                    reviewListNew.add(review);
-                                }
-                            }
-                            reviewList.clear();
-                            reviewList.addAll(reviewListNew);
-                            reviewListNew.clear();
-                        }
-                        reviews = reviewList.stream().collect(Collectors.toList());
-                    }
+                    List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
                     //проверяем наличие открытых ревью по данной теме
-                    if (reviews.isEmpty()) {
+                    if (reviewsAll.isEmpty()) {
                         nextStep = USER_MENU;
                         throw new ProcessInputException("К сожалению, сейчас никто не готов принять " +
                                 "ревью, напиши в общее обсуждение сообщение с просьбой добавить кого-то " +
