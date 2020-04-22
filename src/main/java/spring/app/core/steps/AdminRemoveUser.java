@@ -69,14 +69,15 @@ public class AdminRemoveUser extends Step {
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
 
-        if (wordInput.equals("назад")
-                || wordInput.equals("нет")
-                || wordInput.equals("отмена")) {
+        if (wordInput.equals("назад") || wordInput.equals("отмена")) {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = START;
+        } else if (wordInput.equals("нет")){
+            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
+            nextStep = ADMIN_REMOVE_USER;
         } else if (savedInput == null || savedInput.isEmpty()) {
             // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
             // vkId для удаления input. Сохраняем в память введенный текст
