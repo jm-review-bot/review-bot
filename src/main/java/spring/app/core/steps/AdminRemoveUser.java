@@ -9,16 +9,15 @@ import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
+
+    private Set<Integer> deleteUsersOk = new HashSet<>();
 
     @Override
     public void enter(BotContext context) {
@@ -33,7 +32,6 @@ public class AdminRemoveUser extends Step {
             List<String> usersToDelete = new ArrayList<>();
             final int[] i = {1};
             context.getUserService().getAllUsers().stream()
-                    .filter(user -> !user.getRole().isAdmin())
                     .sorted(Comparator.comparing(User::getLastName))
                     .forEach(user -> {
                         userList.append("[").append(i[0]++).append("] ")
@@ -41,8 +39,11 @@ public class AdminRemoveUser extends Step {
                                 .append(" ")
                                 .append(user.getFirstName())
                                 .append(", https://vk.com/id")
-                                .append(user.getVkId())
-                                .append("\n");
+                                .append(user.getVkId());
+                        if (!user.getRole().isAdmin()) {
+                            userList.append(" (админ)");
+                        }
+                        userList.append("\n");
                         // сохраняем ID юзера в лист
                         usersToDelete.add(user.getId().toString());
                     });
@@ -55,6 +56,11 @@ public class AdminRemoveUser extends Step {
             // т.к. там могло выпасть исключение, если юзер вводит заведомо неверные данные
             text = savedInput.get(0);
             keyboard = YES_NO_KB;
+        }
+        // если id пользователя есть в Set, значит им был удален пользователь(и)
+        if (deleteUsersOk.contains(vkId)) {
+            text = "Пользователь(ли) удален(ы).\n\n" + text;
+            deleteUsersOk.remove(vkId);
         }
     }
 
@@ -75,7 +81,7 @@ public class AdminRemoveUser extends Step {
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = START;
-        } else if (wordInput.equals("нет")){
+        } else if (wordInput.equals("нет")) {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = ADMIN_REMOVE_USER;
         } else if (savedInput == null || savedInput.isEmpty()) {
@@ -112,6 +118,8 @@ public class AdminRemoveUser extends Step {
                     context.getUserService()
                             .deleteUserById(Long.parseLong(userIdString))
             );
+            // сохраняю id пользователя, чтобы вывести текст об успешном удалении
+            deleteUsersOk.add(vkId);
             // обязательно очищаем память
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
