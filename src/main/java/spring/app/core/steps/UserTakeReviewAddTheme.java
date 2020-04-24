@@ -21,6 +21,9 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserTakeReviewAddTheme");
+        //======
         context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n ");
         themeList.append("Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");

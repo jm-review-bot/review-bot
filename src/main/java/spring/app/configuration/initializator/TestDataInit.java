@@ -81,6 +81,9 @@ public class TestDataInit {
     @Autowired
     private Step userStartReviewCore;
 
+    @Autowired
+    private Step deleteReview;
+
     public TestDataInit() {
     }
 
@@ -157,6 +160,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
+        steps.put(StepSelector.DELETE_REVIEW, deleteReview);
 
         //add themes
         Theme core = new Theme();

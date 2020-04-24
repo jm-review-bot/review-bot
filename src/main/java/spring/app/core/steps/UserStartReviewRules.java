@@ -22,6 +22,9 @@ public class UserStartReviewRules extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserStartReviewRules");
+        //======
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         // Получаю reviewId из хранилища и список студентов, записанных на ревью

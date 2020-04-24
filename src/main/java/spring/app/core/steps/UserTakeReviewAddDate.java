@@ -28,6 +28,9 @@ public class UserTakeReviewAddDate extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserTakeReviewAddDate");
+        //======
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));

@@ -25,6 +25,9 @@ public class UserPassReviewGetListReview extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserPassReviewGetListReview");
+        //======
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему

@@ -13,6 +13,9 @@ public class AdminMenu extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"AdminMenu");
+        //======
         text = String.format("Привет %s! Ты в админке", context.getUser().getFirstName());
         keyboard = ADMIN_MENU_KB;
     }

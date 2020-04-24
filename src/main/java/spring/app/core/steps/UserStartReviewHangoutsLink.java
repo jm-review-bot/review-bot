@@ -23,6 +23,9 @@ public class UserStartReviewHangoutsLink extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserStartReviewHangoutsLink");
+        //======
         text = "Чтобы начать ревью, необходимо создать разговор в hangouts, для этого перейди по ссылке https://hangouts.google.com/hangouts/_/ ," +
                 " подключись к диалогу нажми \"пригласить участников\" и скопируй ссылку." +
                 " Важно! Не копируй ссылку из браузерной строки, копировать надо именно ссылку из модального окна приглашения участников." +

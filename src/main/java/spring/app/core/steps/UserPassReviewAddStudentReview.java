@@ -15,6 +15,9 @@ public class UserPassReviewAddStudentReview extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserPassReviewAddStudentReview");
+        //======
         StorageService storageService = context.getStorageService();
         //получаю дату ревью с прошлого шага
         String date = storageService.getUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW).get(0);

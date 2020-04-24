@@ -26,6 +26,9 @@ public class UserTakeReviewConfirmation extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserTakeReviewConfirmation");
+        //======
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //достаем из глобального хранилища номер темы, введенной пользователем на предыдущем шаге

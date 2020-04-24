@@ -22,6 +22,9 @@ public class AdminRemoveUser extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"AdminRemoveUser");
+        //======
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
         List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER);

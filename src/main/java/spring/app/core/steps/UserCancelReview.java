@@ -20,6 +20,9 @@ public class UserCancelReview extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserCancelReview");
+        //======
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
         List<String> savedInput = storageService.getUserStorage(vkId, USER_CANCEL_REVIEW);

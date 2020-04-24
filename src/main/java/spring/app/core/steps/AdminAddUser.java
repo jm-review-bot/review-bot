@@ -24,6 +24,9 @@ public class AdminAddUser extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"AdminAddUser");
+        //======
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
 

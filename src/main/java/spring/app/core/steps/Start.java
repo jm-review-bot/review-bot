@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
@@ -13,7 +14,9 @@ public class Start extends Step {
 
     @Override
     public void enter(BotContext context) {
-
+        //======
+        System.out.println("BEGIN_STEP::"+"Start");
+        //======
         text = "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
         keyboard = START_KB;
         if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
@@ -33,7 +36,10 @@ public class Start extends Step {
             nextStep = USER_MENU;
         } else if (command.equals("/start")) {
             nextStep = START;
-        } else {
+        } else if (command.equals("/delete")) {
+            nextStep = StepSelector.DELETE_REVIEW;
+        }
+        else {
             keyboard = START_KB;
             throw new ProcessInputException("Введена неверная команда...");
         }

@@ -26,6 +26,9 @@ public class UserPassReviewAddTheme extends Step {
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserPassReviewAddTheme");
+        //======
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
