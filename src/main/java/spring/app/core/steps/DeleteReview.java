@@ -3,6 +3,7 @@ package spring.app.core.steps;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Question;
 import spring.app.model.Review;
@@ -10,6 +11,7 @@ import spring.app.model.User;
 import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
@@ -17,6 +19,7 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class DeleteReview extends Step {
+    public static HashMap<Integer, Integer> specMap = new HashMap<Integer, Integer>();
     //public static boolean error;
     //public static int countReviews = -1;
     //public static Review specReview;
@@ -24,7 +27,13 @@ public class DeleteReview extends Step {
     public void enter(BotContext context) {//здесь выводится текст в чате при переходе на этот step
         //======
         System.out.println("BEGIN_STEP::"+"DeleteReview");
-        //error = false;
+        if(specMap.get(context.getUser().getVkId())==null) {
+            System.out.println("--||---||--||--userVkId---"+context.getUser().getVkId()+"------");
+            specMap.put(context.getUser().getVkId(),new Integer(-1));
+               //DeleteReview.specMap.remove(userVkId);
+               //DeleteReview.specMap.put(userVkId,new Integer(-1));
+            System.out.println("--||---||--||--userVkId---"+context.getUser().getVkId()+"------");
+        }
         //======
                     List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
                     //==================================== если нет ни одного ревью, то в чат даётся сообщение об ошибке
@@ -57,12 +66,10 @@ public class DeleteReview extends Step {
         //ТЫ УЖЕ НА ЭТОМ STEP`Е
         //Тут обработчики твоих возможных команд, которые ты вводишь УЖЕ БУДУЧИ НА ЭТОМ STEP`е
         String command = context.getInput();
-        if("Назад".equals(command)) {
-            nextStep = USER_MENU;//START;
-        } else if(NumberUtils.isNumber(command)) {
-            int numberReview = Integer.parseInt(command);
-            List<Review> rs = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
-            if ((numberReview>0) && (numberReview<=rs.size())) {
+        if(("Отмена".equals(command) || "Да, отменить ревью".equals(command)) && (specMap.get(context.getVkId()).intValue() != -1)) {
+            if("Да, отменить ревью".equals(command)) {
+                int numberReview = specMap.get(context.getVkId()).intValue();
+                List<Review> rs = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
                 Review specReview = deleteReview(
                         rs.get(numberReview-1),
                         context.getThemeService(),
@@ -72,8 +79,41 @@ public class DeleteReview extends Step {
                         context.getVkService(),
                         context.getVkId()
                 );
+                specMap.put(context.getVkId(),new Integer(-1));//фэлс-ин-хэшмап
+                   //specMap.remove(context.getVkId());
+                   //specMap.put(context.getVkId(), new Integer(-1));
+                keyboard = BACK_KB;
                 nextStep = USER_MENU;//keyboard = BACK_KB;
                 throw new ProcessInputException("Ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"} было успешно отменено.\n");
+                //
+            } else {
+                List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
+                String selectReview = "Выберете ревью, которое хотите отменить:\n";
+                int i = 1;
+                for(Review review: reviews) {
+                    selectReview = selectReview.concat("["+i+"] {"+context.getThemeService().getThemeById(review.getTheme().getId()).getTitle()+"} - {"+review.getDate()+"}\n");
+                    i++;
+                }
+                specMap.put(context.getVkId(),new Integer(-1));//фэлс-ин-хэшмап
+                   //specMap.remove(context.getVkId());
+                   //specMap.put(context.getVkId(), new Integer(-1));
+                keyboard = BACK_KB;//nextStep = StepSelector.DELETE_REVIEW;
+                throw new ProcessInputException(selectReview);
+            }
+        }
+        if("Назад".equals(command)) {
+            nextStep = USER_MENU;//START;
+        } else if(NumberUtils.isNumber(command)) {
+            int numberReview = Integer.parseInt(command);
+            List<Review> rs = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
+            if ((numberReview>0) && (numberReview<=rs.size())) {
+                //“Вы действительно хотите отменить ревью {название темы} - {дата и время проведения}”
+                //И две кнопки: “отмена” и “да, отменить ревью”
+                specMap.put(context.getVkId(),Integer.valueOf(numberReview));
+                   //specMap.remove(context.getVkId());
+                   //specMap.put(context.getVkId(),Integer.valueOf(numberReview));
+                keyboard = CANCEL_OR_DELETE;
+                throw new ProcessInputException("Вы действительно хотите отменить ревью {"+context.getThemeService().getThemeById(rs.get(numberReview).getTheme().getId()).getTitle()+"} - {"+rs.get(numberReview).getDate()+"}.\n");
             } else {
                 keyboard = BACK_KB;
                 throw new ProcessInputException("Введённое число не является номером какого-либо ревью из списка. Введите корректное число.\n");

@@ -154,6 +154,30 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
+    public final static String CANCEL_OR_DELETE = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Да, отменить ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
     public final static String ADMIN_MENU_KB = "{\n" +
             "  \"one_time\": false,\n" +
             "  \"buttons\": [\n" +
