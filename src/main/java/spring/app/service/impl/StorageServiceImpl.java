@@ -57,4 +57,22 @@ public class StorageServiceImpl implements StorageService {
             STORAGE.get(vkId).remove(step);
         }
     }
+
+    /**
+     * метод который полностью очищает кэш
+     */
+
+    @Override
+    public void clearStorage() {
+        STORAGE.clear();
+    }
+
+    /**
+     * метод для удаления из кэша пользователей, после того как они будут удалены админом
+     */
+
+    @Override
+    public void clearUsersOfStorage(Integer userToDelete) {
+        STORAGE.keySet().remove(userToDelete);
+    }
 }
