@@ -9,16 +9,15 @@ import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
+
+    private Set<Integer> deleteUsersOk = new HashSet<>();
 
     @Override
     public void enter(BotContext context) {
@@ -33,7 +32,6 @@ public class AdminRemoveUser extends Step {
             List<String> usersToDelete = new ArrayList<>();
             final int[] i = {1};
             context.getUserService().getAllUsers().stream()
-                    .filter(user -> !user.getRole().isAdmin())
                     .sorted(Comparator.comparing(User::getLastName))
                     .forEach(user -> {
                         userList.append("[").append(i[0]++).append("] ")
@@ -41,8 +39,11 @@ public class AdminRemoveUser extends Step {
                                 .append(" ")
                                 .append(user.getFirstName())
                                 .append(", https://vk.com/id")
-                                .append(user.getVkId())
-                                .append("\n");
+                                .append(user.getVkId());
+                        if (user.getRole().isAdmin()) {
+                            userList.append(" (админ)");
+                        }
+                        userList.append("\n");
                         // сохраняем ID юзера в лист
                         usersToDelete.add(user.getId().toString());
                     });
@@ -55,6 +56,11 @@ public class AdminRemoveUser extends Step {
             // т.к. там могло выпасть исключение, если юзер вводит заведомо неверные данные
             text = savedInput.get(0);
             keyboard = YES_NO_KB;
+        }
+        // если id пользователя есть в Set, значит им был удален пользователь(и)
+        if (deleteUsersOk.contains(vkId)) {
+            text = "Пользователь(ли) удален(ы).\n\n" + text;
+            deleteUsersOk.remove(vkId);
         }
     }
 
@@ -69,14 +75,15 @@ public class AdminRemoveUser extends Step {
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
 
-        if (wordInput.equals("назад")
-                || wordInput.equals("нет")
-                || wordInput.equals("отмена")) {
+        if (wordInput.equals("назад") || wordInput.equals("отмена")) {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             nextStep = START;
+        } else if (wordInput.equals("нет")) {
+            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
+            nextStep = ADMIN_REMOVE_USER;
         } else if (savedInput == null || savedInput.isEmpty()) {
             // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
             // vkId для удаления input. Сохраняем в память введенный текст
@@ -109,8 +116,11 @@ public class AdminRemoveUser extends Step {
             // удаляем юзеров и удаляем записи данных юзеров из кэша
             usersToDelete.forEach(userIdString -> {
                 storageService.clearUsersOfStorage(context.getUserService().getUserById(Long.parseLong(userIdString)).getVkId());
-                context.getUserService().deleteUserById(Long.parseLong(userIdString));
+                context.getUserService()
+                        .deleteUserById(Long.parseLong(userIdString));
             });
+            // сохраняю id пользователя, чтобы вывести текст об успешном удалении
+            deleteUsersOk.add(vkId);
             // обязательно очищаем память
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
