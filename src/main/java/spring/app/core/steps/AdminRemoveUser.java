@@ -40,7 +40,7 @@ public class AdminRemoveUser extends Step {
                                 .append(user.getFirstName())
                                 .append(", https://vk.com/id")
                                 .append(user.getVkId());
-                        if (!user.getRole().isAdmin()) {
+                        if (user.getRole().isAdmin()) {
                             userList.append(" (админ)");
                         }
                         userList.append("\n");
