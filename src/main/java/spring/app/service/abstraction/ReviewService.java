@@ -26,6 +26,8 @@ public interface ReviewService {
 
     List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime);
 
+    List<Review> getMyReviewForDate(Integer vkId, LocalDateTime localDateTime, Integer numberOfMinutes);
+
     List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes);
 
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
