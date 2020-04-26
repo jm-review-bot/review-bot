@@ -30,10 +30,9 @@ public class UserPassReviewGetListReview extends Step {
         Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
         // получаю список созданных мною ревью, если они имеется
         List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
-        List<Review> reviewsAll;
         Set<Review> reviewsSetNoAccess = new HashSet<>();
         //получаю список ревью по теме
-        reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+        List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
         if (reviewsMy.size() > 0) {
             // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
             Set<Review> reviewsSetTemp = new HashSet<>();
@@ -72,9 +71,9 @@ public class UserPassReviewGetListReview extends Step {
         Map<Integer, Long> indexList = new HashMap<>();
         for (Review review : reviewsAll) {
             if (reviewsSetNoAccess.contains(review)) {
-                indexList.put(i, review.getId());
-            } else {
                 indexList.put(i, -review.getId());
+            } else {
+                indexList.put(i, review.getId());
             }
 
             reviewsIndex.putIfAbsent(vkId, indexList);
@@ -83,8 +82,8 @@ public class UserPassReviewGetListReview extends Step {
                     .append("]")
                     .append(" дата: ")
                     .append(review.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
-            if (!reviewsSetNoAccess.contains(review)) {
-                reviewList.append(" [запись невозможна: вы проводите ревью в это время]");
+            if (reviewsSetNoAccess.contains(review)) {
+                reviewList.append(" (запись невозможна: вы проводите ревью в это время)");
             }
             reviewList.append("\n");
             i++;
