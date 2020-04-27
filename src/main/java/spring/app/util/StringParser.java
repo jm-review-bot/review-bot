@@ -42,7 +42,11 @@ public class StringParser {
      * Удобно для считывания команд.
      */
     public static String[] toWordsArray(String text) {
-        return text.trim().toLowerCase().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
+        String[] strArray = text.trim().toLowerCase().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
+        if (strArray.length == 0){
+            strArray = new String[]{""};
+        }
+        return strArray;
     }
 
 
