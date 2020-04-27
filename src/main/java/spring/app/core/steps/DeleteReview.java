@@ -1,6 +1,8 @@
 package spring.app.core.steps;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -19,6 +21,8 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class DeleteReview extends Step {
+    private static final Logger logger = LoggerFactory.getLogger(
+            DeleteReview.class);
     public static HashMap<Integer, Integer> specMap = new HashMap<Integer, Integer>();
     //public static boolean error;
     //public static int countReviews = -1;
@@ -84,6 +88,10 @@ public class DeleteReview extends Step {
                    //specMap.put(context.getVkId(), new Integer(-1));
                 keyboard = BACK_KB;
                 nextStep = USER_MENU;//keyboard = BACK_KB;
+                //System.out.println("|-LOGGING-|-|-|-"+context.getUser().getLastName()+" "+context.getUser().getFirstName()+" отменил ревью, которое должен был принимать. " +
+                  //      "А именно - ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"}");
+                //logger.debug("Пользователь "+context.getUser().getLastName()+" "+context.getUser().getFirstName()+" отменил ревью, которое должен был принимать. " +
+                  //      "А именно - ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"}");
                 throw new ProcessInputException("Ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"} было успешно отменено.\n");
                 //
             } else {
