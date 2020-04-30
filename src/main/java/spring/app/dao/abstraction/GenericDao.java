@@ -5,6 +5,7 @@ import java.util.List;
 
 
 public interface GenericDao<PK extends Serializable, T> {
+
 	void save(T entity);
 
 	T getById(PK id);
@@ -14,4 +15,5 @@ public interface GenericDao<PK extends Serializable, T> {
 	void update(T group);
 
 	void deleteById(PK id);
+
 }

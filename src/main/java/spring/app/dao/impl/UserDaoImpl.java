@@ -1,39 +1,70 @@
 package spring.app.dao.impl;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Repository
-@Transactional
 public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
-	public UserDaoImpl() {
-		super(User.class);
-	}
+    public UserDaoImpl() {
+        super(User.class);
+    }
 
-	@Override
-	public User getUserByLogin(String login) {
-		User user = null;
-		try {
-			TypedQuery<User> query = entityManager.createQuery("SELECT u FROM User u WHERE u.login = :login OR u.email = :login", User.class);
-			query.setParameter("login", login);
-			user = query.getSingleResult();
-		} catch (NoResultException e) {
-			//logger
-		}
-		return user;
-	}
+    @Override
+    public User getByVkId(Integer vkId) throws NoResultException {
+        try {
+            TypedQuery<User> query = entityManager.createQuery(
+                    "SELECT u FROM User u WHERE u.vkId = :id", User.class);
+            query.setParameter("id", vkId);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            throw e;
+        }
+    }
 
-	@Override
-	public List<User> getAllUsers() {
+    @Override
+    public boolean isExistByVkId(Integer vkId) {
+        try {
+            entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :id", User.class).setParameter("id", vkId).getSingleResult();
+            return true;
+        } catch (NoResultException e) {
+            return false;
+        }
+    }
 
-		return (List<User>) entityManager.createNativeQuery("SELECT * FROM users", User.class).getResultList();
-	}
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void deleteUserByVkId(Integer vkId) throws NoResultException {
+        // Write all pending changes to the DB
+        entityManager.flush();
+        // Remove all entities from the persistence context
+        entityManager.clear();
+        entityManager.createQuery("DELETE FROM User u WHERE u.vkId = :id")
+                .setParameter("id", vkId)
+                .executeUpdate();
+    }
+
+    @Override
+    public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return (List<User>) entityManager.createNativeQuery("select u.* " +
+                "from users u join review r on u.id = r.reviewer_id where r.is_open = true and r.date between :period_start and :period_end", User.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodEnd)
+                .getResultList();
+    }
+
+    @Override
+    public List<User> getStudentsByReviewId(Long reviewId) {
+        return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id", User.class)
+                .setParameter("review_id", reviewId)
+                .getResultList();
+    }
 }

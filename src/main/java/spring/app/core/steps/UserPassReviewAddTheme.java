@@ -1,0 +1,169 @@
+package spring.app.core.steps;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import spring.app.core.BotContext;
+import spring.app.exceptions.NoNumbersEnteredException;
+import spring.app.exceptions.ProcessInputException;
+import spring.app.model.Review;
+import spring.app.model.StudentReview;
+import spring.app.model.Theme;
+import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
+import spring.app.util.StringParser;
+
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static spring.app.core.StepSelector.*;
+import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
+
+@Component
+public class UserPassReviewAddTheme extends Step {
+    private Logger logger = LoggerFactory.getLogger(
+            UserPassReviewAddTheme.class);
+    private Set<Integer> idsIfCancelStudentReview = new HashSet<>();
+    private Map<Integer, Theme> themes = new HashMap<>();
+
+    @Override
+    public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"UserPassReviewAddTheme");
+        //======
+        StorageService storageService = context.getStorageService();
+        Integer vkId = context.getVkId();
+        StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+
+        if (studentReview != null) {
+            text = String.format("Вы уже записаны на ревью:\n" +
+                            "Тема: %s\n" +
+                            "Дата: %s\n" +
+                            "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
+                    StringParser.localDateTimeToString(studentReview.getReview().getDate()));
+
+            keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
+
+        } else {
+            StringBuilder themeList = new StringBuilder();
+            if (storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME) != null){
+                themeList.append("Выбранное Вами ревью уже заполнено!\n\n");
+                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+            }
+            //формирую список тем и вывожу его как нумерованный список
+            context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
+            themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
+
+            for (Integer position : themes.keySet()) {
+                themeList.append("[")
+                        .append(position)
+                        .append("] ")
+                        .append(themes.get(position).getTitle())
+                        .append(", стоимость ")
+                        .append(themes.get(position).getReviewPoint())
+                        .append(" RP")
+                        .append("\n");
+            }
+
+            text = themeList.toString();
+
+            if (idsIfCancelStudentReview.contains(vkId)) {
+                text = "Ревью отменено.\n\n" + text;
+                idsIfCancelStudentReview.remove(vkId);
+            }
+
+            keyboard = BACK_KB;
+        }
+    }
+
+    @Override
+    public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
+        Integer vkId = context.getVkId();
+        String currentInput = context.getInput();
+        StorageService storageService = context.getStorageService();
+        StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        //если записи на ревью нету, значит ожидаем номер темы
+        if (studentReview == null && StringParser.isNumeric(currentInput)) {
+            Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
+            //проверяем или номер темы не выходит за рамки
+            if (command > 0 & command <= themes.size()) {
+                Theme theme = context.getThemeService().getByPosition(command);
+                User user = context.getUser();
+                //проверяем хватает ли РП для сдачи выбранной темы
+                if (theme.getReviewPoint() <= user.getReviewPoint()) {
+                    // получаю список созданных мною ревью, если они имеется
+                    List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+                    List<Review> reviews;
+                    //получаю список ревью по теме
+                    if (reviewsMy.size() == 0) {
+                        // т.к. созданных мною ревью нету, тогда в запросе не учитываю время созданных мною ревью
+                        reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                    }else{
+                        // т.к. имеются созданныю мною ревью, нужно отфильтровать список ревью по теме, чтобы они не пересекались с моими ревью
+                        reviews = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                        // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
+                        Set<Review> reviewList = new HashSet<>();
+                        Set<Review> reviewListNew = new HashSet<>();
+                        reviewList.addAll(reviews);
+                        // перебор списка моих ревью
+                        for (Review reviewOneMy : reviewsMy){
+                            // получаю список ревью которые не пересекаются с моим ревью и перебираю их поштучно
+                            for (Review review : context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)){
+                                // если такое ревью встречалось на прошлом проходе, добавляю его в множество
+                                if(reviewList.contains(review)){
+                                    reviewListNew.add(review);
+                                }
+                            }
+                            reviewList.clear();
+                            reviewList.addAll(reviewListNew);
+                            reviewListNew.clear();
+                        }
+                        reviews = reviewList.stream().collect(Collectors.toList());
+                    }
+                    //проверяем наличие открытых ревью по данной теме
+                    if (reviews.isEmpty()) {
+                        nextStep = USER_MENU;
+                        throw new ProcessInputException("К сожалению, сейчас никто не готов принять " +
+                                "ревью, напиши в общее обсуждение сообщение с просьбой добавить кого-то " +
+                                "ревью, чтобы не ждать пока оно появится. Кто-то обязательно откликнется! " +
+                                "Если проверяющего не нашлось сообщи сразу же об этом Станиславу Сорокину или Герману Севостьянову");
+                    } else {
+                        //если нашли хоть одно открытое ревью по выбранной теме, сохраняем ID темы для следующего шага
+                        List<String> list = new ArrayList<>();
+                        list.add(theme.getId().toString());
+                        storageService.updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
+                        nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
+                    }
+                } else {
+                    throw new ProcessInputException("У Вас не хватает РП. Для того чтобы заработать нужное " +
+                            "количество РП, необходимо провести ревью.");
+                }
+            } else {
+                throw new ProcessInputException("Введен неверный номер темы...");
+            }
+        } else {
+            //определяем нажатую кнопку или сообщаем о неверной команде
+            String command = StringParser.toWordsArray(currentInput)[0];
+            if ("отмена".equals(command) && studentReview != null) {
+                if(context.getUser().getRole().isAdmin()) {
+                    logger.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                            "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getVkId()+"] отменил свою запись на ревью.\n" +
+                            "А именно:\n" +
+                            context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId()).getReview().getTheme().getTitle() + "_"+
+                            context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId()).getReview().getDate());
+                }
+                context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
+                idsIfCancelStudentReview.add(vkId);
+                nextStep = USER_PASS_REVIEW_ADD_THEME;
+            } else if ("/start".equals(command)) {
+                nextStep = START;
+            } else if ("назад".equals(command)) {
+                nextStep = USER_MENU;
+            } else {
+                throw new ProcessInputException("Введена неверная команда...");
+            }
+        }
+    }
+}

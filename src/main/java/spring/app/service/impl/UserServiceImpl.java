@@ -2,50 +2,92 @@ package spring.app.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import spring.app.dao.abstraction.ReviewDao;
+import spring.app.dao.abstraction.StudentReviewAnswerDao;
+import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-	private UserDao userDao;
+    private final UserDao userDao;
+    private final StudentReviewAnswerDao studentReviewAnswerDao;
+    private final StudentReviewDao studentReviewDao;
+    private final ReviewDao reviewDao;
 
-	@Autowired
-	public UserServiceImpl(UserDao userDao) {
-		this.userDao = userDao;
-	}
 
-	@Override
-	public User getUserByLogin(String login) {
-		return userDao.getUserByLogin(login);
-	}
+    @Autowired
+    public UserServiceImpl(UserDao userDao, StudentReviewAnswerDao studentReviewAnswerDao, StudentReviewDao studentReviewDao, ReviewDao reviewDao) {
+        this.userDao = userDao;
+        this.studentReviewAnswerDao = studentReviewAnswerDao;
+        this.studentReviewDao = studentReviewDao;
+        this.reviewDao = reviewDao;
+    }
 
-	@Override
-	public User getUserById(Long id) {
-		return userDao.getById(id);
-	}
+    @Transactional
+    @Override
+    public void addUser(User user) {
+        userDao.save(user);
+    }
 
-	@Override
-	public void addUser(User user) {
-		userDao.save(user);
-	}
+    @Override
+    public User getUserById(Long id) {
+        return userDao.getById(id);
+    }
 
-	@Override
-	public List<User> getAllUsers() {
-		return userDao.getAllUsers();
-	}
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.getAll();
+    }
 
-	@Override
-	public void deleteUserById(Long id) {
-		userDao.deleteById(id);
-	}
+    @Transactional
+    @Override
+    public void updateUser(User user) {
+        userDao.update(user);
+    }
 
-	@Override
-	public void updateUser(User user) {
-		userDao.update(user);
-	}
+    @Transactional
+    @Override
+    public void deleteUserById(Long id) {
+        // удаляем StudentReviewAnswer
+        studentReviewAnswerDao.bulkDeleteByUserId(id);
+        // удаляем StudentReview
+        studentReviewDao.bulkDeleteByUserId(id);
+        // удаляем Review
+        reviewDao.bulkDeleteByUserId(id);
+        // удаляем юзера
+        userDao.deleteById(id);
+    }
 
+    @Override
+    public User getByVkId(Integer vkId) {
+        return userDao.getByVkId(vkId);
+    }
+
+    @Override
+    public boolean isExistByVkId(Integer vkId) {
+        return userDao.isExistByVkId(vkId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserByVkId(Integer vkId) {
+        userDao.deleteUserByVkId(vkId);
+    }
+
+    @Override
+    public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return userDao.getUsersByReviewPeriod(periodStart, periodEnd);
+    }
+
+    @Override
+    public List<User> getStudentsByReviewId(Long reviewId) {
+        return userDao.getStudentsByReviewId(reviewId);
+    }
 }

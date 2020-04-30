@@ -2,21 +2,28 @@ package spring.app.service.abstraction;
 
 import spring.app.model.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-
 public interface UserService {
-	User getUserByLogin(String login);
 
-	//User getUserByEmail(String email);
+    void addUser(User user);
 
-	User getUserById(Long id);
+    User getUserById(Long id);
 
-	void addUser(User user);
+    List<User> getAllUsers();
 
-	List<User> getAllUsers();
+    void updateUser(User user);
 
-	void deleteUserById(Long id);
+    void deleteUserById(Long id);
 
-	void updateUser(User user);
+    User getByVkId(Integer vkId);
+
+    boolean isExistByVkId(Integer vkId);
+
+    void deleteUserByVkId(Integer vkId);
+
+    List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    List<User> getStudentsByReviewId(Long reviewId);
 }

@@ -1,180 +1,144 @@
 package spring.app.model;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import spring.app.core.StepSelector;
 
 import javax.persistence.*;
-import java.sql.Blob;
-import java.util.Collection;
-import java.util.Set;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users")
+public class User {
 
-public class User implements UserDetails {
-	@Id
-	@GeneratedValue
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "id")
+    private Long id;
 
-	//@Column(name = "login",  nullable = false, unique = true)
-	private String login;
+    @Column(name = "first_name")
+    private String firstName;
 
-	//@Column(name = "email",  nullable = false, unique = true)
-	private String email;
+    @Column(name = "last_name")
+    private String lastName;
 
+    @Column(name = "vk_id", unique = true)
+    private Integer vkId;
 
-	//@Column(name = "password", length = 30, nullable = false)
-	private String password;
+    /**
+     * Текущий(последний) шаг пользователя в чатботе
+     */
+    @Column(name = "chat_step")
+    @Enumerated(EnumType.ORDINAL)
+    private StepSelector chatStep;
 
-	@Lob
-	@Column(name="profile_pic")
-	private Blob profilePic;
+    /**
+     * Факт просмотра пользователем стартового сообщения шага.
+     * false - показываем ему сообщение
+     * true - ждем от него сообщения, обрабатываем его input
+     */
+    @Column(name = "is_viewed")
+    private boolean isViewed;
 
+    @Column(name = "review_point")
+    private Integer reviewPoint = 0;
 
-	@ManyToMany(fetch = FetchType.EAGER, targetEntity = Role.class)
-	@JoinTable(name = "permissions",
-			joinColumns = {@JoinColumn(name = "user_id")},
-			inverseJoinColumns = {@JoinColumn(name = "role_id")})
-	private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
-	//@Column(name = "enabled", nullable = false)
-	private Boolean enabled = true;
+    public User() {
+    }
 
+    public User(String firstName, String lastName, Integer vkId, StepSelector chatStep, Role role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.vkId = vkId;
+        this.chatStep = chatStep;
+        this.role = role;
+        this.isViewed = false;
+    }
 
-	public User() {
-	}
+    public User(String firstName, String lastName, Integer vkId, StepSelector chatStep) {
+        this.vkId = vkId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.chatStep = chatStep;
+    }
 
-	public User(Long id) {
-		this.id = id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public User(String email, String login, String password, boolean enabled) {
-		this.email = email;
-		this.login = login;
-		this.password = password;
-		this.enabled = enabled;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public User(Long id, String email, String login, String password, boolean enabled) {
-		this.id = id;
-		this.email = email;
-		this.login = login;
-		this.password = password;
-		this.enabled = enabled;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	public Blob getProfilePic() {
-		return profilePic;
-	}
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-	public void setProfilePic(Blob profilePic) {
-		this.profilePic = profilePic;
-	}
+    public String getLastName() {
+        return lastName;
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public Integer getVkId() {
+        return vkId;
+    }
 
-	public String getLogin() {
-		return login;
-	}
+    public void setVkId(Integer vkId) {
+        this.vkId = vkId;
+    }
 
-	public void setLogin(String login) {
-		this.login = login;
-	}
+    public Integer getReviewPoint() {
+        return reviewPoint;
+    }
 
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles;
-	}
+    public void setReviewPoint(Integer reviewPoint) {
+        this.reviewPoint = reviewPoint;
+    }
 
-	@Override
-	public String getPassword() {
-		return password;
-	}
+    public Role getRole() {
+        return role;
+    }
 
-	@Override
-	public String getUsername() {
-		return login;
-	}
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
-	public boolean isAccountNonExpired() {
-		return true;
-	}
+    public StepSelector getChatStep() {
+        return chatStep;
+    }
 
-	public boolean isAccountNonLocked() {
-		return true;
-	}
+    public void setChatStep(StepSelector chatStep) {
+        this.chatStep = chatStep;
+    }
 
-	public boolean isCredentialsNonExpired() {
-		return true;
-	}
+    public boolean isViewed() {
+        return isViewed;
+    }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public void setViewed(boolean viewed) {
+        isViewed = viewed;
+    }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
 
-	public Set<Role> getRoles() {
-		return roles;
-	}
+        return id.equals(user.id) && vkId.equals(user.vkId);
+    }
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
-
-	public String toString() {
-		return login;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public Boolean getEnabled() {
-		return enabled;
-	}
-
-	public void setEnabled(Boolean enabled) {
-		this.enabled = enabled;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-
-		User user = (User) o;
-
-		if (id != null ? !id.equals(user.id) : user.id != null) return false;
-		if (login != null ? !login.equals(user.login) : user.login != null) return false;
-		if (email != null ? !email.equals(user.email) : user.email != null) return false;
-		if (password != null ? !password.equals(user.password) : user.password != null) return false;
-		if (roles != null ? !roles.equals(user.roles) : user.roles != null) return false;
-		return enabled != null ? enabled.equals(user.enabled) : user.enabled == null;
-	}
-
-	@Override
-	public int hashCode() {
-		int result = id != null ? id.hashCode() : 0;
-		result = 31 * result + (login != null ? login.hashCode() : 0);
-		result = 31 * result + (email != null ? email.hashCode() : 0);
-		result = 31 * result + (password != null ? password.hashCode() : 0);
-		result = 31 * result + (roles != null ? roles.hashCode() : 0);
-		result = 31 * result + (enabled != null ? enabled.hashCode() : 0);
-		return result;
-	}
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, vkId);
+    }
 }
