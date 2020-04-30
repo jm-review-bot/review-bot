@@ -11,9 +11,6 @@ import spring.app.core.StepHolder;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
@@ -22,8 +19,6 @@ import java.util.TimeZone;
 @EnableAsync
 @EnableCaching
 public class Main {//https://github.com/jm-review-bot/review-bot.git
-	private static final Logger logger = LoggerFactory.getLogger(
-			Main.class);
 	private static final String FILENAME = "/file/does/not/exist";
 
     public static void main(String[] args) {

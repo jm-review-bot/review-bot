@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -17,6 +19,8 @@ import static spring.app.util.Keyboards.YES_NO_KB;
 
 @Component
 public class UserCancelReview extends Step {
+    private Logger logger = LoggerFactory.getLogger(
+            UserCancelReview.class);
 
     @Override
     public void enter(BotContext context) {
@@ -67,6 +71,11 @@ public class UserCancelReview extends Step {
                 storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
                 nextStep = START;
             } else if (wordInput.equals("да")) {
+                /*logger.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                        "Пользователь "+context.getUser().getLastName()+" "+context.getUser().getFirstName()+" [vkId - "+context.getUser().getVkId()+"] отменил свою запись на ревью.\n" +
+                        "А именно:\n" +
+                        context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId()).getReview().getTheme().getTitle() + "_"+
+                        context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId()).getReview().getDate());*/
                 context.getStudentReviewService().deleteStudentReviewByVkId(vkId);
                 List<String> savedMessage = Arrays.asList("Запись на ревью была удалена.");
                 storageService.updateUserStorage(vkId, USER_CANCEL_REVIEW, savedMessage);

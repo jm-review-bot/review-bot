@@ -1,7 +1,5 @@
 package spring.app.core.steps;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -19,7 +17,6 @@ import static spring.app.util.Keyboards.BACK_KB;
 @Component
 public class UserStartReviewHangoutsLink extends Step {
 
-    private final static Logger log = LoggerFactory.getLogger(UserStartReviewHangoutsLink.class);
 
     @Override
     public void enter(BotContext context) {
@@ -54,7 +51,6 @@ public class UserStartReviewHangoutsLink extends Step {
                 Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                 String hangoutsLink = "Ревью началось, вот ссылка для подключения: " + userInput;
                 context.getVkService().sendMessage(hangoutsLink, userStep.getKeyboard(), user.getVkId());
-                log.warn("Студенту с id {} отправлено сообщение: {}", user.getVkId(), hangoutsLink);
             }
             nextStep = USER_START_REVIEW_RULES;
         } else {

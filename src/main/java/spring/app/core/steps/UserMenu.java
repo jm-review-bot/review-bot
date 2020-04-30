@@ -66,7 +66,7 @@ public class UserMenu extends Step {
                     .append(REVIEW_CANCEL_FR)
                     .append(ROW_DELIMETER_FR);
         }
-        //---если у пользователя есть ХОТЬ ОДНО созданное им ревью, то отобразить кнопку "Отменить ревью" [DELETE_REVIEW]
+        //---если у пользователя есть ХОТЬ ОДНО созданное им ревью, то отобразить кнопку "Отменить приём ревью" [DELETE_REVIEW]
         //getOpenReviewsByReviewerVkId(new Integer(vkId))
         if(!context.getReviewService().getOpenReviewsByReviewerVkId(user.getVkId()).isEmpty()) {
             System.out.println("|STEP::UserMenu::пользователь_с_vkId_"+vkId.toString()+"_записан_принимающим_(преподавателем)_как_минимум_на_одно_ревью|");

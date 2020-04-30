@@ -21,12 +21,9 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class DeleteReview extends Step {
-    private static final Logger logger = LoggerFactory.getLogger(
+    private Logger logger = LoggerFactory.getLogger(
             DeleteReview.class);
     public static HashMap<Integer, Integer> specMap = new HashMap<Integer, Integer>();
-    //public static boolean error;
-    //public static int countReviews = -1;
-    //public static Review specReview;
     @Override
     public void enter(BotContext context) {//здесь выводится текст в чате при переходе на этот step
         //======
@@ -88,10 +85,11 @@ public class DeleteReview extends Step {
                    //specMap.put(context.getVkId(), new Integer(-1));
                 keyboard = BACK_KB;
                 nextStep = USER_MENU;//keyboard = BACK_KB;
-                //System.out.println("|-LOGGING-|-|-|-"+context.getUser().getLastName()+" "+context.getUser().getFirstName()+" отменил ревью, которое должен был принимать. " +
-                  //      "А именно - ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"}");
-                //logger.debug("Пользователь "+context.getUser().getLastName()+" "+context.getUser().getFirstName()+" отменил ревью, которое должен был принимать. " +
-                  //      "А именно - ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"}");
+                System.out.println("|-LOGGING-|-|-|-"+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" отменил ревью, которое должен был принимать. " +
+                        "А именно - ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"}");
+                logger.debug("\tlog-message об операции пользователя над экземпляром сущности:\n" +
+                        "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [id - "+context.getUser().getVkId()+"] отменил ревью (которое должен был принимать). " +
+                        "А именно - ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"}");
                 throw new ProcessInputException("Ревью {"+context.getThemeService().getThemeById(specReview.getTheme().getId()).getTitle()+"} - {"+specReview.getDate()+"} было успешно отменено.\n");
                 //
             } else {
@@ -121,7 +119,9 @@ public class DeleteReview extends Step {
                    //specMap.remove(context.getVkId());
                    //specMap.put(context.getVkId(),Integer.valueOf(numberReview));
                 keyboard = CANCEL_OR_DELETE;
-                throw new ProcessInputException("Вы действительно хотите отменить ревью {"+context.getThemeService().getThemeById(rs.get(numberReview).getTheme().getId()).getTitle()+"} - {"+rs.get(numberReview).getDate()+"}.\n");
+                String name_review = /*rs.get(numberReview).getTheme().getTitle();*/context.getThemeService().getThemeById(rs.get(numberReview-1).getTheme().getId()).getTitle();
+                String date_review = rs.get(numberReview-1).getDate().toString();
+                throw new ProcessInputException("Вы действительно хотите отменить ревью {"+name_review+"} - {"+date_review+"}.\n");
             } else {
                 keyboard = BACK_KB;
                 throw new ProcessInputException("Введённое число не является номером какого-либо ревью из списка. Введите корректное число.\n");

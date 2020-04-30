@@ -1,8 +1,6 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.DeleteReview;
@@ -20,7 +18,6 @@ import java.util.List;
 
 @Component
 public class VkBot implements ChatBot {
-    private final static Logger log = LoggerFactory.getLogger(VkBot.class);
     private VkService vkService;
     private UserService userService;
     private RoleService roleService;
@@ -85,7 +82,6 @@ public class VkBot implements ChatBot {
             try {
                 user = userService.getByVkId(userVkId);
             } catch (NoResultException e) {
-                log.warn("Пришло сообщение от незарегистрированного пользователя c vkId: {}", userVkId);
                 sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
                 return;
             }
@@ -96,8 +92,6 @@ public class VkBot implements ChatBot {
             userStep = user.getChatStep();
             // видел ли User этот шаг
             isViewed = user.isViewed();
-            log.debug("VK_ID юзера: {}, роль: {},  шаг: {}, ранее просмотрен: {}", userVkId, role.getName(),
-                    userStep, isViewed);
             currentStep = stepHolder.getSteps().get(userStep);
 
             if (!isViewed) {
@@ -122,7 +116,6 @@ public class VkBot implements ChatBot {
                     userService.updateUser(user);
                 } catch (ProcessInputException | NoNumbersEnteredException | NoDataEnteredException e) {
                     // отправляем сообщение об ошибке ввода
-                    log.info("Пользователь с vkId: {} ввел неверные данные", userVkId);
                     sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);
                 }
             }

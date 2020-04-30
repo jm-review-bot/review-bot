@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -19,6 +21,9 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
+
+    private Logger logger = LoggerFactory.getLogger(
+            AdminRemoveUser.class);
 
     @Override
     public void enter(BotContext context) {
@@ -110,10 +115,20 @@ public class AdminRemoveUser extends Step {
         } else if (wordInput.equals("да")) {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
             // удаляем юзеров
-            usersToDelete.forEach(userIdString ->
-                    context.getUserService()
-                            .deleteUserById(Long.parseLong(userIdString))
+            String str = "";
+            for(String s : usersToDelete) {
+                str = str + context.getUserService().getUserById(Long.parseLong(s)).getFirstName() + " " +
+                        context.getUserService().getUserById(Long.parseLong(s)).getLastName() + "[vkId - "+context.getUserService().getUserById(Long.parseLong(s)).getVkId()+"]\n";
+            }
+            usersToDelete.forEach(userIdString -> {
+                context.getUserService()
+                        .deleteUserById(Long.parseLong(userIdString));
+                    }
             );
+            logger.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                    "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getId()+"] удалил пользователя(ей) из базы.\n" +
+                    "А именно, он удалил следующего(их) пользователя(ей):\n" +
+                    str);
             // обязательно очищаем память
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);

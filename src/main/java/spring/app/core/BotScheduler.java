@@ -18,7 +18,6 @@ import java.util.List;
 
 @Component
 public class BotScheduler {
-    private final static Logger log = LoggerFactory.getLogger(BotScheduler.class);
     private final VkService vkService;
     private final ReviewService reviewService;
     private final UserService userService;
@@ -38,14 +37,12 @@ public class BotScheduler {
 
     @Scheduled(fixedDelayString = "${bot.operations_interval}")
     public void scheduleFixedDelayTask() {
-        log.trace("Бот работает уже " + (timeCounter++) + " с.");
         List<Message> messages = vkService.getMessages();
         bot.replyForMessages(messages);
     }
 
     @Scheduled(cron = "${bot.expired_review_check_time}")
     public void scheduleCloseExpiredReview() {
-        log.info("Скрипт запущен. Началась проверка просроченных ревью.");
         reviewService.updateAllExpiredReviewsByDate(LocalDateTime.now());
     }
 
@@ -66,7 +63,6 @@ public class BotScheduler {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(user.getChatStep());
                 bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать прием ревью\"", step.getKeyboard(), user.getVkId());
-                log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }
     }

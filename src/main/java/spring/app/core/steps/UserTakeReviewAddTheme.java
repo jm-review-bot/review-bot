@@ -47,7 +47,7 @@ public class UserTakeReviewAddTheme extends Step {
             // вытаскиваем themeId по позиции, позиция соответствует пользовательскому вводу
             String themeId = themes.get(Integer.parseInt(userInput)).getId().toString();
             // проверяем, что сдали ревью по теме, которую хотим принять
-            List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()
+            List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()// pometka - нужна ли проверка на наличие админовских прав
                     .map(theme -> theme.getId().toString())
                     .collect(toList());
             if (passedThemesIds.contains(themeId)) {

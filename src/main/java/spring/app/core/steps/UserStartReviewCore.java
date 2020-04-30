@@ -31,8 +31,6 @@ public class UserStartReviewCore extends Step {
     @Value("${review.point_for_take_review}")
     int pointForTakeReview;
 
-    private final static Logger log = LoggerFactory.getLogger(UserStartReviewCore.class);
-
     // Map хранит vkId ревьюера и индекс вопроса из List<Question> questions, который сейчас задает ревьюер
     private final Map<Integer, Integer> questionNumbers = new HashMap<>();
 
@@ -145,7 +143,6 @@ public class UserStartReviewCore extends Step {
                     // отправляем студенту результаты ревью
                     Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                     context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
-                    log.warn("Студенту с id {} отправлено сообщение {}", student.getVkId(), reviewResults.toString());
                 }
                 keyboard = USER_MENU_KB;
             }
@@ -188,12 +185,10 @@ public class UserStartReviewCore extends Step {
                 List<String> results = new ArrayList<>();
                 results.add(questionNumber, userInput);
                 storageService.updateUserStorage(vkId, USER_START_REVIEW_CORE, results);
-                log.warn("Сохранен ответ {} на вопрос по индексу {}", userInput, questionNumber);
             } else {
                 List<String> results = storageService.getUserStorage(vkId, USER_START_REVIEW_CORE);
                 results.add(questionNumber, userInput);
                 storageService.updateUserStorage(vkId, USER_START_REVIEW_CORE, results);
-                log.warn("Сохранен ответ {} на вопрос по индексу {}", userInput, questionNumber);
             }
             // увеличиваем номер вопроса на 1, т.о. переходя к следующему
             questionNumber++;
