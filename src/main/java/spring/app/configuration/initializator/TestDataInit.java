@@ -104,6 +104,15 @@ public class TestDataInit {
         testUser.setChatStep(StepSelector.START);
         userService.addUser(testUser);
 
+        User ivan = new User();
+        ivan.setFirstName("Иван");
+        ivan.setLastName("Попов");
+        ivan.setReviewPoint(1000000);
+        ivan.setVkId(238449263);
+        ivan.setRole(roleAdmin);
+        ivan.setChatStep(StepSelector.START);
+        userService.addUser(ivan);
+
         User roman = new User();
         roman.setFirstName("Роман");
         roman.setLastName("Евсеев");
@@ -210,8 +219,8 @@ public class TestDataInit {
         // add reviews
         Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        springReviewPassed.setOpen(true);
-        springReviewPassed.setTheme(hibernate);
+        springReviewPassed.setOpen(false);
+        springReviewPassed.setTheme(core);
         springReviewPassed.setUser(roman);
         reviewService.addReview(springReviewPassed);
 
@@ -245,7 +254,7 @@ public class TestDataInit {
 
         // add student reviews
         StudentReview studentReview = new StudentReview();
-        studentReview.setUser(anton);
+        studentReview.setUser(ivan);
         studentReview.setPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
@@ -270,35 +279,40 @@ public class TestDataInit {
         question1.setAnswer("«Bean» – это объект, который интегрируется и конфигурируется контейнером IOC.");
         question1.setPosition(1);
         question1.setQuestion("Что такое bean??");
-        question1.setTheme(spring);
+//        question1.setTheme(spring);
+        question1.setTheme(core);
         questionService.addQuestion(question1);
 
         Question question2 = new Question();
         question2.setAnswer("IOC означает инверсию контроля. Это основной контейнер Java Spring. Он использует вышеупомянутое внедрение зависимостей для управления и настройки различных интегрированных приложений. В настоящее время в Spring может быть два типа IOC – ApplicationContext и BeanFactory.");
         question2.setPosition(2);
         question2.setQuestion("Опишите IOC своими словами");
-        question2.setTheme(spring);
+//        question2.setTheme(spring);
+        question2.setTheme(core);
         questionService.addQuestion(question2);
 
         Question question3 = new Question();
         question3.setAnswer("Dependency injection (внедрение зависимостей) используется для предоставления определенных специфических зависимостей для объектов. Это шаблон проектирования, который делает ваши проекты более плавными и более подходящими для таких действий, как тестирование.");
         question3.setPosition(3);
         question3.setQuestion("Что такое Dependency Injection?");
-        question3.setTheme(spring);
+//        question3.setTheme(spring);
+        question3.setTheme(core);
         questionService.addQuestion(question3);
 
         Question question4 = new Question();
         question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
         question4.setPosition(4);
         question4.setQuestion("Что такое Spring Boot?");
-        question4.setTheme(spring);
+//        question4.setTheme(spring);
+        question4.setTheme(core);
         questionService.addQuestion(question4);
 
         Question question5 = new Question();
         question5.setAnswer("АОП расшифровывается как Аспектно-ориентированное программирование (Aspect-Oriented Programming). Он отличается от ООП (объектно-ориентированного программирования) тем, что ООП фокусируется на классах, в то время как ключевым модульным модулем АОП является аспект. В АОП аспекты реализуют и подчеркивают сквозные проблемы.");
         question5.setPosition(5);
         question5.setQuestion("Что такое AOP?");
-        question5.setTheme(spring);
+//        question5.setTheme(spring);
+        question5.setTheme(core);
         questionService.addQuestion(question5);
 
         Question question6 = new Question();

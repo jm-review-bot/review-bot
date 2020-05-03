@@ -1,5 +1,5 @@
-vkconfig.properties
 logs/**
+codestream.xml
 
 #--------------------
 HELP.md
@@ -34,4 +34,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/vkconfig.properties
