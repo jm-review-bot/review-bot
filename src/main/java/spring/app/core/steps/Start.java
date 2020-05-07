@@ -34,12 +34,7 @@ public class Start extends Step {
             nextStep = ADMIN_MENU;
         } else if (command.equals("начать")) {
             nextStep = USER_MENU;
-        } else if (command.equals("/start")) {
-            nextStep = START;
-        } else if (command.equals("/delete")) {
-            nextStep = StepSelector.DELETE_REVIEW;
-        }
-        else {
+        } else {
             keyboard = START_KB;
             throw new ProcessInputException("Введена неверная команда...");
         }
