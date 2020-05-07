@@ -14,6 +14,7 @@ import spring.app.util.StringParser;
 import java.time.LocalDateTime;
 import java.util.*;
 
+import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
 import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
@@ -83,6 +84,19 @@ public class UserPassReviewAddTheme extends Step {
             if (command > 0 & command <= themes.size()) {
                 Theme theme = context.getThemeService().getByPosition(command);
                 User user = context.getUser();
+                //Проверяем сдал ли пользователь предыдущее ревью
+                List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()
+                        .map(themee -> themee.getId().toString())
+                        .collect(toList());
+                String idd = String.valueOf(themes.get(command-1).getId());
+                if (passedThemesIds.contains(idd)) {
+                    nextStep = USER_TAKE_REVIEW_ADD_DATE;
+                } else {
+                    nextStep = USER_TAKE_REVIEW_ADD_THEME;
+                    throw new ProcessInputException("Ты пока не можешь сдать эту тему, потому что не сдал ревью по предыдущей теме.\n\n" +
+                            "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
+                }
+
                 //проверяем хватает ли РП для сдачи выбранной темы
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
                     //получаю список ревью по теме

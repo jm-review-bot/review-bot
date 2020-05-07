@@ -9,7 +9,9 @@ import spring.app.model.Theme;
 import spring.app.model.StudentReview;
 
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
 import java.util.List;
 

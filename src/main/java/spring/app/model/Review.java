@@ -14,7 +14,7 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Type(type = "org.hibernate.type.LocalDateTimeType")

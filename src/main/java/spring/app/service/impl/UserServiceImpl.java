@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByReviewId(Long reviewId) {
         return userDao.getStudentsByReviewId(reviewId);
     }
+
+    @Override
+    public Long getMaxId() {
+        return userDao.getMaxId();
+    }
 }

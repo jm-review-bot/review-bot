@@ -26,4 +26,6 @@ public interface UserService {
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 
     List<User> getStudentsByReviewId(Long reviewId);
+
+    Long getMaxId();
 }
