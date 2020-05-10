@@ -1,7 +1,5 @@
 package spring.app.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -20,7 +18,6 @@ import java.util.stream.Collectors;
  * Утилитный класс для обработки ввода для получения тех или иных данных
  */
 public class StringParser {
-    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
 
     private static Pattern numeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
@@ -64,7 +61,6 @@ public class StringParser {
                 .map(Integer::parseInt)
                 .collect(Collectors.toSet());
         if (integerSet.isEmpty()) {
-            log.debug("Введенные данные не содержат чисел: {}", text);
             throw new NoNumbersEnteredException("Введенные данные не содержат чисел.");
         }
         return integerSet;

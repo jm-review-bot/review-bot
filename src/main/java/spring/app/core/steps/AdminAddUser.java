@@ -2,6 +2,8 @@ package spring.app.core.steps;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.IncorrectVkIdsException;
@@ -21,9 +23,14 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
+    private Logger logger = LoggerFactory.getLogger(
+            AdminAddUser.class);
 
     @Override
     public void enter(BotContext context) {
+        //======
+        System.out.println("BEGIN_STEP::"+"AdminAddUser");
+        //======
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
 
@@ -86,6 +93,10 @@ public class AdminAddUser extends Step {
                                 .append("\n");
 
                     });
+                    logger.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                            "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [id - "+context.getUser().getVkId()+"] добавил пользователя(ей) в базу.\n" +
+                            "А именно, он добавил следующего(их) пользователя(ей):\n" +
+                            addedUserText.toString());
                     addedUserText.append("\nВы можете прислать еще ссылки на профили или вернуться в Меню, введя \"назад\".");
                     storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(addedUserText.toString()));
                     nextStep = ADMIN_ADD_USER;
@@ -98,6 +109,5 @@ public class AdminAddUser extends Step {
                 throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
             }
         }
-
     }
 }
