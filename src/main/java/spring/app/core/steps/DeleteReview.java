@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Question;
@@ -75,6 +76,7 @@ public class DeleteReview extends Step {
                         rs.get(numberReview-1),
                         context.getThemeService(),
                         context.getUserService(),
+                        context.getStepHolder(),
                         context.getQuestionService(),
                         context.getReviewService(),
                         context.getVkService(),
@@ -132,14 +134,15 @@ public class DeleteReview extends Step {
         }
     }
     //============================================= МЕТОД УДАЛЕНИЯ РЕВЬЮ ====================================================================
-    Review deleteReview(Review review, ThemeService themeService, UserService userService, QuestionService questionService, ReviewService reviewService, VkService vkService, Integer vkId) {
+    Review deleteReview(Review review, ThemeService themeService, UserService userService, StepHolder stepHolder, QuestionService questionService, ReviewService reviewService, VkService vkService, Integer vkId) {
         //всем участникам этого ревью, т.е. всем студентам, которые были на это ревью записаны - должно отправиться
         //сообщение с текстом: “Ревью {название темы} - {дата и время проведения} было отменено проверяющим”
         String message = "Ревью {"+themeService.getThemeById(review.getTheme().getId()).getTitle()+"} - {"+review.getDate()+"} было отменено проверяющим\n";
         List<User> studentsByReview = userService.getStudentsByReviewId(review.getId());
         for(User user : studentsByReview) {
+            Step userStep = stepHolder.getSteps().get(user.getChatStep());
             //отправка каждому студенту сообщения message
-            vkService.sendMessage(message,NO_KB,vkId);
+            vkService.sendMessage(message,userStep.getKeyboard(),user.getVkId());
         }
          //удалить из базы это ревью и все связанные с ним данные
         	//удаление вопросов по этому ревью
