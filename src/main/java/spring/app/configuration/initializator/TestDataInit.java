@@ -52,7 +52,19 @@ public class TestDataInit {
     private Step adminRemoveUser;
 
     @Autowired
-    private Step adminEditReview;
+    private Step adminEditReviewGetUserList;
+
+    @Autowired
+    private Step adminEditReviewGetThemeList;
+
+    @Autowired
+    private Step adminEditReviewGetReviewList;
+
+    @Autowired
+    private Step adminEditReviewGetReviewInfo;
+
+    @Autowired
+    private Step adminEditReviewChangeReview;
 
     @Autowired
     private Step userTakeReviewAddDate;
@@ -150,7 +162,11 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
-        steps.put(StepSelector.ADMIN_EDIT_REVIEW, adminEditReview);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_USER_LIST, adminEditReviewGetUserList);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_THEME_LIST, adminEditReviewGetThemeList);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST, adminEditReviewGetReviewList);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO, adminEditReviewGetReviewInfo);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW, adminEditReviewChangeReview);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);

@@ -38,13 +38,14 @@ public class StudentReviewServiceImpl implements StudentReviewService {
 
     /**
      * Возвращает все ревью студента по определенной теме
-     * @param vkId студента
+     *
+     * @param vkId  студента
      * @param theme тема
      * @return
      */
     @Override
     public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
-        return studentReviewDao.getAllStudentReviewsByStudentVkIdAndTheme(vkId,theme);
+        return studentReviewDao.getAllStudentReviewsByStudentVkIdAndTheme(vkId, theme);
     }
 
     @Transactional
@@ -60,7 +61,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser){
+    public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser) {
         return studentReviewDao.getStudentReviewIfAvailableAndOpen(idUser);
     }
 
@@ -78,5 +79,10 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     @Override
     public StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
         return studentReviewDao.getStudentReviewByReviewIdAndStudentId(reviewId, studentId);
+    }
+
+    @Override
+    public StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
+        return studentReviewDao.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(id);
     }
 }

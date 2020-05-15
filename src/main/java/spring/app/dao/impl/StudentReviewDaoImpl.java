@@ -58,6 +58,15 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     }
 
     @Override
+    public StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
+        return entityManager.createQuery("SELECT sr FROM StudentReview sr " +
+                "JOIN FETCH sr.review r JOIN FETCH sr.user u JOIN FETCH r.theme JOIN FETCH r.user rewiever WHERE sr.id = :srId", StudentReview.class)
+                .setParameter("srId", id)
+                .getResultList().get(0);
+
+    }
+
+    @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public void bulkDeleteByUserId(Long id) {
         // Write all pending changes to the DB

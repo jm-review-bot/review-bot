@@ -31,7 +31,6 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", nullable = false)
-    @Fetch(FetchMode.JOIN)
     private Theme theme;
 
     public Review() {

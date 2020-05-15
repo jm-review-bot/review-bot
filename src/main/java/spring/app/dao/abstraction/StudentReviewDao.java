@@ -18,4 +18,6 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
     void deleteStudentReviewByVkId(Integer vkId);
 
     StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
+
+    StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
 }

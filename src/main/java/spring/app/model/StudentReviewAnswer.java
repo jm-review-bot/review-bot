@@ -25,7 +25,6 @@ public class StudentReviewAnswer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Fetch(FetchMode.JOIN)
     private Question question;
 
     @Column(name = "is_right")

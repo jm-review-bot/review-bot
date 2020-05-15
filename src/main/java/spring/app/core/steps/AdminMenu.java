@@ -31,7 +31,7 @@ public class AdminMenu extends Step {
                 nextStep = START;
                 break;
             case "ревью":
-                nextStep = ADMIN_EDIT_REVIEW;
+                nextStep = ADMIN_EDIT_REVIEW_GET_USER_LIST;
                 break;
             case "главное":
             case "Главное":

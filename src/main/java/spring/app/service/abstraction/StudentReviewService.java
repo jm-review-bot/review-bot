@@ -26,4 +26,6 @@ public interface StudentReviewService {
     StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
 
     void deleteStudentReviewByVkId(Integer vkId);
+
+    StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
 }
