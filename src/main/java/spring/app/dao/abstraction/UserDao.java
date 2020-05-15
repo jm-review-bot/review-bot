@@ -18,4 +18,6 @@ public interface UserDao extends GenericDao<Long, User> {
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 
     List<User> getStudentsByReviewId(Long reviewId);
+
+    Long getMaxId();
 }

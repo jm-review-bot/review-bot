@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
+import spring.app.model.StudentReview;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
@@ -70,5 +71,10 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id", User.class)
                 .setParameter("review_id", reviewId)
                 .getResultList();
+    }
+
+    @Override
+    public Long getMaxId() {
+        return (Long) entityManager.createQuery("select max(u.id) from User u").getSingleResult();
     }
 }

@@ -221,4 +221,16 @@ public class Keyboards {
             "      }\n" +
             "  ]]\n" +
             "} ";
+    public final static String ADMIN_NEXT = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [[\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Далее\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "  ]]\n" +
+            "} ";
 }

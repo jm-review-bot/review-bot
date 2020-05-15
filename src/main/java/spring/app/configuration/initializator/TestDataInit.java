@@ -1,6 +1,7 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.Step;
@@ -81,6 +82,9 @@ public class TestDataInit {
     @Autowired
     private Step userStartReviewCore;
 
+    @Autowired
+    private Step adminAddUserInputTheme;
+
     public TestDataInit() {
     }
 
@@ -140,6 +144,24 @@ public class TestDataInit {
         nikolay.setChatStep(StepSelector.START);
         userService.addUser(nikolay);
 
+        User aiBolotov = new User();
+        aiBolotov.setFirstName("Александр");
+        aiBolotov.setLastName("Болотов");
+        aiBolotov.setReviewPoint(8);
+        aiBolotov.setVkId(2738886);
+        aiBolotov.setRole(roleAdmin);
+        aiBolotov.setChatStep(StepSelector.START);
+        userService.addUser(aiBolotov);
+
+        User bot = new User();
+        bot.setFirstName("Bot");
+        bot.setLastName("Bot");
+        bot.setReviewPoint(99);
+        bot.setVkId(null);
+        bot.setRole(roleAdmin);
+        bot.setChatStep(StepSelector.START);
+        userService.addUser(bot);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -157,6 +179,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
+        steps.put(StepSelector.ADMIN_ADD_USER_INPUT_THEME, adminAddUserInputTheme);
 
         //add themes
         Theme core = new Theme();
@@ -243,6 +266,13 @@ public class TestDataInit {
         springReviewPassed4.setUser(maksim);
         reviewService.addReview(springReviewPassed4);
 
+        Review springReviewPassed5 = new Review();
+        springReviewPassed5.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
+        springReviewPassed5.setOpen(false);
+        springReviewPassed5.setTheme(core);
+        springReviewPassed5.setUser(bot);
+        reviewService.addReview(springReviewPassed5);
+
         // add student reviews
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(anton);
@@ -264,6 +294,12 @@ public class TestDataInit {
         studentReview4.setUser(roman);
         studentReview4.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview4);
+
+        StudentReview studentReview5 = new StudentReview();
+        studentReview5.setUser(aiBolotov);
+        studentReview5.setReview(springReviewPassed5);
+        studentReview5.setPassed(true);
+        studentReviewService.addStudentReview(studentReview5);
 
         // add Questions
         Question question1 = new Question();

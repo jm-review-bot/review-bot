@@ -7,6 +7,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
+import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
@@ -14,13 +15,17 @@ import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static spring.app.core.StepSelector.*;
+import static spring.app.util.Keyboards.ADMIN_NEXT;
 import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
+    private Map<Integer, Theme> themes = new HashMap<>();
 
     @Override
     public void enter(BotContext context) {
@@ -30,7 +35,8 @@ public class AdminAddUser extends Step {
         List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_ADD_USER);
 
         if (savedInput == null || savedInput.isEmpty()) {
-            text = "Введите ссылку на профиль пользователя.\nМожно добавить несколько пользователей, введя ссылки через пробел или запятую.";
+//            text = "Введите ссылку на профиль пользователя.\nМожно добавить несколько пользователей, введя ссылки через пробел или запятую.";
+            text = "Введите ссылку на профиль пользователя.";
             keyboard = BACK_KB;
         } else {
             text = savedInput.get(0);
@@ -70,7 +76,7 @@ public class AdminAddUser extends Step {
                 // проверяем что получился непустой список
                 if (!addedUsersList.isEmpty()) {
                     // теперь можно начать формировать ответ
-                    StringBuilder addedUserText = new StringBuilder("Были успешно добавлены пользователи:\n\n");
+                    StringBuilder addedUserText = new StringBuilder("Был успешно добавлен пользователь:\n\n");
 
                     addedUsersList.forEach(user -> {
                         // сэтим юзерам роль ЮЗЕР, добавляем в базу и формируем строку с оветом
@@ -86,11 +92,11 @@ public class AdminAddUser extends Step {
                                 .append("\n");
 
                     });
-                    addedUserText.append("\nВы можете прислать еще ссылки на профили или вернуться в Меню, введя \"назад\".");
+                    addedUserText.append("\nВы можете прислать еще ссылку на профиль или вернуться в Меню, введя \"назад\".");
                     storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(addedUserText.toString()));
-                    nextStep = ADMIN_ADD_USER;
+                    nextStep = ADMIN_ADD_USER_INPUT_THEME;
                 } else {
-                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList("Пользователь(и) уже в базе."));
+                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList("Пользователь уже в базе."));
                     nextStep = ADMIN_ADD_USER;
                 }
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {
