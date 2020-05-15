@@ -20,17 +20,26 @@ public class AdminMenu extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = StringParser.toWordsArray(context.getInput())[0];
-        if ("добавить".equals(command)) {
-            nextStep = ADMIN_ADD_USER;
-        } else if ("удалить".equals(command)) {
-            nextStep = ADMIN_REMOVE_USER;
-        } else if ("/start".equals(command)) {
-            nextStep = START;
-        } else if ("главное".equalsIgnoreCase(command)) {
-            nextStep = USER_MENU;
-        } else {
-            keyboard = ADMIN_MENU_KB;
-            throw new ProcessInputException("Введена неверная команда...");
+        switch (command) {
+            case "добавить":
+                nextStep = ADMIN_ADD_USER;
+                break;
+            case "удалить":
+                nextStep = ADMIN_REMOVE_USER;
+                break;
+            case "/start":
+                nextStep = START;
+                break;
+            case "ревью":
+                nextStep = ADMIN_EDIT_REVIEW;
+                break;
+            case "главное":
+            case "Главное":
+                nextStep = USER_MENU;
+                break;
+            default:
+                keyboard = ADMIN_MENU_KB;
+                throw new ProcessInputException("Введена неверная команда...");
         }
     }
 }

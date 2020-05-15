@@ -70,6 +70,27 @@ public class Keyboards {
             "  ]]\n" +
             "} ";
 
+    public final static String BACK_AND_EDIT_STATUS_KB = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [[\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Изменить статус\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n" +
+            "  ]]\n" +
+            "} ";
+
     public final static String NO_KB = "{\"buttons\":[],\"one_time\":false}";
 
     public final static String ADMIN_START_KB = "{\n" +
@@ -137,6 +158,14 @@ public class Keyboards {
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Удалить пользователя\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Ревью\"\n" +
             "        },\n" +
             "        \"color\": \"primary\"\n" +
             "      }\n" +

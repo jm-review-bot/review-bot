@@ -52,6 +52,9 @@ public class TestDataInit {
     private Step adminRemoveUser;
 
     @Autowired
+    private Step adminEditReview;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -147,6 +150,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW, adminEditReview);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
@@ -246,14 +250,10 @@ public class TestDataInit {
         // add student reviews
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(anton);
-        studentReview.setPassed(true);
+        studentReview.setPassed(false);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
 
-        StudentReview studentReview2 = new StudentReview();
-        studentReview2.setUser(anton);
-        studentReview2.setReview(springReview);
-        studentReviewService.addStudentReview(studentReview2);
 
         StudentReview studentReview3 = new StudentReview();
         studentReview3.setUser(testUser);
@@ -335,5 +335,61 @@ public class TestDataInit {
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
         questionService.addQuestion(question10);
+
+
+        //Тестовые данные для проверки редактирования ревью:
+        User akira = new User();
+        akira.setFirstName("Akira");
+        akira.setLastName("Rokudo");
+        akira.setReviewPoint(30);
+        akira.setVkId(167464635);
+        akira.setRole(roleAdmin);
+        akira.setChatStep(StepSelector.START);
+        userService.addUser(akira);
+
+        Question questionHiber1 = new Question();
+        questionHiber1.setAnswer("‘Autowriting‘ позволяет разработчику вводить bean-компоненты в свое приложение автоматически, без необходимости ручного вмешательства.");
+        questionHiber1.setPosition(1);
+        questionHiber1.setQuestion("Что такое autowriting?");
+        questionHiber1.setTheme(hibernate);
+        questionService.addQuestion(questionHiber1);
+
+        Question questionHiber2 = new Question();
+        questionHiber2.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
+        questionHiber2.setPosition(2);
+        questionHiber2.setQuestion("Что такое target object?");
+        questionHiber2.setTheme(hibernate);
+        questionService.addQuestion(questionHiber2);
+
+        Question questionHiber3 = new Question();
+        questionHiber3.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
+        questionHiber3.setPosition(3);
+        questionHiber3.setQuestion("Что такое DAO?");
+        questionHiber3.setTheme(hibernate);
+        questionService.addQuestion(questionHiber3);
+
+        StudentReview studentReview2 = new StudentReview();
+        studentReview2.setUser(anton);
+        studentReview2.setPassed(true); //минус час, в поисках налл поинтера из-за отсутствия этой строчки... AR
+        studentReview2.setReview(springReview);
+        studentReviewService.addStudentReview(studentReview2);
+
+        StudentReviewAnswer answer1 = new StudentReviewAnswer();
+        answer1.setQuestion(questionHiber1);
+        answer1.setRight(true);
+        answer1.setStudentReview(studentReview2);
+        studentReviewAnswerService.addStudentReviewAnswer(answer1);
+
+        StudentReviewAnswer answer2 = new StudentReviewAnswer();
+        answer2.setQuestion(questionHiber2);
+        answer2.setRight(false);
+        answer2.setStudentReview(studentReview2);
+        studentReviewAnswerService.addStudentReviewAnswer(answer2);
+
+        StudentReviewAnswer answer3 = new StudentReviewAnswer();
+        answer3.setQuestion(questionHiber3);
+        answer3.setRight(true);
+        answer3.setStudentReview(studentReview2);
+        studentReviewAnswerService.addStudentReviewAnswer(answer3);
     }
 }

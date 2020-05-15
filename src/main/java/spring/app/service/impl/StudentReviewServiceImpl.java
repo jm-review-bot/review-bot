@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
+import spring.app.model.Theme;
 import spring.app.service.abstraction.StudentReviewService;
 
 import java.util.List;
@@ -33,6 +34,17 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     @Override
     public List<StudentReview> getAllStudentReview() {
         return studentReviewDao.getAll();
+    }
+
+    /**
+     * Возвращает все ревью студента по определенной теме
+     * @param vkId студента
+     * @param theme тема
+     * @return
+     */
+    @Override
+    public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
+        return studentReviewDao.getAllStudentReviewsByStudentVkIdAndTheme(vkId,theme);
     }
 
     @Transactional

@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,6 +25,7 @@ public class StudentReviewAnswer {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @Fetch(FetchMode.JOIN)
     private Question question;
 
     @Column(name = "is_right")
@@ -31,7 +34,7 @@ public class StudentReviewAnswer {
     public StudentReviewAnswer() {
     }
 
-    public StudentReviewAnswer (StudentReview studentReview, Question question, Boolean isRight) {
+    public StudentReviewAnswer(StudentReview studentReview, Question question, Boolean isRight) {
         this.studentReview = studentReview;
         this.question = question;
         this.isRight = isRight;

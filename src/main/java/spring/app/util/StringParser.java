@@ -29,6 +29,7 @@ public class StringParser {
 
     /**
      * Проверка что введены только числовые данные. На данный момент метод не используется, вместо него есть {@link #toNumbersSet(String)}.
+     * Теперь используется.
      */
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
@@ -43,7 +44,7 @@ public class StringParser {
      */
     public static String[] toWordsArray(String text) {
         String[] strArray = text.trim().toLowerCase().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
-        if (strArray.length == 0){
+        if (strArray.length == 0) {
             strArray = new String[]{""};
         }
         return strArray;
@@ -126,7 +127,7 @@ public class StringParser {
 
     public static boolean isHangoutsLink(String link) {
         String prefix = "https://hangouts.google.com/call/";
-        if (link.startsWith(prefix)){
+        if (link.startsWith(prefix)) {
             String suffix = link.trim().substring(prefix.length());
             return suffix.length() == 24 && suffix.endsWith("AEEI");
         }
