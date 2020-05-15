@@ -29,7 +29,6 @@ public class StringParser {
 
     /**
      * Проверка что введены только числовые данные. На данный момент метод не используется, вместо него есть {@link #toNumbersSet(String)}.
-     * Теперь используется.
      */
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
@@ -127,11 +126,7 @@ public class StringParser {
 
     public static boolean isHangoutsLink(String link) {
         String prefix = "https://hangouts.google.com/call/";
-        if (link.startsWith(prefix)) {
-            String suffix = link.trim().substring(prefix.length());
-            return suffix.length() == 24 && suffix.endsWith("AEEI");
-        }
-        return false;
+        return link.startsWith(prefix);
     }
 
     public static boolean isValidReviewerInput(String input, int numberOfStudents) {
