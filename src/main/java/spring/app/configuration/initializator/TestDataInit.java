@@ -335,5 +335,151 @@ public class TestDataInit {
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
         questionService.addQuestion(question10);
+
+
+        //тестовые данные для ветки user-start-review-core_random-answerer.
+        //Используется:
+        //1.юзер который сдал 3 ревью и принимает 2 ревью
+        //2. 2 юзера которые сдают 2 ревью
+        //3. ревью на котором первый принимает, а 2 и 3 сдают
+        //4. 4 вопроса для темы.
+        /*
+        Проверенные кейсы.
+        Рандомность выбора юзера.
+        Заполнение после окончания рандомных ответчиков но не окончания ответчиков на вопрос
+        Заполнение после окончания рандомных ответчиков и окончания ответчиков на вопрос
+        Успешная сдача ревью
+        Не успешная сдача ревью
+        Рассылка вопросов после окончания ревью
+         */
+        User akira = new User();
+        akira.setFirstName("Akira");
+        akira.setLastName("Rokudo");
+        akira.setReviewPoint(30);
+        akira.setVkId(167464635);
+        akira.setRole(roleUser);
+        akira.setChatStep(StepSelector.START);
+        userService.addUser(akira);
+
+        //Ревью и связь о прохождении кора
+        Review akiraCorePassed = new Review();
+        akiraCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
+        akiraCorePassed.setOpen(false);
+        akiraCorePassed.setTheme(core);
+        akiraCorePassed.setUser(akira);//кто принимал
+        reviewService.addReview(akiraCorePassed);
+        StudentReview akiraCoreSuccesReview = new StudentReview();
+        akiraCoreSuccesReview.setUser(akira);
+        akiraCoreSuccesReview.setPassed(true);
+        akiraCoreSuccesReview.setReview(akiraCorePassed);
+        studentReviewService.addStudentReview(akiraCoreSuccesReview);
+        //Ревью и связь о прохождении многопоточки
+        Review akiraMultithreadingPassed = new Review();
+        akiraMultithreadingPassed.setDate(LocalDateTime.of(2020, 4, 14, 11, 0));
+        akiraMultithreadingPassed.setOpen(false);
+        akiraMultithreadingPassed.setTheme(multithreading);
+        akiraMultithreadingPassed.setUser(akira);//кто принимал
+        reviewService.addReview(akiraMultithreadingPassed);
+        StudentReview akiraMultithreadingSuccesReview = new StudentReview();
+        akiraMultithreadingSuccesReview.setUser(akira);
+        akiraMultithreadingSuccesReview.setPassed(true);
+        akiraMultithreadingSuccesReview.setReview(akiraMultithreadingPassed);
+        studentReviewService.addStudentReview(akiraMultithreadingSuccesReview);
+
+        //первый юзер сдающий ревью по многопоточке. То есть у него 1 пройденное ревью - кор
+        User studentForCriticalWeight = new User();
+        studentForCriticalWeight.setFirstName("Алексей");
+        studentForCriticalWeight.setLastName("Травов");
+        studentForCriticalWeight.setReviewPoint(10);
+        studentForCriticalWeight.setVkId(561687031);
+        studentForCriticalWeight.setRole(roleUser);
+        studentForCriticalWeight.setChatStep(StepSelector.START);
+        userService.addUser(studentForCriticalWeight);
+
+        //Ревью и связь о прохождении кора
+        Review studentForCriticalWeightCorePassed = new Review();
+        studentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
+        studentForCriticalWeightCorePassed.setOpen(false);
+        studentForCriticalWeightCorePassed.setTheme(core);
+        studentForCriticalWeightCorePassed.setUser(studentForCriticalWeight);//кто принимал
+        reviewService.addReview(studentForCriticalWeightCorePassed);
+        StudentReview studentForCriticalWeightCoreSuccesReview = new StudentReview();
+        studentForCriticalWeightCoreSuccesReview.setUser(studentForCriticalWeight);
+        studentForCriticalWeightCoreSuccesReview.setPassed(true);
+        studentForCriticalWeightCoreSuccesReview.setReview(studentForCriticalWeightCorePassed);
+        studentReviewService.addStudentReview(studentForCriticalWeightCoreSuccesReview);
+
+        //второй юзер сдающий ревью по многопоточке. То есть у него 1 пройденное ревью - кор
+        User secondStudentForCriticalWeight = nikolay;
+
+        //Ревью и связь о прохождении кора
+        Review secondStudentForCriticalWeightCorePassed = new Review();
+        secondStudentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
+        secondStudentForCriticalWeightCorePassed.setOpen(false);
+        secondStudentForCriticalWeightCorePassed.setTheme(core);
+        secondStudentForCriticalWeightCorePassed.setUser(secondStudentForCriticalWeight);//кто принимал
+        reviewService.addReview(secondStudentForCriticalWeightCorePassed);
+        StudentReview secondStudentForCriticalWeightCoreSuccesReview = new StudentReview();
+        secondStudentForCriticalWeightCoreSuccesReview.setUser(secondStudentForCriticalWeight);//кто сдавал
+        secondStudentForCriticalWeightCoreSuccesReview.setPassed(true);
+        secondStudentForCriticalWeightCoreSuccesReview.setReview(secondStudentForCriticalWeightCorePassed);
+        studentReviewService.addStudentReview(secondStudentForCriticalWeightCoreSuccesReview);
+
+
+
+        //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
+        //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
+        Review criticalWeightReview = new Review();
+        criticalWeightReview.setDate(LocalDateTime.of(2020, 5, 16, 23, 00));
+        criticalWeightReview.setOpen(true);
+        criticalWeightReview.setTheme(multithreading);
+        criticalWeightReview.setUser(akira);//кто принимает
+        reviewService.addReview(criticalWeightReview);
+
+        //Связь для ревью.
+        // первый из сдающих
+        StudentReview criticalWeightFirstStudentReview = new StudentReview();
+        criticalWeightFirstStudentReview.setUser(studentForCriticalWeight);//кто сдает
+        criticalWeightFirstStudentReview.setReview(criticalWeightReview);
+        studentReviewService.addStudentReview(criticalWeightFirstStudentReview);
+        //второй сдающий
+        StudentReview criticalWeightSecondStudentReview = new StudentReview();
+        criticalWeightSecondStudentReview.setUser(secondStudentForCriticalWeight);//кто сдает
+        criticalWeightSecondStudentReview.setReview(criticalWeightReview);
+        studentReviewService.addStudentReview(criticalWeightSecondStudentReview);
+
+        //4 вопроса
+        Question criticalQuestion1 = new Question();
+        criticalQuestion1.setAnswer("Герои мультика");
+        criticalQuestion1.setPosition(1);
+        criticalQuestion1.setQuestion("Кто такие фиксики");
+        criticalQuestion1.setTheme(multithreading);
+//        criticalQuestion1.setWeight(1);
+        questionService.addQuestion(criticalQuestion1);
+
+        Question criticalQuestion2 = new Question();
+        criticalQuestion2.setAnswer("Столько же, сколько накануне, ибо Йозеф еще спит");
+        criticalQuestion2.setPosition(2);
+        criticalQuestion2.setQuestion("Сколько будет весить Йозеф, если греки выступили на рассвете?");
+        criticalQuestion2.setTheme(multithreading);
+//        criticalQuestion2.setWeight(2);
+        questionService.addQuestion(criticalQuestion2);
+
+        Question criticalQuestion3 = new Question();
+        criticalQuestion3.setAnswer("Путь праведника труден, ибо препятствуют ему себялюбивые и тираны из злых людей.");
+        criticalQuestion3.setPosition(3);
+        criticalQuestion3.setQuestion("Назовите первое предложение Ветхого Завета, Книги Иезекииля,Главы 25,17 Стиха ");
+        criticalQuestion3.setTheme(multithreading);
+//        criticalQuestion3.setWeight(3);
+        questionService.addQuestion(criticalQuestion3);
+
+        Question criticalQuestion4 = new Question();
+        criticalQuestion4.setAnswer("завершает работу цикла");
+        criticalQuestion4.setPosition(4);
+        criticalQuestion4.setQuestion("Что делает оператор break?");
+        criticalQuestion4.setTheme(multithreading);
+//        criticalQuestion4.setWeight(4);
+        questionService.addQuestion(criticalQuestion4);
+
     }
 }
