@@ -7,8 +7,6 @@ import com.vk.api.sdk.exceptions.ClientException;
 import com.vk.api.sdk.httpclient.HttpTransportClient;
 import com.vk.api.sdk.objects.messages.Dialog;
 import com.vk.api.sdk.objects.messages.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,6 @@ import java.util.Random;
 @Service
 @PropertySource("classpath:vkconfig.properties")
 public class VkServiceImpl implements VkService {
-    private final static Logger log = LoggerFactory.getLogger(VkServiceImpl.class);
     @Value("${group_id}")
     private int groupID;
     @Value("${access_token}")
@@ -49,7 +46,7 @@ public class VkServiceImpl implements VkService {
                 result.add(item.getMessage());
             }
         } catch (ApiException | ClientException e) {
-            log.error("Исключение при получении сообщений", e);
+            //ignore
         }
         return result;
     }
@@ -65,7 +62,7 @@ public class VkServiceImpl implements VkService {
                     .userId(userId).randomId(random.nextInt())
                     .execute();
         } catch (ApiException | ClientException e) {
-            log.error("Исключение при отправке сообщения", e);
+            //ignore
         }
     }
 

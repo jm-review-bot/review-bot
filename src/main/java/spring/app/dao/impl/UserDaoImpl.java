@@ -1,7 +1,5 @@
 package spring.app.dao.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +13,6 @@ import java.util.List;
 
 @Repository
 public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
-    private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
 
     public UserDaoImpl() {
         super(User.class);
@@ -29,7 +26,6 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
             query.setParameter("id", vkId);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            log.info("Пользователь с vkId:{} не обнаружен в базе", vkId);
             throw e;
         }
     }
