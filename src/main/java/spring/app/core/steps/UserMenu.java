@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
@@ -43,10 +44,12 @@ public class UserMenu extends Step {
                 .collect(Collectors.toList());
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
-        try {
-            studentReview = reviewService.getOpenReviewByStudentVkId(vkId);
-        } catch (NoResultException ignore) {
-            // Если пользователь не записан ни на одно ревью, метод Dao выбросит исключение и нужно скрыть кнопку "Отменить ревью"
+        List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
+        if(!openStudentReview.isEmpty()) {
+            if (openStudentReview.size()>1) {
+                //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
+            }
+            studentReview = openStudentReview.get(0).getReview();
         }
         // формируем блок кнопок
         StringBuilder keys = new StringBuilder(HEADER_FR);
