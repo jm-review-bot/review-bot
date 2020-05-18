@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,7 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
+    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
 
     @Override
     public void enter(BotContext context) {
@@ -84,6 +87,10 @@ public class AdminAddUser extends Step {
                                 .append(", https://vk.com/id")
                                 .append(user.getVkId())
                                 .append("\n");
+                        log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                                "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [id - "+context.getUser().getVkId()+"] добавил пользователя(ей) в базу.\n" +
+                                "А именно, он добавил следующего(их) пользователя(ей):\n" +
+                                addedUserText.toString());
 
                     });
                     addedUserText.append("\nВы можете прислать еще ссылки на профили или вернуться в Меню, введя \"назад\".");
