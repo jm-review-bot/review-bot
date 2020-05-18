@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -16,6 +18,7 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
+    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
 
     private Set<Integer> deleteUsersOk = new HashSet<>();
 
@@ -114,6 +117,11 @@ public class AdminRemoveUser extends Step {
         } else if (wordInput.equals("да")) {
             // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
             // удаляем юзеров и удаляем записи данных юзеров из кэша
+            String str = "";
+            for(String s : usersToDelete) {
+                str = str + context.getUserService().getUserById(Long.parseLong(s)).getFirstName() + " " +
+                        context.getUserService().getUserById(Long.parseLong(s)).getLastName() + "[vkId - "+context.getUserService().getUserById(Long.parseLong(s)).getVkId()+"]\n";
+            }
             usersToDelete.forEach(userIdString -> {
                 storageService.clearUsersOfStorage(context.getUserService().getUserById(Long.parseLong(userIdString)).getVkId());
                 context.getUserService()
@@ -121,6 +129,10 @@ public class AdminRemoveUser extends Step {
             });
             // сохраняю id пользователя, чтобы вывести текст об успешном удалении
             deleteUsersOk.add(vkId);
+            log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                    "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getId()+"] удалил пользователя(ей) из базы.\n" +
+                    "А именно, он удалил следующего(их) пользователя(ей):\n" +
+                    str);
             // обязательно очищаем память
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
