@@ -5,6 +5,8 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
+import java.util.Arrays;
+
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
@@ -20,10 +22,12 @@ public class AdminMenu extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = StringParser.toWordsArray(context.getInput())[0];
+        Integer vkId = context.getVkId();
         if ("добавить".equals(command)) {
             nextStep = ADMIN_ADD_USER;
         } else if ("удалить".equals(command)) {
-            nextStep = ADMIN_REMOVE_USER;
+            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("delete"));
+            nextStep = ADMIN_USERS_LIST;//в этом шаге все зависит от режима
         } else if ("/start".equals(command)) {
             nextStep = START;
         } else if ("главное".equalsIgnoreCase(command)) {
