@@ -31,14 +31,17 @@ public class UserStartReviewRules extends Step {
         StringBuilder studentsList = new StringBuilder("На твоём ревью сегодня присутствуют:\n\n");
         final int[] i = {1};
         students.forEach(user -> {
-            studentsList.append(String.format("[%d] %s %s, https://vk.com/id%d\n", i[0]++, user.getFirstName(), user.getLastName(), user.getVkId()));
+            studentsList.append(String.format("[%d] %s %s, (https://vk.com/id%d)\n", i[0]++, user.getFirstName(), user.getLastName(), user.getVkId()));
         });
         // запоминаем список студентов для использования на следующем шаге
         storageService.updateUserStorage(vkId, USER_START_REVIEW_RULES, Arrays.asList(studentsList.toString()));
 
         StringBuilder textBuilder = new StringBuilder(studentsList);
         // формируем информационное сообщение , которое зависит от кол-ва участников ревью
-        textBuilder.append("\nСистема будет выдавать вопрос из списка, который тебе необходимо задать.\n\n");
+        textBuilder.append("\nСистема будет выдавать вопрос из списка, который тебе необходимо задать,")
+                .append(" и имя человека, которому данный вопрос ты должен адресовать.")
+                .append(" Если человек не отвечает на вопрос - нажимай на кнопку 'ответ не принят'. Если ответ получен верный - 'ответ принят'\n");
+        /*
         String studentName1 = students.get(0).getFirstName();
         if (students.size() == 1) {
             textBuilder.append(String.format("Если %s ответил правильно на вопрос - напиши в чат 1+ \nЕсли %s неправильно ответил на вопрос - напиши в чат 1", studentName1, studentName1));
@@ -66,8 +69,10 @@ public class UserStartReviewRules extends Step {
             if (students.size() == 3) {
                 textBuilder.append("Если никто не ответил правильно на вопрос - \nнаписать в чат 1 2 3");
             }
-            textBuilder.append("\n\nВопрос задаётся до ПЕРВОГО человека ответившего правильно");
         }
+         */
+        //TODO: на мой взгляд строку ниже надо все же расскоментить. Но ТЗ есть ТЗ
+        //   textBuilder.append("\n\nВопрос задаётся до ПЕРВОГО человека ответившего правильно");
         text = textBuilder.toString();
         keyboard = START_KB;
     }

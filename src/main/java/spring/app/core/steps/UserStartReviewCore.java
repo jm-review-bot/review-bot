@@ -9,14 +9,10 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.Question;
-import spring.app.model.StudentReview;
-import spring.app.model.StudentReviewAnswer;
-import spring.app.model.User;
+import spring.app.model.*;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
-import javax.persistence.ManyToMany;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -35,6 +31,7 @@ public class UserStartReviewCore extends Step {
     private final Map<Integer, Pair<Integer, Long>> questionNumbers = new HashMap<>();
     //Хранит по vkId набор айдишников студентов которым можно задать вопрос. На старте - всем студентам на ревью
     private final Map<Integer, List<Long>> possibleAnswerer = new HashMap<>();
+
 
     @Override
     public void enter(BotContext context) {
@@ -73,7 +70,10 @@ public class UserStartReviewCore extends Step {
             // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer
             // строки корректные, мы их проверяли в processInput()
             List<String> reviewerInput = storageService.getUserStorage(vkId, USER_START_REVIEW_CORE);
+            //карта с ключом по студенту и списком вопросов на которые он не смог дать ответ
             Map<User, List<String>> problemQuestions = new HashMap<>();
+            //карта с ключом по студенту и суммарным весом его кривых вопросов(не стал мудрить и фигачить лист с парами строка-вес)
+            Map<User, Integer> studentWrongWeight = new HashMap<>();
             for (String questionString : reviewerInput) { //TODO:вынести в отдельный метод AR
                 //вычленяем позицию вопроса, вырезаем её и получаем вопрос.
                 String questionPosition = questionString.substring(1, questionString.indexOf(" "));//c 1 потому что строка начинается с q. q23 4 2 1 к примеру. Это удобнее, если когда-то мы будем хранить ревью
@@ -84,7 +84,7 @@ public class UserStartReviewCore extends Step {
                     //вырезаем последнего студента в таком случае. Он нормальный.
                     String luckyStudentPosition;
                     if (questionString.contains(" ")) {
-                        luckyStudentPosition = questionString.substring(questionString.lastIndexOf(" ")+1, questionString.length() - 1);//+ не вытаскиваем
+                        luckyStudentPosition = questionString.substring(questionString.lastIndexOf(" ") + 1, questionString.length() - 1);//+ не вытаскиваем
                         questionString = questionString.substring(0, questionString.lastIndexOf(" "));
                     } else {
                         luckyStudentPosition = questionString.substring(0, questionString.length() - 1);
@@ -108,11 +108,13 @@ public class UserStartReviewCore extends Step {
                         List<String> problemQuestionList = problemQuestions.get(student);
                         problemQuestionList.add(question.getQuestion());
                         problemQuestions.put(student, problemQuestionList);
+                        //да, тут в одну строку, т.к. конкат листов как минимум не удобен для чтения
+                        studentWrongWeight.merge(student, question.getWeight(), (oldWeight, newWeight) -> oldWeight += newWeight);
                     }
                 }
             }
 
-            // очищаем ввод ревьюера из STORAGE //TODO: наверно это стоит перенести в processInput AR
+            // очищаем ввод ревьюера из STORAGE.
             storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
             storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
             // добавляем очки за прием ревью
@@ -126,17 +128,15 @@ public class UserStartReviewCore extends Step {
             // подведение итогов ревью для студентов, рассылка сообщений студентам с результатами ревью, списание очков
             for (User student : students) {//TODO:разбить и вынести на 2 метода - расчет итогов(сдал/не сдал) и рассылку AR
                 // списываем очки за пройденное ревью
-                Integer reviewPoint = context.getThemeService().getThemeByReviewId(reviewId).getReviewPoint();
-                student.setReviewPoint(student.getReviewPoint() - reviewPoint);
+                Theme theme = context.getThemeService().getThemeByReviewId(reviewId);
+                student.setReviewPoint(student.getReviewPoint() - theme.getReviewPoint());
                 context.getUserService().updateUser(student);
                 // проверяем ответы по карте. Если проблемные вопросы есть - значит(до правок по весу) он не сдал.
                 // Не быть хотя бы одного ответа у него не может т.к. это возможно только если вопросов на ревью было меньше чем студентов
                 StudentReview studentReview = context.getStudentReviewService().getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
-                if (problemQuestions.containsKey(student)) {
-                    //доработать этот блок под проверку веса.
+                if (studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
                     studentReview.setPassed(false);
                 } else {
-                    //нет проблемных вопросов - значит нет смысла и считать, он точно прошел.
                     studentReview.setPassed(true);
                 }
                 context.getStudentReviewService().updateStudentReview(studentReview);
@@ -146,14 +146,14 @@ public class UserStartReviewCore extends Step {
                     reviewResults.append("Ревью пройдено\n");
                 } else {
                     reviewResults.append("Ревью не пройдено.\n\nВот список проблемных вопросов:\n");
-                    final int[] k = {1};
-                    for (String incorrectAnswer : problemQuestions.get(student)) {
-                        reviewResults.append("[").append(k[0]++).append("] ")
-                                .append(incorrectAnswer)
-                                .append("\n");
-                    }
                 }
-                reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", reviewPoint, student.getReviewPoint()));
+                final int[] k = {1};
+                for (String incorrectAnswer : problemQuestions.get(student)) {
+                    reviewResults.append("[").append(k[0]++).append("] ")
+                            .append(incorrectAnswer)
+                            .append("\n");
+                }
+                reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", theme.getReviewPoint(), student.getReviewPoint()));
                 // отправляем студенту результаты ревью
                 Step userStep = context.getStepHolder().getSteps().get(student.getChatStep());
                 context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
@@ -165,7 +165,8 @@ public class UserStartReviewCore extends Step {
     }
 
     @Override
-    public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+    public void processInput(BotContext context) throws
+            ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
@@ -308,3 +309,4 @@ public class UserStartReviewCore extends Step {
     Изменить алгоритм проверки пройденности ревью. Вместо наличия проблемного вопроса - проверка через карту по критичной массе.
      */
 }
+
