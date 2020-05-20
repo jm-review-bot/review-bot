@@ -22,11 +22,22 @@ public class Question {
     @Column(name = "position")
     private Integer position;
 
+    @Column(name = "weight")
+    private Integer weight;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
 
     public Question() {
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
+    }
+
+    public Integer getWeight() {
+        return weight;
     }
 
     public Long getId() {

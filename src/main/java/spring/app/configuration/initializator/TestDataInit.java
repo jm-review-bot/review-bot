@@ -163,48 +163,56 @@ public class TestDataInit {
         core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
+        core.setCritical_weight(8);
         themeService.addTheme(core);
 
         Theme multithreading = new Theme();
         multithreading.setPosition(2);
         multithreading.setReviewPoint(4);
         multithreading.setTitle("Многопоточность");
+        multithreading.setCritical_weight(8);
         themeService.addTheme(multithreading);
 
         Theme sql = new Theme();
         sql.setPosition(3);
         sql.setReviewPoint(4);
         sql.setTitle("SQL");
+        sql.setCritical_weight(8);
         themeService.addTheme(sql);
 
         Theme hibernate = new Theme();
         hibernate.setPosition(4);
         hibernate.setReviewPoint(4);
         hibernate.setTitle("Hibernate");
+        hibernate.setCritical_weight(8);
         themeService.addTheme(hibernate);
 
         Theme spring = new Theme();
         spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
+        spring.setCritical_weight(8);
         themeService.addTheme(spring);
 
         Theme patterns = new Theme();
         patterns.setPosition(6);
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
+        patterns.setCritical_weight(8);
         themeService.addTheme(patterns);
 
         Theme algorithm = new Theme();
         algorithm.setPosition(7);
         algorithm.setReviewPoint(4);
         algorithm.setTitle("Алгоритмы");
+        algorithm.setCritical_weight(8);
         themeService.addTheme(algorithm);
 
         Theme finalReview = new Theme();
         finalReview.setPosition(8);
         finalReview.setReviewPoint(4);
         finalReview.setTitle("Финальное ревью");
+        finalReview.setCritical_weight(8);
         themeService.addTheme(finalReview);
 
         // add reviews
@@ -271,6 +279,7 @@ public class TestDataInit {
         question1.setPosition(1);
         question1.setQuestion("Что такое bean??");
         question1.setTheme(spring);
+        question1.setWeight(8);
         questionService.addQuestion(question1);
 
         Question question2 = new Question();
@@ -278,6 +287,7 @@ public class TestDataInit {
         question2.setPosition(2);
         question2.setQuestion("Опишите IOC своими словами");
         question2.setTheme(spring);
+        question2.setWeight(8);
         questionService.addQuestion(question2);
 
         Question question3 = new Question();
@@ -285,6 +295,7 @@ public class TestDataInit {
         question3.setPosition(3);
         question3.setQuestion("Что такое Dependency Injection?");
         question3.setTheme(spring);
+        question3.setWeight(8);
         questionService.addQuestion(question3);
 
         Question question4 = new Question();
@@ -292,6 +303,7 @@ public class TestDataInit {
         question4.setPosition(4);
         question4.setQuestion("Что такое Spring Boot?");
         question4.setTheme(spring);
+        question4.setWeight(8);
         questionService.addQuestion(question4);
 
         Question question5 = new Question();
@@ -299,6 +311,7 @@ public class TestDataInit {
         question5.setPosition(5);
         question5.setQuestion("Что такое AOP?");
         question5.setTheme(spring);
+        question5.setWeight(8);
         questionService.addQuestion(question5);
 
         Question question6 = new Question();
@@ -306,6 +319,7 @@ public class TestDataInit {
         question6.setPosition(6);
         question6.setQuestion("Что такое autowriting?");
         question6.setTheme(spring);
+        question6.setWeight(8);
         questionService.addQuestion(question6);
 
         Question question7 = new Question();
@@ -313,6 +327,7 @@ public class TestDataInit {
         question7.setPosition(7);
         question7.setQuestion("Что такое target object?");
         question7.setTheme(spring);
+        question7.setWeight(8);
         questionService.addQuestion(question7);
 
         Question question8 = new Question();
@@ -320,6 +335,7 @@ public class TestDataInit {
         question8.setPosition(8);
         question8.setQuestion("Что такое DAO?");
         question8.setTheme(spring);
+        question8.setWeight(8);
         questionService.addQuestion(question8);
 
         Question question9 = new Question();
@@ -327,6 +343,7 @@ public class TestDataInit {
         question9.setPosition(9);
         question9.setQuestion("Что делает @RequestMapping?");
         question9.setTheme(spring);
+        question9.setWeight(8);
         questionService.addQuestion(question9);
 
         Question question10 = new Question();
@@ -334,6 +351,7 @@ public class TestDataInit {
         question10.setPosition(10);
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
+        question10.setWeight(8);
         questionService.addQuestion(question10);
     }
 }
