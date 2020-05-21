@@ -8,6 +8,40 @@ public class Keyboards {
 
     public final static String ROW_DELIMETER_FR = "],[";
 
+    public final static String USER_MENU_D_FR = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Сдать ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Принять ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"3\\\"}\",\n" +
+            "          \"label\": \"Отменить приём ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n";
+
+    public final static String DELETE_REVIEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отменить ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n";
+
     public final static String REVIEW_START_FR = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
@@ -21,7 +55,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Отменить ревью\"\n" +
+            "          \"label\": \"Отменить сдачу ревью\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n";
@@ -113,6 +147,30 @@ public class Keyboards {
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Нет\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
+    public final static String CANCEL_OR_DELETE = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Да, отменить ревью\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n" +
