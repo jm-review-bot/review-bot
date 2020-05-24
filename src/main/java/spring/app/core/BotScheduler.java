@@ -14,6 +14,7 @@ import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -66,6 +67,29 @@ public class BotScheduler {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(user.getChatStep());
                 bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать прием ревью\"", step.getKeyboard(), user.getVkId());
+                log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
+            }
+        }
+    }
+
+    @Scheduled(fixedDelayString = "${bot.review_reminder_interval}")
+    public void sendReviewHourReminder() {
+
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(59).plusNanos(1);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(60);
+
+        List<User> reviewers = userService.getUsersByReviewPeriod(periodStart, periodEnd);
+        List<User> students = userService.getStudentsByReviewPeriod(periodStart, periodEnd);
+
+        List<User> users = new ArrayList<>();
+        users.addAll(reviewers);
+        users.addAll(students);
+
+        if (!users.isEmpty()) {
+            for (User user : users) {
+                // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
+                Step step = stepHolder.getSteps().get(user.getChatStep());
+                bot.sendMessage("Напоминание! Через час у тебя ревью.", step.getKeyboard(), user.getVkId());
                 log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }
