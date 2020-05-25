@@ -221,4 +221,30 @@ public class Keyboards {
             "      }\n" +
             "  ]]\n" +
             "} ";
+
+    public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"оставить имя как есть\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"ввести новое имя фамилию\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
+
 }

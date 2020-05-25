@@ -43,7 +43,7 @@ public class StringParser {
      */
     public static String[] toWordsArray(String text) {
         String[] strArray = text.trim().toLowerCase().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
-        if (strArray.length == 0){
+        if (strArray.length == 0) {
             strArray = new String[]{""};
         }
         return strArray;
@@ -77,16 +77,35 @@ public class StringParser {
      * @param text
      * @return List<String>, который сразу может быть передан в метод запроса информации из ВК о данных юзерах.
      */
-    public static List<String> toVkIdsList(String text) {
-        String[] words = text.trim().toLowerCase().split("[\\s,]+");
-        List<String> result = new ArrayList<>();
-        for (String link : words) {
-            link = link.replaceAll("https://vk.com/id", "");
-            link = link.replaceAll("https://vk.com/", "");
-            result.add(link);
+    //TODO: убрать при рефакторинге
+//    public static List<String> toVkIdsList(String text) {
+//        String[] words = text.trim().toLowerCase().split("[\\s,]+");
+//        List<String> result = new ArrayList<>();
+//        for (String link : words) {
+//            link = link.replaceAll("https://vk.com/id", "");
+//            link = link.replaceAll("https://vk.com/", "");
+//            result.add(link);
+//        }
+//        return result;
+//    }
+
+    /**
+     * Отсекает доменную часть ссылки на профиль юзера
+     * @param text ссылку на профиль
+     * @return null, если строка неподходящего формата
+     */
+    public static String toVkId(String text) {
+        if (text != null && !text.isEmpty()) {
+            text = text.trim();
+            if (text.startsWith("https://vk.com/")) {
+                text = text.replaceAll("https://vk.com/id", "");
+                text = text.replaceAll("https://vk.com/", "");
+                return text;
+            }
         }
-        return result;
+        return null;
     }
+
 
     /**
      * Метод преобразует строковое представление даты в формате dd.MM.uuuu HH:mm
@@ -126,11 +145,7 @@ public class StringParser {
 
     public static boolean isHangoutsLink(String link) {
         String prefix = "https://hangouts.google.com/call/";
-        if (link.startsWith(prefix)){
-            String suffix = link.trim().substring(prefix.length());
-            return suffix.length() == 24 && suffix.endsWith("AEEI");
-        }
-        return false;
+        return link.startsWith(prefix);
     }
 
     public static boolean isValidReviewerInput(String input, int numberOfStudents) {
