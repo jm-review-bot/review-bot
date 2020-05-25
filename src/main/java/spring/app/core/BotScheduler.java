@@ -58,8 +58,8 @@ public class BotScheduler {
     @Scheduled(fixedDelayString = "${bot.review_reminder_interval}")
     public void sendReviewReminder() {
 
-        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(2).plusNanos(1);
-        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(3);
+        LocalDateTime periodStart = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime periodEnd = LocalDateTime.now();
 
         List<User> users = userService.getUsersByReviewPeriod(periodStart, periodEnd);
         if (!users.isEmpty()) {
@@ -67,7 +67,6 @@ public class BotScheduler {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(user.getChatStep());
                 bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать прием ревью\"", step.getKeyboard(), user.getVkId());
-                log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }
     }
@@ -90,7 +89,6 @@ public class BotScheduler {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(user.getChatStep());
                 bot.sendMessage("Напоминание! Через час у тебя ревью.", step.getKeyboard(), user.getVkId());
-                log.debug("В {} пользователю с id {} отправлено напоминание о ревью.", LocalDateTime.now(), user.getVkId());
             }
         }
     }
