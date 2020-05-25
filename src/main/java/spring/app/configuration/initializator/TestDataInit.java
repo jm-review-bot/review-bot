@@ -52,6 +52,12 @@ public class TestDataInit {
     private Step adminRemoveUser;
 
     @Autowired
+    private Step adminProposalChangeFullnameAddedUser;
+
+    @Autowired
+    private Step adminChangeAddedUserFullname;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -147,6 +153,8 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
+        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
@@ -353,5 +361,14 @@ public class TestDataInit {
         question10.setTheme(spring);
         question10.setWeight(8);
         questionService.addQuestion(question10);
+
+        User akira = new User();
+        akira.setFirstName("Akira");
+        akira.setLastName("Rokudo");
+        akira.setReviewPoint(30);
+        akira.setVkId(167464635);
+        akira.setRole(roleAdmin);
+        akira.setChatStep(StepSelector.START);
+        userService.addUser(akira);
     }
 }
