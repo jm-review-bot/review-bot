@@ -104,7 +104,6 @@ public class UserStartReviewCore extends Step {
                 // подведение итогов ревью для студентов, рассылка сообщений студентам с результатами ревью, списание очков
                 for (User student : students) {
                     Integer weight = new Integer(0);
-                    List<Question> questionList = context.getQuestionService().getQuestionsByReviewId(reviewId);
                     // списываем очки за пройденное ревью
                     Integer reviewPoint = context.getThemeService().getThemeByReviewId(reviewId).getReviewPoint();
                     student.setReviewPoint(student.getReviewPoint() - reviewPoint);
@@ -118,13 +117,10 @@ public class UserStartReviewCore extends Step {
                         for (StudentReviewAnswer answer : studentReviewAnswers) {
                             if (!answer.getRight()) {
                                 weight += context.getQuestionService().getQuestionByStudentReviewAnswerId(answer.getId()).getWeight();
-                                break;
-                            } else {
-                                //studentReview.setPassed(true);
                             }
                         }
-                        if(weight>=context.getThemeService().getThemeByReviewId(reviewId).getCriticalWeight()) {
-                            studentReview.setPassed(false);//
+                        if (weight >= context.getThemeService().getThemeByReviewId(reviewId).getCritical_weight()) {
+                            studentReview.setPassed(false);
                         } else {
                             studentReview.setPassed(true);
                         }

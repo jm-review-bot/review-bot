@@ -52,6 +52,12 @@ public class TestDataInit {
     private Step adminRemoveUser;
 
     @Autowired
+    private Step adminProposalChangeFullnameAddedUser;
+
+    @Autowired
+    private Step adminChangeAddedUserFullname;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -147,6 +153,8 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
+        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
@@ -163,56 +171,56 @@ public class TestDataInit {
         core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
-        core.setCriticalWeight(8);
+        core.setCritical_weight(8);
         themeService.addTheme(core);
 
         Theme multithreading = new Theme();
         multithreading.setPosition(2);
         multithreading.setReviewPoint(4);
         multithreading.setTitle("Многопоточность");
-        multithreading.setCriticalWeight(8);
+        multithreading.setCritical_weight(8);
         themeService.addTheme(multithreading);
 
         Theme sql = new Theme();
         sql.setPosition(3);
         sql.setReviewPoint(4);
         sql.setTitle("SQL");
-        sql.setCriticalWeight(8);
+        sql.setCritical_weight(8);
         themeService.addTheme(sql);
 
         Theme hibernate = new Theme();
         hibernate.setPosition(4);
         hibernate.setReviewPoint(4);
         hibernate.setTitle("Hibernate");
-        hibernate.setCriticalWeight(8);
+        hibernate.setCritical_weight(8);
         themeService.addTheme(hibernate);
 
         Theme spring = new Theme();
         spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
-        spring.setCriticalWeight(8);
+        spring.setCritical_weight(8);
         themeService.addTheme(spring);
 
         Theme patterns = new Theme();
         patterns.setPosition(6);
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
-        patterns.setCriticalWeight(8);
+        patterns.setCritical_weight(8);
         themeService.addTheme(patterns);
 
         Theme algorithm = new Theme();
         algorithm.setPosition(7);
         algorithm.setReviewPoint(4);
         algorithm.setTitle("Алгоритмы");
-        algorithm.setCriticalWeight(8);
+        algorithm.setCritical_weight(8);
         themeService.addTheme(algorithm);
 
         Theme finalReview = new Theme();
         finalReview.setPosition(8);
         finalReview.setReviewPoint(4);
         finalReview.setTitle("Финальное ревью");
-        finalReview.setCriticalWeight(8);
+        finalReview.setCritical_weight(8);
         themeService.addTheme(finalReview);
 
         // add reviews
@@ -353,5 +361,14 @@ public class TestDataInit {
         question10.setTheme(spring);
         question10.setWeight(8);
         questionService.addQuestion(question10);
+
+        User akira = new User();
+        akira.setFirstName("Akira");
+        akira.setLastName("Rokudo");
+        akira.setReviewPoint(30);
+        akira.setVkId(167464635);
+        akira.setRole(roleAdmin);
+        akira.setChatStep(StepSelector.START);
+        userService.addUser(akira);
     }
 }
