@@ -31,23 +31,28 @@ public class UserFeedbackComment extends Step {
         String command = StringParser.toWordsArray(context.getInput())[0];
 
         if (!"главное".equals(command)) {
-            //добавляем в бд
-            newFeedback.setRatingReview(Integer.valueOf(context.getStorageService()
-                    .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT).get(0)));
-
-            newFeedback.setRatingReviewer(Integer.valueOf(context.getStorageService()
-                    .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT).get(0)));
-
-            newFeedback.setStudentReview(context.getStudentReviewService()
-                    .getStudentReviewById(Long.valueOf(context.getStorageService()
-                            .getUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION).get(0))));
-
             newFeedback.setComment(context.getInput());
-
-            context.getFeedbackService().addFeedback(newFeedback);
         }
+
+        //добавляем в бд
+        newFeedback.setUser(context.getUser());
+
+        newFeedback.setRatingReview(Integer.valueOf(context.getStorageService()
+                .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT).get(0)));
+
+        newFeedback.setRatingReviewer(Integer.valueOf(context.getStorageService()
+                .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT).get(0)));
+
+        newFeedback.setStudentReview(context.getStudentReviewService()
+                .getStudentReviewById(Long.valueOf(context.getStorageService()
+                        .getUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION).get(0))));
+
+        context.getFeedbackService().addFeedback(newFeedback);
+
         //clear cash
-        context.getStorageService().clearStorage();
+        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT);
+        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT);
+        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
 
         nextStep = USER_MENU;
     }

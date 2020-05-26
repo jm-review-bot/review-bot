@@ -135,12 +135,14 @@ public class UserStartReviewCore extends Step {
                                     .append("\n");
                         }
                     }
-                    reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", reviewPoint, student.getReviewPoint()));
+                    reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP \n ", reviewPoint, student.getReviewPoint()));
+                    reviewResults.append("Для улучшения качества обучения дайте обратную связь после ревью");
                     // отправляем студенту результаты ревью
-                    context.getStorageService().updateUserStorage(user.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
+                    context.getStorageService().updateUserStorage(student.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
                     //Step userStep = context.getStepHolder().getSteps().get(USER_FEEDBACK_CONFIRMATION);
-                    user.setChatStep(USER_FEEDBACK_CONFIRMATION);
-                    context.getUserService().updateUser(user);
+                    student.setChatStep(USER_FEEDBACK_CONFIRMATION);
+                    student.setViewed(true);
+                    context.getUserService().updateUser(student);
                     context.getVkService().sendMessage(reviewResults.toString(), FEEDBACK_CONFIRM_KB, student.getVkId());
                     log.warn("Студенту с id {} отправлено сообщение {}", student.getVkId(), reviewResults.toString());
                 }
