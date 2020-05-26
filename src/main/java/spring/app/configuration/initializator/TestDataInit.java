@@ -49,6 +49,9 @@ public class TestDataInit {
     private Step adminAddUser;
 
     @Autowired
+    private  Step adminUserList;
+
+    @Autowired
     private Step adminRemoveUser;
 
     @Autowired
@@ -146,6 +149,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_MENU, userMenu);
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
@@ -335,5 +339,14 @@ public class TestDataInit {
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
         questionService.addQuestion(question10);
+
+        User akira = new User();
+        akira.setFirstName("Akira");
+        akira.setLastName("Rokudo");
+        akira.setReviewPoint(30);
+        akira.setVkId(167464635);
+        akira.setRole(roleAdmin);
+        akira.setChatStep(StepSelector.START);
+        userService.addUser(akira);
     }
 }
