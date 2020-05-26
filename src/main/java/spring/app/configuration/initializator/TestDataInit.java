@@ -81,6 +81,18 @@ public class TestDataInit {
     @Autowired
     private Step userStartReviewCore;
 
+    @Autowired
+    private Step userFeedbackConfirmation;
+
+    @Autowired
+    private Step userFeedbackReviewAssessment;
+
+    @Autowired
+    private Step userFeedbackReviewerAssessment;
+
+    @Autowired
+    private Step userFeedbackComment;
+
     public TestDataInit() {
     }
 
@@ -103,6 +115,15 @@ public class TestDataInit {
         testUser.setRole(roleUser);  // change role for testing
         testUser.setChatStep(StepSelector.START);
         userService.addUser(testUser);
+
+        User sergey = new User();
+        sergey.setFirstName("Сергей");
+        sergey.setLastName("Лебедев");
+        sergey.setReviewPoint(1000000);
+        sergey.setVkId(80169300);
+        sergey.setRole(roleAdmin);
+        sergey.setChatStep(StepSelector.START);
+        userService.addUser(sergey);
 
         User roman = new User();
         roman.setFirstName("Роман");
@@ -157,6 +178,10 @@ public class TestDataInit {
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
+        steps.put(StepSelector.USER_FEEDBACK_CONFIRMATION, userFeedbackConfirmation);
+        steps.put(StepSelector.USER_FEEDBACK_REVIEW_ASSESSMENT, userFeedbackReviewAssessment);
+        steps.put(StepSelector.USER_FEEDBACK_REVIEWER_ASSESSMENT, userFeedbackReviewerAssessment);
+        steps.put(StepSelector.USER_FEEDBACK_COMMENT, userFeedbackComment);
 
         //add themes
         Theme core = new Theme();
@@ -218,8 +243,8 @@ public class TestDataInit {
         // add reviews
         Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        springReviewPassed.setOpen(true);
-        springReviewPassed.setTheme(hibernate);
+        springReviewPassed.setOpen(false);
+        springReviewPassed.setTheme(core);
         springReviewPassed.setUser(roman);
         reviewService.addReview(springReviewPassed);
 
@@ -252,8 +277,10 @@ public class TestDataInit {
         reviewService.addReview(springReviewPassed4);
 
         // add student reviews
+
+
         StudentReview studentReview = new StudentReview();
-        studentReview.setUser(anton);
+        studentReview.setUser(sergey);
         studentReview.setPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
