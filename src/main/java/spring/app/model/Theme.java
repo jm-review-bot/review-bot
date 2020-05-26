@@ -15,13 +15,24 @@ public class Theme {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "criticalWeight")
+    private Integer criticalWeight;
+
     @Column(name = "position")
     private Integer position;
 
-    @Column(name = "review_point")
+    @Column(name = "reviewPoint")
     private Integer reviewPoint;
 
     public Theme() {
+    }
+
+    public void setCritical_weight(Integer criticalWeight) {
+        this.criticalWeight = criticalWeight;
+    }
+
+    public Integer getCritical_weight() {
+        return criticalWeight;
     }
 
     public Long getId() {
