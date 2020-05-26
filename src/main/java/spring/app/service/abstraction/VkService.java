@@ -13,5 +13,5 @@ public interface VkService {
 
     void sendMessage(String text, String keyboard, Integer userId);
 
-    List<User> newUsersFromVk(List<String> userIds) throws ClientException, ApiException, IncorrectVkIdsException;
+    User newUserFromVk(String userId) throws ClientException, ApiException, IncorrectVkIdsException;
 }
