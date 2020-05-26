@@ -244,7 +244,7 @@ public class TestDataInit {
         Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
         springReviewPassed.setOpen(false);
-        springReviewPassed.setTheme(core);
+        springReviewPassed.setTheme(spring);
         springReviewPassed.setUser(roman);
         reviewService.addReview(springReviewPassed);
 

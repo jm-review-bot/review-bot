@@ -36,8 +36,8 @@ public class UserFeedbackConfirmation extends Step {
         } else if (wordInput.equals("начать")) {
             nextStep = USER_FEEDBACK_REVIEW_ASSESSMENT;
         } else {
-            throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" чтобы оставить отзыв" +
-                    " или \"Нет\" для выхода в главное меню.");
+            throw new ProcessInputException("Введена неверная команда. Нажми \"Начать\" чтобы оставить отзыв" +
+                    " или \"Отказаться\" для выхода в главное меню.");
         }
     }
 }
