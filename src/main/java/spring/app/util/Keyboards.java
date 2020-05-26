@@ -221,4 +221,28 @@ public class Keyboards {
             "      }\n" +
             "  ]]\n" +
             "} ";
+
+    public final static String FEEDBACK_CONFIRM_KB = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Начать\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Отказаться\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
 }

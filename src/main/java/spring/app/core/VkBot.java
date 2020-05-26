@@ -30,9 +30,10 @@ public class VkBot implements ChatBot {
     private StudentReviewService studentReviewService;
     private StudentReviewAnswerService studentReviewAnswerService;
     private StorageService storageService;
+    private FeedbackService feedbackService;
 
 
-    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService, StorageService storageService) {
+    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService, StorageService storageService, FeedbackService feedbackService) {
         this.vkService = vkService;
         this.userService = userService;
         this.roleService = roleService;
@@ -43,6 +44,7 @@ public class VkBot implements ChatBot {
         this.studentReviewService = studentReviewService;
         this.studentReviewAnswerService = studentReviewAnswerService;
         this.storageService = storageService;
+        this.feedbackService = feedbackService;
     }
 
     @Override
@@ -98,7 +100,7 @@ public class VkBot implements ChatBot {
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, questionService, stepHolder, studentReviewAnswerService, studentReviewService, storageService);
+            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, questionService, stepHolder, studentReviewAnswerService, studentReviewService, storageService, feedbackService);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг

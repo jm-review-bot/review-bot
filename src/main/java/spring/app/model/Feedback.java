@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 @Table(name = "student_feedback")
@@ -23,65 +22,50 @@ public class Feedback {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Review review;
+    private StudentReview studentReview;
 
     @Column(name = "rating_reviewer")
-    private String ratingReviewer;
+    private Integer ratingReviewer;
 
     @Column(name = "rating_review")
-    private String ratingReview;
+    private Integer ratingReview;
 
     @Column(name = "student_comment")
     private String comment;
 
-    public Feedback(Long id, User user, Review review, String ratingReviewer, String ratingReview) {
+    public Feedback(Long id, User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview) {
         this.id = id;
         this.user = user;
-        this.review = review;
+        this.studentReview = studentReview;
         this.ratingReviewer = ratingReviewer;
         this.ratingReview = ratingReview;
     }
 
-    public Feedback(Long id, User user, Review review, String ratingReviewer, String ratingReview, String comment) {
+    public Feedback(User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview) {
+        this.user = user;
+        this.studentReview = studentReview;
+        this.ratingReviewer = ratingReviewer;
+        this.ratingReview = ratingReview;
+    }
+
+    public Feedback(User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview, String comment) {
+        this.user = user;
+        this.studentReview = studentReview;
+        this.ratingReviewer = ratingReviewer;
+        this.ratingReview = ratingReview;
+        this.comment = comment;
+    }
+
+    public Feedback(Long id, User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview, String comment) {
         this.id = id;
         this.user = user;
-        this.review = review;
+        this.studentReview = studentReview;
         this.ratingReviewer = ratingReviewer;
         this.ratingReview = ratingReview;
         this.comment = comment;
     }
 
     public Feedback() {
-    }
-
-    public Feedback(Long id, User user, Review review) {
-        this.id = id;
-        this.user = user;
-        this.review = review;
-    }
-
-    public String getRatingReviewer() {
-        return ratingReviewer;
-    }
-
-    public void setRatingReviewer(String ratingReviewer) {
-        this.ratingReviewer = ratingReviewer;
-    }
-
-    public String getRatingReview() {
-        return ratingReview;
-    }
-
-    public void setRatingReview(String ratingReview) {
-        this.ratingReview = ratingReview;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
     }
 
     public Long getId() {
@@ -100,29 +84,35 @@ public class Feedback {
         this.user = user;
     }
 
-    public Review getReview() {
-        return review;
+    public StudentReview getStudentReview() {
+        return studentReview;
     }
 
-    public void setReview(Review review) {
-        this.review = review;
+    public void setStudentReview(StudentReview studentReview) {
+        this.studentReview = studentReview;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Feedback feedback = (Feedback) o;
-        return id.equals(feedback.id) &&
-                user.equals(feedback.user) &&
-                review.equals(feedback.review) &&
-                Objects.equals(ratingReviewer, feedback.ratingReviewer) &&
-                Objects.equals(ratingReview, feedback.ratingReview) &&
-                Objects.equals(comment, feedback.comment);
+    public Integer getRatingReviewer() {
+        return ratingReviewer;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, user, review, ratingReviewer, ratingReview, comment);
+    public void setRatingReviewer(Integer ratingReviewer) {
+        this.ratingReviewer = ratingReviewer;
+    }
+
+    public Integer getRatingReview() {
+        return ratingReview;
+    }
+
+    public void setRatingReview(Integer ratingReview) {
+        this.ratingReview = ratingReview;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

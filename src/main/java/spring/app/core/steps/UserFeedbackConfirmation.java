@@ -8,28 +8,36 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.YES_NO_KB;
+import static spring.app.util.Keyboards.FEEDBACK_CONFIRM_KB;
 
 @Component
 public class UserFeedbackConfirmation extends Step {
 
     @Override
     public void enter(BotContext context) {
+
         text = "Для улучшения качества обучения дайте обратную связь после ревью.";
-        keyboard = YES_NO_KB;
+
+        keyboard = FEEDBACK_CONFIRM_KB;
     }
 
     @Override
-    public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+    public void processInput(BotContext context)
+            throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+
         String currentInput = context.getInput();
         String wordInput = StringParser.toWordsArray(currentInput)[0];
 
-        if (wordInput.equals("нет")) {
+        if (wordInput.equals("отказаться")) {
+            //clear cash
+            context.getStorageService().getUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION).clear();
+
             nextStep = USER_MENU;
-        } else if (wordInput.equals("да")) {
+        } else if (wordInput.equals("начать")) {
             nextStep = USER_FEEDBACK_REVIEW_ASSESSMENT;
         } else {
-            throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" чтобы оценить !!!!!! или \"Нет\" для выхода в главное меню.");
+            throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" чтобы оставить отзыв" +
+                    " или \"Нет\" для выхода в главное меню.");
         }
     }
 }

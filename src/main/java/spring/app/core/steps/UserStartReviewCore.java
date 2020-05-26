@@ -15,26 +15,20 @@ import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.NO_KB;
-import static spring.app.util.Keyboards.USER_MENU_KB;
+import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserStartReviewCore extends Step {
 
-    @Value("${review.point_for_take_review}")
-    int pointForTakeReview;
-
     private final static Logger log = LoggerFactory.getLogger(UserStartReviewCore.class);
-
     // Map хранит vkId ревьюера и индекс вопроса из List<Question> questions, который сейчас задает ревьюер
     private final Map<Integer, Integer> questionNumbers = new HashMap<>();
+    @Value("${review.point_for_take_review}")
+    int pointForTakeReview;
 
     @Override
     public void enter(BotContext context) {
@@ -143,8 +137,11 @@ public class UserStartReviewCore extends Step {
                     }
                     reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", reviewPoint, student.getReviewPoint()));
                     // отправляем студенту результаты ревью
-                    Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
-                    context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
+                    context.getStorageService().updateUserStorage(user.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
+                    //Step userStep = context.getStepHolder().getSteps().get(USER_FEEDBACK_CONFIRMATION);
+                    user.setChatStep(USER_FEEDBACK_CONFIRMATION);
+                    context.getUserService().updateUser(user);
+                    context.getVkService().sendMessage(reviewResults.toString(), FEEDBACK_CONFIRM_KB, student.getVkId());
                     log.warn("Студенту с id {} отправлено сообщение {}", student.getVkId(), reviewResults.toString());
                 }
                 keyboard = USER_MENU_KB;
