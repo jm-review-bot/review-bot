@@ -119,7 +119,7 @@ public class UserStartReviewCore extends Step {
                                 weight += context.getQuestionService().getQuestionByStudentReviewAnswerId(answer.getId()).getWeight();
                             }
                         }
-                        if (weight >= context.getThemeService().getThemeByReviewId(reviewId).getCritical_weight()) {
+                        if (weight >= context.getThemeService().getThemeByReviewId(reviewId).getCriticalWeight()) {
                             studentReview.setPassed(false);
                         } else {
                             studentReview.setPassed(true);
