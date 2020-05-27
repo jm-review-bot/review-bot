@@ -25,6 +25,9 @@ public class AdminMenu extends Step {
         Integer vkId = context.getVkId();
         if ("добавить".equals(command)) {
             nextStep = ADMIN_ADD_USER;
+        } else if ("изменить".equals(command)) {
+            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("edit"));
+            nextStep = ADMIN_USERS_LIST;//в этом шаге все зависит от режима
         } else if ("удалить".equals(command)) {
             context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("delete"));
             nextStep = ADMIN_USERS_LIST;//в этом шаге все зависит от режима
