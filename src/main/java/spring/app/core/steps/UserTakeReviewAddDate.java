@@ -69,9 +69,10 @@ public class UserTakeReviewAddDate extends Step {
             } catch (NoDataEnteredException e) {
                 throw new ProcessInputException("Некорректный ввод данных...\n\n Пример корректного ответа 02.06.2020 17:30");
             }
-            if (plannedStartReviewTime.isAfter(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
+//            if (plannedStartReviewTime.isAfter(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
+            if (plannedStartReviewTime.isAfter(LocalDateTime.now())) {
                 List<Review> conflictReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId, plannedStartReviewTime, reviewDuration);
-                List<Review> conflictStudentReviews = context.getReviewService().getOpenReviewsByStudentVkId(vkId, plannedStartReviewTime, reviewDuration);
+//                List<Review> conflictStudentReviews = context.getReviewService().getOpenReviewsByStudentVkId(vkId, plannedStartReviewTime, reviewDuration);
                 if (!conflictReviews.isEmpty()) {
                     Review conflictReview = conflictReviews.get(0);
                     StringBuilder conflictExceptionMessage = new StringBuilder();
@@ -82,16 +83,16 @@ public class UserTakeReviewAddDate extends Step {
                             .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
                     throw new ProcessInputException(conflictExceptionMessage.toString());
-                } else if (!conflictStudentReviews.isEmpty()) {
-                    Review conflictReview = conflictStudentReviews.get(0);
-                    StringBuilder conflictExceptionMessage = new StringBuilder();
-                    conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, в котором ты участвуешь.")
-                            .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
-                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
-                            .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
-                            .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
-                            .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
-                    throw new ProcessInputException(conflictExceptionMessage.toString());
+//                } else if (!conflictStudentReviews.isEmpty()) {
+//                    Review conflictReview = conflictStudentReviews.get(0);
+//                    StringBuilder conflictExceptionMessage = new StringBuilder();
+//                    conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, в котором ты участвуешь.")
+//                            .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
+//                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
+//                            .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
+//                            .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
+//                            .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
+//                    throw new ProcessInputException(conflictExceptionMessage.toString());
                 } else {
                     //все хорошо с валидацией, создаем ревью.
                     User user = context.getUserService().getByVkId(vkId);
@@ -110,9 +111,9 @@ public class UserTakeReviewAddDate extends Step {
                 }
             } else if (plannedStartReviewTime.isBefore(LocalDateTime.now())) {
                 throw new ProcessInputException("Время принятия нового ревью не может быть в прошлом :)\n Повтори ввод или вернись назад к выбору темы ревью");
-            } else if (plannedStartReviewTime.isBefore(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
-                throw new ProcessInputException(String.format("Ты можешь объявить о готовности принять, ревью не ранее, чем за %d минут до его начала\n" +
-                        "Повтори ввод или вернись назад к выбору темы ревью", (timeLimitBeforeReview + 1)));
+//            } else if (plannedStartReviewTime.isBefore(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
+//                throw new ProcessInputException(String.format("Ты можешь объявить о готовности принять, ревью не ранее, чем за %d минут до его начала\n" +
+//                        "Повтори ввод или вернись назад к выбору темы ревью", (timeLimitBeforeReview + 1)));
             }
         }
     }
