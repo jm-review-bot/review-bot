@@ -67,4 +67,9 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
         return studentReviewDao.getStudentReviewByReviewIdAndStudentId(reviewId, studentId);
     }
+
+    @Override
+    public List<StudentReview> getOpenReviewByStudentVkId(Integer vkId) {
+        return studentReviewDao.getOpenReviewByStudentVkId(vkId);
+    }
 }
