@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -9,11 +10,13 @@ import spring.app.model.Review;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.impl.StorageServiceImpl;
 import spring.app.util.Keyboards;
 import spring.app.util.StringParser;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +27,8 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
+    @Autowired
+    StorageServiceImpl ssi;
 
     @Value("${review.point_for_empty_review}")
     int pointForEmptyReview;
@@ -36,9 +41,6 @@ public class UserMenu extends Step {
 
     @Override
     public void enter(BotContext context) {
-        //======
-        System.out.println("BEGIN_STEP::"+"UserMenu");
-        //======
         Integer vkId = context.getVkId();
         User user = context.getUser();
         ReviewService reviewService = context.getReviewService();
@@ -66,20 +68,21 @@ public class UserMenu extends Step {
                     .append(REVIEW_CANCEL_FR)
                     .append(ROW_DELIMETER_FR);
         }
-        //---если у пользователя есть ХОТЬ ОДНО созданное им ревью, то отобразить кнопку "Отменить приём ревью" [DELETE_REVIEW]
-        //getOpenReviewsByReviewerVkId(new Integer(vkId))
+        //если у пользователя есть ХОТЬ ОДНО созданное им ревью, то отобразить кнопку "Отменить приём ревью" [DELETE_REVIEW]
         if(!context.getReviewService().getOpenReviewsByReviewerVkId(user.getVkId()).isEmpty()) {
-            System.out.println("|STEP::UserMenu::пользователь_с_vkId_"+vkId.toString()+"_записан_принимающим_(преподавателем)_как_минимум_на_одно_ревью|");
             keys.append(Keyboards.USER_MENU_D_FR).
                     append(FOOTER_FR);
-            System.out.println("--======--");
         } else {
             keys.append(USER_MENU_FR)
                     .append(FOOTER_FR);
         }
-        //---
         keyboard = keys.toString();
-        text = String.format("Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, для удобного использования бота воспользуйтесь кнопками + скрин. \nНа данный момент у вас %d RP (Review Points) для сдачи ревью.\nRP используются для записи на ревью, когда вы хотите записаться на ревью вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, если вы дали возможность вам сдать, но никто не записался на сдачу (те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.", user.getFirstName(), user.getReviewPoint());
+        String message = "";
+        if(ssi.getUserStorage(context.getVkId(),USER_MENU) != null) {
+            message = (new StringBuilder(ssi.getUserStorage(context.getVkId(),USER_MENU).get(0))).append("\n").toString();
+            ssi.updateUserStorage(context.getVkId(),USER_MENU,new ArrayList<String>());
+        }
+        text = String.format((new StringBuilder(message)).append("Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, для удобного использования бота воспользуйтесь кнопками + скрин. \nНа данный момент у вас %d RP (Review Points) для сдачи ревью.\nRP используются для записи на ревью, когда вы хотите записаться на ревью вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, если вы дали возможность вам сдать, но никто не записался на сдачу (те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.").toString(), user.getFirstName(), user.getReviewPoint());
     }
 
     @Override
@@ -88,7 +91,7 @@ public class UserMenu extends Step {
         StorageService storageService = context.getStorageService();
         String command = context.getInput();//StringParser.toWordsArray(context.getInput())[0];
         //тут каждая команда со своим обратчиком:
-        if (command.indexOf("Начать")!=-1) { // (Начать прием ревью)
+        if (command.contains("Начать")) { // (Начать прием ревью)
             // получаем список всех ревью, которые проводит пользователь
             List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
@@ -123,16 +126,22 @@ public class UserMenu extends Step {
                 // если пользователь не проводит ревью, то показываем сообщение
                 throw new ProcessInputException("Ты еще не объявлял о принятии ревью!\n Сначала ты должен его объвить, для этого нажми на кнопку \"Принять ревью\" и следуй дальнейшим указаниям.");
             }
-        } else if (command.indexOf("приём")!=-1) { // (Отменить ревью (!) у принимающего лица [препода])
-            nextStep = SELECTING_REVIEW_TO_DELETE;
-            storageService.removeUserStorage(vkId, SELECTING_REVIEW_TO_DELETE);
-        } else if (command.indexOf("сдачу")!=-1) { // (Отменить запись на ревью (!) у сдающего лица [студента])
+        } else if (command.contains("приём")) { // (Отменить ревью (!) у принимающего лица [препода])
+            List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
+            //если нет ни одного ревью, то в чат даётся сообщение об ошибке
+            if(reviews.isEmpty()) {
+                throw new ProcessInputException("Произошла ошибка. Вы не запланировали ни одного ревью\n");
+            } else {
+                nextStep = SELECTING_REVIEW_TO_DELETE;
+                storageService.removeUserStorage(vkId, SELECTING_REVIEW_TO_DELETE);
+            }
+        } else if (command.contains("сдачу")) { // (Отменить запись на ревью (!) у сдающего лица [студента])
             nextStep = USER_CANCEL_REVIEW;
             storageService.removeUserStorage(vkId, USER_MENU);
-        } else if (command.indexOf("Сдать")!=-1) { // (Сдать ревью)
+        } else if (command.contains("Сдать")) { // (Сдать ревью)
             nextStep = USER_PASS_REVIEW_ADD_THEME;
             storageService.removeUserStorage(vkId, USER_MENU);
-        } else if (command.indexOf("Принять")!=-1) { // (Принять ревью)
+        } else if (command.contains("Принять")) { // (Принять ревью)
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")
