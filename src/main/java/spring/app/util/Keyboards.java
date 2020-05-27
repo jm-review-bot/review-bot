@@ -12,7 +12,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Начать прием ревью\"\n" +
+            "          \"label\": \"Начать ревью\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      }\n";
