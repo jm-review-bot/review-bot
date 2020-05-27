@@ -90,8 +90,4 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId);
     }
 
-    @Override
-    public Review getOpenReviewByStudentVkId(Integer vkId) {
-        return reviewDao.getOpenReviewByStudentVkId(vkId);
-    }
 }
