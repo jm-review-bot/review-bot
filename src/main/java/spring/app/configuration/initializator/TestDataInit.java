@@ -49,6 +49,9 @@ public class TestDataInit {
     private Step adminAddUser;
 
     @Autowired
+    private  Step adminUserList;
+
+    @Autowired
     private Step adminRemoveUser;
 
     @Autowired
@@ -152,6 +155,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_MENU, userMenu);
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);

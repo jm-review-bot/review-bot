@@ -8,7 +8,6 @@ import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
-import javax.persistence.NoResultException;
 import java.util.*;
 
 import static spring.app.core.StepSelector.*;
@@ -17,51 +16,22 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminRemoveUser extends Step {
 
-    private Set<Integer> deleteUsersOk = new HashSet<>();
-
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
-        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER);
-        StringBuilder userList;
-        if (savedInput == null || savedInput.isEmpty()) {
-            // если в памяти пусто, показываем первичный вопрос
-            userList = new StringBuilder("Вот список всех пользователей. Для удаления, напиши указанные номера одного или нескольких пользователей через пробел или запятую.\nДля возврата в меню, введи \"назад\".\n\n");
-            // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
-            List<String> usersToDelete = new ArrayList<>();
-            final int[] i = {1};
-            context.getUserService().getAllUsers().stream()
-                    .sorted(Comparator.comparing(User::getLastName))
-                    .forEach(user -> {
-                        userList.append("[").append(i[0]++).append("] ")
-                                .append(user.getLastName())
-                                .append(" ")
-                                .append(user.getFirstName())
-                                .append(", https://vk.com/id")
-                                .append(user.getVkId());
-                        if (user.getRole().isAdmin()) {
-                            userList.append(" (админ)");
-                        }
-                        userList.append("\n");
-                        // сохраняем ID юзера в лист
-                        usersToDelete.add(user.getId().toString());
-                    });
-            text = userList.toString();
-            keyboard = BACK_KB;
-            storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, usersToDelete);
-        } else {
-            // если в памяти уже есть данные, значит показываем предупреждение об удалении юзеров
-            // оно было подготовлено в processInput и сохранено в памяти,
-            // т.к. там могло выпасть исключение, если юзер вводит заведомо неверные данные
-            text = savedInput.get(0);
-            keyboard = YES_NO_KB;
-        }
-        // если id пользователя есть в Set, значит им был удален пользователь(и)
-        if (deleteUsersOk.contains(vkId)) {
-            text = "Пользователь(ли) удален(ы).\n\n" + text;
-            deleteUsersOk.remove(vkId);
-        }
+        String selectedUserId = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
+        User selectedUser = context.getUserService().getUserById(Long.parseLong(selectedUserId));
+        String userInfo = new StringBuilder().append(selectedUser.getFirstName()).append(" ").append(selectedUser.getLastName())
+                .append(" (https://vk.com/id").append(selectedUser.getVkId()).append(").\n").toString();
+        StringBuilder confirmMessage = new StringBuilder("Студент ");
+        confirmMessage.append(userInfo)
+                .append("Вы точно хотите удалить данного студента?\n")
+                .append("[1] подтвердить\n")
+                .append("[2] отменить\n");
+        storageService.updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(userInfo));
+        text = confirmMessage.toString();
+        keyboard = NO_KB;
     }
 
     @Override
@@ -69,64 +39,35 @@ public class AdminRemoveUser extends Step {
         String currentInput = context.getInput();
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
-        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER);
-        List<String> usersToDelete = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
 
-        // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
-
-        if (wordInput.equals("назад") || wordInput.equals("отмена")) {
-            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
-            nextStep = ADMIN_MENU;
-        } else if (wordInput.equals("/start")) {
-            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
-            nextStep = START;
-        } else if (wordInput.equals("нет")) {
-            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
-            nextStep = ADMIN_REMOVE_USER;
-        } else if (savedInput == null || savedInput.isEmpty()) {
-            // если юзер на данном шаге ничего еще не вводил, значит мы ожидаем от него
-            // vkId для удаления input. Сохраняем в память введенный текст
-            StringBuilder confirmMessage = new StringBuilder("Вы собираетесь удалить пользователей:\n\n");
-            try {
-                List<String> selectedUsers = new ArrayList<>();
-
-                StringParser.toNumbersSet(currentInput)
-                        .forEach(inputNumber -> {
-                            Long userId = Long.parseLong(usersToDelete.get(inputNumber - 1));
-                            User user = context.getUserService().getUserById(userId);
-                            confirmMessage
-                                    .append(user.getLastName())
-                                    .append(" ")
-                                    .append(user.getFirstName())
-                                    .append(", https://vk.com/id")
-                                    .append(user.getVkId())
-                                    .append("\n");
-                            selectedUsers.add(user.getId().toString());
-                        });
-                confirmMessage.append("\nСогласны? (Да/Нет)");
-                storageService.updateUserStorage(vkId, ADMIN_REMOVE_USER, Arrays.asList(confirmMessage.toString()));
-                storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, selectedUsers);
-                nextStep = ADMIN_REMOVE_USER;
-            } catch (NumberFormatException | NoResultException | NoNumbersEnteredException | IndexOutOfBoundsException e) {
-                throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
+        if (StringParser.isNumeric(wordInput)) {
+            Integer selectedNumber = Integer.parseInt(wordInput);
+            switch (selectedNumber) {
+                case 1:
+                    //Удаляем.
+                    String selectedUserId = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
+                    storageService.clearUsersOfStorage(context.getUserService().getUserById(Long.parseLong(selectedUserId)).getVkId());
+                    context.getUserService()
+                            .deleteUserById(Long.parseLong(selectedUserId));
+                    //перекинем инфу с удаления на список юзеров. Для унификации. Данная инфа будет использована при возвращении
+                    String userInfo = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER).get(0);
+                    storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
+                    storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(userInfo));
+                    nextStep = ADMIN_USERS_LIST;
+                    break;
+                case 2:
+                    //Возвращаемся назад
+                    storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
+                    //Очищаем список ролей, раз не хотим ничего сообщать в том шаге
+                    storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+                    nextStep = ADMIN_USERS_LIST;
+                    break;
+                default:
+                    throw new ProcessInputException("Введено неподходящее число");
             }
-        } else if (wordInput.equals("да")) {
-            // если он раньше что-то вводил на этом шаге, то мы ожидаем подтверждения действий.
-            // удаляем юзеров и удаляем записи данных юзеров из кэша
-            usersToDelete.forEach(userIdString -> {
-                storageService.clearUsersOfStorage(context.getUserService().getUserById(Long.parseLong(userIdString)).getVkId());
-                context.getUserService()
-                        .deleteUserById(Long.parseLong(userIdString));
-            });
-            // сохраняю id пользователя, чтобы вывести текст об успешном удалении
-            deleteUsersOk.add(vkId);
-            // обязательно очищаем память
-            storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
-            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
-            nextStep = ADMIN_REMOVE_USER;
         } else {
-            throw new ProcessInputException("Введена неверная команда...");
+            throw new NoNumbersEnteredException("Введена неверная команда. Введите 1 для удаления или 2 для возврата");
         }
     }
 }
