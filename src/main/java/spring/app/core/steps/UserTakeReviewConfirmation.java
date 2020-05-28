@@ -13,6 +13,7 @@ import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
@@ -58,7 +59,9 @@ public class UserTakeReviewConfirmation extends Step {
                 User user = context.getUserService().getByVkId(vkId);
                 Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
                 Theme theme = context.getThemeService().getThemeById(themeId);
-                context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
+                Review review = new Review(user, theme, true, plannedStartReviewTime);
+                context.getReviewService().addReview(review);
+                context.getStorageService().updateUserStorage(vkId, USER_MENU, Arrays.asList(review.getId().toString()));
                 nextStep = USER_MENU;
                 storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
                 storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
