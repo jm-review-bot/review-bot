@@ -24,9 +24,6 @@ public class Review {
     @Column(name = "is_open")
     private Boolean isOpen;
 
-    @Column(name = "is_fake")
-    private Boolean isFake;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewer_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -68,14 +65,6 @@ public class Review {
 
     public void setOpen(Boolean open) {
         isOpen = open;
-    }
-
-    public Boolean getFake() {
-        return isFake;
-    }
-
-    public void setFake(Boolean fake) {
-        isFake = fake;
     }
 
     public User getUser() {

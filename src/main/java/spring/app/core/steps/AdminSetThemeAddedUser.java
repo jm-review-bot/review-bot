@@ -72,26 +72,17 @@ public class AdminSetThemeAddedUser extends Step {
                 StudentReviewService studentReviewService = context.getStudentReviewService();
                 // Получение пользователей
                 int vkId = context.getVkId();
-                Long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
+                long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
                 int themePosition = Integer.parseInt(userInput);
                 User addedUser = userService.getUserById(addedUserId);
-                User admin = userService.getByVkId(vkId);
+                User admin = context.getUser();
                 // Создание всех ревью, которые прошел пользователь
                 for (int i = 1; i < themePosition; i++) {
                     Theme currentTheme = themeService.getByPosition(i);
 
-                    Review fakeReview = new Review();
-                    fakeReview.setDate(LocalDateTime.now());
-                    fakeReview.setOpen(false);
-                    fakeReview.setFake(true);
-                    fakeReview.setTheme(currentTheme);
-                    fakeReview.setUser(admin);
+                    Review fakeReview = new Review(admin, currentTheme, false, LocalDateTime.now());
                     reviewService.addReview(fakeReview);
-
-                    StudentReview studentReview = new StudentReview();
-                    studentReview.setPassed(true);
-                    studentReview.setReview(fakeReview);
-                    studentReview.setUser(addedUser);
+                    StudentReview studentReview = new StudentReview(addedUser, fakeReview, true);
                     studentReviewService.addStudentReview(studentReview);
                 }
                 // Начисление ревью поинтов
