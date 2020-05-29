@@ -3,6 +3,7 @@ package spring.app.core;
 import com.vk.api.sdk.objects.messages.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
@@ -27,6 +28,12 @@ public class BotScheduler {
     private final ChatBot bot;
     private final StorageService storageService;
     private long timeCounter;
+
+    @Value("${bot.minutes_remainder_reviewers}")
+    int minutesRemainderReviewers;
+
+    @Value("${bot.minutes_remainder_students_reviewers}")
+    int minutesRemainderStudentsReviewers;
 
     public BotScheduler(VkService vkService, ReviewService reviewService, ChatBot bot, UserService userService, StepHolder stepHolder, StorageService storageService) {
         this.vkService = vkService;
@@ -58,8 +65,8 @@ public class BotScheduler {
     @Scheduled(fixedDelayString = "${bot.review_reminder_interval}")
     public void sendReviewReminder() {
 
-        LocalDateTime periodStart = LocalDateTime.now().minusMinutes(1);
-        LocalDateTime periodEnd = LocalDateTime.now();
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(minutesRemainderReviewers - 1);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(minutesRemainderReviewers);
 
         List<User> users = userService.getUsersByReviewPeriod(periodStart, periodEnd);
         if (!users.isEmpty()) {
@@ -74,8 +81,8 @@ public class BotScheduler {
     @Scheduled(fixedDelayString = "${bot.review_reminder_interval}")
     public void sendReviewHourReminder() {
 
-        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(59).plusNanos(1);
-        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(60);
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(minutesRemainderStudentsReviewers - 1);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(minutesRemainderStudentsReviewers);
 
         List<User> reviewers = userService.getUsersByReviewPeriod(periodStart, periodEnd);
         List<User> students = userService.getStudentsByReviewPeriod(periodStart, periodEnd);
