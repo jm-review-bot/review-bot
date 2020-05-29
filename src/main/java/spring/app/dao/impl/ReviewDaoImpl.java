@@ -148,18 +148,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("id", vkId).getResultList();
     }
 
-    /**
-     * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
-     * @param vkId
-     */
-    @Override
-    public Review getOpenReviewByStudentVkId(Integer vkId) throws NoResultException {
-        return entityManager.createQuery(
-                "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme JOIN FETCH srr.user JOIN Review r ON r.id = sr.review.id WHERE r.isOpen = true AND sr.user.vkId = :vkId", StudentReview.class)
-                .setParameter("vkId", vkId)
-                .getSingleResult()
-                .getReview();
-    }
+
 
     @Override
     @Transactional(propagation= Propagation.MANDATORY)

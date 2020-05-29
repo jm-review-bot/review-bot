@@ -12,7 +12,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Начать прием ревью\"\n" +
+            "          \"label\": \"Начать ревью\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      }\n";
@@ -135,6 +135,14 @@ public class Keyboards {
             "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Изменить пользователя\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Удалить пользователя\"\n" +
             "        },\n" +
@@ -220,6 +228,78 @@ public class Keyboards {
             "        \"color\": \"positive\"\n" +
             "      }\n" +
             "  ]]\n" +
+            "} ";
+
+    public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"оставить имя как есть\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"ввести новое имя фамилию\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
+    public final static String CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"изменить имя\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"изменить вкИд\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
+            "} ";
+
+    public final static String YES_OR_CANCEL = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [\n" +
+            "    [\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"да\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"отмена\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n" +
+            "    ]\n" +
+            "  ]\n" +
             "} ";
 
     public final static String RIGHT_WRONG_ANSWER = "{\n" +

@@ -188,6 +188,10 @@ public class UserStartReviewCore extends Step {
                 nextStep = USER_MENU;
                 questionNumbers.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_MENU);
+            } else if (userInput.equalsIgnoreCase("/start")) {
+                nextStep = START;
+                questionNumbers.keySet().remove(vkId);
+                storageService.removeUserStorage(vkId, USER_MENU);
             } else {
                 throw new ProcessInputException("Для выхода в главное меню нажми кнопку \"Главное меню\"");
             }

@@ -49,7 +49,31 @@ public class TestDataInit {
     private Step adminAddUser;
 
     @Autowired
+    private  Step adminUserList;
+
+    @Autowired
+    private Step adminEditUser;
+
+    @Autowired
+    private Step adminInputNewFullnameEditedUser;
+
+    @Autowired
+    private Step adminConfirmChangeEditedUserFullname;
+
+    @Autowired
+    private Step adminInputNewVkIdEditedUser;
+
+    @Autowired
+    private Step adminConfirmChangeEditedUserVkId;
+
+    @Autowired
     private Step adminRemoveUser;
+
+    @Autowired
+    private Step adminProposalChangeFullnameAddedUser;
+
+    @Autowired
+    private Step adminChangeAddedUserFullname;
 
     @Autowired
     private Step userTakeReviewAddDate;
@@ -146,7 +170,15 @@ public class TestDataInit {
         steps.put(StepSelector.USER_MENU, userMenu);
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
+        steps.put(StepSelector.ADMIN_EDIT_USER, adminEditUser);
+        steps.put(StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, adminInputNewFullnameEditedUser);
+        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME, adminConfirmChangeEditedUserFullname);
+        steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
+        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
+        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
@@ -354,28 +386,12 @@ public class TestDataInit {
         question10.setWeight(8);
         questionService.addQuestion(question10);
 
-
-        //тестовые данные для ветки user-start-review-core_random-answerer.
-        //Используется:
-        //1.юзер который сдал 3 ревью и принимает 2 ревью
-        //2. 2 юзера которые сдают 2 ревью
-        //3. ревью на котором первый принимает, а 2 и 3 сдают
-        //4. 4 вопроса для темы.
-        /*
-        Проверенные кейсы.
-        Рандомность выбора юзера.
-        Заполнение после окончания рандомных ответчиков но не окончания ответчиков на вопрос
-        Заполнение после окончания рандомных ответчиков и окончания ответчиков на вопрос
-        Успешная сдача ревью
-        Не успешная сдача ревью
-        Рассылка вопросов после окончания ревью
-         */
         User akira = new User();
         akira.setFirstName("Akira");
         akira.setLastName("Rokudo");
         akira.setReviewPoint(30);
         akira.setVkId(167464635);
-        akira.setRole(roleUser);
+        akira.setRole(roleAdmin);
         akira.setChatStep(StepSelector.START);
         userService.addUser(akira);
 
@@ -448,7 +464,7 @@ public class TestDataInit {
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview = new Review();
-        criticalWeightReview.setDate(LocalDateTime.of(2020, 5, 20, 23, 36));
+        criticalWeightReview.setDate(LocalDateTime.of(2020, 5, 25, 19, 18));
         criticalWeightReview.setOpen(true);
         criticalWeightReview.setTheme(multithreading);
         criticalWeightReview.setUser(akira);//кто принимает
@@ -498,6 +514,7 @@ public class TestDataInit {
         criticalQuestion4.setTheme(multithreading);
         criticalQuestion4.setWeight(4);
         questionService.addQuestion(criticalQuestion4);
+
 
     }
 }
