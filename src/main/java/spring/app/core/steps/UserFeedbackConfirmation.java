@@ -30,7 +30,7 @@ public class UserFeedbackConfirmation extends Step {
 
         if (wordInput.equals("отказаться")) {
             //clear cash
-            context.getStorageService().getUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION).clear();
+            context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
 
             nextStep = USER_MENU;
         } else if (wordInput.equals("начать")) {

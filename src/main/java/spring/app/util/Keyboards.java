@@ -270,5 +270,16 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
-
+    public final static String USER_FEEDBACK_ENDING_KB = "{\n" +
+            "  \"one_time\": false,\n" +
+            "  \"buttons\": [[\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Закончить\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "  ]]\n" +
+            "} ";
 }

@@ -9,7 +9,7 @@ import spring.app.model.Feedback;
 import spring.app.util.StringParser;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.USER_MENU_KB;
+import static spring.app.util.Keyboards.USER_FEEDBACK_ENDING_KB;
 
 @Component
 public class UserFeedbackComment extends Step {
@@ -20,7 +20,7 @@ public class UserFeedbackComment extends Step {
         text = "Дайте ваш развернутый комментарий, замечания, предложения (необязательно). " +
                 "Если не хотите заполнять это поле - нажмите кнопку 'Главное меню'.";
 
-        keyboard = USER_MENU_KB;
+        keyboard = USER_FEEDBACK_ENDING_KB;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class UserFeedbackComment extends Step {
         Feedback newFeedback = new Feedback();
         String command = StringParser.toWordsArray(context.getInput())[0];
 
-        if (!"главное".equals(command)) {
+        if (!"закончить".equals(command)) {
             newFeedback.setComment(context.getInput());
         }
 
