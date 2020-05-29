@@ -31,11 +31,11 @@ public class AdminUserList extends Step {
         String afterModificationMessage = null;
         //Блок для сообщения после изменения\удаления.
         if (storageService.getUserStorage(vkId, ADMIN_USERS_LIST) != null) {
+            String userInfo = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
             if ("delete".equals(mode)) {
-                String userDeletedInfo = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
-                afterModificationMessage = new StringBuilder("Студент ").append(userDeletedInfo).append("Был успешно удален из базы\n\n").toString();
-            } else {
-                //TODO:заглушка для редактирования
+                afterModificationMessage = new StringBuilder("Студент ").append(userInfo).append("Был успешно удален из базы\n\n").toString();
+            } else if ("edit".equals(mode)) {
+                afterModificationMessage = userInfo;
             }
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
         }
@@ -44,7 +44,7 @@ public class AdminUserList extends Step {
         if ("delete".equals(mode)) {
             userList.append("Список всех студентов. Выберете студента для удаления.\n");
         } else {
-            //TODO:заглушка для редактирования
+            userList.append("Выберите пользователя для изменения:\n");
         }
         // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
         List<String> users = new ArrayList<>();
@@ -96,7 +96,7 @@ public class AdminUserList extends Step {
             if ("delete".equals(mode)) {
                 nextStep = ADMIN_REMOVE_USER;
             } else {
-                //TODO:Заглушка под редактирование
+                nextStep = ADMIN_EDIT_USER;
             }
         } else {
             throw new ProcessInputException("Введена неверная команда...");
