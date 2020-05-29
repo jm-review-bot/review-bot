@@ -101,13 +101,12 @@ public class UserTakeReviewAddDate extends Step {
                     storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
                     storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
                     nextStep = USER_MENU;
-                    String textForSend = String.format("Супер! Твоё ревью добавлено в сетку расписания, в день и время когда оно наступит нажми на кнопку \"Начать ревью\"\n\n\n", theme.getTitle(), userInput);
-                    String messageForSend = textForSend + "Ваше ревью " + theme.getTitle() + " " + plannedStartReviewTime.toString() + " было успешно добавлено в сетку расписания\n\n";
+                    String textForSend = String.format(String.format("Супер! Твоё ревью добавлено в сетку расписания, в день и время когда оно наступит нажми на кнопку \"Начать ревью\"\n\nВаше ревью '%%s' %%s было успешно добавлено в сетку расписания\n\n"), theme.getTitle(), userInput);
                     //и шлем сообщение. А вот и не шлем. Мы не знаем какие кнопки отобразить пользователю. Так что
                     //отправлять сообщения таким образом мы можем всем кроме себя. Для себя пользуемся хаком с хранилищем-
                     //кладем сообщения на шаг, на который планируем придти
                     //context.getVkService().sendMessage(textForSend, this.keyboard, vkId);
-                    context.getStorageService().updateUserStorage(vkId, USER_MENU, Arrays.asList(messageForSend));
+                    context.getStorageService().updateUserStorage(vkId, USER_MENU, Arrays.asList(textForSend));
                 }
             } else if (plannedStartReviewTime.isBefore(LocalDateTime.now())) {
                 throw new ProcessInputException("Время принятия нового ревью не может быть в прошлом :)\n Повтори ввод или вернись назад к выбору темы ревью");
