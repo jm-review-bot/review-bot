@@ -144,12 +144,16 @@ public class UserMenu extends Step {
         } else if (command.contains("Принять")) { // (Принять ревью)
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
             storageService.removeUserStorage(vkId, USER_MENU);
-        } else if (command.equals("/admin")
-                && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
-            nextStep = ADMIN_MENU;
-            storageService.removeUserStorage(vkId, USER_MENU);
+        } else if (command.equals("/admin")) {
+            if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
+                nextStep = ADMIN_MENU;
+                storageService.removeUserStorage(vkId, USER_MENU);
+            } else {
+                throw new ProcessInputException("Недостаточно прав для выполнения команды!");
+            }
         } else { // любой другой ввод
             throw new ProcessInputException("Введена неверная команда...");
         }
+
     }
 }
