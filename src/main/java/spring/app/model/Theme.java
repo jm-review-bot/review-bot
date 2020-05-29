@@ -27,12 +27,12 @@ public class Theme {
     public Theme() {
     }
 
-    public void setCritical_weight(Integer criticalWeight) {
-        this.criticalWeight = criticalWeight;
+    public Integer getCriticalWeight() {
+        return criticalWeight;
     }
 
-    public Integer getCritical_weight() {
-        return criticalWeight;
+    public void setCriticalWeight(Integer criticalWeight) {
+        this.criticalWeight = criticalWeight;
     }
 
     public Long getId() {
