@@ -33,12 +33,16 @@ public class UserTakeReviewAddDate extends Step {
         Integer vkId = context.getVkId();
         Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
         Theme theme = context.getThemeService().getThemeById(themeId);
-        List<String> errorMessages = storageService.getUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
         StringBuilder textBuilder = new StringBuilder();
-        if (errorMessages != null) {
+
+        /*
+        List<String> errorMessages = storageService.getUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
+*/
+        /*if (errorMessages != null) {
             textBuilder.append(errorMessages.get(0));
             storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_CONFIRMATION);
-        }
+        }*/
+
         textBuilder.append(String.format("Ты выбрал тему: %s", theme.getTitle()))
                 .append(".\n\n Укажи время и дату для принятия ревью в формате ДД.ММ.ГГГГ ЧЧ:ММ по Московскому часовому поясу.\n Пример корректного ответа 02.06.2020 17:30\n\n")
                 .append(String.format("Ты можешь объявить о готовности принять ревью не позднее, чем за %d  минут до его начала\n", (timeLimitBeforeReview + 1)))
