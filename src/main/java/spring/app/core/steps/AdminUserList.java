@@ -16,6 +16,7 @@ import java.util.List;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 
 /**
  * @author AkiraRokudo on 19.05.2020 in one of sun day
@@ -65,11 +66,11 @@ public class AdminUserList extends Step {
                     // сохраняем ID юзера в лист
                     users.add(user.getId().toString());
                 });
-        userList.append("Для возврата в меню, введи \"назад\".\n\n");
+        userList.append("Для возврата в меню, введи \"назад\".\n\n Для поиска по ссылке нажмите кнопку 'Поиск'.\n");
         storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, users);
         text = afterModificationMessage == null ? userList.toString() : afterModificationMessage + userList.toString();
 
-        keyboard = BACK_KB;
+        keyboard = SEARCH_OR_BACK;
     }
 
     @Override
@@ -83,6 +84,8 @@ public class AdminUserList extends Step {
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             storageService.removeUserStorage(vkId, ADMIN_MENU);
             nextStep = ADMIN_MENU;
+        } else if (wordInput.equals("поиск")) {
+            nextStep = ADMIN_SEARCH;
         } else if (StringParser.isNumeric(wordInput)) {
             Integer selectedNumber = Integer.parseInt(wordInput);
             //значит мы выбрали пользователя. Обновим коллекцию
