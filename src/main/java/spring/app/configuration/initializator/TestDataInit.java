@@ -85,9 +85,6 @@ public class TestDataInit {
     private Step userTakeReviewAddTheme;
 
     @Autowired
-    private Step userTakeReviewConfirmation;
-
-    @Autowired
     private Step userPassReviewAddTheme;
 
     @Autowired
@@ -140,6 +137,15 @@ public class TestDataInit {
         roman.setChatStep(StepSelector.START);
         userService.addUser(roman);
 
+        User sergey = new User();
+        sergey.setFirstName("Сергей");
+        sergey.setLastName("Лебедев");
+        sergey.setReviewPoint(1000000);
+        sergey.setVkId(80169300);
+        sergey.setRole(roleAdmin);
+        sergey.setChatStep(StepSelector.START);
+        userService.addUser(sergey);
+
         User maksim = new User();
         maksim.setFirstName("Максим");
         maksim.setLastName("Ботюк");
@@ -185,7 +191,6 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
-        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
         steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
