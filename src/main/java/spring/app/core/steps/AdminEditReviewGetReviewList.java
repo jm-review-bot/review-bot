@@ -5,17 +5,14 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 import static spring.app.util.Keyboards.BACK_KB;
 
 /**
@@ -40,7 +37,7 @@ public class AdminEditReviewGetReviewList extends Step {
                 .getAllStudentReviewsByStudentVkIdAndTheme(selectedUserVKId, selectedTheme).stream()
                 .forEach(sreview -> {
                     stringBuilder.append("[").append(reviewCounter[0]++).append("] ")
-                            .append(sreview.getReview().getDate())
+                            .append(StringParser.localDateTimeToString(sreview.getReview().getDate()))
                             .append(" (");
                     if (!sreview.getPassed()) {
                         stringBuilder.append("не ");

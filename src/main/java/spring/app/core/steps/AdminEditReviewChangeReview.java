@@ -10,11 +10,9 @@ import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 import static spring.app.util.Keyboards.BACK_KB;
 
 /**

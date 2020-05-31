@@ -2,21 +2,16 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.core.StepSelector;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.StudentReview;
-import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 import static spring.app.util.Keyboards.BACK_KB;
 
 /**
@@ -60,7 +55,7 @@ public class AdminEditReviewGetThemeList extends Step {
             if (selectedNumber <= 0 || selectedNumber > themes.size()) {
                 throw new ProcessInputException("Введено неподходящее число");
             }
-            String selectedThemesPosition = themes.get(selectedNumber-1);
+            String selectedThemesPosition = themes.get(selectedNumber - 1);
             themes.clear();
             themes.add(selectedThemesPosition);
             storageService.updateUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_THEME_LIST, themes);

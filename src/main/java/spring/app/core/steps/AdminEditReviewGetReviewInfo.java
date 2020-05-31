@@ -15,9 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO;
 import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
-import static spring.app.util.Keyboards.BACK_KB;
 
 /**
  * @author AkiraRokudo on 15.05.2020 in one of sun day
