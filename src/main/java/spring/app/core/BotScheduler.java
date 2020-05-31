@@ -30,10 +30,10 @@ public class BotScheduler {
     private long timeCounter;
 
     @Value("${bot.minutes_remainder_reviewers}")
-    int minutesRemainderReviewers;
+    private int minutesRemainderReviewers;
 
     @Value("${bot.minutes_remainder_students_reviewers}")
-    int minutesRemainderStudentsReviewers;
+    private int minutesRemainderStudentsReviewers;
 
     public BotScheduler(VkService vkService, ReviewService reviewService, ChatBot bot, UserService userService, StepHolder stepHolder, StorageService storageService) {
         this.vkService = vkService;
