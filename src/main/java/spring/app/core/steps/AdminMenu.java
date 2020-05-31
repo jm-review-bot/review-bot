@@ -5,6 +5,8 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
+import java.util.Arrays;
+
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 

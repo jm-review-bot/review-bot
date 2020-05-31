@@ -28,13 +28,13 @@ class VkServiceTest {
         List<String> correctVkIds = Arrays.asList("3808497", "vednn");
 
         assertThrows(IncorrectVkIdsException.class, () -> {
-            List<User> resultUsers = vkService.newUsersFromVk(incorrectVkIds);
-            resultUsers.forEach(System.out::println);
+            User resultUser = vkService.newUserFromVk(incorrectVkIds.get(0));
+            System.out.println(resultUser);
         });
 
         assertDoesNotThrow(() -> {
-            List<User> resultUsers = vkService.newUsersFromVk(correctVkIds);
-            resultUsers.forEach(System.out::println);
+            User resultUser = vkService.newUserFromVk(correctVkIds.get(0));
+            System.out.println(resultUser);
         });
     }
 }

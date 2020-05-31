@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.model.StudentReview;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
@@ -25,20 +26,33 @@ public class UserCancelReview extends Step {
         List<String> savedInput = storageService.getUserStorage(vkId, USER_CANCEL_REVIEW);
 
         if (savedInput == null || savedInput.isEmpty()) {
-            Review review = context.getReviewService().getOpenReviewByStudentVkId(vkId);
-
+            Review review = null;
+            List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
+            if (!openStudentReview.isEmpty()) {
+                if (openStudentReview.size() > 1) {
+                    //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
+                }
+                review = openStudentReview.get(0).getReview();
+            }
             // показываем юзеру ревью, на которое он записан, Тему, дату и время
-            StringBuilder message = new StringBuilder("Вы записаны на ревью:\n");
-            message.append("Тема: ")
-                    .append(review.getTheme().getTitle())
-                    .append(".\n")
-                    .append("Дата: ")
-                    .append(StringParser.localDateTimeToString(review.getDate()))
-                    .append(". \n\n")
-                    .append("Вы действительно хотите отменить запись? (Да/Нет)");
+            //если оно еще есть.
+            StringBuilder message = new StringBuilder();
+            if (review != null) {
+                message.append("Вы записаны на ревью:\n")
+                        .append("Тема: ")
+                        .append(review.getTheme().getTitle())
+                        .append(".\n")
+                        .append("Дата: ")
+                        .append(StringParser.localDateTimeToString(review.getDate()))
+                        .append(". \n\n")
+                        .append("Вы действительно хотите отменить запись? (Да/Нет)");
+                keyboard = YES_NO_KB;
+            } else {
+                message.append("Ревью для отмены не найдено. Возможно его только что отменил ревьюер");
+                keyboard = USER_MENU_KB;
+            }
             text = message.toString();
             // показываем клаву c кнопками Да и Нет
-            keyboard = YES_NO_KB;
         } else {
             // если зафиксирован инпут на этом шаге, и это "да"
             // говорим, что запись на данное ревью удалена
@@ -56,13 +70,16 @@ public class UserCancelReview extends Step {
         // + стандартные команды на выход в начало или назад
 
         String wordInput = StringParser.toWordsArray(currentInput)[0];
-        if (storageService.getUserStorage(vkId, USER_CANCEL_REVIEW) == null) {
+        if (wordInput.equals("главное")) {
+            storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
+            nextStep = USER_MENU;
+        } else if (wordInput.equals("/start")) {
+            storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
+            nextStep = START;
+        } else if (storageService.getUserStorage(vkId, USER_CANCEL_REVIEW) == null) {
             if (wordInput.equals("нет")) {
                 storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
                 nextStep = USER_MENU;
-            } else if (wordInput.equals("/start")) {
-                storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
-                nextStep = START;
             } else if (wordInput.equals("да")) {
                 context.getStudentReviewService().deleteStudentReviewByVkId(vkId);
                 List<String> savedMessage = Arrays.asList("Запись на ревью была удалена.");
@@ -72,15 +89,7 @@ public class UserCancelReview extends Step {
                 throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" для удаления записи на ревью или \"Нет\" для выхода в главное меню.");
             }
         } else {
-            if (wordInput.equals("главное")) {
-                storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
-                nextStep = USER_MENU;
-            } else if (wordInput.equals("/start")) {
-                storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
-                nextStep = START;
-            } else {
-                throw new ProcessInputException("Введена неверная команда. Для выхода нажми на кнопку \"Главное меню\"");
-            }
+            throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" для удаления записи на ревью или \"Нет\" для выхода в главное меню.");
         }
     }
 }
