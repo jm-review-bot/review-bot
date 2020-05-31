@@ -76,6 +76,9 @@ public class TestDataInit {
     private Step adminChangeAddedUserFullname;
 
     @Autowired
+    private Step adminSetThemeAddedUser;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -179,6 +182,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+        steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);

@@ -47,7 +47,7 @@ public class AdminAddUser extends Step {
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = START;
-        } else if(parsedInput != null){
+        } else if (parsedInput != null){
             // мы ожидаем от него ссылки на профиль добавляемого  юзера
             try {
                 // получем юзера на основе запроса в VK
@@ -76,7 +76,8 @@ public class AdminAddUser extends Step {
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {
                 throw new ProcessInputException("Введены неверные данные. Такой пользователь не найден...");
             }
+        } else {
+            throw new ProcessInputException("Введена некрректная ссылка.");
         }
-
     }
 }
