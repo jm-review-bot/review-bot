@@ -25,11 +25,11 @@ public class SelectingReviewToDelete extends Step {
         //хранилище стэпа REVIEWER_DELETE_REVIEW для каждого vkId юзера хранит айдишник ревью, которое следует отменить
         //если оно пустое, то создаём для данного пользователя пустой список строк
         if(ssi.getUserStorage(context.getVkId(),REVIEWER_DELETE_REVIEW)==null) {
-            ssi.updateUserStorage(context.getVkId(),REVIEWER_DELETE_REVIEW,new ArrayList<String>());
+            ssi.updateUserStorage(context.getVkId(),REVIEWER_DELETE_REVIEW,new ArrayList<>());
         }
         //хранилище стэпа SELECTING_REVIEW_TO_DELETE для каждого vkId юзера хранит номера ревью (для выбора того, какое следует отменить), которые выведятся
         //списком в цикле for ниже
-        ssi.updateUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE,new ArrayList<String>());
+        ssi.updateUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE,new ArrayList<>());
         List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getVkId());
         StringBuilder selectReview = new StringBuilder("Выберете ревью, которое хотите отменить:\n");
         int i = 1;

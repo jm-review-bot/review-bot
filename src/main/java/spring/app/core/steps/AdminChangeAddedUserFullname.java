@@ -8,7 +8,6 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
-
 import static spring.app.core.StepSelector.ADMIN_ADD_USER;
 import static spring.app.util.Keyboards.NO_KB;
 

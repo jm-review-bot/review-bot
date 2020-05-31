@@ -1,6 +1,5 @@
 package spring.app.core.steps;
 
-import com.vk.api.sdk.actions.Storage;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;

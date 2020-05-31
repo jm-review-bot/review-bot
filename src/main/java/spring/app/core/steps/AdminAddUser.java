@@ -21,7 +21,6 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
-
     @Override
     public void enter(BotContext context) {
         text = "Введите ссылку на профиль нового пользователя.\n";

@@ -1,5 +1,4 @@
 package spring.app.core;
-
 public enum StepSelector {
     START,
     USER_MENU,

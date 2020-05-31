@@ -8,7 +8,6 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;

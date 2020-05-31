@@ -6,6 +6,7 @@ import spring.app.core.BotContext;
 import spring.app.core.StepHolder;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
 import spring.app.service.impl.StorageServiceImpl;
@@ -46,6 +47,7 @@ public class ReviewerDeleteReview extends Step {
             Review specReview = context.getReviewService().getReviewById(numberReview);
             deleteReview(
                     specReview,
+                    context.getStudentReviewService(),
                     context.getThemeService(),
                     context.getUserService(),
                     context.getStepHolder(),
@@ -64,7 +66,7 @@ public class ReviewerDeleteReview extends Step {
             throw new ProcessInputException("Введена неверная команда...\n");
         }
     }
-    private void deleteReview(Review review, ThemeService themeService, UserService userService, StepHolder stepHolder, ReviewService reviewService, VkService vkService, Integer vkId) {
+    private void deleteReview(Review review, StudentReviewService studentReviewService, ThemeService themeService, UserService userService, StepHolder stepHolder, ReviewService reviewService, VkService vkService, Integer vkId) {
         //всем участникам этого ревью, т.е. всем студентам, которые были на это ревью записаны - должно отправиться
         //сообщение с текстом: “Ревью {название темы} - {дата и время проведения} было отменено проверяющим”
         StringBuilder message = new StringBuilder("Ревью {").append(themeService.getThemeById(review.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(review.getDate())).append("} было отменено проверяющим\n");
@@ -75,9 +77,9 @@ public class ReviewerDeleteReview extends Step {
                 //перед отправкой находящемуся на стэпе UserMenu студенту сообщения нужно определить, какие кнопки ему надо отображать
                 //перед отправкой студенту сообщения нужно определить, какие кнопки ему надо отображать
                 StringBuilder keys = new StringBuilder(HEADER_FR);
-                Review studentReview = null;
+                List<StudentReview> studentReviews = null;
                 try {
-                    studentReview = reviewService.getOpenReviewByStudentVkId(vkId);
+                    studentReviews = studentReviewService.getOpenReviewByStudentVkId(vkId);//reviewService.getOpenReviewByStudentVkId(vkId);
                 } catch (NoResultException ignore) {
                     // Если пользователь не записан ни на одно ревью, метод Dao выбросит исключение и нужно скрыть кнопку "Отменить ревью"
                 }
@@ -89,7 +91,7 @@ public class ReviewerDeleteReview extends Step {
                             .append(REVIEW_START_FR)
                             .append(ROW_DELIMETER_FR);
                 }
-                if (studentReview != null) {
+                if (studentReviews != null) {
                     keys
                             .append(REVIEW_CANCEL_FR)
                             .append(ROW_DELIMETER_FR);

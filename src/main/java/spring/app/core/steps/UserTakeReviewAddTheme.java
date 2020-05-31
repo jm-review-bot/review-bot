@@ -76,4 +76,3 @@ public class UserTakeReviewAddTheme extends Step {
         }
     }
 }
-

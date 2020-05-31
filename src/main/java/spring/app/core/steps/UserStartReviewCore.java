@@ -62,7 +62,6 @@ public class UserStartReviewCore extends Step {
                 textBuilder.append(String.format("\nВопрос: %s", questions.get(questionNumber).getQuestion()))
                         .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
                 keyboard = NO_KB;
-
                 // если вопросы кончились
             } else {
                 // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer

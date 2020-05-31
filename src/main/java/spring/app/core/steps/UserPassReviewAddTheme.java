@@ -28,7 +28,6 @@ public class UserPassReviewAddTheme extends Step {
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-
         if (studentReview != null) {
             text = String.format("Вы уже записаны на ревью:\n" +
                             "Тема: %s\n" +
