@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.dto.QuestionNumberAnswererIdDto;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
@@ -23,12 +24,12 @@ import static spring.app.util.Keyboards.*;
 public class UserStartReviewCore extends Step {
 
     @Value("${review.point_for_take_review}")
-    int pointForTakeReview;
+    private int pointForTakeReview;
 
     private final static Logger log = LoggerFactory.getLogger(UserStartReviewCore.class);
 
     // Map хранит по vkId ревьюера текущий вопрос и отвечающего на него
-    private final Map<Integer, Pair<Integer, Long>> questionNumbers = new HashMap<>();
+    private final Map<Integer, QuestionNumberAnswererIdDto> questionNumbers = new HashMap<>();
     //Хранит по vkId набор айдишников студентов которым можно задать вопрос. На старте - всем студентам на ревью
     private final Map<Integer, List<Long>> possibleAnswerer = new HashMap<>();
 
@@ -48,11 +49,11 @@ public class UserStartReviewCore extends Step {
         // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
         // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
 
-        questionNumbers.putIfAbsent(vkId, new Pair<>(0, 0L));
+        questionNumbers.putIfAbsent(vkId, new QuestionNumberAnswererIdDto(0, 0L));
         if (!possibleAnswerer.containsKey(vkId)) { //containsKey ибо иначе каждый раз расчеты были бы
             possibleAnswerer.put(vkId, students.stream().map(User::getId).collect(Collectors.toList()));
         }
-        int questionNumber = questionNumbers.get(vkId).getKey();
+        int questionNumber = questionNumbers.get(vkId).getQuestionNumber();
         if (questionNumber != questions.size()) {
             Long nextAnswererId = selectNextRandomAnswererStudent(vkId, context, questionNumber);
             //находим по айдишнику следующего студента в списке студентов.
@@ -62,7 +63,7 @@ public class UserStartReviewCore extends Step {
                     .append(user.getFirstName()).append(" ").append(user.getLastName())
                     .append(String.format(": %s", questions.get(questionNumber).getQuestion()))
                     .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
-            questionNumbers.put(vkId, new Pair<>(questionNumber, nextAnswererId));
+            questionNumbers.put(vkId, new QuestionNumberAnswererIdDto(questionNumber, nextAnswererId));
             keyboard = RIGHT_WRONG_ANSWER;
 
             // если вопросы кончились
@@ -183,7 +184,7 @@ public class UserStartReviewCore extends Step {
             storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
             storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
             // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
-        } else if (questionNumbers.get(vkId).getKey() == questions.size()) {
+        } else if (questionNumbers.get(vkId).getQuestionNumber() == questions.size()) {
             if (userInput.equalsIgnoreCase("главное меню")) {
                 nextStep = USER_MENU;
                 questionNumbers.keySet().remove(vkId);
@@ -198,9 +199,9 @@ public class UserStartReviewCore extends Step {
             // проверяем, является ли ввод ревьюера корректным
         } else if (userInput.equals("Ответ принят") || userInput.equals("Ответ не принят")) {
             // определяем какой вопрос мы задавали
-            int questionNumber = questionNumbers.get(vkId).getKey();
+            int questionNumber = questionNumbers.get(vkId).getQuestionNumber();
             //выявляем кому задавали
-            Long answererId = questionNumbers.get(vkId).getValue();
+            Long answererId = questionNumbers.get(vkId).getAnswererId();
             int answererPosition = 0;
             for (User student : students) {
                 if (student.getId().equals(answererId)) {
@@ -238,7 +239,7 @@ public class UserStartReviewCore extends Step {
             questionStrings.add(currentQuestionString);
             storageService.updateUserStorage(vkId, USER_START_REVIEW_CORE, questionStrings);
             log.info("Сохранен ответ {} на вопрос по индексу {} студента с id {}", userInput, questionNumber, answererId);
-            questionNumbers.put(vkId, new Pair<>(questionNumber, 0L));
+            questionNumbers.put(vkId, new QuestionNumberAnswererIdDto(questionNumber, 0L));
             nextStep = USER_START_REVIEW_CORE;
         } else {
             throw new ProcessInputException("Неверный ввод ответов студентов, повторите ввод");
