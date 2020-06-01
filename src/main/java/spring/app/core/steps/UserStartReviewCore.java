@@ -92,6 +92,8 @@ public class UserStartReviewCore extends Step {
                 // очищаем ввод ревьюера из STORAGE
                 storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
                 storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
+                //удаление хранилища, связанного с USER_MENU
+                storageService.removeUserStorage(vkId, USER_MENU);
                 // добавляем очки за прием ревью
                 User user = context.getUserService().getByVkId(vkId);
                 user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);

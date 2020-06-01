@@ -45,9 +45,7 @@ public class UserMenu extends Step {
         ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
         // если ревью открыто, но прошло более 10 минут с момента его начала, то кнопка отображаться не будет
-        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId).stream()
-                .filter(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()))//сортировка ревью по дате, отобржается сначала ближайшее по времени
-                .collect(Collectors.toList());
+        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
         List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
@@ -59,7 +57,7 @@ public class UserMenu extends Step {
         }
         // формируем блок кнопок
         StringBuilder keys = new StringBuilder(HEADER_FR);
-        if (!userReviews.isEmpty()) {
+        if (userReviews.stream().anyMatch(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()))) {
             keys
                     .append(REVIEW_START_FR)
                     .append(ROW_DELIMETER_FR);
@@ -69,8 +67,13 @@ public class UserMenu extends Step {
                     .append(REVIEW_CANCEL_FR)
                     .append(ROW_DELIMETER_FR);
         }
-        keys.append(USER_MENU_FR)
+        if(!userReviews.isEmpty()) {
+            keys.append(USER_MENU_D_FR)
                 .append(FOOTER_FR);
+        } else {
+            keys.append(USER_MENU_FR)
+                .append(FOOTER_FR);
+        }
         keyboard = keys.toString();
         text = String.format("Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, для удобного использования бота воспользуйтесь кнопками + скрин. \nНа данный момент у вас %d RP (Review Points) для сдачи ревью.\nRP используются для записи на ревью, когда вы хотите записаться на ревью вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, если вы дали возможность вам сдать, но никто не записался на сдачу (те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.", user.getFirstName(), user.getReviewPoint());
         List<String> currentStorage = context.getStorageService().getUserStorage(vkId, USER_MENU);
@@ -78,6 +81,7 @@ public class UserMenu extends Step {
             //если кому потребуется выводить кучу текста - пусть стримами бегаем по элементам. А пока тут нужен только первый
             text = currentStorage.get(0) + text;
         }
+        context.getStorageService().removeUserStorage(vkId, USER_MENU);
     }
 
     @Override
@@ -121,7 +125,7 @@ public class UserMenu extends Step {
                 // если пользователь не проводит ревью, то показываем сообщение
                 throw new ProcessInputException("Ты еще не объявлял о принятии ревью!\n Сначала ты должен его объвить, для этого нажми на кнопку \"Принять ревью\" и следуй дальнейшим указаниям.");
             }
-        } else if (command.contains("приём")) { // (Отменить ревью (!) у принимающего лица [препода])
+        } else if (command.contains("Отменить ревью")) { // (Отменить ревью (!) у принимающего лица [препода])
             List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
             //если нет ни одного ревью, то в чат даётся сообщение об ошибке
             if(reviews.isEmpty()) {
@@ -132,17 +136,13 @@ public class UserMenu extends Step {
             }
         } else if (command.contains("сдачу")) { // (Отменить запись на ревью (!) у сдающего лица [студента])
             nextStep = USER_CANCEL_REVIEW;
-            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.contains("Сдать")) { // (Сдать ревью)
             nextStep = USER_PASS_REVIEW_ADD_THEME;
-            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.contains("Принять")) { // (Принять ревью)
             nextStep = USER_TAKE_REVIEW_ADD_THEME;
-            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")) {
             if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
                 nextStep = ADMIN_MENU;
-                storageService.removeUserStorage(vkId, USER_MENU);
             } else {
                 throw new ProcessInputException("Недостаточно прав для выполнения команды!");
             }

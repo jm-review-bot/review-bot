@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.service.abstraction.VkService;
 import spring.app.service.impl.StorageServiceImpl;
 import spring.app.util.StringParser;
 
@@ -18,8 +19,12 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class SelectingReviewToDelete extends Step {
+    private StorageServiceImpl ssi;
     @Autowired
-    StorageServiceImpl ssi;
+    public SelectingReviewToDelete(StorageServiceImpl ssi) {
+        this.ssi = ssi;
+    }
+
     @Override
     public void enter(BotContext context) {//здесь выводится текст в чате при переходе на этот step
         //хранилище стэпа REVIEWER_DELETE_REVIEW для каждого vkId юзера хранит айдишник ревью, которое следует отменить
@@ -33,11 +38,13 @@ public class SelectingReviewToDelete extends Step {
         List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getVkId());
         StringBuilder selectReview = new StringBuilder("Выберете ревью, которое хотите отменить:\n");
         int i = 1;
+        List<String> reviewIds = new ArrayList<>();
         for(Review review: reviews) {
             selectReview = selectReview.append("[").append(i).append("] {").append(context.getThemeService().getThemeById(review.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(review.getDate())).append("}\n");
             i++;
-            ssi.getUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE).add(Long.toString(review.getId()));
+            reviewIds.add(Long.toString(review.getId()));
         }
+        ssi.getUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE).addAll(reviewIds);
         text = selectReview.toString();
         keyboard = BACK_KB;
     }
@@ -54,12 +61,14 @@ public class SelectingReviewToDelete extends Step {
             if((numberReview>0)&&(numberReview <= ssi.getUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE).size())) {
                 //получаем индекс ревью по её позции в списке выбора......
                 long indexReview = Long.parseLong(ssi.getUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE).get(numberReview-1));//это индекс ревью в БД
-                if((((context.getReviewService().getReviewById(indexReview)) == null) || !(context.getReviewService().getReviewById(indexReview)).getOpen()) && (context.getReviewService().getReviewById(indexReview).getUser().getVkId()!=context.getVkId())) {
-                    String message = "Введённое число является номером ревью из одного из ревью списка выше, однако к настоящему времени данное ревью было либо удалено, либо закрыто, либо вы не числитесь его создателем (а значит не можете отменять его).\n";
-                    ssi.updateUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE,new ArrayList<String>());
+                Review review = context.getReviewService().getReviewById(indexReview);
+                if((review == null) && (review.getUser().getVkId()!=context.getVkId())) {
+                    String message = "Введённое число является номером ревью из одного из ревью списка выше, однако к настоящему времени данное ревью было либо удалено, либо вы не числитесь его создателем (а значит не можете отменять его).\n";
+                    ssi.removeUserStorage(context.getVkId(),SELECTING_REVIEW_TO_DELETE);
                     List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getVkId());
+                    VkService vkService = context.getVkService();
                     if(reviews.isEmpty()) {
-                        context.getVkService().sendMessage(message,keyboard,context.getUser().getVkId());
+                        vkService.sendMessage(message,keyboard,context.getUser().getVkId());
                         nextStep = USER_MENU;
                     } else {
                         nextStep = SELECTING_REVIEW_TO_DELETE;

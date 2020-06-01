@@ -28,7 +28,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"3\\\"}\",\n" +
-            "          \"label\": \"Отменить приём ревью\"\n" +
+            "          \"label\": \"Отменить ревью\"\n" +
             "        },\n" +
             "        \"color\": \"primary\"\n" +
             "      }\n";
@@ -55,7 +55,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Отменить ревью\"\n" +
+            "          \"label\": \"Отменить сдачу ревью\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n";
@@ -193,14 +193,6 @@ public class Keyboards {
             "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Изменить пользователя\"\n" +
-            "        },\n" +
-            "        \"color\": \"primary\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
             "          \"label\": \"Удалить пользователя\"\n" +
             "        },\n" +
@@ -296,7 +288,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"оставить имя как есть\"\n" +
+            "          \"label\": \"РѕСЃС‚Р°РІРёС‚СЊ РёРјСЏ РєР°Рє РµСЃС‚СЊ\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -304,7 +296,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"ввести новое имя фамилию\"\n" +
+            "          \"label\": \"РІРІРµСЃС‚Рё РЅРѕРІРѕРµ РёРјСЏ С„Р°РјРёР»РёСЋ\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n" +
@@ -320,7 +312,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"изменить имя\"\n" +
+            "          \"label\": \"РёР·РјРµРЅРёС‚СЊ РёРјСЏ\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -328,7 +320,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"изменить вкИд\"\n" +
+            "          \"label\": \"РёР·РјРµРЅРёС‚СЊ РІРєРРґ\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      }\n" +
@@ -344,7 +336,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"да\"\n" +
+            "          \"label\": \"РґР°\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -352,7 +344,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"отмена\"\n" +
+            "          \"label\": \"РѕС‚РјРµРЅР°\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n" +
