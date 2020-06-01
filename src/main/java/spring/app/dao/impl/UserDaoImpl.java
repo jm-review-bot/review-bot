@@ -71,4 +71,14 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .setParameter("review_id", reviewId)
                 .getResultList();
     }
+
+    @Override
+    public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return entityManager.createNativeQuery("SELECT u.* FROM users u JOIN student_review sr ON u.id = sr.student_id " +
+                "WHERE sr.review_id IN " +
+                "(SELECT r.id FROM review r WHERE r.is_open = TRUE AND r.date BETWEEN :period_start AND :period_end)", User.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodEnd)
+                .getResultList();
+    }
 }

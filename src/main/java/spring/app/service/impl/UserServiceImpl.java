@@ -90,4 +90,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByReviewId(Long reviewId) {
         return userDao.getStudentsByReviewId(reviewId);
     }
+
+    @Override
+    public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return userDao.getStudentsByReviewPeriod(periodStart, periodEnd);
+    }
 }
