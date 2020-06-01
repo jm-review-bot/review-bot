@@ -49,7 +49,31 @@ public class TestDataInit {
     private Step adminAddUser;
 
     @Autowired
+    private  Step adminUserList;
+
+    @Autowired
+    private Step adminEditUser;
+
+    @Autowired
+    private Step adminInputNewFullnameEditedUser;
+
+    @Autowired
+    private Step adminConfirmChangeEditedUserFullname;
+
+    @Autowired
+    private Step adminInputNewVkIdEditedUser;
+
+    @Autowired
+    private Step adminConfirmChangeEditedUserVkId;
+
+    @Autowired
     private Step adminRemoveUser;
+
+    @Autowired
+    private Step adminProposalChangeFullnameAddedUser;
+
+    @Autowired
+    private Step adminChangeAddedUserFullname;
 
     @Autowired
     private Step userTakeReviewAddDate;
@@ -146,7 +170,15 @@ public class TestDataInit {
         steps.put(StepSelector.USER_MENU, userMenu);
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
+        steps.put(StepSelector.ADMIN_EDIT_USER, adminEditUser);
+        steps.put(StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, adminInputNewFullnameEditedUser);
+        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME, adminConfirmChangeEditedUserFullname);
+        steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
+        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
+        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
@@ -163,48 +195,56 @@ public class TestDataInit {
         core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
+        core.setCriticalWeight(8);
         themeService.addTheme(core);
 
         Theme multithreading = new Theme();
         multithreading.setPosition(2);
         multithreading.setReviewPoint(4);
         multithreading.setTitle("Многопоточность");
+        multithreading.setCriticalWeight(8);
         themeService.addTheme(multithreading);
 
         Theme sql = new Theme();
         sql.setPosition(3);
         sql.setReviewPoint(4);
         sql.setTitle("SQL");
+        sql.setCriticalWeight(8);
         themeService.addTheme(sql);
 
         Theme hibernate = new Theme();
         hibernate.setPosition(4);
         hibernate.setReviewPoint(4);
         hibernate.setTitle("Hibernate");
+        hibernate.setCriticalWeight(8);
         themeService.addTheme(hibernate);
 
         Theme spring = new Theme();
         spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
+        spring.setCriticalWeight(8);
         themeService.addTheme(spring);
 
         Theme patterns = new Theme();
         patterns.setPosition(6);
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
+        patterns.setCriticalWeight(8);
         themeService.addTheme(patterns);
 
         Theme algorithm = new Theme();
         algorithm.setPosition(7);
         algorithm.setReviewPoint(4);
         algorithm.setTitle("Алгоритмы");
+        algorithm.setCriticalWeight(8);
         themeService.addTheme(algorithm);
 
         Theme finalReview = new Theme();
         finalReview.setPosition(8);
         finalReview.setReviewPoint(4);
         finalReview.setTitle("Финальное ревью");
+        finalReview.setCriticalWeight(8);
         themeService.addTheme(finalReview);
 
         // add reviews
@@ -271,6 +311,7 @@ public class TestDataInit {
         question1.setPosition(1);
         question1.setQuestion("Что такое bean??");
         question1.setTheme(spring);
+        question1.setWeight(8);
         questionService.addQuestion(question1);
 
         Question question2 = new Question();
@@ -278,6 +319,7 @@ public class TestDataInit {
         question2.setPosition(2);
         question2.setQuestion("Опишите IOC своими словами");
         question2.setTheme(spring);
+        question2.setWeight(8);
         questionService.addQuestion(question2);
 
         Question question3 = new Question();
@@ -285,6 +327,7 @@ public class TestDataInit {
         question3.setPosition(3);
         question3.setQuestion("Что такое Dependency Injection?");
         question3.setTheme(spring);
+        question3.setWeight(8);
         questionService.addQuestion(question3);
 
         Question question4 = new Question();
@@ -292,6 +335,7 @@ public class TestDataInit {
         question4.setPosition(4);
         question4.setQuestion("Что такое Spring Boot?");
         question4.setTheme(spring);
+        question4.setWeight(8);
         questionService.addQuestion(question4);
 
         Question question5 = new Question();
@@ -299,6 +343,7 @@ public class TestDataInit {
         question5.setPosition(5);
         question5.setQuestion("Что такое AOP?");
         question5.setTheme(spring);
+        question5.setWeight(8);
         questionService.addQuestion(question5);
 
         Question question6 = new Question();
@@ -306,6 +351,7 @@ public class TestDataInit {
         question6.setPosition(6);
         question6.setQuestion("Что такое autowriting?");
         question6.setTheme(spring);
+        question6.setWeight(8);
         questionService.addQuestion(question6);
 
         Question question7 = new Question();
@@ -313,6 +359,7 @@ public class TestDataInit {
         question7.setPosition(7);
         question7.setQuestion("Что такое target object?");
         question7.setTheme(spring);
+        question7.setWeight(8);
         questionService.addQuestion(question7);
 
         Question question8 = new Question();
@@ -320,6 +367,7 @@ public class TestDataInit {
         question8.setPosition(8);
         question8.setQuestion("Что такое DAO?");
         question8.setTheme(spring);
+        question8.setWeight(8);
         questionService.addQuestion(question8);
 
         Question question9 = new Question();
@@ -327,6 +375,7 @@ public class TestDataInit {
         question9.setPosition(9);
         question9.setQuestion("Что делает @RequestMapping?");
         question9.setTheme(spring);
+        question9.setWeight(8);
         questionService.addQuestion(question9);
 
         Question question10 = new Question();
@@ -334,6 +383,138 @@ public class TestDataInit {
         question10.setPosition(10);
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setTheme(spring);
+        question10.setWeight(8);
         questionService.addQuestion(question10);
+
+        User akira = new User();
+        akira.setFirstName("Akira");
+        akira.setLastName("Rokudo");
+        akira.setReviewPoint(30);
+        akira.setVkId(167464635);
+        akira.setRole(roleAdmin);
+        akira.setChatStep(StepSelector.START);
+        userService.addUser(akira);
+
+        //Ревью и связь о прохождении кора
+        Review akiraCorePassed = new Review();
+        akiraCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
+        akiraCorePassed.setOpen(false);
+        akiraCorePassed.setTheme(core);
+        akiraCorePassed.setUser(akira);//кто принимал
+        reviewService.addReview(akiraCorePassed);
+        StudentReview akiraCoreSuccesReview = new StudentReview();
+        akiraCoreSuccesReview.setUser(akira);
+        akiraCoreSuccesReview.setPassed(true);
+        akiraCoreSuccesReview.setReview(akiraCorePassed);
+        studentReviewService.addStudentReview(akiraCoreSuccesReview);
+        //Ревью и связь о прохождении многопоточки
+        Review akiraMultithreadingPassed = new Review();
+        akiraMultithreadingPassed.setDate(LocalDateTime.of(2020, 4, 14, 11, 0));
+        akiraMultithreadingPassed.setOpen(false);
+        akiraMultithreadingPassed.setTheme(multithreading);
+        akiraMultithreadingPassed.setUser(akira);//кто принимал
+        reviewService.addReview(akiraMultithreadingPassed);
+        StudentReview akiraMultithreadingSuccesReview = new StudentReview();
+        akiraMultithreadingSuccesReview.setUser(akira);
+        akiraMultithreadingSuccesReview.setPassed(true);
+        akiraMultithreadingSuccesReview.setReview(akiraMultithreadingPassed);
+        studentReviewService.addStudentReview(akiraMultithreadingSuccesReview);
+
+        //первый юзер сдающий ревью по многопоточке. То есть у него 1 пройденное ревью - кор
+        User studentForCriticalWeight = new User();
+        studentForCriticalWeight.setFirstName("Алексей");
+        studentForCriticalWeight.setLastName("Травов");
+        studentForCriticalWeight.setReviewPoint(10);
+        studentForCriticalWeight.setVkId(561687031);
+        studentForCriticalWeight.setRole(roleUser);
+        studentForCriticalWeight.setChatStep(StepSelector.START);
+        userService.addUser(studentForCriticalWeight);
+
+        //Ревью и связь о прохождении кора
+        Review studentForCriticalWeightCorePassed = new Review();
+        studentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
+        studentForCriticalWeightCorePassed.setOpen(false);
+        studentForCriticalWeightCorePassed.setTheme(core);
+        studentForCriticalWeightCorePassed.setUser(studentForCriticalWeight);//кто принимал
+        reviewService.addReview(studentForCriticalWeightCorePassed);
+        StudentReview studentForCriticalWeightCoreSuccesReview = new StudentReview();
+        studentForCriticalWeightCoreSuccesReview.setUser(studentForCriticalWeight);
+        studentForCriticalWeightCoreSuccesReview.setPassed(true);
+        studentForCriticalWeightCoreSuccesReview.setReview(studentForCriticalWeightCorePassed);
+        studentReviewService.addStudentReview(studentForCriticalWeightCoreSuccesReview);
+
+        //второй юзер сдающий ревью по многопоточке. То есть у него 1 пройденное ревью - кор
+        User secondStudentForCriticalWeight = nikolay;
+
+        //Ревью и связь о прохождении кора
+        Review secondStudentForCriticalWeightCorePassed = new Review();
+        secondStudentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
+        secondStudentForCriticalWeightCorePassed.setOpen(false);
+        secondStudentForCriticalWeightCorePassed.setTheme(core);
+        secondStudentForCriticalWeightCorePassed.setUser(secondStudentForCriticalWeight);//кто принимал
+        reviewService.addReview(secondStudentForCriticalWeightCorePassed);
+        StudentReview secondStudentForCriticalWeightCoreSuccesReview = new StudentReview();
+        secondStudentForCriticalWeightCoreSuccesReview.setUser(secondStudentForCriticalWeight);//кто сдавал
+        secondStudentForCriticalWeightCoreSuccesReview.setPassed(true);
+        secondStudentForCriticalWeightCoreSuccesReview.setReview(secondStudentForCriticalWeightCorePassed);
+        studentReviewService.addStudentReview(secondStudentForCriticalWeightCoreSuccesReview);
+
+
+
+        //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
+        //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
+        Review criticalWeightReview = new Review();
+        criticalWeightReview.setDate(LocalDateTime.of(2020, 5, 25, 19, 18));
+        criticalWeightReview.setOpen(true);
+        criticalWeightReview.setTheme(multithreading);
+        criticalWeightReview.setUser(akira);//кто принимает
+        reviewService.addReview(criticalWeightReview);
+
+        //Связь для ревью.
+        // первый из сдающих
+        StudentReview criticalWeightFirstStudentReview = new StudentReview();
+        criticalWeightFirstStudentReview.setUser(studentForCriticalWeight);//кто сдает
+        criticalWeightFirstStudentReview.setReview(criticalWeightReview);
+        studentReviewService.addStudentReview(criticalWeightFirstStudentReview);
+        //второй сдающий
+        StudentReview criticalWeightSecondStudentReview = new StudentReview();
+        criticalWeightSecondStudentReview.setUser(secondStudentForCriticalWeight);//кто сдает
+        criticalWeightSecondStudentReview.setReview(criticalWeightReview);
+        studentReviewService.addStudentReview(criticalWeightSecondStudentReview);
+
+        //4 вопроса
+        Question criticalQuestion1 = new Question();
+        criticalQuestion1.setAnswer("Герои мультика");
+        criticalQuestion1.setPosition(1);
+        criticalQuestion1.setQuestion("Кто такие фиксики");
+        criticalQuestion1.setTheme(multithreading);
+        criticalQuestion1.setWeight(1);
+        questionService.addQuestion(criticalQuestion1);
+
+        Question criticalQuestion2 = new Question();
+        criticalQuestion2.setAnswer("Столько же, сколько накануне, ибо Йозеф еще спит");
+        criticalQuestion2.setPosition(2);
+        criticalQuestion2.setQuestion("Сколько будет весить Йозеф, если греки выступили на рассвете?");
+        criticalQuestion2.setTheme(multithreading);
+        criticalQuestion2.setWeight(2);
+        questionService.addQuestion(criticalQuestion2);
+
+        Question criticalQuestion3 = new Question();
+        criticalQuestion3.setAnswer("Путь праведника труден, ибо препятствуют ему себялюбивые и тираны из злых людей.");
+        criticalQuestion3.setPosition(3);
+        criticalQuestion3.setQuestion("Назовите первое предложение Ветхого Завета, Книги Иезекииля,Главы 25,17 Стиха ");
+        criticalQuestion3.setTheme(multithreading);
+        criticalQuestion3.setWeight(3);
+        questionService.addQuestion(criticalQuestion3);
+
+        Question criticalQuestion4 = new Question();
+        criticalQuestion4.setAnswer("завершает работу цикла");
+        criticalQuestion4.setPosition(4);
+        criticalQuestion4.setQuestion("Что делает оператор break?");
+        criticalQuestion4.setTheme(multithreading);
+        criticalQuestion4.setWeight(4);
+        questionService.addQuestion(criticalQuestion4);
+
+
     }
 }

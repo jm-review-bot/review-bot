@@ -22,8 +22,6 @@ import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
 
 @Component
 public class UserPassReviewAddTheme extends Step {
-    private Logger logger = LoggerFactory.getLogger(
-            UserPassReviewAddTheme.class);
     private Set<Integer> idsIfCancelStudentReview = new HashSet<>();
     private Map<Integer, Theme> themes = new HashMap<>();
 
@@ -116,13 +114,6 @@ public class UserPassReviewAddTheme extends Step {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command) && studentReview != null) {
-                if(context.getUser().getRole().isAdmin()) {
-                    logger.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
-                            "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getVkId()+"] отменил свою запись на ревью.\n" +
-                            "А именно:\n" +
-                            context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId()).getReview().getTheme().getTitle() + "_"+
-                            context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId()).getReview().getDate());
-                }
                 context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
                 idsIfCancelStudentReview.add(vkId);
                 nextStep = USER_PASS_REVIEW_ADD_THEME;

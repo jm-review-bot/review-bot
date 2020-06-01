@@ -27,19 +27,8 @@ public class AdminAddUser extends Step {
 
     @Override
     public void enter(BotContext context) {
-        Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
-
-        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_ADD_USER);
-
-        if (savedInput == null || savedInput.isEmpty()) {
-            text = "Введите ссылку на профиль пользователя.\nМожно добавить несколько пользователей, введя ссылки через пробел или запятую.";
-            keyboard = BACK_KB;
-        } else {
-            text = savedInput.get(0);
-            keyboard = BACK_KB;
-            storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
-        }
+        text = "Введите ссылку на профиль нового пользователя.\n";
+        keyboard = BACK_KB;
     }
 
     @Override
@@ -51,58 +40,48 @@ public class AdminAddUser extends Step {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
 
-        List<String> parsedInput = StringParser.toVkIdsList(currentInput);
+        String parsedInput = StringParser.toVkId(currentInput);
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
         if (wordInput.equals("назад")
-                || wordInput.equals("нет")
-                || wordInput.equals("отмена")
                 || wordInput.equals("/admin")) {
-            storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
+            storageService.removeUserStorage(vkId, ADMIN_ADD_USER);//т.к. мы на любом последующем шаге все равно придем в этот шаг, то очистку проводим тут.
             nextStep = ADMIN_MENU;
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = START;
-        } else {
-            // мы ожидаем от него ссылки на профили добавляемых  юзеров
+        } else if(parsedInput != null){
+            // мы ожидаем от него ссылки на профиль добавляемого  юзера
             try {
-                // получем список юзеров на основе запроса в VK
-                List<User> addedUsersList = vkService.newUsersFromVk(parsedInput);
-                // убираем из списка тех, кто уже есть в базе
-                addedUsersList.removeIf(user -> userService.isExistByVkId(user.getVkId()));
-                // проверяем что получился непустой список
-                if (!addedUsersList.isEmpty()) {
+                // получем юзера на основе запроса в VK
+                User addedUser = vkService.newUserFromVk(parsedInput);
+                //проверим, что у нас нет такого юзера
+                if (!userService.isExistByVkId(addedUser.getVkId())) {
                     // теперь можно начать формировать ответ
-                    StringBuilder addedUserText = new StringBuilder("Были успешно добавлены пользователи:\n\n");
-
-                    addedUsersList.forEach(user -> {
-                        // сэтим юзерам роль ЮЗЕР, добавляем в базу и формируем строку с оветом
-                        user.setRole(userRole);
-                        userService.addUser(user);
-                        addedUserText
-                                .append("- ")
-                                .append(user.getLastName())
-                                .append(" ")
-                                .append(user.getFirstName())
-                                .append(", https://vk.com/id")
-                                .append(user.getVkId())
-                                .append("\n");
-                        log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
-                                "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [id - "+context.getUser().getVkId()+"] добавил пользователя(ей) в базу.\n" +
-                                "А именно, он добавил следующего(их) пользователя(ей):\n" +
-                                addedUserText.toString());
-
-                    });
-                    addedUserText.append("\nВы можете прислать еще ссылки на профили или вернуться в Меню, введя \"назад\".");
-                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(addedUserText.toString()));
-                    nextStep = ADMIN_ADD_USER;
+                    StringBuilder addedUserText = new StringBuilder("Пользователь ");
+                    // сэтим юзерам роль ЮЗЕР, добавляем в базу и формируем строку с оветом
+                    addedUser.setRole(userRole);
+                    userService.addUser(addedUser);
+                    addedUserText
+                            .append(addedUser.getFirstName())
+                            .append(" ")
+                            .append(addedUser.getLastName())
+                            .append(" (https://vk.com/id")
+                            .append(addedUser.getVkId())
+                            .append(") \n Был успешно добавлен в базу. Оставить имя фамилию без изменений?\n");
+                    log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
+                            "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [id - "+context.getUser().getVkId()+"] добавил пользователя в базу.\n" +
+                            "А именно, он добавил следующего пользователя:\n" +
+                            addedUser.getFirstName() + " " + addedUser.getLastName() + " (https://vk.com/id" + addedUser.getVkId()+")");
+                    //подготавливаем почву для следующих шагов
+                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(Long.toString(addedUser.getId())));
+                    storageService.updateUserStorage(vkId, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, Arrays.asList(addedUserText.toString()));
+                    nextStep = ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER;
                 } else {
-                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList("Пользователь(и) уже в базе."));
-                    nextStep = ADMIN_ADD_USER;
+                    throw new ProcessInputException("Пользователь уже в базе.\n");
                 }
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {
-                keyboard = BACK_KB;
-                throw new ProcessInputException("Введены неверные данные. Таких пользователей не найдено...");
+                throw new ProcessInputException("Введены неверные данные. Такой пользователь не найден...");
             }
         }
 

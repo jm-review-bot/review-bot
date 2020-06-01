@@ -30,7 +30,7 @@ class StringParserTest {
 
     @Test
     void toVkIdsListTest() {
-        String text = "https://vk.com/romanevseev,https://vk.com/bishunmo1 https://vk.com/id3183318,";
-        Assert.assertEquals(StringParser.toVkIdsList(text), Arrays.asList("romanevseev", "bishunmo1", "3183318"));
+        String text = "https://vk.com/romanevseev";
+        Assert.assertEquals(StringParser.toVkId(text), "romanevseev");
     }
 }

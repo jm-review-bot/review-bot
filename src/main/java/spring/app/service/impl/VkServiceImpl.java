@@ -65,10 +65,10 @@ public class VkServiceImpl implements VkService {
     }
 
     @Override
-    public List<User> newUsersFromVk(List<String> userIds) throws ClientException, ApiException, IncorrectVkIdsException {
+    public User newUserFromVk(String userId) throws ClientException, ApiException, IncorrectVkIdsException {
         List<User> newUsers = new ArrayList<>();
         this.apiClient.users().get(groupActor)
-                .userIds(userIds)
+                .userIds(userId)
                 .execute()
                 .stream()
                 .filter(userInfo -> !userInfo.getFirstName().equals("DELETED"))
@@ -83,6 +83,6 @@ public class VkServiceImpl implements VkService {
         if (newUsers.isEmpty()) {
             throw new IncorrectVkIdsException("В предоставленных данных нет активных пользователей.");
         }
-        return newUsers;
+        return newUsers.get(0);
     }
 }
