@@ -14,6 +14,7 @@ import spring.app.util.StringParser;
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,22 +27,13 @@ public class UserMenu extends Step {
     @Value("${review.point_for_empty_review}")
     int pointForEmptyReview;
 
-    @Value("${review.delay}")
-    int reviewDelay;
-
-    @Value("${review.early_start}")
-    int reviewEarlyStart;
-
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
         User user = context.getUser();
         ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
-        // если ревью открыто, но прошло более 10 минут с момента его начала, то кнопка отображаться не будет
-        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId).stream()
-                .filter(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()))
-                .collect(Collectors.toList());
+        List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
         List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
@@ -83,13 +75,14 @@ public class UserMenu extends Step {
             // получаем список всех ревью, которые проводит пользователь
             List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
-                // берем из списка то ревью, которое находится в диапазоне 5 минут до начала ревью и 10 минут после начала ревью
+                // берем из списка то ревью, которое начинается позже текущего времени с самой поздней датой
                 Review nearestReview = userReviews.stream()
-                        .filter(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()) && review.getDate().minusMinutes(reviewEarlyStart).isBefore(LocalDateTime.now()))
-                        .findFirst().orElse(null);
-                // если такого ревью нет, сообщаем, что начать ты можешь либо за 5 минут до его начала, либо в течение 10 минут после начала
+                        .filter(review -> review.getDate().isBefore(LocalDateTime.now()))
+                        .max(Comparator.comparing(Review::getDate))
+                        .orElse(null);
+                // если такого ревью нет, сообщаем, что начать ревью можно не раньше установленного в самом ревью времени
                 if (nearestReview == null) {
-                    String notification = String.format("Ты можешь начать проведение ревью не ранее %d минут до его начала, либо в течение %d минут после начала ревью", reviewEarlyStart, reviewDelay);
+                    String notification = "Начать ревью можно не раньше установленного в самом ревью времени";
                     throw new ProcessInputException(notification);
                     // если ревью есть в этом временном диапазоне
                 } else {
