@@ -42,7 +42,7 @@ public class AdminProposalChangeFullnameAddedUser extends Step{
         if(currentInput.equals("ввести новое имя фамилию")) {
             nextStep = ADMIN_CHANGE_ADDED_USER_FULLNAME;
         } else if(currentInput.equals("оставить имя как есть")) {
-            nextStep = ADMIN_ADD_USER;//TODO: заменить на переход к указанию темы, в соответствующей задаче
+            nextStep = ADMIN_SET_THEME_ADDED_USER;
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

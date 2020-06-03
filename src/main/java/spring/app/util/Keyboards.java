@@ -288,7 +288,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"РѕСЃС‚Р°РІРёС‚СЊ РёРјСЏ РєР°Рє РµСЃС‚СЊ\"\n" +
+            "          \"label\": \"оставить имя как есть\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -296,7 +296,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"РІРІРµСЃС‚Рё РЅРѕРІРѕРµ РёРјСЏ С„Р°РјРёР»РёСЋ\"\n" +
+            "          \"label\": \"ввести новое имя фамилию\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n" +
@@ -312,7 +312,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"РёР·РјРµРЅРёС‚СЊ РёРјСЏ\"\n" +
+            "          \"label\": \"изменить имя\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -320,7 +320,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"РёР·РјРµРЅРёС‚СЊ РІРєРРґ\"\n" +
+            "          \"label\": \"изменить вкИд\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      }\n" +
@@ -336,7 +336,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"РґР°\"\n" +
+            "          \"label\": \"да°\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
             "      },\n" +
@@ -344,7 +344,7 @@ public class Keyboards {
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"РѕС‚РјРµРЅР°\"\n" +
+            "          \"label\": \"отмена\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }\n" +

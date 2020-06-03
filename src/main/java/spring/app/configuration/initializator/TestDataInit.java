@@ -27,8 +27,6 @@ public class TestDataInit {
     @Autowired
     private StudentReviewService studentReviewService;
 
-    @Autowired
-    private StudentReviewAnswerService studentReviewAnswerService;
 
     @Autowired
     private QuestionService questionService;
@@ -56,9 +54,6 @@ public class TestDataInit {
 
     @Autowired
     private Step userTakeReviewAddTheme;
-
-    @Autowired
-    private Step userTakeReviewConfirmation;
 
     @Autowired
     private Step userPassReviewAddTheme;
@@ -155,7 +150,6 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
-        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
         steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);

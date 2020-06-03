@@ -9,6 +9,7 @@ import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
 import static spring.app.core.StepSelector.ADMIN_ADD_USER;
+import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
 import static spring.app.util.Keyboards.NO_KB;
 
 /**
@@ -38,7 +39,7 @@ public class AdminChangeAddedUserFullname extends Step{
                 addedUser.setFirstName(firstAndLastName[0]);
                 addedUser.setLastName(firstAndLastName[1]);
                 userService.updateUser(addedUser);
-                nextStep = ADMIN_ADD_USER;
+                nextStep = ADMIN_SET_THEME_ADDED_USER;
             } else {
                 throw new ProcessInputException("В новом имени фамилии присутствуют не алфавитные символы");
             }

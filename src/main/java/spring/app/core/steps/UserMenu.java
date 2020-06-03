@@ -30,13 +30,13 @@ import static spring.app.util.Keyboards.*;
 public class UserMenu extends Step {
 
     @Value("${review.point_for_empty_review}")
-    int pointForEmptyReview;
+    private int pointForEmptyReview;
 
     @Value("${review.delay}")
-    int reviewDelay;
+    private int reviewDelay;
 
     @Value("${review.early_start}")
-    int reviewEarlyStart;
+    private int reviewEarlyStart;
 
     @Override
     public void enter(BotContext context) {
@@ -44,20 +44,20 @@ public class UserMenu extends Step {
         User user = context.getUser();
         ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
-        // если ревью открыто, но прошло более 10 минут с момента его начала, то кнопка отображаться не будет
         List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
         List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
-        if(!openStudentReview.isEmpty()) {
-            if (openStudentReview.size()>1) {
+        if (!openStudentReview.isEmpty()) {
+            if (openStudentReview.size() > 1) {
                 //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
             }
             studentReview = openStudentReview.get(0).getReview();
         }
         // формируем блок кнопок
         StringBuilder keys = new StringBuilder(HEADER_FR);
-        if (userReviews.stream().anyMatch(review -> review.getDate().plusMinutes(reviewDelay).isAfter(LocalDateTime.now()))) {
+        boolean userReviewsNotEmpty = !userReviews.isEmpty();
+        if (userReviewsNotEmpty) {
             keys
                     .append(REVIEW_START_FR)
                     .append(ROW_DELIMETER_FR);
@@ -67,12 +67,12 @@ public class UserMenu extends Step {
                     .append(REVIEW_CANCEL_FR)
                     .append(ROW_DELIMETER_FR);
         }
-        if(!userReviews.isEmpty()) {
+        if (userReviewsNotEmpty) {
             keys.append(USER_MENU_D_FR)
-                .append(FOOTER_FR);
+                    .append(FOOTER_FR);
         } else {
             keys.append(USER_MENU_FR)
-                .append(FOOTER_FR);
+                    .append(FOOTER_FR);
         }
         keyboard = keys.toString();
         text = String.format("Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, для удобного использования бота воспользуйтесь кнопками + скрин. \nНа данный момент у вас %d RP (Review Points) для сдачи ревью.\nRP используются для записи на ревью, когда вы хотите записаться на ревью вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, если вы дали возможность вам сдать, но никто не записался на сдачу (те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.", user.getFirstName(), user.getReviewPoint());
@@ -88,7 +88,7 @@ public class UserMenu extends Step {
     public void processInput(BotContext context) throws ProcessInputException {
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
-        String command = context.getInput();//StringParser.toWordsArray(context.getInput())[0];
+        String command = context.getInput();
         //тут каждая команда со своим обратчиком:
         if (command.contains("Начать")) { // (Начать прием ревью)
             // получаем список всех ревью, которые проводит пользователь
@@ -128,7 +128,7 @@ public class UserMenu extends Step {
         } else if (command.contains("Отменить ревью")) { // (Отменить ревью (!) у принимающего лица [препода])
             List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getUser().getVkId());
             //если нет ни одного ревью, то в чат даётся сообщение об ошибке
-            if(reviews.isEmpty()) {
+            if (reviews.isEmpty()) {
                 throw new ProcessInputException("Произошла ошибка. Вы не запланировали ни одного ревью\n");
             } else {
                 nextStep = SELECTING_REVIEW_TO_DELETE;
