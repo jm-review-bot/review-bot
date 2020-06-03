@@ -19,10 +19,10 @@ import static spring.app.util.Keyboards.NO_KB;
 public class UserFeedbackReviewerAssessment extends Step {
 
     @Value("${lower.bound}")
-    int lowBound;
+    private int lowBound;
 
     @Value("${upper.bound}")
-    int upBound;
+    private int upBound;
 
     @Override
     public void enter(BotContext context) {
