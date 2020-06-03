@@ -45,65 +45,65 @@ public class TestDataInit {
     @Autowired
     private Step adminMenu;
 
-    @Autowired
-    private Step adminAddUser;
+//    @Autowired
+//    private Step adminAddUser;
 
     @Autowired
     private  Step adminUserList;
 
-    @Autowired
-    private Step adminEditUser;
-
-    @Autowired
-    private Step adminInputNewFullnameEditedUser;
-
-    @Autowired
-    private Step adminConfirmChangeEditedUserFullname;
-
-    @Autowired
-    private Step adminInputNewVkIdEditedUser;
-
-    @Autowired
-    private Step adminConfirmChangeEditedUserVkId;
-
-    @Autowired
-    private Step adminRemoveUser;
-
-    @Autowired
-    private Step adminProposalChangeFullnameAddedUser;
-
-    @Autowired
-    private Step adminChangeAddedUserFullname;
-
-    @Autowired
-    private Step adminSetThemeAddedUser;
-
-    @Autowired
-    private Step userTakeReviewAddDate;
-
-    @Autowired
-    private Step userTakeReviewAddTheme;
-
-    @Autowired
-    private Step userPassReviewAddTheme;
-
-    @Autowired
-    private Step userPassReviewGetListReview;
-
-    @Autowired
-    private Step userPassReviewAddStudentReview;
-
-    @Autowired
-    private Step userCancelReview;
-
-    @Autowired
-    private Step userStartReviewHangoutsLink;
-
-    @Autowired
-    private Step userStartReviewRules;
-
-    @Autowired
-    private Step userStartReviewCore;
+//    @Autowired
+//    private Step adminEditUser;
+//
+//    @Autowired
+//    private Step adminInputNewFullnameEditedUser;
+//
+//    @Autowired
+//    private Step adminConfirmChangeEditedUserFullname;
+//
+//    @Autowired
+//    private Step adminInputNewVkIdEditedUser;
+//
+//    @Autowired
+//    private Step adminConfirmChangeEditedUserVkId;
+//
+//    @Autowired
+//    private Step adminRemoveUser;
+//
+//    @Autowired
+//    private Step adminProposalChangeFullnameAddedUser;
+//
+//    @Autowired
+//    private Step adminChangeAddedUserFullname;
+//
+//    @Autowired
+//    private Step adminSetThemeAddedUser;
+//
+//    @Autowired
+//    private Step userTakeReviewAddDate;
+//
+//    @Autowired
+//    private Step userTakeReviewAddTheme;
+//
+//    @Autowired
+//    private Step userPassReviewAddTheme;
+//
+//    @Autowired
+//    private Step userPassReviewGetListReview;
+//
+//    @Autowired
+//    private Step userPassReviewAddStudentReview;
+//
+//    @Autowired
+//    private Step userCancelReview;
+//
+//    @Autowired
+//    private Step userStartReviewHangoutsLink;
+//
+//    @Autowired
+//    private Step userStartReviewRules;
+//
+//    @Autowired
+//    private Step userStartReviewCore;
 
     public TestDataInit() {
     }
@@ -178,26 +178,26 @@ public class TestDataInit {
         steps.put(StepSelector.START, start);
         steps.put(StepSelector.USER_MENU, userMenu);
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
-        steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+//        steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
-        steps.put(StepSelector.ADMIN_EDIT_USER, adminEditUser);
-        steps.put(StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, adminInputNewFullnameEditedUser);
-        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME, adminConfirmChangeEditedUserFullname);
-        steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
-        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
-        steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
-        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
-        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
-        steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
-        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
-        steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
-        steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
-        steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
-        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
-        steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
-        steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
-        steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
+//        steps.put(StepSelector.ADMIN_EDIT_USER, adminEditUser);
+//        steps.put(StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, adminInputNewFullnameEditedUser);
+//        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME, adminConfirmChangeEditedUserFullname);
+//        steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
+//        steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
+//        steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+//        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
+//        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+//        steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
+//        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
+//        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
+//        steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
+//        steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
+//        steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
+//        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
+//        steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
+//        steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
+//        steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
 
         //add themes
         Theme core = new Theme();
@@ -435,7 +435,7 @@ public class TestDataInit {
         studentForCriticalWeight.setLastName("Травов");
         studentForCriticalWeight.setReviewPoint(10);
         studentForCriticalWeight.setVkId(561687031);
-        studentForCriticalWeight.setRole(roleUser);
+        studentForCriticalWeight.setRole(roleAdmin);
         studentForCriticalWeight.setChatStep(StepSelector.START);
         userService.addUser(studentForCriticalWeight);
 
@@ -469,7 +469,6 @@ public class TestDataInit {
         studentReviewService.addStudentReview(secondStudentForCriticalWeightCoreSuccesReview);
 
 
-
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview = new Review();
@@ -494,7 +493,7 @@ public class TestDataInit {
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview2 = new Review();
-        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 1, 22, 05));
+        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 3, 23, 25));
         criticalWeightReview2.setOpen(true);
         criticalWeightReview2.setTheme(multithreading);
         criticalWeightReview2.setUser(akira);//кто принимает
@@ -545,6 +544,16 @@ public class TestDataInit {
         criticalQuestion4.setWeight(4);
         questionService.addQuestion(criticalQuestion4);
 
-
+        //Для проверки функционала всех кнопок меню
+        Review criticalWeightReview3 = new Review();
+        criticalWeightReview3.setDate(LocalDateTime.of(2020, 6, 3, 23, 25));
+        criticalWeightReview3.setOpen(true);
+        criticalWeightReview3.setTheme(multithreading);
+        criticalWeightReview3.setUser(akira);//кто принимает
+        reviewService.addReview(criticalWeightReview3);
+        StudentReview criticalWeightFirstStudentReview3 = new StudentReview();
+        criticalWeightFirstStudentReview3.setUser(akira);//кто сдает
+        criticalWeightFirstStudentReview3.setReview(criticalWeightReview3);
+        studentReviewService.addStudentReview(criticalWeightFirstStudentReview3);
     }
 }

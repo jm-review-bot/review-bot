@@ -2,8 +2,6 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.exceptions.NoDataEnteredException;
-import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
@@ -15,7 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 /**
  * @author AkiraRokudo on 19.05.2020 in one of sun day
@@ -23,8 +21,48 @@ import static spring.app.util.Keyboards.BACK_KB;
 @Component
 public class AdminUserList extends Step {
 
+    public AdminUserList() {
+        super("", DEF_BACK_KB);
+    }
+
     @Override
     public void enter(BotContext context) {
+
+    }
+
+    @Override
+    public void processInput(BotContext context) throws ProcessInputException {
+        String currentInput = context.getInput();
+        StorageService storageService = context.getStorageService();
+        Integer vkId = context.getVkId();
+        String wordInput = StringParser.toWordsArray(currentInput)[0];
+        if (wordInput.equals("назад")) {
+            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+            storageService.removeUserStorage(vkId, ADMIN_MENU);
+            sendUserToNextStep(context, ADMIN_MENU);
+        } else if (StringParser.isNumeric(wordInput)) {
+            Integer selectedNumber = Integer.parseInt(wordInput);
+            //значит мы выбрали пользователя. Обновим коллекцию
+            List<String> users = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
+            if (selectedNumber <= 0 || selectedNumber > users.size()) {
+                throw new ProcessInputException("Введено неподходящее число");
+            }
+            String selectedUserId = users.get(selectedNumber - 1);
+            storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(selectedUserId));
+            String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
+            if ("delete".equals(mode)) {
+                sendUserToNextStep(context, ADMIN_REMOVE_USER);
+            } else {
+                sendUserToNextStep(context, ADMIN_EDIT_USER);
+            }
+        } else {
+            throw new ProcessInputException("Введена неверная команда...");
+        }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        String text = "";
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
         String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
@@ -58,9 +96,6 @@ public class AdminUserList extends Step {
                             .append(user.getLastName())
                             .append(", https://vk.com/id")
                             .append(user.getVkId());
-//                    if (user.getRole().isAdmin()) {
-//                        userList.append(" (админ)");
-//                    }
                     userList.append("\n");
                     // сохраняем ID юзера в лист
                     users.add(user.getId().toString());
@@ -69,37 +104,11 @@ public class AdminUserList extends Step {
         storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, users);
         text = afterModificationMessage == null ? userList.toString() : afterModificationMessage + userList.toString();
 
-        keyboard = BACK_KB;
+        return text;
     }
 
     @Override
-    public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
-        String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
-        Integer vkId = context.getVkId();
-
-        String wordInput = StringParser.toWordsArray(currentInput)[0];
-        if (wordInput.equals("назад")) {
-            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
-            storageService.removeUserStorage(vkId, ADMIN_MENU);
-            nextStep = ADMIN_MENU;
-        } else if (StringParser.isNumeric(wordInput)) {
-            Integer selectedNumber = Integer.parseInt(wordInput);
-            //значит мы выбрали пользователя. Обновим коллекцию
-            List<String> users = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
-            if (selectedNumber <= 0 || selectedNumber > users.size()) {
-                throw new ProcessInputException("Введено неподходящее число");
-            }
-            String selectedUserId = users.get(selectedNumber - 1);
-            storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(selectedUserId));
-            String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
-            if ("delete".equals(mode)) {
-                nextStep = ADMIN_REMOVE_USER;
-            } else {
-                nextStep = ADMIN_EDIT_USER;
-            }
-        } else {
-            throw new ProcessInputException("Введена неверная команда...");
-        }
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }
