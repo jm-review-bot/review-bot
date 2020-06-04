@@ -33,6 +33,10 @@ public class UserPassReviewGetListReview extends Step {
         Set<Review> reviewsSetNoAccess = new HashSet<>();
         //получаю список ревью по теме
         List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+
+        // закомментировал проблемный функционал при попытке записаться на ревью будучи ревьюером на другом
+
+        /*
         if (reviewsMy.size() > 0) {
             // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
             Set<Review> reviewsSetTemp = new HashSet<>();
@@ -51,6 +55,8 @@ public class UserPassReviewGetListReview extends Step {
                 reviewsSetTemp.clear();
             }
         }
+        */
+
         //список ревью сортирую по дате
         reviewsAll.sort(Comparator.comparing(Review::getDate));
 
