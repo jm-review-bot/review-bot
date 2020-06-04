@@ -2,9 +2,9 @@ package spring.app.util;
 
 public class Keyboards {
 
-    public final static String HEADER_FR = "{\"one_time\": false,\n\"buttons\": [\n[\n";
+    public final static String HEADER_FR = "{\"one_time\": false,\n\"buttons\": [\n";
 
-    public final static String FOOTER_FR = "]\n]\n}";
+    public final static String FOOTER_FR = "]\n}";
 
     public final static String ROW_DELIMETER_FR = "],[";
 
@@ -228,10 +228,6 @@ public class Keyboards {
             "} ";
 
     public final static String CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -246,16 +242,9 @@ public class Keyboards {
             "          \"label\": \"изменить вкИд\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String YES_OR_CANCEL = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -270,10 +259,7 @@ public class Keyboards {
             "          \"label\": \"отмена\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String RIGHT_WRONG_ANSWER = "{\n" +
             "  \"one_time\": false,\n" +

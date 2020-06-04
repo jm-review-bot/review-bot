@@ -78,10 +78,23 @@ public abstract class Step {
      * @return
      */
     public String getComposeKeyboard(BotContext context) {
-        return getHeaderKeyboardString()
-                + keyboard
-                + getDynamicKeyboard(context)
-                + getFooterKeyboardString();
+
+        String buttons = keyboard + getDynamicKeyboard(context);
+
+        StringBuilder result = new StringBuilder(getHeaderKeyboardString());
+        // Добавляем дополнительные скобки, если добавляются статические или динамические кнопки
+        if (!buttons.equals("")) {
+            result
+                    .append("[\n")
+                    .append(buttons)
+                    .append("]\n");
+        }
+        else {
+            result.append(buttons);
+        }
+        result.append(getFooterKeyboardString());
+
+        return result.toString();
     }
 
     /**
