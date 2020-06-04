@@ -191,17 +191,12 @@ public class Keyboards {
             "} ";
 
     public final static String USER_MENU_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"label\": \"Главное меню\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} ";
+            "      }";
 
     public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
             "  \"one_time\": false,\n" +
@@ -262,10 +257,6 @@ public class Keyboards {
             "      }\n";
 
     public final static String RIGHT_WRONG_ANSWER = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -280,39 +271,5 @@ public class Keyboards {
             "          \"label\": \"Ответ не принят\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
-
-    static String s = "{\"one_time\": false,\n" +
-            "\"buttons\": [\n" +
-            "[\n" +
-            "{\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Сдать ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"primary\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Принять ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"primary\"\n" +
-            "      }\n" +
-            "],[{\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Отменить ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "],[]\n" +
-            "]\n" +
-            "}";
+            "      }";
 }

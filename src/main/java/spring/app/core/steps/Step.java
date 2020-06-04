@@ -83,7 +83,7 @@ public abstract class Step {
 
         StringBuilder result = new StringBuilder(getHeaderKeyboardString());
         // Добавляем дополнительные скобки, если добавляются статические или динамические кнопки
-        if (!buttons.equals("")) {
+        if (!buttons.isEmpty()) {
             result
                     .append("[\n")
                     .append(buttons)
