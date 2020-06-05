@@ -48,7 +48,7 @@ public class SelectingReviewToDelete extends Step {
         String command = context.getInput();
         if ("Назад".equals(command)) {
             nextStep = USER_MENU;
-        } else if (StringParser.isNumeric(command)) {
+        } else if (StringParser.isNaturalNumber(command)) {
             //это позиция (номер) ревью в списке, выведенном пользователю. это НЕ индекс этого ревью в БД,
             // это именно его номер (позиция) в списке, который выводиился при выполнении метода enter этого стэпа
             int numberReview = Integer.parseInt(command);

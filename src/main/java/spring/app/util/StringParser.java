@@ -9,9 +9,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -24,6 +22,8 @@ public class StringParser {
 
     private static Pattern numeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
+    private static Pattern naturalNumber = Pattern.compile("\\d*");
+
     //обязательно первая цифра от 0 до 9, далее только цифры с + или без него, разделенные пробелом, max 3 цифры
     private static Pattern validReviewerInputFormat = Pattern.compile("^\\d\\+?\\s?\\d?\\+?\\s?\\d?\\+?");
 
@@ -35,6 +35,16 @@ public class StringParser {
             return false;
         }
         return numeric.matcher(strNum).matches();
+    }
+
+    /**
+     * Проверка что введены только числовые целые данные.
+     */
+    public static boolean isNaturalNumber(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        return naturalNumber.matcher(strNum).matches();
     }
 
     /**
@@ -91,6 +101,7 @@ public class StringParser {
 
     /**
      * Отсекает доменную часть ссылки на профиль юзера
+     *
      * @param text ссылку на профиль
      * @return null, если строка неподходящего формата
      */
