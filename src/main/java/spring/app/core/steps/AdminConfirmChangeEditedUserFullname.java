@@ -79,4 +79,5 @@ public class AdminConfirmChangeEditedUserFullname extends Step {
     public String getDynamicKeyboard(BotContext context) {
         return "";
     }
+
 }

@@ -64,8 +64,7 @@ public class AdminEditUser extends Step {
 
         if (savedInput != null) {
             return CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK;
-        }
-        else {
+        } else {
             return DEF_BACK_KB;
         }
     }

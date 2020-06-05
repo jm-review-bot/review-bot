@@ -61,4 +61,5 @@ public class AdminInputNewFullnameEditedUser extends Step {
     public String getDynamicKeyboard(BotContext context) {
         return "";
     }
+
 }

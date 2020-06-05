@@ -95,15 +95,15 @@ public class TestDataInit {
 //
 //    @Autowired
 //    private Step userCancelReview;
-//
-//    @Autowired
-//    private Step userStartReviewHangoutsLink;
-//
-//    @Autowired
-//    private Step userStartReviewRules;
-//
-//    @Autowired
-//    private Step userStartReviewCore;
+
+    @Autowired
+    private Step userStartReviewHangoutsLink;
+
+    @Autowired
+    private Step userStartReviewRules;
+
+    @Autowired
+    private Step userStartReviewCore;
 
     public TestDataInit() {
     }
@@ -195,9 +195,9 @@ public class TestDataInit {
 //        steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
 //        steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
 //        steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
-//        steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
-//        steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
-//        steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
+        steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
+        steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
+        steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
 
         //add themes
         Theme core = new Theme();
@@ -472,7 +472,7 @@ public class TestDataInit {
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview = new Review();
-        criticalWeightReview.setDate(LocalDateTime.of(2020, 6, 1, 0, 30));
+        criticalWeightReview.setDate(LocalDateTime.of(2020, 6, 5, 2, 35));
         criticalWeightReview.setOpen(true);
         criticalWeightReview.setTheme(multithreading);
         criticalWeightReview.setUser(akira);//кто принимает
