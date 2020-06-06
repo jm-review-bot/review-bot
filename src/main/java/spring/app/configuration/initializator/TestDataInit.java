@@ -45,11 +45,11 @@ public class TestDataInit {
     @Autowired
     private Step adminMenu;
 
-//    @Autowired
-//    private Step adminAddUser;
+    @Autowired
+    private Step adminAddUser;
 
     @Autowired
-    private  Step adminUserList;
+    private Step adminUserList;
 
     @Autowired
     private Step adminEditUser;
@@ -68,16 +68,16 @@ public class TestDataInit {
 
 //    @Autowired
 //    private Step adminRemoveUser;
-//
-//    @Autowired
-//    private Step adminProposalChangeFullnameAddedUser;
-//
-//    @Autowired
-//    private Step adminChangeAddedUserFullname;
-//
-//    @Autowired
-//    private Step adminSetThemeAddedUser;
-//
+
+    @Autowired
+    private Step adminProposalChangeFullnameAddedUser;
+
+    @Autowired
+    private Step adminChangeAddedUserFullname;
+
+    @Autowired
+    private Step adminSetThemeAddedUser;
+
 //    @Autowired
 //    private Step userTakeReviewAddDate;
 //
@@ -178,7 +178,7 @@ public class TestDataInit {
         steps.put(StepSelector.START, start);
         steps.put(StepSelector.USER_MENU, userMenu);
         steps.put(StepSelector.ADMIN_MENU, adminMenu);
-//        steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
+        steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
         steps.put(StepSelector.ADMIN_EDIT_USER, adminEditUser);
         steps.put(StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, adminInputNewFullnameEditedUser);
@@ -186,9 +186,9 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
         steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
 //        steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
-//        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
-//        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
-//        steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
+        steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
+        steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+        steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
 //        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
 //        steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
 //        steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
