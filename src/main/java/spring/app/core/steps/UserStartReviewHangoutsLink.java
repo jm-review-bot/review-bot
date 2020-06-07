@@ -9,6 +9,8 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.util.List;
@@ -19,7 +21,16 @@ import static spring.app.util.Keyboards.BACK_KB;
 @Component
 public class UserStartReviewHangoutsLink extends Step {
 
+    private final StorageService storageService;
+    private final UserService userService;
+    private final VkService vkService;
     private final static Logger log = LoggerFactory.getLogger(UserStartReviewHangoutsLink.class);
+
+    public UserStartReviewHangoutsLink(StorageService storageService, UserService userService, VkService vkService) {
+        this.storageService = storageService;
+        this.userService = userService;
+        this.vkService = vkService;
+    }
 
     @Override
     public void enter(BotContext context) {
@@ -32,7 +43,6 @@ public class UserStartReviewHangoutsLink extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
         if (userInput.equalsIgnoreCase("назад")) {
@@ -44,13 +54,13 @@ public class UserStartReviewHangoutsLink extends Step {
         } else if (StringParser.isHangoutsLink(userInput)) {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
             Long reviewId = Long.parseLong(storageService.getUserStorage(vkId, USER_MENU).get(0));
-            List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+            List<User> students = userService.getStudentsByReviewId(reviewId);
             // отправляем ссылку на ревью каждому участнику
             for (User user : students) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                 String hangoutsLink = "Ревью началось, вот ссылка для подключения: " + userInput;
-                context.getVkService().sendMessage(hangoutsLink, userStep.getKeyboard(), user.getVkId());
+                vkService.sendMessage(hangoutsLink, userStep.getKeyboard(), user.getVkId());
                 log.warn("Студенту с id {} отправлено сообщение: {}", user.getVkId(), hangoutsLink);
             }
             nextStep = USER_START_REVIEW_RULES;

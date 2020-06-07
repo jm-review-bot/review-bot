@@ -6,6 +6,7 @@ import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 
 
@@ -17,7 +18,15 @@ import static spring.app.util.Keyboards.NO_KB;
  * @author AkiraRokudo on 23.05.2020 in one of sun day
  */
 @Component
-public class AdminChangeAddedUserFullname extends Step{
+public class AdminChangeAddedUserFullname extends Step {
+
+    private final UserService userService;
+    private final StorageService storageService;
+
+    public AdminChangeAddedUserFullname(UserService userService, StorageService storageService) {
+        this.userService = userService;
+        this.storageService = storageService;
+    }
 
     @Override
     public void enter(BotContext context) {
@@ -30,12 +39,12 @@ public class AdminChangeAddedUserFullname extends Step{
         String newFullName = context.getInput();
         Integer vkId = context.getVkId();
         String [] firstAndLastName = newFullName.split(" ");
+
         if (firstAndLastName.length == 2) {
             //Проверим, что есть только символы алфавитов
             boolean allSymbolAlphabet = newFullName.replaceAll(" ", "").chars().allMatch(Character::isLetter);
             if(allSymbolAlphabet) {
-                UserService userService = context.getUserService();
-                Long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
+                Long addedUserId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0));
                 User addedUser = userService.getUserById(addedUserId);
                 addedUser.setFirstName(firstAndLastName[0]);
                 addedUser.setLastName(firstAndLastName[1]);
