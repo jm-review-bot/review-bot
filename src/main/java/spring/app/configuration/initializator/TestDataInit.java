@@ -76,13 +76,13 @@ public class TestDataInit {
     private Step adminChangeAddedUserFullname;
 
     @Autowired
+    private Step adminSetThemeAddedUser;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
     private Step userTakeReviewAddTheme;
-
-    @Autowired
-    private Step userTakeReviewConfirmation;
 
     @Autowired
     private Step userPassReviewAddTheme;
@@ -137,6 +137,15 @@ public class TestDataInit {
         roman.setChatStep(StepSelector.START);
         userService.addUser(roman);
 
+        User sergey = new User();
+        sergey.setFirstName("Сергей");
+        sergey.setLastName("Лебедев");
+        sergey.setReviewPoint(1000000);
+        sergey.setVkId(80169300);
+        sergey.setRole(roleAdmin);
+        sergey.setChatStep(StepSelector.START);
+        userService.addUser(sergey);
+
         User maksim = new User();
         maksim.setFirstName("Максим");
         maksim.setLastName("Ботюк");
@@ -179,9 +188,9 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+        steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
-        steps.put(StepSelector.USER_TAKE_REVIEW_CONFIRMATION, userTakeReviewConfirmation);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
         steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
@@ -464,7 +473,7 @@ public class TestDataInit {
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview = new Review();
-        criticalWeightReview.setDate(LocalDateTime.of(2020, 5, 25, 19, 18));
+        criticalWeightReview.setDate(LocalDateTime.of(2020, 6, 1, 0, 30));
         criticalWeightReview.setOpen(true);
         criticalWeightReview.setTheme(multithreading);
         criticalWeightReview.setUser(akira);//кто принимает
@@ -481,6 +490,27 @@ public class TestDataInit {
         criticalWeightSecondStudentReview.setUser(secondStudentForCriticalWeight);//кто сдает
         criticalWeightSecondStudentReview.setReview(criticalWeightReview);
         studentReviewService.addStudentReview(criticalWeightSecondStudentReview);
+
+        //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
+        //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
+        Review criticalWeightReview2 = new Review();
+        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 1, 22, 05));
+        criticalWeightReview2.setOpen(true);
+        criticalWeightReview2.setTheme(multithreading);
+        criticalWeightReview2.setUser(akira);//кто принимает
+        reviewService.addReview(criticalWeightReview2);
+
+        //Связь для ревью.
+        // первый из сдающих
+        StudentReview criticalWeightFirstStudentReview2 = new StudentReview();
+        criticalWeightFirstStudentReview2.setUser(studentForCriticalWeight);//кто сдает
+        criticalWeightFirstStudentReview2.setReview(criticalWeightReview2);
+        studentReviewService.addStudentReview(criticalWeightFirstStudentReview2);
+        //второй сдающий
+        StudentReview criticalWeightSecondStudentReview2 = new StudentReview();
+        criticalWeightSecondStudentReview2.setUser(secondStudentForCriticalWeight);//кто сдает
+        criticalWeightSecondStudentReview2.setReview(criticalWeightReview2);
+        studentReviewService.addStudentReview(criticalWeightSecondStudentReview2);
 
         //4 вопроса
         Question criticalQuestion1 = new Question();

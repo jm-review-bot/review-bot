@@ -9,10 +9,10 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
-import spring.app.util.StringParser;
 
 
 import static spring.app.core.StepSelector.ADMIN_ADD_USER;
+import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
 import static spring.app.util.Keyboards.NO_KB;
 
 /**
@@ -20,7 +20,7 @@ import static spring.app.util.Keyboards.NO_KB;
  */
 @Component
 public class AdminChangeAddedUserFullname extends Step{
-    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
+    private final static Logger log = LoggerFactory.getLogger(AdminChangeAddedUserFullname.class);
 
     @Override
     public void enter(BotContext context) {
@@ -45,10 +45,9 @@ public class AdminChangeAddedUserFullname extends Step{
                 addedUser.setFirstName(firstAndLastName[0]);
                 addedUser.setLastName(firstAndLastName[1]);
                 userService.updateUser(addedUser);
-                log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
-                        "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getId()+"] изменил имя добавляемого пользователя с vkId "+addedUser.getVkId()+".\n" +
-                        "Предыдущее имя:\n" + oldFirstName+" "+oldLastName+"\nНовое имя:\n"+firstAndLastName[0]+" "+firstAndLastName[1]);
+                log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\nАдминистратор {} {} [vkId - {}] изменил имя добавляемого пользователя с vkId {}.\nПредыдущее имя:\n{} {}\nНовое имя:\n{} {}", context.getUser().getFirstName(), context.getUser().getLastName(), context.getUser().getId(), addedUser.getVkId(), oldFirstName, oldLastName, firstAndLastName[0], firstAndLastName[1]);
                 nextStep = ADMIN_ADD_USER;
+                nextStep = ADMIN_SET_THEME_ADDED_USER;
             } else {
                 throw new ProcessInputException("В новом имени фамилии присутствуют не алфавитные символы");
             }

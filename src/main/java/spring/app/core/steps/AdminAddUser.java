@@ -23,7 +23,7 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
-    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
+    private final static Logger log = LoggerFactory.getLogger(AdminAddUser.class);
 
     @Override
     public void enter(BotContext context) {
@@ -50,7 +50,7 @@ public class AdminAddUser extends Step {
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
             nextStep = START;
-        } else if(parsedInput != null){
+        } else if (parsedInput != null){
             // мы ожидаем от него ссылки на профиль добавляемого  юзера
             try {
                 // получем юзера на основе запроса в VK
@@ -69,10 +69,7 @@ public class AdminAddUser extends Step {
                             .append(" (https://vk.com/id")
                             .append(addedUser.getVkId())
                             .append(") \n Был успешно добавлен в базу. Оставить имя фамилию без изменений?\n");
-                    log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
-                            "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [id - "+context.getUser().getVkId()+"] добавил пользователя в базу.\n" +
-                            "А именно, он добавил следующего пользователя:\n" +
-                            addedUser.getFirstName() + " " + addedUser.getLastName() + " (https://vk.com/id" + addedUser.getVkId()+")");
+                    log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\nАдминистратор {} {} [id - {}] добавил пользователя в базу.\nА именно, он добавил следующего пользователя:\n{} {} (https://vk.com/id{})", context.getUser().getFirstName(), context.getUser().getLastName(), context.getUser().getVkId(), addedUser.getFirstName(), addedUser.getLastName(), addedUser.getVkId());
                     //подготавливаем почву для следующих шагов
                     storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(Long.toString(addedUser.getId())));
                     storageService.updateUserStorage(vkId, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, Arrays.asList(addedUserText.toString()));
@@ -83,7 +80,8 @@ public class AdminAddUser extends Step {
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {
                 throw new ProcessInputException("Введены неверные данные. Такой пользователь не найден...");
             }
+        } else {
+            throw new ProcessInputException("Введена некрректная ссылка.");
         }
-
     }
 }

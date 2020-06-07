@@ -17,7 +17,7 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminRemoveUser extends Step {
-    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
+    private final static Logger log = LoggerFactory.getLogger(AdminRemoveUser.class);
 
     @Override
     public void enter(BotContext context) {
@@ -55,10 +55,7 @@ public class AdminRemoveUser extends Step {
                     storageService.clearUsersOfStorage(user.getVkId());
                     context.getUserService()
                             .deleteUserById(Long.parseLong(selectedUserId));
-                    log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
-                            "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getId()+"] удалил пользователя из базы.\n" +
-                            "А именно, он удалил следующего пользователя:\n" +
-                            str);
+                    log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\nАдминистратор {} {} [vkId - {}] удалил пользователя из базы.\nА именно, он удалил следующего пользователя:\n{}", context.getUser().getFirstName(), context.getUser().getLastName(), context.getUser().getId(), str);
                     //перекинем инфу с удаления на список юзеров. Для унификации. Данная инфа будет использована при возвращении
                     String userInfo = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER).get(0);
                     storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);

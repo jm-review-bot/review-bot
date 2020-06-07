@@ -12,6 +12,7 @@ import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -23,6 +24,12 @@ public class BotScheduler {
     private final ChatBot bot;
     private final StorageService storageService;
     private long timeCounter;
+
+    @Value("${bot.minutes_remainder_reviewers}")
+    private int minutesRemainderReviewers;
+
+    @Value("${bot.minutes_remainder_students_reviewers}")
+    private int minutesRemainderStudentsReviewers;
 
     public BotScheduler(VkService vkService, ReviewService reviewService, ChatBot bot, UserService userService, StepHolder stepHolder, StorageService storageService) {
         this.vkService = vkService;
@@ -52,8 +59,8 @@ public class BotScheduler {
     @Scheduled(fixedDelayString = "${bot.review_reminder_interval}")
     public void sendReviewReminder() {
 
-        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(2).plusNanos(1);
-        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(3);
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(minutesRemainderReviewers - 1);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(minutesRemainderReviewers);
 
         List<User> users = userService.getUsersByReviewPeriod(periodStart, periodEnd);
         if (!users.isEmpty()) {
@@ -61,6 +68,28 @@ public class BotScheduler {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(user.getChatStep());
                 bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать прием ревью\"", step.getKeyboard(), user.getVkId());
+            }
+        }
+    }
+
+    @Scheduled(fixedDelayString = "${bot.review_reminder_interval}")
+    public void sendReviewHourReminder() {
+
+        LocalDateTime periodStart = LocalDateTime.now().plusMinutes(minutesRemainderStudentsReviewers - 1);
+        LocalDateTime periodEnd = LocalDateTime.now().plusMinutes(minutesRemainderStudentsReviewers);
+
+        List<User> reviewers = userService.getUsersByReviewPeriod(periodStart, periodEnd);
+        List<User> students = userService.getStudentsByReviewPeriod(periodStart, periodEnd);
+
+        List<User> users = new ArrayList<>();
+        users.addAll(reviewers);
+        users.addAll(students);
+
+        if (!users.isEmpty()) {
+            for (User user : users) {
+                // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
+                Step step = stepHolder.getSteps().get(user.getChatStep());
+                bot.sendMessage("Напоминание! Через час у тебя ревью.", step.getKeyboard(), user.getVkId());
             }
         }
     }

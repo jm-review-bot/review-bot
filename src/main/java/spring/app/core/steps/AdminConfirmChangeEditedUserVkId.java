@@ -23,7 +23,7 @@ import static spring.app.util.Keyboards.YES_OR_CANCEL;
  */
 @Component
 public class AdminConfirmChangeEditedUserVkId extends Step {
-    private final static Logger log = LoggerFactory.getLogger(StringParser.class);
+    private final static Logger log = LoggerFactory.getLogger(AdminConfirmChangeEditedUserVkId.class);
 
     @Override
     public void enter(BotContext context) {
@@ -60,9 +60,7 @@ public class AdminConfirmChangeEditedUserVkId extends Step {
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST,
                     Arrays.asList(String.format("Vkid пользователя %s %s (%s) успешно изменено на {%s}\n"
                             , editingUser.getFirstName(), editingUser.getLastName(), oldVkId, newUserVkId)));
-            log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\n" +
-                    "Администратор "+context.getUser().getFirstName()+" "+context.getUser().getLastName()+" [vkId - "+context.getUser().getId()+"] изменил vkId пользователя "+editingUser.getFirstName()+" "+editingUser.getLastName()+".\n" +
-                    "Предыдущий vkId:\n" + oldVkId+"\nНовый vkId:\n"+newUserVkId);
+            log.debug("\tlog-message об операции пользователя над экземпляром(ами) сущности:\nАдминистратор {} {} [vkId - {}] изменил vkId пользователя {} {}.\nПредыдущий vkId:\n{}\nНовый vkId:\n{}", context.getUser().getFirstName(), context.getUser().getLastName(), context.getUser().getId(), editingUser.getFirstName(), editingUser.getLastName(), oldVkId, newUserVkId);
             nextStep = ADMIN_USERS_LIST;
         } else if ("отмена".equals(input)) {
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_VKID_EDITED_USER);
