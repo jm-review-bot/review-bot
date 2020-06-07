@@ -13,9 +13,14 @@ import static spring.app.util.Keyboards.USER_MENU_KB;
 @Component
 public class UserPassReviewAddStudentReview extends Step {
 
+    private final StorageService storageService;
+
+    public UserPassReviewAddStudentReview(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
     @Override
     public void enter(BotContext context) {
-        StorageService storageService = context.getStorageService();
         //получаю дату ревью с прошлого шага
         String date = storageService.getUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW).get(0);
         text = String.format("Ты записан на ревью в %s, для отмены записи - в меню нажми кнопку \"Отменить ревью\". " +
@@ -26,7 +31,6 @@ public class UserPassReviewAddStudentReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        StorageService storageService = context.getStorageService();
         String command = StringParser.toWordsArray(context.getInput())[0];
         if ("главное".equals(command)) {
             nextStep = USER_MENU;

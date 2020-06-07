@@ -20,12 +20,17 @@ import static spring.app.util.Keyboards.CHANGE_OR_NOT_ADDED_USER_FULLNAME;
  * @author AkiraRokudo on 23.05.2020 in one of sun day
  */
 @Component
-public class AdminProposalChangeFullnameAddedUser extends Step{
+public class AdminProposalChangeFullnameAddedUser extends Step {
+
+    private final StorageService storageService;
+
+    public AdminProposalChangeFullnameAddedUser(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
 
         List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
         if (savedInput != null) {

@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.ThemeService;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,11 +18,19 @@ import static spring.app.util.Keyboards.BACK_KB;
 
 @Component
 public class UserTakeReviewAddTheme extends Step {
+
     private Map<Integer, Theme> themes = new HashMap<>();
+    private final ThemeService themeService;
+    private final StorageService storageService;
+
+    public UserTakeReviewAddTheme(ThemeService themeService, StorageService storageService) {
+        this.themeService = themeService;
+        this.storageService = storageService;
+    }
 
     @Override
     public void enter(BotContext context) {
-        context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
+        themeService.getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n ");
         themeList.append("Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         for (Integer position : themes.keySet()) {
@@ -34,7 +43,6 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        StorageService storageService = context.getStorageService();
         String userInput = context.getInput();
         Integer vkId = context.getVkId();
         List<String> themePositionsList = themes.keySet().stream()
@@ -44,7 +52,7 @@ public class UserTakeReviewAddTheme extends Step {
             // вытаскиваем themeId по позиции, позиция соответствует пользовательскому вводу
             String themeId = themes.get(Integer.parseInt(userInput)).getId().toString();
             // проверяем, что сдали ревью по теме, которую хотим принять
-            List<String> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId).stream()
+            List<String> passedThemesIds = themeService.getPassedThemesByUser(vkId).stream()
                     .map(theme -> theme.getId().toString())
                     .collect(toList());
             if (passedThemesIds.contains(themeId)) {

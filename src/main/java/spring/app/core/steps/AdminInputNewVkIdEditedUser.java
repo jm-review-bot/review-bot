@@ -20,6 +20,12 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminInputNewVkIdEditedUser extends Step {
 
+    private final StorageService storageService;
+
+    public AdminInputNewVkIdEditedUser(StorageService storageService) {
+        this.storageService = storageService;
+    }
+
     @Override
     public void enter(BotContext context) {
         text = "В ответ на данное сообщение отправьте ссылку, или новый vkid";
@@ -30,6 +36,7 @@ public class AdminInputNewVkIdEditedUser extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String currentInput = context.getInput();
         String parsedInput = null;
+
         //если пришел не айдишник - значит предполагаем что пришла ссылку и пытаемся из неё получить айдишник
         if (!StringParser.isNumeric(currentInput)) {
             parsedInput = StringParser.toVkId(currentInput);
@@ -37,7 +44,7 @@ public class AdminInputNewVkIdEditedUser extends Step {
             parsedInput = currentInput;
         }
         if (parsedInput != null) {
-            context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_INPUT_NEW_VKID_EDITED_USER, Arrays.asList(parsedInput));
+            storageService.updateUserStorage(context.getVkId(), ADMIN_INPUT_NEW_VKID_EDITED_USER, Arrays.asList(parsedInput));
             nextStep = ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID;
         } else {
             throw new ProcessInputException("Введенный текст не является vkid или ссылкой на профиль");

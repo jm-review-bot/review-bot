@@ -9,6 +9,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,12 +23,19 @@ import static spring.app.util.Keyboards.YES_OR_CANCEL;
 @Component
 public class AdminConfirmChangeEditedUserFullname extends Step {
 
+    private final UserService userService;
+    private final StorageService storageService;
+
+    public AdminConfirmChangeEditedUserFullname(UserService userService, StorageService storageService) {
+        this.userService = userService;
+        this.storageService = storageService;
+    }
+
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         String userId = storageService.getUserStorage(vkId, StepSelector.ADMIN_USERS_LIST).get(0);
-        User editingUser = context.getUserService().getUserById(Long.parseLong(userId));
+        User editingUser = userService.getUserById(Long.parseLong(userId));
         List<String> userFullname = storageService.getUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
         text = String.format("Вы действительно хотите сменить пользователю %s %s (%s) имя на {%s} {%s}? \n",
                 editingUser.getFirstName(),
@@ -43,16 +51,16 @@ public class AdminConfirmChangeEditedUserFullname extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String input = context.getInput();
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
+
         if ("да".equals(input)) {
             String userId = storageService.getUserStorage(vkId, StepSelector.ADMIN_USERS_LIST).get(0);
-            User editingUser = context.getUserService().getUserById(Long.parseLong(userId));
+            User editingUser = userService.getUserById(Long.parseLong(userId));
             List<String> userFullname = storageService.getUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
             String oldFirstName = editingUser.getFirstName();
             String oldLastName = editingUser.getLastName();
             editingUser.setFirstName(userFullname.get(0));
             editingUser.setLastName(userFullname.get(1));
-            context.getUserService().updateUser(editingUser);
+            userService.updateUser(editingUser);
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
             //подготовим сообщение для вывода после изменения
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST,

@@ -7,6 +7,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
@@ -23,10 +24,17 @@ import static spring.app.util.Keyboards.BACK_KB;
 @Component
 public class AdminUserList extends Step {
 
+    private final StorageService storageService;
+    private final UserService userService;
+
+    public AdminUserList(StorageService storageService, UserService userService) {
+        this.storageService = storageService;
+        this.userService = userService;
+    }
+
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
         String afterModificationMessage = null;
         //Блок для сообщения после изменения\удаления.
@@ -49,7 +57,7 @@ public class AdminUserList extends Step {
         // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
         List<String> users = new ArrayList<>();
         final int[] i = {1};
-        context.getUserService().getAllUsers().stream()
+        userService.getAllUsers().stream()
                 .sorted(Comparator.comparing(User::getLastName))
                 .forEach(user -> {
                     userList.append("[").append(i[0]++).append("] ")
@@ -75,7 +83,6 @@ public class AdminUserList extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
 
         String wordInput = StringParser.toWordsArray(currentInput)[0];

@@ -8,7 +8,7 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
-import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -20,14 +20,26 @@ import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
 
 @Component
 public class UserPassReviewAddTheme extends Step {
+
+    private final StorageService storageService;
+    private final ReviewService reviewService;
+    private final ThemeService themeService;
+    private final StudentReviewService studentReviewService;
     private Set<Integer> idsIfCancelStudentReview = new HashSet<>();
     private Map<Integer, Theme> themes = new HashMap<>();
 
+    public UserPassReviewAddTheme(StorageService storageService, ReviewService reviewService,
+                                  ThemeService themeService, StudentReviewService studentReviewService) {
+        this.storageService = storageService;
+        this.reviewService = reviewService;
+        this.themeService = themeService;
+        this.studentReviewService = studentReviewService;
+    }
+
     @Override
     public void enter(BotContext context) {
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
-        StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
 
         if (studentReview != null) {
             text = String.format("Вы уже записаны на ревью:\n" +
@@ -45,7 +57,7 @@ public class UserPassReviewAddTheme extends Step {
                 storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
             }
             //формирую список тем и вывожу его как нумерованный список
-            context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
+            themeService.getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
             themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
 
             for (Integer position : themes.keySet()) {
@@ -74,19 +86,18 @@ public class UserPassReviewAddTheme extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
-        StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
         if (studentReview == null && StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             //проверяем или номер темы не выходит за рамки
             if (command > 0 & command <= themes.size()) {
-                Theme theme = context.getThemeService().getByPosition(command);
+                Theme theme = themeService.getByPosition(command);
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
                 if (theme.getReviewPoint() <= user.getReviewPoint()) {
                     //получаю список ревью по теме
-                    List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+                    List<Review> reviewsAll = reviewService.getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
                     //проверяем наличие открытых ревью по данной теме
                     if (reviewsAll.isEmpty()) {
                         nextStep = USER_MENU;
@@ -112,7 +123,7 @@ public class UserPassReviewAddTheme extends Step {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command) && studentReview != null) {
-                context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
+                studentReviewService.deleteStudentReviewById(studentReview.getId());
                 idsIfCancelStudentReview.add(vkId);
                 nextStep = USER_PASS_REVIEW_ADD_THEME;
             } else if ("/start".equals(command)) {

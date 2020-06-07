@@ -8,6 +8,7 @@ import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
+import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
@@ -22,6 +23,18 @@ import static spring.app.util.Keyboards.BACK_KB;
 @Component
 public class AdminAddUser extends Step {
 
+    private final VkService vkService;
+    private final UserService userService;
+    private final StorageService storageService;
+    private final RoleService roleService;
+
+    public AdminAddUser(VkService vkService, UserService userService, StorageService storageService, RoleService roleService) {
+        this.vkService = vkService;
+        this.userService = userService;
+        this.storageService = storageService;
+        this.roleService = roleService;
+    }
+
     @Override
     public void enter(BotContext context) {
         text = "Введите ссылку на профиль нового пользователя.\n";
@@ -30,16 +43,14 @@ public class AdminAddUser extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        VkService vkService = context.getVkService();
-        UserService userService = context.getUserService();
-        StorageService storageService = context.getStorageService();
-        Role userRole = context.getRoleService().getRoleByName("USER");
+        Role userRole = roleService.getRoleByName("USER");
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
 
         String parsedInput = StringParser.toVkId(currentInput);
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
+
         if (wordInput.equals("назад")
                 || wordInput.equals("/admin")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);//т.к. мы на любом последующем шаге все равно придем в этот шаг, то очистку проводим тут.

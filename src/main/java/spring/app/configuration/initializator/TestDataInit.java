@@ -545,6 +545,5 @@ public class TestDataInit {
         criticalQuestion4.setWeight(4);
         questionService.addQuestion(criticalQuestion4);
 
-
     }
 }

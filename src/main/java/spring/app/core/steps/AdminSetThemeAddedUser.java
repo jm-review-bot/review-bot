@@ -7,10 +7,7 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.StudentReviewService;
-import spring.app.service.abstraction.ThemeService;
-import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -25,16 +22,30 @@ import static spring.app.util.Keyboards.NO_KB;
 public class AdminSetThemeAddedUser extends Step {
 
     private Map<Integer, Theme> themes = new HashMap<>();
+    private final StorageService storageService;
+    private final UserService userService;
+    private final ThemeService themeService;
+    private final ReviewService reviewService;
+    private final StudentReviewService studentReviewService;
+
+    public AdminSetThemeAddedUser(StorageService storageService, UserService userService,
+                                  ThemeService themeService, ReviewService reviewService,
+                                  StudentReviewService studentReviewService) {
+        this.storageService = storageService;
+        this.userService = userService;
+        this.themeService = themeService;
+        this.reviewService = reviewService;
+        this.studentReviewService = studentReviewService;
+    }
 
     @Override
     public void enter(BotContext context) {
 
         Integer vkId = context.getVkId();
-        Long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
-        UserService userService = context.getUserService();
+        Long addedUserId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0));
         User addedUser = userService.getUserById(addedUserId);
         // Получение всех тем
-        context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
+        themeService.getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
         StringBuilder themeList = new StringBuilder("Выберите тему, с которой пользователь ");
         themeList
                 .append(addedUser.getFirstName())
@@ -65,14 +76,9 @@ public class AdminSetThemeAddedUser extends Step {
         if (themePositionsList.contains(userInput)) {
             // Если выбрана не первая тема, то создаем фейковые ревью
             if (!userInput.equals("1")) {
-                // Получение необходимых сервисов
-                ThemeService themeService = context.getThemeService();
-                UserService userService = context.getUserService();
-                ReviewService reviewService = context.getReviewService();
-                StudentReviewService studentReviewService = context.getStudentReviewService();
                 // Получение пользователей
                 int vkId = context.getVkId();
-                long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
+                long addedUserId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0));
                 int themePosition = Integer.parseInt(userInput);
                 User addedUser = userService.getUserById(addedUserId);
                 User admin = context.getUser();
