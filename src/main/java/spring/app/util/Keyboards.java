@@ -8,6 +8,15 @@ public class Keyboards {
 
     public final static String ROW_DELIMETER_FR = "],[";
 
+    public final static String DELETE_STUDENT_REVIEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена записи\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n";
+
     public final static String REVIEW_START_FR = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
