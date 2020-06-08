@@ -119,7 +119,7 @@ public class UserStartReviewCore extends Step {
                 // проверяем ответы по карте. Если проблемные вопросы есть - значит(до правок по весу) он не сдал.
                 // Не быть хотя бы одного ответа у него не может т.к. это возможно только если вопросов на ревью было меньше чем студентов
                 StudentReview studentReview = context.getStudentReviewService().getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
-                if (studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
+                if (studentWrongWeight.get(student) != null && studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
                     studentReview.setPassed(false);
                 } else {
                     studentReview.setPassed(true);
