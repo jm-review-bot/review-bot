@@ -556,13 +556,5 @@ public class TestDataInit {
         criticalWeightFirstStudentReview3.setReview(criticalWeightReview3);
         studentReviewService.addStudentReview(criticalWeightFirstStudentReview3);
 
-        User andrey = new User();
-        andrey.setFirstName("Андрей");
-        andrey.setLastName("Суетин");
-        andrey.setReviewPoint(4);
-        andrey.setVkId(175396577);
-        andrey.setRole(roleAdmin);
-        andrey.setChatStep(StepSelector.START);
-        userService.addUser(andrey);
     }
 }
