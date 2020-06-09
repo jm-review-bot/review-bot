@@ -18,7 +18,7 @@ import static spring.app.util.Keyboards.*;
 public class AdminRemoveUser extends Step {
 
     public AdminRemoveUser() {
-        super("", YES_NO_KB);
+        super("", "");
     }
 
     @Override
@@ -51,7 +51,7 @@ public class AdminRemoveUser extends Step {
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(userInfo));
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         }
-        else if (wordInput.equals("нет")) {
+        else if (wordInput.equals("нет") || wordInput.equals("назад")) {
             //Возвращаемся назад
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             //Очищаем список ролей, раз не хотим ничего сообщать в том шаге
@@ -68,13 +68,25 @@ public class AdminRemoveUser extends Step {
         StorageService storageService = context.getStorageService();
         String userInfo = storageService.getUserStorage(context.getVkId(), ADMIN_REMOVE_USER).get(0);
         StringBuilder confirmMessage = new StringBuilder("Студент ");
-        confirmMessage.append(userInfo)
-                .append("Вы точно хотите удалить данного студента? (Да/Нет)\n");
+        if (userInfo != null) {
+            confirmMessage.append(userInfo)
+                    .append("Вы точно хотите удалить данного студента? (Да/Нет)\n");
+        }
+        else {
+            confirmMessage.append("не выбран.");
+        }
         return confirmMessage.toString();
     }
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
-        return "";
+        StorageService storageService = context.getStorageService();
+        String userInfo = storageService.getUserStorage(context.getVkId(), ADMIN_REMOVE_USER).get(0);
+        if (userInfo != null) {
+            return YES_NO_KB;
+        }
+        else {
+            return DEF_BACK_KB;
+        }
     }
 }
