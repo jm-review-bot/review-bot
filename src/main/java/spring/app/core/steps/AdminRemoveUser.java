@@ -81,12 +81,7 @@ public class AdminRemoveUser extends Step {
     @Override
     public String getDynamicKeyboard(BotContext context) {
         StorageService storageService = context.getStorageService();
-        String userInfo = storageService.getUserStorage(context.getVkId(), ADMIN_REMOVE_USER).get(0);
-        if (userInfo != null) {
-            return YES_NO_KB;
-        }
-        else {
-            return DEF_BACK_KB;
-        }
+
+        return storageService.getUserStorage(context.getVkId(), ADMIN_REMOVE_USER).get(0) != null ? YES_NO_KB : DEF_BACK_KB;
     }
 }
