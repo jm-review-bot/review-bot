@@ -493,7 +493,7 @@ public class TestDataInit {
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview2 = new Review();
-        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 3, 23, 25));
+        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 10, 21, 25));
         criticalWeightReview2.setOpen(true);
         criticalWeightReview2.setTheme(multithreading);
         criticalWeightReview2.setUser(akira);//кто принимает

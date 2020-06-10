@@ -103,7 +103,6 @@ public class UserStartReviewCore extends Step {
 
             // очищаем ввод ревьюера из STORAGE.
             storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
-            storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
             // добавляем очки за прием ревью
             User user = context.getUser();
             user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);
@@ -132,11 +131,15 @@ public class UserStartReviewCore extends Step {
                 } else {
                     reviewResults.append("Ревью не пройдено.\n\nВот список проблемных вопросов:\n");
                 }
-                final int[] k = {1};
-                for (String incorrectAnswer : problemQuestions.get(student)) {
-                    reviewResults.append("[").append(k[0]++).append("] ")
-                            .append(incorrectAnswer)
-                            .append("\n");
+                List<String> incorrectAnswerList = problemQuestions.get(student);
+                //если у студента были вопросы на которые он не смог ответить - добавим их.
+                if (incorrectAnswerList != null) {
+                    final int[] k = {1};
+                    for (String incorrectAnswer : problemQuestions.get(student)) {
+                        reviewResults.append("[").append(k[0]++).append("] ")
+                                .append(incorrectAnswer)
+                                .append("\n");
+                    }
                 }
                 reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", theme.getReviewPoint(), student.getReviewPoint()));
                 // отправляем студенту результаты ревью
@@ -166,7 +169,6 @@ public class UserStartReviewCore extends Step {
             possibleAnswerer.keySet().remove(vkId);
             storageService.removeUserStorage(vkId, USER_MENU);
             storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
-            storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
             sendUserToNextStep(context, START);
             // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
         } else if (questionNumbers.get(vkId).getQuestionNumber() == questions.size()) {
@@ -239,8 +241,7 @@ public class UserStartReviewCore extends Step {
         // получаем список вопросов, отсортированных по позиции, которые соответствуют теме ревью
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
         // формирую сообщение со списком участников
-        String userRules = storageService.getUserStorage(vkId, USER_START_REVIEW_RULES).get(0);
-        StringBuilder textBuilder = userRules == null ? new StringBuilder() : new StringBuilder(userRules);
+        StringBuilder textBuilder = new StringBuilder();
         // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
         // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
 
