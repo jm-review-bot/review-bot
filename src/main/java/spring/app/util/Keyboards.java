@@ -103,7 +103,7 @@ public class Keyboards {
             "          \"label\": \"Нет\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" ;
+            "      }\n";
 
     public final static String DEF_ADMIN_MENU_KB = "{\n" +
             "        \"action\": {\n" +
@@ -204,10 +204,6 @@ public class Keyboards {
             "      }";
 
     public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -222,10 +218,7 @@ public class Keyboards {
             "          \"label\": \"ввести новое имя фамилию\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK = "{\n" +
             "        \"action\": {\n" +

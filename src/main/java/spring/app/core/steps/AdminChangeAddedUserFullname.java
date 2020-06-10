@@ -19,7 +19,7 @@ import static spring.app.util.Keyboards.NO_KB;
 public class AdminChangeAddedUserFullname extends Step {
 
     public AdminChangeAddedUserFullname() {
-        super("Введите новое имя и фамилию. Например: Иван Иванов", NO_KB);
+        super("Введите новое имя и фамилию. Например: Иван Иванов", "");
     }
 
     @Override

@@ -28,7 +28,7 @@ public class AdminSetThemeAddedUser extends Step {
     private Map<Integer, Theme> themes = new HashMap<>();
 
     public AdminSetThemeAddedUser() {
-        super("", NO_KB);
+        super("", "");
     }
 
     @Override
