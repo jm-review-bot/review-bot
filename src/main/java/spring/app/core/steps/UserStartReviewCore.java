@@ -174,10 +174,12 @@ public class UserStartReviewCore extends Step {
         } else if (questionNumbers.get(vkId).getQuestionNumber() == questions.size()) {
             if (userInput.equalsIgnoreCase("главное меню")) {
                 questionNumbers.keySet().remove(vkId);
+                possibleAnswerer.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_MENU);
                 sendUserToNextStep(context, USER_MENU);
             } else if (userInput.equalsIgnoreCase("/start")) {
                 questionNumbers.keySet().remove(vkId);
+                possibleAnswerer.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_MENU);
                 sendUserToNextStep(context, START);
             } else {
