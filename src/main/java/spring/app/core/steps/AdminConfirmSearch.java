@@ -19,13 +19,14 @@ import static spring.app.util.Keyboards.YES_NO_KB;
 @Component
 public class AdminConfirmSearch extends Step {
 
+    public AdminConfirmSearch() {
+        super("", YES_NO_KB);
+    }
+
     @Override
     public void enter(BotContext context) {
         //Уточняем что это тот юзер, и выводим 2 кнопки - да и нет.
-        String userIdString = context.getStorageService().getUserStorage(context.getVkId(), ADMIN_SEARCH).get(0);
-        User user = context.getUserService().getUserById(Long.parseLong(userIdString));
-        text = String.format("Найден пользователь %s %s (%s). Это нужный пользователь?", user.getFirstName(), user.getLastName(), user.getVkId());
-        keyboard = YES_NO_KB;
+
     }
 
     @Override
@@ -34,17 +35,17 @@ public class AdminConfirmSearch extends Step {
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         if ("Нет".equals(input)) {
-            nextStep = ADMIN_SEARCH;
             storageService.removeUserStorage(vkId, ADMIN_SEARCH);
+            sendUserToNextStep(context, ADMIN_SEARCH);
         } else if ("Да".equals(input)) {
             String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
             String findingUserId = storageService.getUserStorage(vkId, ADMIN_SEARCH).get(0);
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(findingUserId));
             //определим куда мы пойдем с нашим юзером
             if ("delete".equals(mode)) {
-                nextStep = ADMIN_REMOVE_USER;
+                sendUserToNextStep(context, ADMIN_REMOVE_USER);
             } else if ("edit".equals(mode)) {
-                nextStep = ADMIN_EDIT_USER;
+                sendUserToNextStep(context, ADMIN_EDIT_USER);
             } else {
                 throw new ProcessInputException("Произошла ошибка при обработке ответа - вернитесь на предыдущий шаг выбрав вариант 'нет'");
             }
@@ -53,5 +54,18 @@ public class AdminConfirmSearch extends Step {
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        String userIdString = context.getStorageService().getUserStorage(context.getVkId(), ADMIN_SEARCH).get(0);
+        User user = context.getUserService().getUserById(Long.parseLong(userIdString));
+        String text = String.format("Найден пользователь %s %s (%s). Это нужный пользователь?", user.getFirstName(), user.getLastName(), user.getVkId());
+        return text;
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

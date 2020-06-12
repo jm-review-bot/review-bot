@@ -2,8 +2,6 @@ package spring.app.core.steps;
 
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
-import spring.app.exceptions.NoDataEnteredException;
-import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
@@ -15,7 +13,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 
 /**
  * @author AkiraRokudo on 19.05.2020 in one of sun day
@@ -29,14 +27,34 @@ public class AdminUserList extends Step {
 
     @Override
     public void enter(BotContext context) {
+        StorageService storageService = context.getStorageService();
+        Integer vkId = context.getVkId();
+        //определим режим работы - редактирование или удаление.
+        String mode = null;
+        if (storageService.getUserStorage(vkId, ADMIN_MENU) != null) {
+            mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
+        }
+        //посмотрим, не попали ли мы сюда после редактирования\удаления
+        String afterModificationMessage = null;
+        List<String> usersInfoList = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
+        if (usersInfoList != null) {
+            String userInfo = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
+            if ("delete".equals(mode)) {
+                afterModificationMessage = new StringBuilder("Студент ").append(userInfo).append("Был успешно удален из базы\n\n").toString();
+            } else if ("edit".equals(mode)) {
+                afterModificationMessage = userInfo;
+            }
+        }
         //сохраним список юзеров для дальнейшего использования
         List<String> usersIdList = new ArrayList<>();
         context.getUserService().getAllUsers().stream()
                 .sorted(Comparator.comparing(User::getLastName))
                 .forEach(user ->
-                    // сохраняем ID юзера в лист
-                    usersIdList.add(user.getId().toString()));
-        context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_USERS_LIST, usersIdList);
+                        // сохраняем ID юзера в лист
+                        usersIdList.add(user.getId().toString()));
+        //добавим первым элементом префикс после изменения\удаления
+        usersIdList.add(0, afterModificationMessage);
+        storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, usersIdList);
     }
 
     @Override
@@ -82,14 +100,12 @@ public class AdminUserList extends Step {
         }
         String afterModificationMessage = null;
         //Блок для сообщения после изменения\удаления.
-        if (storageService.getUserStorage(vkId, ADMIN_USERS_LIST) != null) {
-            String userInfo = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
-            if ("delete".equals(mode)) {
-                afterModificationMessage = new StringBuilder("Студент ").append(userInfo).append("Был успешно удален из базы\n\n").toString();
-            } else if ("edit".equals(mode)) {
-                afterModificationMessage = userInfo;
-            }
-            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+        // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
+        List<String> usersIdList = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
+        //если мы в динамическом тексте первый раз после удаления - вытащим первый элемент из обработки и удалим его из коллекции айдишников
+        if (!usersIdList.isEmpty() && !StringParser.isNumeric(usersIdList.get(0))) {
+            afterModificationMessage = usersIdList.get(0);
+            usersIdList.remove(0);
         }
 
         StringBuilder userList = new StringBuilder();
@@ -98,9 +114,8 @@ public class AdminUserList extends Step {
         } else {
             userList.append("Выберите пользователя для изменения:\n");
         }
-        // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
-        List<String> usersIdList = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
-        if(usersIdList != null) {
+
+        if (usersIdList != null) {
             //TODO: работать с листом юзеров, не дергая каждый раз БД
             final int[] i = {1};
             usersIdList.stream().forEach(userId -> {

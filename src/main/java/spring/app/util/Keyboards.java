@@ -272,9 +272,6 @@ public class Keyboards {
             "      }";
 
     public final static String SEARCH_OR_BACK = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"label\": \"Поиск\"\n" +
@@ -287,7 +284,5 @@ public class Keyboards {
             "          \"label\": \"Назад\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} ";
+            "      } ";
 }
