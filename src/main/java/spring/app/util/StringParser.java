@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 public class StringParser {
     private final static Logger log = LoggerFactory.getLogger(StringParser.class);
 
-    private static Pattern numeric = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private static Pattern numeric = Pattern.compile("\\d*");
+
+    private static Pattern realNumeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     //обязательно первая цифра от 0 до 9, далее только цифры с + или без него, разделенные пробелом, max 3 цифры
     private static Pattern validReviewerInputFormat = Pattern.compile("^\\d\\+?\\s?\\d?\\+?\\s?\\d?\\+?");
@@ -35,6 +37,13 @@ public class StringParser {
             return false;
         }
         return numeric.matcher(strNum).matches();
+    }
+
+    public static boolean isRealNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        return realNumeric.matcher(strNum).matches();
     }
 
     /**
