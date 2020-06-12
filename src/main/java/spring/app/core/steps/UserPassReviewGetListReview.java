@@ -36,8 +36,35 @@ public class UserPassReviewGetListReview extends Step {
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
         Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
+        // получаю список созданных мною ревью, если они имеется
         //получаю список ревью по теме
         List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+
+        // закомментировал проблемный функционал при попытке записаться на ревью будучи ревьюером на другом
+
+        /*
+        List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+        Set<Review> reviewsSetNoAccess = new HashSet<>();
+        if (reviewsMy.size() > 0) {
+            // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
+            Set<Review> reviewsSetTemp = new HashSet<>();
+            reviewsSetNoAccess.addAll(reviewsAll);
+            // перебор списка моих ревью
+            for (Review reviewOneMy : reviewsMy) {
+                // получаю список ревью которые не пересекаются с моим ревью и перебираю их поштучно
+                for (Review review : context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)) {
+                    // если такое ревью встречалось на прошлом проходе, добавляю его в множество
+                    if (reviewsSetNoAccess.contains(review)) {
+                        reviewsSetTemp.add(review);
+                    }
+                }
+                reviewsSetNoAccess.clear();
+                reviewsSetNoAccess.addAll(reviewsSetTemp);
+                reviewsSetTemp.clear();
+            }
+        }
+        */
+
         //список ревью сортирую по дате
         reviewsAll.sort(Comparator.comparing(Review::getDate));
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
