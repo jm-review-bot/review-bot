@@ -24,12 +24,12 @@ public class UserFeedbackReviewerAssessment extends Step {
     @Value("${upper.bound}")
     private int upBound;
 
+    public UserFeedbackReviewerAssessment() {
+        super("", "");
+    }
+
     @Override
     public void enter(BotContext context) {
-
-        text = "Оцените насколько объективен и корректен был принимающий " + lowBound + " до " + upBound + "?";
-
-        keyboard = NO_KB;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class UserFeedbackReviewerAssessment extends Step {
                 storageService.updateUserStorage
                         (context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT, Arrays.asList(currentInput));
 
-                nextStep = USER_FEEDBACK_COMMENT;
+                sendUserToNextStep(context, USER_FEEDBACK_COMMENT);
             } else {
                 throw new NoNumbersEnteredException("Некорректный ввод, введите оценку в диапазоне от " + lowBound +
                         " до " + upBound + " числом!");
@@ -54,5 +54,15 @@ public class UserFeedbackReviewerAssessment extends Step {
         } else {
             throw new NoNumbersEnteredException("Введите числовое значение!");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return "Оцените насколько объективен и корректен был принимающий " + lowBound + " до " + upBound + "?";
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

@@ -13,12 +13,12 @@ import static spring.app.util.Keyboards.FEEDBACK_CONFIRM_KB;
 @Component
 public class UserFeedbackConfirmation extends Step {
 
+    public UserFeedbackConfirmation() {
+        super("Для улучшения качества обучения дайте обратную связь после ревью.", FEEDBACK_CONFIRM_KB);
+    }
+
     @Override
     public void enter(BotContext context) {
-
-        text = "Для улучшения качества обучения дайте обратную связь после ревью.";
-
-        keyboard = FEEDBACK_CONFIRM_KB;
     }
 
     @Override
@@ -32,12 +32,22 @@ public class UserFeedbackConfirmation extends Step {
             //clear cash
             context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
 
-            nextStep = USER_MENU;
+            sendUserToNextStep(context, USER_MENU);
         } else if (wordInput.equals("начать")) {
-            nextStep = USER_FEEDBACK_REVIEW_ASSESSMENT;
+            sendUserToNextStep(context, USER_FEEDBACK_REVIEW_ASSESSMENT);
         } else {
             throw new ProcessInputException("Введена неверная команда. Нажми \"Начать\" чтобы оставить отзыв" +
                     " или \"Отказаться\" для выхода в главное меню.");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return "";
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

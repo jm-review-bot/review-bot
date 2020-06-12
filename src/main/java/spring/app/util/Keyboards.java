@@ -204,10 +204,6 @@ public class Keyboards {
             "      }";
 
     public final static String FEEDBACK_CONFIRM_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -222,10 +218,15 @@ public class Keyboards {
             "          \"label\": \"Отказаться\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} "; //TODO
+            "       }";
+
+    public final static String USER_FEEDBACK_ENDING_KB = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Закончить\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "       }";
 
     public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
             "        \"action\": {\n" +
@@ -294,17 +295,4 @@ public class Keyboards {
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }";
-
-    public final static String USER_FEEDBACK_ENDING_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"label\": \"Закончить\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} "; //TODO
 }
