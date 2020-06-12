@@ -9,6 +9,7 @@ import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -25,11 +26,21 @@ public class UserPassReviewAddTheme extends Step {
         super("", DEF_BACK_KB);
     }
 
-    private Set<Integer> idsIfCancelStudentReview = new HashSet<>();
-    private Map<Integer, Theme> themes = new HashMap<>();
-
     @Override
     public void enter(BotContext context) {
+        StringBuilder themeList = new StringBuilder();
+        themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
+        for (Theme theme : context.getThemeService().getAllThemes()) {
+            themeList.append("[")
+                    .append(theme.getPosition())
+                    .append("] ")
+                    .append(theme.getTitle())
+                    .append(", стоимость ")
+                    .append(theme.getReviewPoint())
+                    .append(" RP")
+                    .append("\n");
+        }
+        context.getStorageService().updateUserStorage(context.getVkId(),USER_PASS_REVIEW_ADD_THEME,Arrays.asList(themeList.toString()));
     }
 
     @Override
@@ -41,15 +52,15 @@ public class UserPassReviewAddTheme extends Step {
         //если записи на ревью нету, значит ожидаем номер темы
         if (studentReview == null && StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
+            Theme selectedTheme = context.getThemeService().getAllThemes().stream().filter(theme -> theme.getPosition().equals(command)).findFirst().orElse(null);
             //проверяем или номер темы не выходит за рамки
-            if (command > 0 & command <= themes.size()) {
-                Theme theme = context.getThemeService().getByPosition(command);
+            if (selectedTheme != null) {
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
-                if (theme.getReviewPoint() <= user.getReviewPoint()) {
+                if (selectedTheme.getReviewPoint() <= user.getReviewPoint()) {
                     //сохраняем ID темы для следующего шага
                     List<String> list = new ArrayList<>();
-                    list.add(theme.getId().toString());
+                    list.add(selectedTheme.getId().toString());
                     storageService.updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
                     sendUserToNextStep(context, USER_PASS_REVIEW_GET_LIST_REVIEW);
                 } else {
@@ -63,9 +74,7 @@ public class UserPassReviewAddTheme extends Step {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command) && studentReview != null) {
-                context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
-                idsIfCancelStudentReview.add(vkId);
-                sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
+                sendUserToNextStep(context, USER_CANCEL_REVIEW);
             } else if ("/start".equals(command)) {
                 sendUserToNextStep(context, START);
             } else if ("назад".equals(command)) {
@@ -78,8 +87,6 @@ public class UserPassReviewAddTheme extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        StorageService storageService = context.getStorageService();
-        Integer vkId = context.getVkId();
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         if (studentReview != null) {
             return String.format("Вы уже записаны на ревью:\n" +
@@ -88,30 +95,7 @@ public class UserPassReviewAddTheme extends Step {
                             "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
                     StringParser.localDateTimeToString(studentReview.getReview().getDate()));
         } else {
-            StringBuilder themeList = new StringBuilder();
-            if (storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME) != null){
-                themeList.append("Выбранное Вами ревью уже заполнено!\n\n");
-                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
-            }
-            //формирую список тем и вывожу его как нумерованный список
-            context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
-            themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
-            for (Integer position : themes.keySet()) {
-                themeList.append("[")
-                        .append(position)
-                        .append("] ")
-                        .append(themes.get(position).getTitle())
-                        .append(", стоимость ")
-                        .append(themes.get(position).getReviewPoint())
-                        .append(" RP")
-                        .append("\n");
-            }
-            if (idsIfCancelStudentReview.contains(vkId)) {
-                idsIfCancelStudentReview.remove(vkId);
-                return new StringBuilder("Ревью отменено.\n\n").append(themeList).toString();
-            } else {
-                return themeList.toString();
-            }
+            return context.getStorageService().getUserStorage(context.getVkId(),USER_PASS_REVIEW_ADD_THEME).get(0);
         }
     }
 
