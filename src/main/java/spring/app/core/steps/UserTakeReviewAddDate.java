@@ -20,18 +20,20 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class UserTakeReviewAddDate extends Step {
-    public UserTakeReviewAddDate() {
-        //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
-        super("", DEF_BACK_KB);
-    }
-    @Override
-    public void enter(BotContext context) {
-    }
     @Value("${review.duration}")
     private int reviewDuration;
 
     @Value("${review.time_limit.before_starting_review}")
     private int timeLimitBeforeReview;
+
+    public UserTakeReviewAddDate() {
+        //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
+        super("", DEF_BACK_KB);
+    }
+
+    @Override
+    public void enter(BotContext context) {
+    }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
@@ -84,20 +86,14 @@ public class UserTakeReviewAddDate extends Step {
                     context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
                     storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
                     storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
-                    sendUserToNextStep(context, USER_MENU);
-                    String textForSend = String.format(String.format("Супер! Твоё ревью добавлено в сетку расписания, в день и время когда оно наступит нажми на кнопку \"Начать ревью\"\n\nВаше ревью '%%s' %%s было успешно добавлено в сетку расписания\n\n"), theme.getTitle(), userInput);
-                    //и шлем сообщение.А вот и не шлем.Мы не знаем какие кнопки отобразить пользователю.Так что
-                    //отправлять сообщения таким образом мы можем всем кроме себя.Для себя пользуемся хаком
-                    //с хранилищем -
-                    //        кладем сообщения на шаг, на который планируем придти
-                    context.getVkService().sendMessage(textForSend, this.getComposeKeyboard(context), vkId);
+                    String textForSend = String.format(String.format("Супер! Твоё ревью добавлено в сетку расписания, " +
+                            "в день и время когда оно наступит нажми на кнопку " +
+                            "\"Начать ревью\"\n\nВаше ревью '%%s' %%s было успешно добавлено в сетку расписания\n\n"), theme.getTitle(), userInput);
                     context.getStorageService().updateUserStorage(vkId, USER_MENU, Arrays.asList(textForSend));
+                    sendUserToNextStep(context, USER_MENU);
                 }
-            } else if (plannedStartReviewTime.isBefore(LocalDateTime.now())) {
+            } else {
                 throw new ProcessInputException("Время принятия нового ревью не может быть в прошлом :)\n Повтори ввод или вернись назад к выбору темы ревью");
-            } else if (plannedStartReviewTime.isBefore(LocalDateTime.now().plusMinutes(timeLimitBeforeReview))) {
-                throw new ProcessInputException(String.format("Ты можешь объявить о готовности принять, ревью не ранее, чем за %d минут до его начала\n" +
-                        "Повтори ввод или вернись назад к выбору темы ревью", (timeLimitBeforeReview + 1)));
             }
         }
     }
@@ -112,7 +108,6 @@ public class UserTakeReviewAddDate extends Step {
 
         textBuilder.append(String.format("Ты выбрал тему: %s", theme.getTitle()))
                 .append(".\n\n Укажи время и дату для принятия ревью в формате ДД.ММ.ГГГГ ЧЧ:ММ по Московскому часовому поясу.\n Пример корректного ответа 02.06.2020 17:30\n\n")
-                .append(String.format("Ты можешь объявить о готовности принять ревью не позднее, чем за %d  минут до его начала\n", (timeLimitBeforeReview + 1)))
                 .append(String.format("Время принятия ревью %d минут, новое ревью не должно пересекаться с другими ревью, которые ты готов принять\n\n", (reviewDuration + 1)))
                 .append("Для возврата к предыдущему меню и выбора другой темы нажми на кнопку \"Назад\"");
         return textBuilder.toString();
