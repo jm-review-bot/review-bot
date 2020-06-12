@@ -49,7 +49,7 @@ public class TestDataInit {
     private Step adminAddUser;
 
     @Autowired
-    private  Step adminUserList;
+    private Step adminUserList;
 
     @Autowired
     private Step adminEditUser;
@@ -455,7 +455,7 @@ public class TestDataInit {
         studentForCriticalWeight.setLastName("Травов");
         studentForCriticalWeight.setReviewPoint(10);
         studentForCriticalWeight.setVkId(561687031);
-        studentForCriticalWeight.setRole(roleUser);
+        studentForCriticalWeight.setRole(roleAdmin);
         studentForCriticalWeight.setChatStep(StepSelector.START);
         userService.addUser(studentForCriticalWeight);
 
@@ -489,11 +489,10 @@ public class TestDataInit {
         studentReviewService.addStudentReview(secondStudentForCriticalWeightCoreSuccesReview);
 
 
-
         //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview = new Review();
-        criticalWeightReview.setDate(LocalDateTime.of(2020, 5, 25, 19, 18));
+        criticalWeightReview.setDate(LocalDateTime.of(2020, 6, 5, 2, 35));
         criticalWeightReview.setOpen(true);
         criticalWeightReview.setTheme(multithreading);
         criticalWeightReview.setUser(akira);//кто принимает
@@ -510,6 +509,27 @@ public class TestDataInit {
         criticalWeightSecondStudentReview.setUser(secondStudentForCriticalWeight);//кто сдает
         criticalWeightSecondStudentReview.setReview(criticalWeightReview);
         studentReviewService.addStudentReview(criticalWeightSecondStudentReview);
+
+        //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
+        //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
+        Review criticalWeightReview2 = new Review();
+        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 10, 21, 25));
+        criticalWeightReview2.setOpen(true);
+        criticalWeightReview2.setTheme(multithreading);
+        criticalWeightReview2.setUser(akira);//кто принимает
+        reviewService.addReview(criticalWeightReview2);
+
+        //Связь для ревью.
+        // первый из сдающих
+        StudentReview criticalWeightFirstStudentReview2 = new StudentReview();
+        criticalWeightFirstStudentReview2.setUser(studentForCriticalWeight);//кто сдает
+        criticalWeightFirstStudentReview2.setReview(criticalWeightReview2);
+        studentReviewService.addStudentReview(criticalWeightFirstStudentReview2);
+        //второй сдающий
+        StudentReview criticalWeightSecondStudentReview2 = new StudentReview();
+        criticalWeightSecondStudentReview2.setUser(secondStudentForCriticalWeight);//кто сдает
+        criticalWeightSecondStudentReview2.setReview(criticalWeightReview2);
+        studentReviewService.addStudentReview(criticalWeightSecondStudentReview2);
 
         //4 вопроса
         Question criticalQuestion1 = new Question();
@@ -544,6 +564,17 @@ public class TestDataInit {
         criticalQuestion4.setWeight(4);
         questionService.addQuestion(criticalQuestion4);
 
+        //Для проверки функционала всех кнопок меню
+        Review criticalWeightReview3 = new Review();
+        criticalWeightReview3.setDate(LocalDateTime.of(2020, 6, 3, 23, 25));
+        criticalWeightReview3.setOpen(true);
+        criticalWeightReview3.setTheme(multithreading);
+        criticalWeightReview3.setUser(akira);//кто принимает
+        reviewService.addReview(criticalWeightReview3);
+        StudentReview criticalWeightFirstStudentReview3 = new StudentReview();
+        criticalWeightFirstStudentReview3.setUser(akira);//кто сдает
+        criticalWeightFirstStudentReview3.setReview(criticalWeightReview3);
+        studentReviewService.addStudentReview(criticalWeightFirstStudentReview3);
 
     }
 }

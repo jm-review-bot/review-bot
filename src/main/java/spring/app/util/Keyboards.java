@@ -2,11 +2,20 @@ package spring.app.util;
 
 public class Keyboards {
 
-    public final static String HEADER_FR = "{\"one_time\": false,\n\"buttons\": [\n[\n";
+    public final static String HEADER_FR = "{\"one_time\": false,\n\"buttons\": [\n";
 
-    public final static String FOOTER_FR = "]\n]\n}";
+    public final static String FOOTER_FR = "]\n}";
 
     public final static String ROW_DELIMETER_FR = "],[";
+
+    public final static String DELETE_STUDENT_REVIEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена записи\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n";
 
     public final static String REVIEW_START_FR = "{\n" +
             "        \"action\": {\n" +
@@ -26,7 +35,7 @@ public class Keyboards {
             "        \"color\": \"negative\"\n" +
             "      }\n";
 
-    public final static String USER_MENU_FR = "{\n" +
+    public final static String DEF_USER_MENU_KB = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -45,30 +54,20 @@ public class Keyboards {
 
 
     public final static String START_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"label\": \"Начать\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} ";
+            "      }\n";
 
-    public final static String BACK_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
+    public final static String DEF_BACK_KB = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"label\": \"Назад\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} ";
+            "      }\n";
 
     public final static String BACK_AND_EDIT_STATUS_KB = "{\n" +
             "  \"one_time\": false,\n" +
@@ -94,10 +93,6 @@ public class Keyboards {
     public final static String NO_KB = "{\"buttons\":[],\"one_time\":false}";
 
     public final static String ADMIN_START_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -112,16 +107,9 @@ public class Keyboards {
             "          \"label\": \"Начать\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String YES_NO_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -136,16 +124,9 @@ public class Keyboards {
             "          \"label\": \"Нет\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
-    public final static String ADMIN_MENU_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
+    public final static String DEF_ADMIN_MENU_KB = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -185,10 +166,7 @@ public class Keyboards {
             "          \"label\": \"Главное меню\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String USER_MENU_DELETE_STUDENT_REVIEW = "{\n" +
             "  \"one_time\": true,\n" +
@@ -247,23 +225,14 @@ public class Keyboards {
             "} ";
 
     public final static String USER_MENU_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [[\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"label\": \"Главное меню\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "  ]]\n" +
-            "} ";
+            "      }";
 
     public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -278,16 +247,9 @@ public class Keyboards {
             "          \"label\": \"ввести новое имя фамилию\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -302,16 +264,9 @@ public class Keyboards {
             "          \"label\": \"изменить вкИд\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
 
     public final static String YES_OR_CANCEL = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -326,8 +281,22 @@ public class Keyboards {
             "          \"label\": \"отмена\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
+            "      }\n";
+
+    public final static String RIGHT_WRONG_ANSWER = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Ответ принят\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Ответ не принят\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }";
 }

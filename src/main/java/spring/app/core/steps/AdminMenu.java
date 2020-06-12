@@ -8,15 +8,17 @@ import spring.app.util.StringParser;
 import java.util.Arrays;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 
 @Component
 public class AdminMenu extends Step {
 
+    public AdminMenu() {
+        super("", DEF_ADMIN_MENU_KB);
+    }
+
     @Override
     public void enter(BotContext context) {
-        text = String.format("Привет %s! Ты в админке", context.getUser().getFirstName());
-        keyboard = ADMIN_MENU_KB;
     }
 
     @Override
@@ -24,24 +26,38 @@ public class AdminMenu extends Step {
         String command = StringParser.toWordsArray(context.getInput())[0];
         switch (command) {
             case "добавить":
-                nextStep = ADMIN_ADD_USER;
+                sendUserToNextStep(context, ADMIN_ADD_USER);
+                break;
+            case "изменить":
+                context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_MENU, Arrays.asList("edit"));
+                sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
                 break;
             case "удалить":
-                nextStep = ADMIN_REMOVE_USER;
+                context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_MENU, Arrays.asList("delete"));
+                sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
                 break;
             case "/start":
-                nextStep = START;
+                sendUserToNextStep(context, START);
                 break;
             case "ревью":
                 nextStep = ADMIN_EDIT_REVIEW_GET_USER_LIST;
                 break;
             case "главное":
             case "Главное":
-                nextStep = USER_MENU;
+                sendUserToNextStep(context, USER_MENU);
                 break;
             default:
-                keyboard = ADMIN_MENU_KB;
                 throw new ProcessInputException("Введена неверная команда...");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return String.format("Привет %s! Ты в админке", context.getUser().getFirstName());
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

@@ -13,29 +13,33 @@ import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.ADMIN_ADD_USER;
-import static spring.app.util.Keyboards.NO_KB;
+import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
 
 @Component
 public class AdminSetThemeAddedUser extends Step {
 
-    private Map<Integer, Theme> themes = new HashMap<>();
+    public AdminSetThemeAddedUser() {
+        super("", "");
+    }
 
     @Override
     public void enter(BotContext context) {
-
         Integer vkId = context.getVkId();
         Long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
         UserService userService = context.getUserService();
         User addedUser = userService.getUserById(addedUserId);
+        StringBuilder themeList;
+        List<String> listTheme = new ArrayList<>();
+        List<Theme> themes = context.getThemeService().getAllThemes();
         // Получение всех тем
-        context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
-        StringBuilder themeList = new StringBuilder("Выберите тему, с которой пользователь ");
+        themes.sort(Comparator.comparing(Theme::getPosition));
+        themeList = new StringBuilder("Выберите тему, с которой пользователь ");
         themeList
                 .append(addedUser.getFirstName())
                 .append(" ")
@@ -46,19 +50,21 @@ public class AdminSetThemeAddedUser extends Step {
                 .append(") ")
                 .append("может начать сдачу ревью:\n");
 
-        for (Integer position : themes.keySet()) {
-            themeList.append(String.format("[%d] %s\n", position, themes.get(position).getTitle()));
+        for (Theme position : themes) {
+            themeList.append(String.format("[%d] %s\n", position.getPosition(), position.getTitle()));
         }
-        // Вывод пользователю
-        text = themeList.toString();
-        keyboard = NO_KB;
+
+        listTheme.add(themeList.toString());
+        context.getStorageService().updateUserStorage(vkId, ADMIN_SET_THEME_ADDED_USER, listTheme);
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-
         String userInput = context.getInput();
-        List<String> themePositionsList = themes.keySet().stream()
+        List<Theme> themes = context.getThemeService().getAllThemes();
+
+        List<String> themePositionsList = themes.stream()
+                .map(Theme::getPosition)
                 .map(Object::toString)
                 .collect(toList());
 
@@ -90,9 +96,20 @@ public class AdminSetThemeAddedUser extends Step {
                 addedUser.setReviewPoint(reviewCost);
                 userService.updateUser(addedUser);
             }
-            nextStep = ADMIN_ADD_USER;
+            sendUserToNextStep(context, ADMIN_ADD_USER);
         } else {
             throw new ProcessInputException("Введена неверная команда...\n\n Введите цифру, соответствующую теме рьвью.");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        List<String> themeList = context.getStorageService().getUserStorage(context.getVkId(), ADMIN_SET_THEME_ADDED_USER);
+        return themeList.get(0);
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }
