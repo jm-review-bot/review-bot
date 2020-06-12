@@ -8,11 +8,12 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.StudentReview;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewAnswerService;
+import spring.app.service.abstraction.StudentReviewService;
 import spring.app.util.StringParser;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
@@ -23,20 +24,35 @@ import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 @Component
 public class AdminEditReviewGetReviewInfo extends Step {
 
+    private StorageService storageService;
+    private StudentReviewService studentReviewService;
+    private StudentReviewAnswerService studentReviewAnswerService;
+
+    public AdminEditReviewGetReviewInfo(
+            StorageService storageService,
+            StudentReviewService studentReviewService,
+            StudentReviewAnswerService studentReviewAnswerService) {
+        super("", BACK_AND_EDIT_STATUS_KB);
+        this.storageService = storageService;
+        this.studentReviewService = studentReviewService;
+        this.studentReviewAnswerService = studentReviewAnswerService;
+    }
+
     @Override
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         StringBuilder stringBuilder = new StringBuilder();
-        String sStudentReviewToChange = storageService.getUserStorage(vkId, StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO).get(0);
-        StudentReview studentReview = context.getStudentReviewService().getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long.parseLong(sStudentReviewToChange));
-        List<String> selectedReviewList = new ArrayList<>();
+        String sStudentReviewToChange = storageService.getUserStorage(vkId, StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST).get(0);
+        StudentReview studentReview = studentReviewService.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long.parseLong(sStudentReviewToChange));
+
+        //извлечем инфу из ревью
         stringBuilder
                 .append("Ревью по теме '").append(studentReview.getReview().getTheme().getTitle()).append("' ").append("за ").append(studentReview.getReview().getDate()).append(".\n")
                 .append("Студент: ").append(studentReview.getUser().getFirstName()).append(" ").append(studentReview.getUser().getLastName()).append("\n")
                 .append("Принимающий: ").append(studentReview.getReview().getUser().getFirstName()).append(" ").append(studentReview.getReview().getUser().getLastName()).append("\n");
-        context.getStudentReviewAnswerService()
-                .getStudentReviewAnswersByStudentReviewId(studentReview.getId()).stream()
+
+        //добавим инфу по ответам
+        studentReviewAnswerService.getStudentReviewAnswersByStudentReviewId(studentReview.getId()).stream()
                 .sorted(Comparator.comparingInt(sra -> sra.getQuestion().getPosition())) //TODO:проверить необходимость сортировки
                 .forEach(sra -> {
                     stringBuilder
@@ -47,25 +63,38 @@ public class AdminEditReviewGetReviewInfo extends Step {
                             .append(sra.getRight() ? "+" : "-")
                             .append("\n");
                 });
-        selectedReviewList.add(sStudentReviewToChange);
-        text = stringBuilder.toString();
-        keyboard = BACK_AND_EDIT_STATUS_KB;
+
+        storageService.updateUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_REVIEW_INFO, Arrays.asList(stringBuilder.toString()));
     }
 
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String wordInput = StringParser.toWordsArray(currentInput)[0];
         if (wordInput.equals("назад")) {
             storageService.removeUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_REVIEW_INFO);
-            nextStep = ADMIN_EDIT_REVIEW_GET_REVIEW_LIST;
+            sendUserToNextStep(context, ADMIN_EDIT_REVIEW_GET_REVIEW_LIST);
         } else if (wordInput.equals("изменить")) {
-            nextStep = ADMIN_EDIT_REVIEW_CHANGE_REVIEW;
+            String sStudentReviewToChange = storageService.getUserStorage(vkId, StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST).get(0);
+            StudentReview studentReview = studentReviewService.getStudentReviewById(Long.parseLong(sStudentReviewToChange));
+            if (studentReview.getPassed() == null) {
+                throw new ProcessInputException("Это ревью еще не было проведено. Его нельзя изменить");
+            }
+            sendUserToNextStep(context, ADMIN_EDIT_REVIEW_CHANGE_REVIEW);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return storageService.getUserStorage(context.getVkId(), ADMIN_EDIT_REVIEW_GET_REVIEW_INFO).get(0);
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

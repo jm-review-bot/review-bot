@@ -40,7 +40,7 @@ public class AdminMenu extends Step {
                 sendUserToNextStep(context, START);
                 break;
             case "ревью":
-                nextStep = ADMIN_EDIT_REVIEW_GET_USER_LIST;
+                sendUserToNextStep(context, ADMIN_EDIT_REVIEW_GET_USER_LIST);
                 break;
             case "главное":
             case "Главное":
