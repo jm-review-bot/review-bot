@@ -1,24 +1,19 @@
 package spring.app.core.steps;
 
-import javafx.util.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.dto.QuestionNumberAnswererIdDto;
-import spring.app.exceptions.NoDataEnteredException;
-import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.*;
 import spring.app.service.abstraction.StorageService;
-import spring.app.util.StringParser;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.RIGHT_WRONG_ANSWER;
+import static spring.app.util.Keyboards.USER_MENU_KB;
 
 @Component
 public class UserStartReviewCore extends Step {
@@ -26,16 +21,19 @@ public class UserStartReviewCore extends Step {
     @Value("${review.point_for_take_review}")
     private int pointForTakeReview;
 
-    private final static Logger log = LoggerFactory.getLogger(UserStartReviewCore.class);
-
     // Map хранит по vkId ревьюера текущий вопрос и отвечающего на него
     private final Map<Integer, QuestionNumberAnswererIdDto> questionNumbers = new HashMap<>();
     //Хранит по vkId набор айдишников студентов которым можно задать вопрос. На старте - всем студентам на ревью
     private final Map<Integer, List<Long>> possibleAnswerer = new HashMap<>();
 
+    public UserStartReviewCore() {
+        super("", "");
+    }
 
     @Override
     public void enter(BotContext context) {
+        //вычислим кому отдавать вопрос + производим рассылку по окончанию.
+        // Определяется тут, т.к. при запросе динамического текста неправильным будет определять\слать такое
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         // Получаю reviewId из хранилища и список студентов, записанных на ревью//
@@ -43,31 +41,19 @@ public class UserStartReviewCore extends Step {
         List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
         // получаем список вопросов, отсортированных по позиции, которые соответствуют теме ревью
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
-
         // формирую сообщение со списком участников
-        StringBuilder textBuilder = new StringBuilder(storageService.getUserStorage(vkId, USER_START_REVIEW_RULES).get(0));
-        // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
-        // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
-
         questionNumbers.putIfAbsent(vkId, new QuestionNumberAnswererIdDto(0, 0L));
         if (!possibleAnswerer.containsKey(vkId)) { //containsKey ибо иначе каждый раз расчеты были бы
             possibleAnswerer.put(vkId, students.stream().map(User::getId).collect(Collectors.toList()));
         }
         int questionNumber = questionNumbers.get(vkId).getQuestionNumber();
+        //убедимся что вопросы не закончились
         if (questionNumber != questions.size()) {
             Long nextAnswererId = selectNextRandomAnswererStudent(vkId, context, questionNumber);
             //находим по айдишнику следующего студента в списке студентов.
-            User user = students.stream().filter(u -> u.getId().equals(nextAnswererId)).findFirst().get();
-            textBuilder
-                    .append("\nВопрос для ")
-                    .append(user.getFirstName()).append(" ").append(user.getLastName())
-                    .append(String.format(": %s", questions.get(questionNumber).getQuestion()))
-                    .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
             questionNumbers.put(vkId, new QuestionNumberAnswererIdDto(questionNumber, nextAnswererId));
-            keyboard = RIGHT_WRONG_ANSWER;
-
-            // если вопросы кончились
         } else {
+
             // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer
             // строки корректные, мы их проверяли в processInput()
             List<String> reviewerInput = storageService.getUserStorage(vkId, USER_START_REVIEW_CORE);
@@ -117,14 +103,11 @@ public class UserStartReviewCore extends Step {
 
             // очищаем ввод ревьюера из STORAGE.
             storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
-            storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
             // добавляем очки за прием ревью
-            User user = context.getUserService().getByVkId(vkId);
+            User user = context.getUser();
             user.setReviewPoint(user.getReviewPoint() + pointForTakeReview);
             context.getUserService().updateUser(user);
             // формируем сообщение об окончании ревью для ревьюера
-            String reviewResultMessage = String.format("Вопросы закончились, ревью окончено!\n Результаты ревью будут отправлены каждому участнику.\nВам начислено 2 RP, теперь Ваш баланс %d RP", user.getReviewPoint());
-            textBuilder.delete(0, textBuilder.length()).append(reviewResultMessage);
 
             // подведение итогов ревью для студентов, рассылка сообщений студентам с результатами ревью, списание очков
             for (User student : students) {//TODO:разбить и вынести на 2 метода - расчет итогов(сдал/не сдал) и рассылку AR
@@ -135,7 +118,7 @@ public class UserStartReviewCore extends Step {
                 // проверяем ответы по карте. Если проблемные вопросы есть - значит(до правок по весу) он не сдал.
                 // Не быть хотя бы одного ответа у него не может т.к. это возможно только если вопросов на ревью было меньше чем студентов
                 StudentReview studentReview = context.getStudentReviewService().getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
-                if (studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
+                if (studentWrongWeight.get(student) != null && studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
                     studentReview.setPassed(false);
                 } else {
                     studentReview.setPassed(true);
@@ -148,26 +131,31 @@ public class UserStartReviewCore extends Step {
                 } else {
                     reviewResults.append("Ревью не пройдено.\n\nВот список проблемных вопросов:\n");
                 }
-                final int[] k = {1};
-                for (String incorrectAnswer : problemQuestions.get(student)) {
-                    reviewResults.append("[").append(k[0]++).append("] ")
-                            .append(incorrectAnswer)
-                            .append("\n");
+                List<String> incorrectAnswerList = problemQuestions.get(student);
+                //если у студента были вопросы на которые он не смог ответить - добавим их.
+                if (incorrectAnswerList != null) {
+                    final int[] k = {1};
+                    for (String incorrectAnswer : problemQuestions.get(student)) {
+                        reviewResults.append("[").append(k[0]++).append("] ")
+                                .append(incorrectAnswer)
+                                .append("\n");
+                    }
                 }
                 reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", theme.getReviewPoint(), student.getReviewPoint()));
                 // отправляем студенту результаты ревью
                 Step userStep = context.getStepHolder().getSteps().get(student.getChatStep());
-                context.getVkService().sendMessage(reviewResults.toString(), userStep.getKeyboard(), student.getVkId());
-                log.warn("Студенту с id {} отправлено сообщение {}", student.getVkId(), reviewResults.toString());
+                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(),
+                        context.getUserService(), context.getThemeService(), context.getReviewService(),
+                        context.getRoleService(), context.getVkService(), context.getQuestionService(),
+                        context.getStepHolder(), context.getStudentReviewAnswerService(), context.getStudentReviewService(),
+                        context.getStorageService());
+                context.getVkService().sendMessage(reviewResults.toString(), userStep.getComposeKeyboard(studentContext), student.getVkId());
             }
-            keyboard = USER_MENU_KB;
         }
-        text = textBuilder.toString();
     }
 
     @Override
-    public void processInput(BotContext context) throws
-            ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+    public void processInput(BotContext context) throws ProcessInputException {
         StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
@@ -176,23 +164,24 @@ public class UserStartReviewCore extends Step {
         List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
 
         if (userInput.equalsIgnoreCase("/start")) { // служебная команда, которая прервет выполнение ревью без возможности возвращения к нему
-            nextStep = START;
             //очищаем все что накопили.
             questionNumbers.keySet().remove(vkId);
             possibleAnswerer.keySet().remove(vkId);
             storageService.removeUserStorage(vkId, USER_MENU);
             storageService.removeUserStorage(vkId, USER_START_REVIEW_CORE);
-            storageService.removeUserStorage(vkId, USER_START_REVIEW_RULES);
+            sendUserToNextStep(context, START);
             // если вопросы закончились, то ждем только нажатия на кнопку выхода в главное меню или ввод /start
         } else if (questionNumbers.get(vkId).getQuestionNumber() == questions.size()) {
             if (userInput.equalsIgnoreCase("главное меню")) {
-                nextStep = USER_MENU;
                 questionNumbers.keySet().remove(vkId);
+                possibleAnswerer.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_MENU);
+                sendUserToNextStep(context, USER_MENU);
             } else if (userInput.equalsIgnoreCase("/start")) {
-                nextStep = START;
                 questionNumbers.keySet().remove(vkId);
+                possibleAnswerer.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_MENU);
+                sendUserToNextStep(context, START);
             } else {
                 throw new ProcessInputException("Для выхода в главное меню нажми кнопку \"Главное меню\"");
             }
@@ -238,11 +227,61 @@ public class UserStartReviewCore extends Step {
             //сохраним результат обработки.
             questionStrings.add(currentQuestionString);
             storageService.updateUserStorage(vkId, USER_START_REVIEW_CORE, questionStrings);
-            log.info("Сохранен ответ {} на вопрос по индексу {} студента с id {}", userInput, questionNumber, answererId);
             questionNumbers.put(vkId, new QuestionNumberAnswererIdDto(questionNumber, 0L));
-            nextStep = USER_START_REVIEW_CORE;
+            sendUserToNextStep(context, USER_START_REVIEW_CORE);
         } else {
             throw new ProcessInputException("Неверный ввод ответов студентов, повторите ввод");
+        }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        StorageService storageService = context.getStorageService();
+        Integer vkId = context.getVkId();
+        // Получаю reviewId из хранилища и список студентов, записанных на ревью//
+        Long reviewId = Long.parseLong(storageService.getUserStorage(vkId, USER_MENU).get(0));
+        // получаем список вопросов, отсортированных по позиции, которые соответствуют теме ревью
+        List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
+        // формирую сообщение со списком участников
+        StringBuilder textBuilder = new StringBuilder();
+        // Если мы первый раз оказались на этом шаге, то в Map questionNumbers еще нет ключа, соответствующего vkId ревьюера,
+        // поэтому задаем первый вопрос из списка, сохраняем номер вопроса (начинаем с 0) в questionNumbers
+
+
+        int questionNumber = questionNumbers.get(vkId).getQuestionNumber();
+        if (questionNumber != questions.size()) {
+            Long nextAnswererId = questionNumbers.get(vkId).getAnswererId();
+            List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+            //находим по айдишнику следующего студента в списке студентов.
+            User user = students.stream().filter(u -> u.getId().equals(nextAnswererId)).findFirst().get();
+            textBuilder
+                    .append("\nВопрос для ")
+                    .append(user.getFirstName()).append(" ").append(user.getLastName())
+                    .append(String.format(": %s", questions.get(questionNumber).getQuestion()))
+                    .append(String.format("\n\nОтвет: %s", questions.get(questionNumber).getAnswer()));
+            // questionNumbers.put(vkId, new QuestionNumberAnswererIdDto(questionNumber, nextAnswererId));
+
+            // если вопросы кончились
+        } else {
+            User user = context.getUser();
+            String reviewResultMessage = String.format("Вопросы закончились, ревью окончено!\n Результаты ревью будут отправлены каждому участнику.\nВам начислено 2 RP, теперь Ваш баланс %d RP", user.getReviewPoint());
+            textBuilder = new StringBuilder(reviewResultMessage);
+        }
+        String text = textBuilder.toString();
+        return text;
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        Integer vkId = context.getVkId();
+        Long reviewId = Long.parseLong(context.getStorageService().getUserStorage(vkId, USER_MENU).get(0));
+        // получаем список вопросов, отсортированных по позиции, которые соответствуют теме ревью
+        List<Question> questions = context.getQuestionService().getQuestionsByReviewId(reviewId);
+        int questionNumber = questionNumbers.get(vkId).getQuestionNumber();
+        if (questionNumber != questions.size()) {//если вопросы еще есть
+            return RIGHT_WRONG_ANSWER;
+        } else {
+            return USER_MENU_KB;
         }
     }
 
