@@ -19,9 +19,8 @@ public class BotContext {
     private final StudentReviewService studentReviewService;
     private final StepHolder stepHolder;
     private final StorageService storageService;
-    private final FeedbackService feedbackService;
 
-    public BotContext(User user, Integer vkId, String input, Role role, UserService userService, ThemeService themeService, ReviewService reviewService, RoleService roleService, VkService vkService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService, StorageService storageService, FeedbackService feedbackService) {
+    public BotContext(User user, Integer vkId, String input, Role role, UserService userService, ThemeService themeService, ReviewService reviewService, RoleService roleService, VkService vkService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService, StorageService storageService) {
         this.user = user;
         this.vkId = vkId;
         this.input = input;
@@ -36,11 +35,6 @@ public class BotContext {
         this.studentReviewAnswerService = studentReviewAnswerService;
         this.studentReviewService = studentReviewService;
         this.storageService = storageService;
-        this.feedbackService = feedbackService;
-    }
-
-    public FeedbackService getFeedbackService() {
-        return feedbackService;
     }
 
     public Integer getVkId() {

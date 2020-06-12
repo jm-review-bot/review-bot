@@ -13,6 +13,7 @@ import static spring.app.util.Keyboards.USER_FEEDBACK_ENDING_KB;
 
 @Component
 public class UserFeedbackComment extends Step {
+    //переменную
 
     @Override
     public void enter(BotContext context) {
