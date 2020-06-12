@@ -19,8 +19,6 @@ public class UserFeedbackComment extends Step {
     @Autowired
     private FeedbackService feedbackService;
 
-    private Feedback addFeedback = new Feedback();
-
     public UserFeedbackComment() {
         super("Дайте ваш развернутый комментарий, замечания, предложения (необязательно). " +
                 "Если не хотите заполнять это поле - нажмите кнопку 'Главное меню'.", USER_FEEDBACK_ENDING_KB);
@@ -35,6 +33,7 @@ public class UserFeedbackComment extends Step {
             throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
 
         String command = StringParser.toWordsArray(context.getInput())[0];
+        Feedback addFeedback = new Feedback();
 
         if (!"закончить".equals(command)) {
             addFeedback.setComment(context.getInput());
