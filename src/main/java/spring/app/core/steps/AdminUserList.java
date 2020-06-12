@@ -65,7 +65,7 @@ public class AdminUserList extends Step {
         String text = "";
         Integer vkId = context.getVkId();
         StorageService storageService = context.getStorageService();
-        String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
+        String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);//Опасно без проверки то..
         String afterModificationMessage = null;
         //Блок для сообщения после изменения\удаления.
         if (storageService.getUserStorage(vkId, ADMIN_USERS_LIST) != null) {

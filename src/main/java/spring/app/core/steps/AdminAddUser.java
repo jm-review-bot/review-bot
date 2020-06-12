@@ -86,7 +86,6 @@ public class AdminAddUser extends Step {
     }
 
 
-
     @Override
     public String getDynamicText(BotContext context) {
         return "";

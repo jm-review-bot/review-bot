@@ -9,10 +9,12 @@ import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
-import java.util.*;
+import java.util.Arrays;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_REMOVE_USER;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
+import static spring.app.util.Keyboards.YES_NO_KB;
 
 @Component
 public class AdminRemoveUser extends Step {
@@ -50,15 +52,13 @@ public class AdminRemoveUser extends Step {
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(userInfo));
             sendUserToNextStep(context, ADMIN_USERS_LIST);
-        }
-        else if (wordInput.equals("нет") || wordInput.equals("назад")) {
+        } else if (wordInput.equals("нет") || wordInput.equals("назад")) {
             //Возвращаемся назад
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             //Очищаем список ролей, раз не хотим ничего сообщать в том шаге
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             sendUserToNextStep(context, ADMIN_USERS_LIST);
-        }
-        else {
+        } else {
             throw new NoNumbersEnteredException("Введена неверная команда. Нажмите \"Да\" для удаления или \"Нет\" для возврата.");
         }
     }
@@ -71,8 +71,7 @@ public class AdminRemoveUser extends Step {
         if (userInfo != null) {
             confirmMessage.append(userInfo)
                     .append("Вы точно хотите удалить данного студента? (Да/Нет)\n");
-        }
-        else {
+        } else {
             confirmMessage.append("не выбран.");
         }
         return confirmMessage.toString();

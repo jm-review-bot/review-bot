@@ -96,10 +96,10 @@ public class UserPassReviewGetListReview extends Step {
                     list.add(StringParser.localDateTimeToString(review.getDate()));
                     storageService.updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
                     storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
-                    sendUserToNextStep(context, USER_PASS_REVIEW_ADD_STUDENT_REVIEW);
                     //удаляю запись по id из списка, т.к. при удалении записи на ревью и повторной записи, выводится
                     //сообщение: Выбранное Вами ревью уже заполнено!
                     reviewsIndex.keySet().remove(vkId);
+                    sendUserToNextStep(context, USER_PASS_REVIEW_ADD_STUDENT_REVIEW);
                 } else {
                     throw new ProcessInputException("Выбранное Вами ревью уже заполнено!\n\nВыбери удобное время и дату для записи, всё время и дата указывается в МСК " +
                             "часовом поясе, для выбора отправь в ответе число соответствующее удобному для тебя времени.\n\n");
@@ -107,8 +107,8 @@ public class UserPassReviewGetListReview extends Step {
                 // если idReview равно отрицательному числу, значит запись на данное ревью не доступна,
                 // т.к. в это время я сам принимаю ревью
             } else if (idReview < 0L) {
-              //сюда мы могли попасть только если выбранное ревью пересекается с одним из наших
-              //сейчас мы сюда попасть не можем (т. к. проверка на пересечение исключена)
+                //сюда мы могли попасть только если выбранное ревью пересекается с одним из наших
+                //сейчас мы сюда попасть не можем (т. к. проверка на пересечение исключена)
                 // получаю ревью на которое нет возможности записаться
                 Review reviewNoAccess = context.getReviewService().getReviewById(Math.abs(idReview));
                 // получаю список моих ревью, которые пересекаются с выбранным ревью
@@ -132,13 +132,13 @@ public class UserPassReviewGetListReview extends Step {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(context.getInput())[0];
             if ("/start".equals(command)) {
+                reviewsIndex.keySet().remove(vkId);
+                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
                 sendUserToNextStep(context, START);
-                reviewsIndex.keySet().remove(vkId);
-                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
             } else if ("назад".equals(command)) {
-                sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
                 reviewsIndex.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
             }
@@ -151,7 +151,6 @@ public class UserPassReviewGetListReview extends Step {
         ReviewService reviewService = context.getReviewService();
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
-        Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
         ////Set<Review> reviewsSetNoAccess = new HashSet<>();
         if (reviewsIndex.get(vkId).isEmpty()) {
             return "К сожалению, сейчас никто не готов принять " +
@@ -164,7 +163,7 @@ public class UserPassReviewGetListReview extends Step {
         StringBuilder reviewList = new StringBuilder("Выбери удобное время и дату для записи, всё время и дата указывается в МСК часовом поясе, для выбора отправь в " +
                 "ответе число соответствующее удобному для тебя времени.\n\n");
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
-        for(Map.Entry<Integer,Long> indexesMap : reviewsIndex.get(vkId).entrySet()) {
+        for (Map.Entry<Integer, Long> indexesMap : reviewsIndex.get(vkId).entrySet()) {
             ////if (reviewsSetNoAccess.contains(review)) {
             ////    indexList.put(i, -review.getId());
             ////} else {

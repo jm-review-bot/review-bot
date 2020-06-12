@@ -4,19 +4,18 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
-import spring.app.service.abstraction.ThemeService;
 import spring.app.util.StringParser;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 import static spring.app.util.Keyboards.DELETE_STUDENT_REVIEW;
 
 @Component
@@ -40,7 +39,7 @@ public class UserPassReviewAddTheme extends Step {
                     .append(" RP")
                     .append("\n");
         }
-        context.getStorageService().updateUserStorage(context.getVkId(),USER_PASS_REVIEW_ADD_THEME,Arrays.asList(themeList.toString()));
+        context.getStorageService().updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME, Arrays.asList(themeList.toString()));
     }
 
     @Override
@@ -95,14 +94,14 @@ public class UserPassReviewAddTheme extends Step {
                             "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
                     StringParser.localDateTimeToString(studentReview.getReview().getDate()));
         } else {
-            return context.getStorageService().getUserStorage(context.getVkId(),USER_PASS_REVIEW_ADD_THEME).get(0);
+            return context.getStorageService().getUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME).get(0);
         }
     }
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
         StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-        if(studentReview != null) {
+        if (studentReview != null) {
             StringBuilder keys = new StringBuilder();
             keys
                     .append(this.getRowDelimiterString())

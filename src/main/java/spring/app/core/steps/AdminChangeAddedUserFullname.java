@@ -10,7 +10,6 @@ import spring.app.service.abstraction.UserService;
 
 import static spring.app.core.StepSelector.ADMIN_ADD_USER;
 import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
-import static spring.app.util.Keyboards.NO_KB;
 
 /**
  * @author AkiraRokudo on 23.05.2020 in one of sun day

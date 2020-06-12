@@ -88,8 +88,7 @@ public abstract class Step {
                     .append("[\n")
                     .append(buttons)
                     .append("]\n");
-        }
-        else {
+        } else {
             result.append(buttons);
         }
         result.append(getFooterKeyboardString());
