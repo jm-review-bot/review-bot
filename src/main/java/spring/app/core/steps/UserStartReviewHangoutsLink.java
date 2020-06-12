@@ -1,7 +1,5 @@
 package spring.app.core.steps;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -14,20 +12,20 @@ import spring.app.util.StringParser;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class UserStartReviewHangoutsLink extends Step {
 
-    private final static Logger log = LoggerFactory.getLogger(UserStartReviewHangoutsLink.class);
+    public UserStartReviewHangoutsLink() {
+        super("Чтобы начать ревью, необходимо создать разговор в hangouts, для этого перейди по ссылке https://hangouts.google.com/hangouts/_/ ," +
+                " подключись к диалогу нажми \"пригласить участников\" и скопируй ссылку." +
+                " Важно! Не копируй ссылку из браузерной строки, копировать надо именно ссылку из модального окна приглашения участников." +
+                " Эту ссылку отправь ответным сообщением. ", DEF_BACK_KB);
+    }
 
     @Override
     public void enter(BotContext context) {
-        text = "Чтобы начать ревью, необходимо создать разговор в hangouts, для этого перейди по ссылке https://hangouts.google.com/hangouts/_/ ," +
-                " подключись к диалогу нажми \"пригласить участников\" и скопируй ссылку." +
-                " Важно! Не копируй ссылку из браузерной строки, копировать надо именно ссылку из модального окна приглашения участников." +
-                " Эту ссылку отправь ответным сообщением. ";
-        keyboard = BACK_KB;
     }
 
     @Override
@@ -36,11 +34,11 @@ public class UserStartReviewHangoutsLink extends Step {
         Integer vkId = context.getVkId();
         String userInput = context.getInput();
         if (userInput.equalsIgnoreCase("назад")) {
-            nextStep = USER_MENU;
             storageService.removeUserStorage(vkId, USER_MENU);
+            sendUserToNextStep(context, USER_MENU);
         } else if (userInput.equalsIgnoreCase("/start")) {
-            nextStep = START;
             storageService.removeUserStorage(vkId, USER_MENU);
+            sendUserToNextStep(context, START);
         } else if (StringParser.isHangoutsLink(userInput)) {
             // достаем reviewId, сохраненный на предыдущем шаге, достаем список студентов, записанных на ревью
             Long reviewId = Long.parseLong(storageService.getUserStorage(vkId, USER_MENU).get(0));
@@ -50,12 +48,26 @@ public class UserStartReviewHangoutsLink extends Step {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step userStep = context.getStepHolder().getSteps().get(user.getChatStep());
                 String hangoutsLink = "Ревью началось, вот ссылка для подключения: " + userInput;
-                context.getVkService().sendMessage(hangoutsLink, userStep.getKeyboard(), user.getVkId());
-                log.warn("Студенту с id {} отправлено сообщение: {}", user.getVkId(), hangoutsLink);
+                BotContext studentContext = new BotContext(user, user.getVkId(), "", user.getRole(),
+                        context.getUserService(), context.getThemeService(), context.getReviewService(),
+                        context.getRoleService(), context.getVkService(), context.getQuestionService(),
+                        context.getStepHolder(), context.getStudentReviewAnswerService(), context.getStudentReviewService(),
+                        context.getStorageService());
+                context.getVkService().sendMessage(hangoutsLink, userStep.getComposeKeyboard(studentContext), user.getVkId());
             }
-            nextStep = USER_START_REVIEW_RULES;
+            sendUserToNextStep(context, USER_START_REVIEW_RULES);
         } else {
             throw new ProcessInputException("Некорректный ввод данных...");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return "";
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

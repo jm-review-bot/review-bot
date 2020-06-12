@@ -8,15 +8,17 @@ import spring.app.util.StringParser;
 import java.util.Arrays;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 
 @Component
 public class AdminMenu extends Step {
 
+    public AdminMenu() {
+        super("", DEF_ADMIN_MENU_KB);
+    }
+
     @Override
     public void enter(BotContext context) {
-        text = String.format("Привет %s! Ты в админке", context.getUser().getFirstName());
-        keyboard = ADMIN_MENU_KB;
     }
 
     @Override
@@ -24,17 +26,29 @@ public class AdminMenu extends Step {
         String command = StringParser.toWordsArray(context.getInput())[0];
         Integer vkId = context.getVkId();
         if ("добавить".equals(command)) {
-            nextStep = ADMIN_ADD_USER;
+            sendUserToNextStep(context, ADMIN_ADD_USER);//в этом шаге все зависит от режима
+        } else if ("изменить".equals(command)) {
+            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("edit"));
+            sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
         } else if ("удалить".equals(command)) {
             context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("delete"));
-            nextStep = ADMIN_USERS_LIST;//в этом шаге все зависит от режима
+            sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
         } else if ("/start".equals(command)) {
-            nextStep = START;
+            sendUserToNextStep(context, START);
         } else if ("главное".equalsIgnoreCase(command)) {
-            nextStep = USER_MENU;
+            sendUserToNextStep(context, USER_MENU);
         } else {
-            keyboard = ADMIN_MENU_KB;
             throw new ProcessInputException("Введена неверная команда...");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return String.format("Привет %s! Ты в админке", context.getUser().getFirstName());
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

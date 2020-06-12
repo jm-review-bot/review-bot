@@ -7,6 +7,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
+import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
@@ -15,12 +16,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 
 @Component
 public class UserPassReviewGetListReview extends Step {
-    private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();
+
+    private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();//по vkId хранит позицию (в списке выбора ревью для записи [этот список выведен был пользователю])
+    // и айди ревью соответственно
+
+    public UserPassReviewGetListReview() {
+        //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
+        super("", DEF_BACK_KB);
+    }
 
     @Override
     public void enter(BotContext context) {
@@ -29,10 +37,14 @@ public class UserPassReviewGetListReview extends Step {
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
         Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
         // получаю список созданных мною ревью, если они имеется
-        List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
-        Set<Review> reviewsSetNoAccess = new HashSet<>();
         //получаю список ревью по теме
         List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+
+        // закомментировал проблемный функционал при попытке записаться на ревью будучи ревьюером на другом
+
+        /*
+        List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+        Set<Review> reviewsSetNoAccess = new HashSet<>();
         if (reviewsMy.size() > 0) {
             // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
             Set<Review> reviewsSetTemp = new HashSet<>();
@@ -51,45 +63,16 @@ public class UserPassReviewGetListReview extends Step {
                 reviewsSetTemp.clear();
             }
         }
+        */
+
         //список ревью сортирую по дате
         reviewsAll.sort(Comparator.comparing(Review::getDate));
-
-        //если пользователь пришел с прошлого шага, ему выводится список ревью по выбранной теме
-        //если пользователь повторно заходит в данный шаг, значит выбранное ревью уже занято
-        StringBuilder reviewList = new StringBuilder();
-        if (reviewsIndex.get(vkId) == null) {
-            reviewList.append("Выбери удобное время и дату для записи, всё время и дата указывается в МСК часовом поясе, для выбора отправь в " +
-                    "ответе число соответствующее удобному для тебя времени.\n\n");
-        } else {
-            reviewList.append("Выбранное Вами ревью уже заполнено!\n\nВыбери удобное время и дату для записи, всё время и дата указывается в МСК " +
-                    "часовом поясе, для выбора отправь в ответе число соответствующее удобному для тебя времени.\n\n");
-            reviewsIndex.keySet().remove(vkId);
-        }
-
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
-        Integer i = 1;
-        Map<Integer, Long> indexList = new HashMap<>();
-        for (Review review : reviewsAll) {
-            if (reviewsSetNoAccess.contains(review)) {
-                indexList.put(i, -review.getId());
-            } else {
-                indexList.put(i, review.getId());
-            }
-
-            reviewsIndex.putIfAbsent(vkId, indexList);
-            reviewList.append("[")
-                    .append(i)
-                    .append("]")
-                    .append(" дата: ")
-                    .append(review.getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
-            if (reviewsSetNoAccess.contains(review)) {
-                reviewList.append(" (запись невозможна: вы проводите ревью в это время)");
-            }
-            reviewList.append("\n");
-            i++;
+        Map<Integer, Long> indexMap = new HashMap<>();
+        for (int i = 0; i < reviewsAll.size(); i++) {
+            indexMap.put(i, reviewsAll.get(i).getId());
         }
-        text = reviewList.toString();
-        keyboard = BACK_KB;
+        reviewsIndex.put(vkId, indexMap);
     }
 
     @Override
@@ -102,7 +85,7 @@ public class UserPassReviewGetListReview extends Step {
             //получаю список ревью, которые вывелись пользователю
             Map<Integer, Long> allReviewsAndIndex = reviewsIndex.get(vkId);
             //из списка ревью по порядковому номеру получаю id ревью, если null - значит введен номер ревью не доступный в списке
-            Long idReview = allReviewsAndIndex.get(command) != null ? reviewsIndex.get(vkId).get(command) : 0L;
+            Long idReview = allReviewsAndIndex.get(command) != null ? allReviewsAndIndex.get(command) : 0L;
             if (idReview > 0L) {
                 Review review = context.getReviewService().getReviewById(idReview);
                 //проверяю остались ли свободные места в выбранном ревью
@@ -113,23 +96,19 @@ public class UserPassReviewGetListReview extends Step {
                     list.add(StringParser.localDateTimeToString(review.getDate()));
                     storageService.updateUserStorage(vkId, USER_PASS_REVIEW_GET_LIST_REVIEW, list);
                     storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
-                    nextStep = USER_PASS_REVIEW_ADD_STUDENT_REVIEW;
                     //удаляю запись по id из списка, т.к. при удалении записи на ревью и повторной записи, выводится
                     //сообщение: Выбранное Вами ревью уже заполнено!
                     reviewsIndex.keySet().remove(vkId);
+                    sendUserToNextStep(context, USER_PASS_REVIEW_ADD_STUDENT_REVIEW);
                 } else {
-                    // если количество ревью по выбранной теме меньше однго, возвращаюсь на прошлый шаг
-                    if (allReviewsAndIndex.size() == 1) {
-                        nextStep = USER_PASS_REVIEW_ADD_THEME;
-                        reviewsIndex.keySet().remove(vkId);
-                    } else {
-                        // если выбранном ревью не осталось свободных мест, занчит повторяем данный шаг
-                        nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
-                    }
+                    throw new ProcessInputException("Выбранное Вами ревью уже заполнено!\n\nВыбери удобное время и дату для записи, всё время и дата указывается в МСК " +
+                            "часовом поясе, для выбора отправь в ответе число соответствующее удобному для тебя времени.\n\n");
                 }
                 // если idReview равно отрицательному числу, значит запись на данное ревью не доступна,
                 // т.к. в это время я сам принимаю ревью
             } else if (idReview < 0L) {
+                //сюда мы могли попасть только если выбранное ревью пересекается с одним из наших
+                //сейчас мы сюда попасть не можем (т. к. проверка на пересечение исключена)
                 // получаю ревью на которое нет возможности записаться
                 Review reviewNoAccess = context.getReviewService().getReviewById(Math.abs(idReview));
                 // получаю список моих ревью, которые пересекаются с выбранным ревью
@@ -153,16 +132,58 @@ public class UserPassReviewGetListReview extends Step {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(context.getInput())[0];
             if ("/start".equals(command)) {
-                nextStep = START;
                 reviewsIndex.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                sendUserToNextStep(context, START);
             } else if ("назад".equals(command)) {
-                nextStep = USER_PASS_REVIEW_ADD_THEME;
                 reviewsIndex.keySet().remove(vkId);
                 storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
+                sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
             }
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        StorageService storageService = context.getStorageService();
+        ReviewService reviewService = context.getReviewService();
+        Integer vkId = context.getVkId();
+        //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
+        ////Set<Review> reviewsSetNoAccess = new HashSet<>();
+        if (reviewsIndex.get(vkId).isEmpty()) {
+            return "К сожалению, сейчас никто не готов принять " +
+                    "ревью, напиши в общее обсуждение сообщение с просьбой добавить кого-то " +
+                    "ревью, чтобы не ждать пока оно появится. Кто-то обязательно откликнется! " +
+                    "Если проверяющего не нашлось сообщи сразу же об этом Станиславу Сорокину или Герману Севостьянову";
+        }
+        //если пользователь пришел с прошлого шага, ему выводится список ревью по выбранной теме
+        //если пользователь повторно заходит в данный шаг, значит выбранное ревью уже занято
+        StringBuilder reviewList = new StringBuilder("Выбери удобное время и дату для записи, всё время и дата указывается в МСК часовом поясе, для выбора отправь в " +
+                "ответе число соответствующее удобному для тебя времени.\n\n");
+        //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
+        for (Map.Entry<Integer, Long> indexesMap : reviewsIndex.get(vkId).entrySet()) {
+            ////if (reviewsSetNoAccess.contains(review)) {
+            ////    indexList.put(i, -review.getId());
+            ////} else {
+            ////    indexList.put(i, review.getId());
+            ////}
+            reviewList.append("[")
+                    .append(indexesMap.getKey())
+                    .append("]")
+                    .append(" дата: ")
+                    .append(reviewService.getReviewById(indexesMap.getValue()).getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
+            ////if (reviewsSetNoAccess.contains(review)) {
+            ////    reviewList.append(" (запись невозможна: вы проводите ревью в это время)");
+            ////}
+            reviewList.append("\n");
+        }
+        return reviewList.toString();
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

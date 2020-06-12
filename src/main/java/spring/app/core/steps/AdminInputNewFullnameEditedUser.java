@@ -5,20 +5,21 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.User;
-import spring.app.service.abstraction.UserService;
 
-import static spring.app.core.StepSelector.ADMIN_ADD_USER;
-import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
+import java.util.ArrayList;
+import java.util.List;
+
+import static spring.app.core.StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME;
+import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER;
 
 /**
- * @author AkiraRokudo on 23.05.2020 in one of sun day
+ * @author AkiraRokudo on 27.05.2020 in one of sun day
  */
 @Component
-public class AdminChangeAddedUserFullname extends Step {
+public class AdminInputNewFullnameEditedUser extends Step {
 
-    public AdminChangeAddedUserFullname() {
-        super("Введите новое имя и фамилию. Например: Иван Иванов", "");
+    public AdminInputNewFullnameEditedUser() {
+        super("В ответ на данное сообщение отправьте имя и фамилию в формате {имя} {фамилия}", "");
     }
 
     @Override
@@ -35,13 +36,11 @@ public class AdminChangeAddedUserFullname extends Step {
             //Проверим, что есть только символы алфавитов
             boolean allSymbolAlphabet = newFullName.replaceAll(" ", "").chars().allMatch(Character::isLetter);
             if (allSymbolAlphabet) {
-                UserService userService = context.getUserService();
-                Long addedUserId = Long.parseLong(context.getStorageService().getUserStorage(vkId, ADMIN_ADD_USER).get(0));
-                User addedUser = userService.getUserById(addedUserId);
-                addedUser.setFirstName(firstAndLastName[0]);
-                addedUser.setLastName(firstAndLastName[1]);
-                userService.updateUser(addedUser);
-                sendUserToNextStep(context, ADMIN_SET_THEME_ADDED_USER);
+                List<String> newUserFullName = new ArrayList<>();
+                newUserFullName.add(firstAndLastName[0]);
+                newUserFullName.add(firstAndLastName[1]);
+                context.getStorageService().updateUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, newUserFullName);
+                sendUserToNextStep(context, ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME);
             } else {
                 throw new ProcessInputException("В новом имени фамилии присутствуют не алфавитные символы");
             }
@@ -59,4 +58,5 @@ public class AdminChangeAddedUserFullname extends Step {
     public String getDynamicKeyboard(BotContext context) {
         return "";
     }
+
 }

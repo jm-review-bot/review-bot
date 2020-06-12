@@ -34,5 +34,4 @@ public interface ReviewService {
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
-    Review getOpenReviewByStudentVkId(Integer vkId);
 }
