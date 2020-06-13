@@ -3,6 +3,7 @@ package spring.app.core.steps;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
@@ -13,8 +14,11 @@ import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 @Component
 public class AdminMenu extends Step {
 
-    public AdminMenu() {
+    private final StorageService storageService;
+
+    public AdminMenu(StorageService storageService) {
         super("", DEF_ADMIN_MENU_KB);
+        this.storageService = storageService;
     }
 
     @Override
@@ -28,10 +32,10 @@ public class AdminMenu extends Step {
         if ("добавить".equals(command)) {
             sendUserToNextStep(context, ADMIN_ADD_USER);//в этом шаге все зависит от режима
         } else if ("изменить".equals(command)) {
-            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("edit"));
+            storageService.updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("edit"));
             sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
         } else if ("удалить".equals(command)) {
-            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("delete"));
+            storageService.updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("delete"));
             sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
         } else if ("/start".equals(command)) {
             sendUserToNextStep(context, START);

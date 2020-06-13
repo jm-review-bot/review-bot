@@ -8,6 +8,7 @@ import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
+import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
@@ -21,8 +22,18 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminAddUser extends Step {
 
-    public AdminAddUser() {
+    private final StorageService storageService;
+    private final UserService userService;
+    private final VkService vkService;
+    private final RoleService roleService;
+
+    public AdminAddUser(StorageService storageService, UserService userService,
+                        VkService vkService, RoleService roleService) {
         super("Введите ссылку на профиль нового пользователя.\n", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.userService = userService;
+        this.vkService = vkService;
+        this.roleService = roleService;
     }
 
     @Override
@@ -31,10 +42,8 @@ public class AdminAddUser extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        VkService vkService = context.getVkService();
-        UserService userService = context.getUserService();
-        StorageService storageService = context.getStorageService();
-        Role userRole = context.getRoleService().getRoleByName("USER");
+
+        Role userRole = roleService.getRoleByName("USER");
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
 

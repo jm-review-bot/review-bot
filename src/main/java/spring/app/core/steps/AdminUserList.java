@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
@@ -21,8 +22,13 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminUserList extends Step {
 
-    public AdminUserList() {
+    private final StorageService storageService;
+    private final UserService userService;
+
+    public AdminUserList(StorageService storageService, UserService userService) {
         super("", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.userService = userService;
     }
 
     @Override
@@ -33,7 +39,6 @@ public class AdminUserList extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String wordInput = StringParser.toWordsArray(currentInput)[0];
         if (wordInput.equals("назад")) {
@@ -64,7 +69,6 @@ public class AdminUserList extends Step {
     public String getDynamicText(BotContext context) {
         String text = "";
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);//Опасно без проверки то..
         String afterModificationMessage = null;
         //Блок для сообщения после изменения\удаления.
@@ -87,7 +91,7 @@ public class AdminUserList extends Step {
         // создаем лист строк, куда будем складывать Id Юзеров, которых мы показываем админу в боте
         List<String> users = new ArrayList<>();
         final int[] i = {1};
-        context.getUserService().getAllUsers().stream()
+        userService.getAllUsers().stream()
                 .sorted(Comparator.comparing(User::getLastName))
                 .forEach(user -> {
                     userList.append("[").append(i[0]++).append("] ")

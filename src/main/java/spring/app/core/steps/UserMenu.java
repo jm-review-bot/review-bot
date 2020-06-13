@@ -9,6 +9,8 @@ import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -22,12 +24,21 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class UserMenu extends Step {
 
+    private final StorageService storageService;
+    private final ReviewService reviewService;
+    private final UserService userService;
+    private final StudentReviewService studentReviewService;
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
-    public UserMenu() {
+    public UserMenu(StorageService storageService, ReviewService reviewService,
+                    UserService userService, StudentReviewService studentReviewService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_USER_MENU_KB);
+        this.storageService = storageService;
+        this.reviewService = reviewService;
+        this.userService = userService;
+        this.studentReviewService = studentReviewService;
     }
 
     @Override
@@ -37,11 +48,10 @@ public class UserMenu extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         String command = StringParser.toWordsArray(context.getInput())[0];
         if (command.equals("начать")) { // (Начать прием ревью)
             // получаем список всех ревью, которые проводит пользователь
-            List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
+            List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
                 // берем из списка то ревью, которое начинается позже текущего времени с самой поздней датой
                 Review nearestReview = userReviews.stream()
@@ -56,7 +66,7 @@ public class UserMenu extends Step {
                 } else {
                     // то смотрим записан ли кто-то на него
                     Long reviewId = nearestReview.getId();
-                    List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+                    List<User> students = userService.getStudentsByReviewId(reviewId);
                     if (!students.isEmpty()) {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
                         storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
@@ -65,10 +75,10 @@ public class UserMenu extends Step {
                     } else {
                         // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
                         nearestReview.setOpen(false);
-                        context.getReviewService().updateReview(nearestReview);
-                        User user = context.getUserService().getByVkId(vkId);
+                        reviewService.updateReview(nearestReview);
+                        User user = userService.getByVkId(vkId);
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
-                        context.getUserService().updateUser(user);
+                        userService.updateUser(user);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
                     }
                 }
@@ -112,11 +122,11 @@ public class UserMenu extends Step {
                         "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
                 , user.getFirstName(), user.getReviewPoint());
         Integer vkId = context.getVkId();
-        List<String> currentStorage = context.getStorageService().getUserStorage(vkId, USER_MENU);
+        List<String> currentStorage = storageService.getUserStorage(vkId, USER_MENU);
         if (currentStorage != null) {
             //если кому потребуется выводить кучу текста - пусть стримами бегает по элементам. А пока тут нужен только первый
             text = currentStorage.get(0) + text;
-            context.getStorageService().removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_MENU);
         }
         return text;
     }
@@ -124,12 +134,11 @@ public class UserMenu extends Step {
     @Override
     public String getDynamicKeyboard(BotContext context) {
         Integer vkId = context.getVkId();
-        ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
         List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
-        List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
+        List<StudentReview> openStudentReview = studentReviewService.getOpenReviewByStudentVkId(vkId);
         if (!openStudentReview.isEmpty()) {
             if (openStudentReview.size() > 1) {
                 //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
@@ -148,11 +157,10 @@ public class UserMenu extends Step {
         }
         //кнопка отмены ревью для студента
         if (studentReview != null) {
-            if (!isEmpty) {
-                keys.append(this.getRowDelimiterString());
-                isEmpty = false;
-            }
-            keys.append(REVIEW_CANCEL_FR);
+            keys
+                    .append(this.getRowDelimiterString())
+                    .append(REVIEW_CANCEL_FR);
+            isEmpty = false;
         }
         if (!isEmpty) {
             return keys.toString();

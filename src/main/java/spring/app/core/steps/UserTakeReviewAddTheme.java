@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.ThemeService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,9 +17,15 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class UserTakeReviewAddTheme extends Step {
-    public UserTakeReviewAddTheme() {
+
+    private final StorageService storageService;
+    private final ThemeService themeService;
+
+    public UserTakeReviewAddTheme(StorageService storageService, ThemeService themeService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.themeService = themeService;
     }
 
     @Override
@@ -26,20 +33,19 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n" +
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
-        List<Theme> themes = context.getThemeService().getAllThemes();
+        List<Theme> themes = themeService.getAllThemes();
         for (Theme position : themes) {
             themeList.append(String.format("[%d] %s\n", position.getPosition(), position.getTitle()));
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());
-        context.getStorageService().updateUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME, listTheme);
+        storageService.updateUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME, listTheme);
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        StorageService storageService = context.getStorageService();
         String userInput = context.getInput();
-        List<Theme> themes = context.getThemeService().getAllThemes();
+        List<Theme> themes = themeService.getAllThemes();
         Integer vkId = context.getVkId();
         List<String> themePositionsList = themes.stream()
                 .map(Theme::getPosition)
@@ -47,9 +53,9 @@ public class UserTakeReviewAddTheme extends Step {
                 .collect(toList());
         if (themePositionsList.contains(userInput)) {
             // вытаскиваем тему по позиции, позиция соответствует пользовательскому вводу
-            Theme selectedTheme = context.getThemeService().getByPosition(Integer.parseInt(userInput));
+            Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
             // проверяем, что сдали ревью по теме, которую хотим принять
-            List<Theme> passedThemesIds = context.getThemeService().getPassedThemesByUser(vkId);
+            List<Theme> passedThemesIds = themeService.getPassedThemesByUser(vkId);
             if (passedThemesIds.contains(selectedTheme)) {
                 // складываем в хранилище для использования в следующих шагах
                 storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(selectedTheme.getId().toString()));
@@ -76,7 +82,7 @@ public class UserTakeReviewAddTheme extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        List<String> themeList = context.getStorageService().getUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME);
+        List<String> themeList = storageService.getUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME);
         return themeList.get(0);
     }
 
