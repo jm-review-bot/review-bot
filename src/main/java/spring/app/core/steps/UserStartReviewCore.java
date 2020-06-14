@@ -140,25 +140,9 @@ public class UserStartReviewCore extends Step {
                                 .append("\n");
                     }
                 }
-                reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP", theme.getReviewPoint(), student.getReviewPoint()));
+                reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP\n", theme.getReviewPoint(), student.getReviewPoint()));
                 // отправляем студенту результаты ревью
-                Step userStep = context.getStepHolder().getSteps().get(student.getChatStep());
-                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(),
-                        context.getUserService(), context.getThemeService(), context.getReviewService(),
-                        context.getRoleService(), context.getVkService(), context.getQuestionService(),
-                        context.getStepHolder(), context.getStudentReviewAnswerService(), context.getStudentReviewService(),
-                        context.getStorageService());
-
-                reviewResults.append("Для улучшения качества обучения дайте обратную связь после ревью");
-                // отправляем студенту результаты ревью
-                context.getStorageService().updateUserStorage(student.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
-                //Step userStep = context.getStepHolder().getSteps().get(USER_FEEDBACK_CONFIRMATION);
-                student.setChatStep(USER_FEEDBACK_CONFIRMATION);
-                student.setViewed(true);
-                context.getUserService().updateUser(student);
-                context.getVkService().sendMessage(reviewResults.toString(), FEEDBACK_CONFIRM_KB, student.getVkId());//TODO
-
-                context.getVkService().sendMessage(reviewResults.toString(), userStep.getComposeKeyboard(studentContext), student.getVkId());
+                sendUserToNextStep(context, USER_FEEDBACK_CONFIRMATION);
             }
         }
     }

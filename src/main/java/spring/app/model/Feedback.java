@@ -33,38 +33,6 @@ public class Feedback {
     @Column(name = "student_comment")
     private String comment;
 
-    public Feedback(Long id, User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview) {
-        this.id = id;
-        this.user = user;
-        this.studentReview = studentReview;
-        this.ratingReviewer = ratingReviewer;
-        this.ratingReview = ratingReview;
-    }
-
-    public Feedback(User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview) {
-        this.user = user;
-        this.studentReview = studentReview;
-        this.ratingReviewer = ratingReviewer;
-        this.ratingReview = ratingReview;
-    }
-
-    public Feedback(User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview, String comment) {
-        this.user = user;
-        this.studentReview = studentReview;
-        this.ratingReviewer = ratingReviewer;
-        this.ratingReview = ratingReview;
-        this.comment = comment;
-    }
-
-    public Feedback(Long id, User user, StudentReview studentReview, Integer ratingReviewer, Integer ratingReview, String comment) {
-        this.id = id;
-        this.user = user;
-        this.studentReview = studentReview;
-        this.ratingReviewer = ratingReviewer;
-        this.ratingReview = ratingReview;
-        this.comment = comment;
-    }
-
     public Feedback() {
     }
 

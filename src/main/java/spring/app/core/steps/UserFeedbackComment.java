@@ -44,17 +44,21 @@ public class UserFeedbackComment extends Step {
 
         addFeedback.setRatingReview(Integer.valueOf(context.getStorageService()
                 .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT).get(0)));
+        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT);
 
         addFeedback.setRatingReviewer(Integer.valueOf(context.getStorageService()
                 .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT).get(0)));
+        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT);
 
         addFeedback.setStudentReview(context.getStudentReviewService()
                 .getStudentReviewById(Long.valueOf(context.getStorageService()
                         .getUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION).get(0))));
+        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
 
         feedbackService.addFeedback(addFeedback);
 
         sendUserToNextStep(context, USER_MENU);
+
     }
 
     @Override
