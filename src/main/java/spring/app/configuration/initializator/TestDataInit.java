@@ -173,6 +173,15 @@ public class TestDataInit {
         nikolay.setChatStep(StepSelector.START);
         userService.addUser(nikolay);
 
+        User kirill = new User();
+        kirill.setFirstName("Кирилл");
+        kirill.setLastName("Башарин");
+        kirill.setReviewPoint(4);
+        kirill.setVkId(36654046);
+        kirill.setRole(roleAdmin);
+        kirill.setChatStep(StepSelector.START);
+        userService.addUser(kirill);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);

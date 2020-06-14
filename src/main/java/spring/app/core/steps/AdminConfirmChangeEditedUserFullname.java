@@ -53,7 +53,6 @@ public class AdminConfirmChangeEditedUserFullname extends Step {
                 context.getUser().setFirstName(userFullname.get(0));
                 context.getUser().setLastName(userFullname.get(1));
             }
-            System.out.println(context.getUser().getFirstName());
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else if ("отмена".equals(input)) {
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
