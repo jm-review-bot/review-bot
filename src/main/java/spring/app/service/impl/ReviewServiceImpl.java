@@ -90,4 +90,8 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId);
     }
 
+    @Override
+    public List<Review> getMyOverdueReviews(Integer vkId) {
+        return reviewDao.getMyOverdueReviews(vkId, LocalDateTime.now());
+    }
 }

@@ -1,5 +1,6 @@
 package spring.app.util;
 
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import spring.app.core.BotContext;
@@ -9,10 +10,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -155,6 +153,11 @@ public class StringParser {
     public static boolean isHangoutsLink(String link) {
         String prefix = "https://hangouts.google.com/call/";
         return link.startsWith(prefix);
+    }
+
+    public static String convertNumberToHumanReadableString(Integer number) {
+        RuleBasedNumberFormat nf = new RuleBasedNumberFormat(Locale.forLanguageTag("ru"), RuleBasedNumberFormat.SPELLOUT);
+        return nf.format(number);
     }
 
     //TODO: больше не используется.

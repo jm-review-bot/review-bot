@@ -25,4 +25,6 @@ public interface ReviewDao extends GenericDao<Long, Review> {
     List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
     void bulkDeleteByUserId(Long id);
+
+    List<Review> getMyOverdueReviews(Integer vkId, LocalDateTime localDateTime);
 }

@@ -34,4 +34,5 @@ public interface ReviewService {
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
+    List<Review> getMyOverdueReviews(Integer vkId);
 }

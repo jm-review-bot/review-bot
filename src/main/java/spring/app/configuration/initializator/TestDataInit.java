@@ -197,6 +197,15 @@ public class TestDataInit {
         kirill.setChatStep(StepSelector.START);
         userService.addUser(kirill);
 
+        User dima = new User();
+        dima.setFirstName("Дмитрий");
+        dima.setLastName("Шепелев");
+        dima.setReviewPoint(0);
+        dima.setVkId(147150209);
+        dima.setRole(roleAdmin);
+        dima.setChatStep(StepSelector.START);
+        userService.addUser(dima);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -320,6 +329,13 @@ public class TestDataInit {
         springReviewPassed4.setTheme(hibernate);
         springReviewPassed4.setUser(maksim);
         reviewService.addReview(springReviewPassed4);
+
+        Review springReviewPassed5 = new Review();
+        springReviewPassed5.setDate(LocalDateTime.of(2020, 6, 15, 11, 0));
+        springReviewPassed5.setOpen(true);
+        springReviewPassed5.setTheme(core);
+        springReviewPassed5.setUser(dima);
+        reviewService.addReview(springReviewPassed5);
 
         // add student reviews
         StudentReview studentReview = new StudentReview();
