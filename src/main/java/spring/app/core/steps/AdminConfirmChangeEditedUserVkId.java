@@ -40,6 +40,9 @@ public class AdminConfirmChangeEditedUserVkId extends Step {
             String newUserVkId = storageService.getUserStorage(vkId, ADMIN_INPUT_NEW_VKID_EDITED_USER).get(0);
             Integer oldVkId = editingUser.getVkId();
             editingUser.setVkId(Integer.parseInt(newUserVkId));
+            if (vkId.equals(oldVkId)) {
+                context.getUser().setVkId(Integer.parseInt(newUserVkId));
+            }
             context.getUserService().updateUser(editingUser);
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
             //удалим все его хранилища по старому айдишнику - обращаться к ним будет некорректно, а хранить - глупо
