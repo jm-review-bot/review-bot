@@ -153,8 +153,6 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("id", vkId).getResultList();
     }
 
-
-
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
     public void bulkDeleteByUserId(Long id) {
@@ -165,5 +163,14 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         entityManager.createQuery("DELETE FROM Review WHERE user.id = :id")
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Review> getMyOverdueReviews(Integer vkId, LocalDateTime localDateTime) {
+        return entityManager
+                .createQuery("SELECT r FROM Review r JOIN FETCH r.theme WHERE r.user.vkId = :id AND r.isOpen = true AND r.date < :date", Review.class)
+                .setParameter("id", vkId)
+                .setParameter("date", localDateTime)
+                .getResultList();
     }
 }

@@ -8,15 +8,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
+import spring.app.model.Review;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
+import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 @Component
 public class BotScheduler {
@@ -105,5 +108,38 @@ public class BotScheduler {
     public void scheduleClearCache() {
         log.info("Скрипт запущен. Началась очистка кэша.");
         storageService.clearStorage();
+    }
+
+    // уведомление пользователя об его просроченных ревью
+    @Scheduled(fixedRate = 60 * 1000) // TODO поправить частоту проверки
+    public void checkUserReviewDelays() {
+        List<User> allUsers = userService.getAllUsers();
+        for (User user: allUsers) {
+            Integer vkId = user.getVkId();
+            List<Review> overdueReviews = reviewService.getMyOverdueReviews(vkId);
+            if (overdueReviews.size() > 1) {
+                StringBuilder builder = new StringBuilder();
+                builder.append(
+                    String.format(
+                        "У вас имеется %s просроченных ревью. Выберите то, которое хотите начать:\n",
+                        StringParser.convertNumberToHumanReadableString(overdueReviews.size())
+                    )
+                );
+                IntStream.range(0, overdueReviews.size())
+                    .forEach(i -> {
+                        Review review = overdueReviews.get(i);
+                        String reviewStr = String.format(
+                            "[%d] %s %s\n",
+                            i + 1,
+                            review.getTheme().getTitle(),
+                            StringParser.localDateTimeToString(review.getDate())
+                        );
+                        builder.append(reviewStr);
+                    });
+
+                Step step = stepHolder.getSteps().get(user.getChatStep());
+                bot.sendMessage(builder.toString(), step.getKeyboard(), vkId);
+            }
+        }
     }
 }
