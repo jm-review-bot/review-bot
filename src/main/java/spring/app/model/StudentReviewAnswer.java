@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -31,7 +33,7 @@ public class StudentReviewAnswer {
     public StudentReviewAnswer() {
     }
 
-    public StudentReviewAnswer (StudentReview studentReview, Question question, Boolean isRight) {
+    public StudentReviewAnswer(StudentReview studentReview, Question question, Boolean isRight) {
         this.studentReview = studentReview;
         this.question = question;
         this.isRight = isRight;
