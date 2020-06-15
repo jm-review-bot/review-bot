@@ -24,21 +24,30 @@ public class AdminMenu extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = StringParser.toWordsArray(context.getInput())[0];
-        Integer vkId = context.getVkId();
-        if ("добавить".equals(command)) {
-            sendUserToNextStep(context, ADMIN_ADD_USER);//в этом шаге все зависит от режима
-        } else if ("изменить".equals(command)) {
-            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("edit"));
-            sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
-        } else if ("удалить".equals(command)) {
-            context.getStorageService().updateUserStorage(vkId, ADMIN_MENU, Arrays.asList("delete"));
-            sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
-        } else if ("/start".equals(command)) {
-            sendUserToNextStep(context, START);
-        } else if ("главное".equalsIgnoreCase(command)) {
-            sendUserToNextStep(context, USER_MENU);
-        } else {
-            throw new ProcessInputException("Введена неверная команда...");
+        switch (command) {
+            case "добавить":
+                sendUserToNextStep(context, ADMIN_ADD_USER);
+                break;
+            case "изменить":
+                context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_MENU, Arrays.asList("edit"));
+                sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
+                break;
+            case "удалить":
+                context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_MENU, Arrays.asList("delete"));
+                sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
+                break;
+            case "/start":
+                sendUserToNextStep(context, START);
+                break;
+            case "ревью":
+                sendUserToNextStep(context, ADMIN_EDIT_REVIEW_GET_USER_LIST);
+                break;
+            case "главное":
+            case "Главное":
+                sendUserToNextStep(context, USER_MENU);
+                break;
+            default:
+                throw new ProcessInputException("Введена неверная команда...");
         }
     }
 
