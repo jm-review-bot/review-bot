@@ -38,7 +38,6 @@ public class StorageServiceImpl implements StorageService {
      * Сохраняет указанный List<String> в ячейку данному юзеру, для указанного шага.
      * Создает пустой Map (ячейку) для данного юзера, если раньше для него не было создана ячейка.
      */
-
     @Override
     public void updateUserStorage(Integer vkId, StepSelector step, List<String> listToSave) {
         STORAGE.putIfAbsent(vkId, new HashMap<>());
