@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import static spring.app.core.StepSelector.*;
@@ -13,8 +14,11 @@ import static spring.app.util.Keyboards.FEEDBACK_CONFIRM_KB;
 @Component
 public class UserFeedbackConfirmation extends Step {
 
-    public UserFeedbackConfirmation() {
+    private final StorageService storageService;
+
+    public UserFeedbackConfirmation(StorageService storageService) {
         super("Для улучшения качества обучения дайте обратную связь после ревью.", FEEDBACK_CONFIRM_KB);
+        this.storageService = storageService;
     }
 
     @Override
@@ -30,8 +34,7 @@ public class UserFeedbackConfirmation extends Step {
 
         if (wordInput.equals("отказаться")) {
             //clear cash
-            context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
-
+            storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
             sendUserToNextStep(context, USER_MENU);
         } else if (wordInput.equals("начать")) {
             sendUserToNextStep(context, USER_FEEDBACK_REVIEW_ASSESSMENT);

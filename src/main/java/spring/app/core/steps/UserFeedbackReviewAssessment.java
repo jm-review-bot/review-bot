@@ -18,14 +18,15 @@ import static spring.app.core.StepSelector.USER_FEEDBACK_REVIEW_ASSESSMENT;
 @Component
 public class UserFeedbackReviewAssessment extends Step {
 
+    private final StorageService storageService;
     @Value("${lower.bound}")
     private int lowBound;
-
     @Value("${upper.bound}")
     private int upBound;
 
-    public UserFeedbackReviewAssessment() {
+    public UserFeedbackReviewAssessment(StorageService storageService) {
         super("", "");
+        this.storageService = storageService;
     }
 
     @Override
@@ -36,7 +37,6 @@ public class UserFeedbackReviewAssessment extends Step {
     public void processInput(BotContext context)
             throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
 
-        StorageService storageService = context.getStorageService();
         String currentInput = context.getInput();
 
         if (StringParser.isNumeric(currentInput)) {

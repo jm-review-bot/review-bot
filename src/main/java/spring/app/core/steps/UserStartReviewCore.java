@@ -141,8 +141,26 @@ public class UserStartReviewCore extends Step {
                     }
                 }
                 reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP\n", theme.getReviewPoint(), student.getReviewPoint()));
+
+//                sendUserToNextStep(context, USER_FEEDBACK_CONFIRMATION);
+
+                reviewResults.append("\nДля улучшения качества обучения дайте обратную связь после ревью.");
                 // отправляем студенту результаты ревью
-                sendUserToNextStep(context, USER_FEEDBACK_CONFIRMATION);
+                context.getStorageService().updateUserStorage(student.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
+
+                Step userStep = context.getStepHolder().getSteps().get(USER_FEEDBACK_CONFIRMATION);
+                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(),
+                        context.getUserService(), context.getThemeService(), context.getReviewService(),
+                        context.getRoleService(), context.getVkService(), context.getQuestionService(),
+                        context.getStepHolder(), context.getStudentReviewAnswerService(), context.getStudentReviewService(),
+                        context.getStorageService());
+
+                student.setChatStep(USER_FEEDBACK_CONFIRMATION);
+                student.setViewed(true);
+                context.getUserService().updateUser(student);
+
+                context.getVkService().sendMessage(reviewResults.toString(), userStep.getComposeKeyboard(studentContext), student.getVkId());
+
             }
         }
     }

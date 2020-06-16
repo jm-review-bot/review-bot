@@ -8,6 +8,9 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Feedback;
 import spring.app.service.abstraction.FeedbackService;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import static spring.app.core.StepSelector.*;
@@ -16,12 +19,17 @@ import static spring.app.util.Keyboards.USER_FEEDBACK_ENDING_KB;
 @Component
 public class UserFeedbackComment extends Step {
 
-    @Autowired
-    private FeedbackService feedbackService;
+    private final FeedbackService feedbackService;
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
 
-    public UserFeedbackComment() {
+    public UserFeedbackComment(FeedbackService feedbackService, StorageService storageService,
+                               StudentReviewService studentReviewService) {
         super("Дайте ваш развернутый комментарий, замечания, предложения (необязательно). " +
                 "Если не хотите заполнять это поле - нажмите кнопку 'Главное меню'.", USER_FEEDBACK_ENDING_KB);
+        this.feedbackService = feedbackService;
+        this.storageService = storageService;
+        this.studentReviewService = studentReviewService;
     }
 
     @Override
@@ -33,32 +41,30 @@ public class UserFeedbackComment extends Step {
             throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
 
         String command = StringParser.toWordsArray(context.getInput())[0];
-        Feedback addFeedback = new Feedback();
+        Feedback userFeedback = new Feedback();
 
         if (!"закончить".equals(command)) {
-            addFeedback.setComment(context.getInput());
+            userFeedback.setComment(context.getInput());
         }
 
-        //добавляем в бд
-        addFeedback.setUser(context.getUser());
-
-        addFeedback.setRatingReview(Integer.valueOf(context.getStorageService()
+        // добавляем в бд
+        userFeedback.setUser(context.getUser());
+        userFeedback.setRatingReview(Integer.valueOf(storageService
                 .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT).get(0)));
-        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT);
 
-        addFeedback.setRatingReviewer(Integer.valueOf(context.getStorageService()
+        userFeedback.setRatingReviewer(Integer.valueOf(storageService
                 .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT).get(0)));
-        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT);
 
-        addFeedback.setStudentReview(context.getStudentReviewService()
-                .getStudentReviewById(Long.valueOf(context.getStorageService()
-                        .getUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION).get(0))));
-        context.getStorageService().removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
-
-        feedbackService.addFeedback(addFeedback);
+        userFeedback.setStudentReview(studentReviewService
+                .getStudentReviewById(Long.valueOf(storageService.getUserStorage(context.getVkId(),
+                        USER_FEEDBACK_CONFIRMATION).get(0))));
+        feedbackService.addFeedback(userFeedback);
+        // очищаем storageService
+        storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT);
+        storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_ASSESSMENT);
+        storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
 
         sendUserToNextStep(context, USER_MENU);
-
     }
 
     @Override

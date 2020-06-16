@@ -18,14 +18,15 @@ import static spring.app.util.Keyboards.NO_KB;
 @Component
 public class UserFeedbackReviewerAssessment extends Step {
 
+    private final StorageService storageService;
     @Value("${lower.bound}")
     private int lowBound;
-
     @Value("${upper.bound}")
     private int upBound;
 
-    public UserFeedbackReviewerAssessment() {
+    public UserFeedbackReviewerAssessment(StorageService storageService) {
         super("", "");
+        this.storageService = storageService;
     }
 
     @Override
@@ -36,7 +37,6 @@ public class UserFeedbackReviewerAssessment extends Step {
     public void processInput(BotContext context)
             throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
 
-        StorageService storageService = context.getStorageService();
         String currentInput = context.getInput();
 
         if (StringParser.isNumeric(currentInput)) {
@@ -58,7 +58,7 @@ public class UserFeedbackReviewerAssessment extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        return "Оцените насколько объективен и корректен был принимающий от" + lowBound + " до " + upBound + "?";
+        return "Оцените насколько объективен и корректен был принимающий от " + lowBound + " до " + upBound + "?";
     }
 
     @Override
