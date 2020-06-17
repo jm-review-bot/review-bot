@@ -1,11 +1,13 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
+import spring.app.service.abstraction.UserService;
 
 import static spring.app.util.Keyboards.*;
 
@@ -13,6 +15,8 @@ public abstract class Step {
 
     private final String text;
     private final String keyboard;
+    @Autowired
+    private UserService userService;
 
     public Step(String text, String keyboard) {
         this.text = text;
@@ -140,6 +144,6 @@ public abstract class Step {
     public void sendUserToNextStep(BotContext context, StepSelector nextStep) {
         User user = context.getUser();
         user.setChatStep(nextStep);
-        context.getUserService().updateUser(user);
+        userService.updateUser(user);
     }
 }
