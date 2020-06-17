@@ -8,6 +8,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
@@ -21,8 +22,13 @@ import static spring.app.util.Keyboards.YES_NO_KB;
 @Component
 public class UserCancelReview extends Step {
 
-    public UserCancelReview() {
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
+
+    public UserCancelReview(StorageService storageService, StudentReviewService studentReviewService) {
         super("", "");
+        this.storageService = storageService;
+        this.studentReviewService = studentReviewService;
     }
 
     @Override
@@ -34,7 +40,6 @@ public class UserCancelReview extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
         // на этом шаге мы ждем либо "Да" либо "Нет"
         // + стандартные команды на выход в начало или назад
         String wordInput = StringParser.toWordsArray(currentInput)[0];
@@ -49,7 +54,7 @@ public class UserCancelReview extends Step {
                 storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
                 sendUserToNextStep(context, USER_MENU);
             } else if (wordInput.equals("да")) {
-                context.getStudentReviewService().deleteStudentReviewByVkId(vkId);
+                studentReviewService.deleteStudentReviewByVkId(vkId);
                 List<String> savedMessage = Arrays.asList("Запись на ревью была удалена.");
                 storageService.updateUserStorage(vkId, USER_CANCEL_REVIEW, savedMessage);
                 sendUserToNextStep(context, USER_CANCEL_REVIEW);
@@ -64,13 +69,12 @@ public class UserCancelReview extends Step {
     @Override
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         List<String> savedInput = storageService.getUserStorage(vkId, USER_CANCEL_REVIEW);
         String text;
 
         if (savedInput == null || savedInput.isEmpty()) {
             Review review = null;
-            List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
+            List<StudentReview> openStudentReview = studentReviewService.getOpenReviewByStudentVkId(vkId);
             if (!openStudentReview.isEmpty()) {
                 if (openStudentReview.size() > 1) {
                     //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
@@ -105,12 +109,11 @@ public class UserCancelReview extends Step {
     @Override
     public String getDynamicKeyboard(BotContext context) {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         List<String> savedInput = storageService.getUserStorage(vkId, USER_CANCEL_REVIEW);
 
         if (savedInput == null || savedInput.isEmpty()) {
             Review review = null;
-            List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
+            List<StudentReview> openStudentReview = studentReviewService.getOpenReviewByStudentVkId(vkId);
             if (!openStudentReview.isEmpty()) {
                 review = openStudentReview.get(0).getReview();
             }
