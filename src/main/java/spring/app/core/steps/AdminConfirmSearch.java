@@ -7,6 +7,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
 
 import java.util.Arrays;
 
@@ -19,8 +20,13 @@ import static spring.app.util.Keyboards.YES_NO_KB;
 @Component
 public class AdminConfirmSearch extends Step {
 
-    public AdminConfirmSearch() {
+    private final StorageService storageService;
+    private final UserService userService;
+
+    public AdminConfirmSearch(StorageService storageService, UserService userService) {
         super("", YES_NO_KB);
+        this.storageService = storageService;
+        this.userService = userService;
     }
 
     @Override
@@ -32,7 +38,6 @@ public class AdminConfirmSearch extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String input = context.getInput();
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         if ("Нет".equals(input)) {
             storageService.removeUserStorage(vkId, ADMIN_SEARCH);
@@ -58,8 +63,8 @@ public class AdminConfirmSearch extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        String userIdString = context.getStorageService().getUserStorage(context.getVkId(), ADMIN_SEARCH).get(0);
-        User user = context.getUserService().getUserById(Long.parseLong(userIdString));
+        String userIdString = storageService.getUserStorage(context.getVkId(), ADMIN_SEARCH).get(0);
+        User user = userService.getUserById(Long.parseLong(userIdString));
         String text = String.format("Найден пользователь %s %s (%s). Это нужный пользователь?", user.getFirstName(), user.getLastName(), user.getVkId());
         return text;
     }

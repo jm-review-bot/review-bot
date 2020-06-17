@@ -20,12 +20,14 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 public class AdminSearch extends Step {
 
     //TODO:шаг AdminAddUser - такой же алгоритм, надо бы оптимизировать.
+    private final UserService userService;
+    private final StorageService storageService;
 
-
-    public AdminSearch() {
+    public AdminSearch(UserService userService, StorageService storageService) {
         super("Введи ссылку на страницу пользователя.\n", DEF_BACK_KB);
+        this.userService = userService;
+        this.storageService = storageService;
     }
-
 
     @Override
     public void enter(BotContext context) {
@@ -33,8 +35,6 @@ public class AdminSearch extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        UserService userService = context.getUserService();
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
 

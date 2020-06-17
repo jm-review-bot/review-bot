@@ -15,6 +15,7 @@ import java.util.List;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
+import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 
 /**
  * @author AkiraRokudo on 19.05.2020 in one of sun day
@@ -26,14 +27,13 @@ public class AdminUserList extends Step {
     private final UserService userService;
 
     public AdminUserList(StorageService storageService, UserService userService) {
-        super("", DEF_BACK_KB);
+        super("", SEARCH_OR_BACK);
         this.storageService = storageService;
         this.userService = userService;
     }
 
     @Override
     public void enter(BotContext context) {
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //определим режим работы - редактирование или удаление.
         String mode = null;
@@ -53,7 +53,7 @@ public class AdminUserList extends Step {
         }
         //сохраним список юзеров для дальнейшего использования
         List<String> usersIdList = new ArrayList<>();
-        context.getUserService().getAllUsers().stream()
+        userService.getAllUsers().stream()
                 .sorted(Comparator.comparing(User::getLastName))
                 .forEach(user ->
                         // сохраняем ID юзера в лист
@@ -66,7 +66,6 @@ public class AdminUserList extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String wordInput = StringParser.toWordsArray(currentInput)[0];
         if (wordInput.equals("назад")) {
@@ -99,7 +98,6 @@ public class AdminUserList extends Step {
     public String getDynamicText(BotContext context) {
         String text = "";
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         String mode = null;
         if (storageService.getUserStorage(vkId, ADMIN_MENU) != null) {
             mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
@@ -125,7 +123,7 @@ public class AdminUserList extends Step {
             //TODO: работать с листом юзеров, не дергая каждый раз БД
             final int[] i = {1};
             usersIdList.stream().forEach(userId -> {
-                User user = context.getUserService().getUserById(Long.parseLong(userId));
+                User user = userService.getUserById(Long.parseLong(userId));
                 userList.append("[").append(i[0]++).append("] ")
                         .append(user.getFirstName())
                         .append(" ")
