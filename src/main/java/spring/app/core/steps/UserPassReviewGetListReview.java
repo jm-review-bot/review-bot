@@ -9,6 +9,8 @@ import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -22,28 +24,36 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class UserPassReviewGetListReview extends Step {
 
+    private final StorageService storageService;
+    private final ThemeService themeService;
+    private final ReviewService reviewService;
+    private final StudentReviewService studentReviewService;
     private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();//по vkId хранит позицию (в списке выбора ревью для записи [этот список выведен был пользователю])
     // и айди ревью соответственно
 
-    public UserPassReviewGetListReview() {
+    public UserPassReviewGetListReview(StorageService storageService, ThemeService themeService,
+                                       ReviewService reviewService, StudentReviewService studentReviewService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.themeService = themeService;
+        this.reviewService = reviewService;
+        this.studentReviewService = studentReviewService;
     }
 
     @Override
     public void enter(BotContext context) {
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
-        Theme theme = context.getThemeService().getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
+        Theme theme = themeService.getThemeById(Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0)));
         // получаю список созданных мною ревью, если они имеется
         //получаю список ревью по теме
-        List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
+        List<Review> reviewsAll = reviewService.getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
 
         // закомментировал проблемный функционал при попытке записаться на ревью будучи ревьюером на другом
 
         /*
-        List<Review> reviewsMy = context.getReviewService().getMyReview(vkId, LocalDateTime.now());
+        List<Review> reviewsMy = reviewService.getMyReview(vkId, LocalDateTime.now());
         Set<Review> reviewsSetNoAccess = new HashSet<>();
         if (reviewsMy.size() > 0) {
             // использую Set, т.к. БД создается с наполнением и чтобы не добавлять в БД те ревью, которые в ней уже есть
@@ -52,7 +62,7 @@ public class UserPassReviewGetListReview extends Step {
             // перебор списка моих ревью
             for (Review reviewOneMy : reviewsMy) {
                 // получаю список ревью которые не пересекаются с моим ревью и перебираю их поштучно
-                for (Review review : context.getReviewService().getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)) {
+                for (Review review : reviewService.getAllReviewsByThemeAndNotMyReviews(context.getUser().getId(), theme, LocalDateTime.now(), reviewOneMy.getDate(), 59)) {
                     // если такое ревью встречалось на прошлом проходе, добавляю его в множество
                     if (reviewsSetNoAccess.contains(review)) {
                         reviewsSetTemp.add(review);
@@ -77,7 +87,6 @@ public class UserPassReviewGetListReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
         if (StringParser.isNumeric(currentInput)) {
@@ -87,10 +96,10 @@ public class UserPassReviewGetListReview extends Step {
             //из списка ревью по порядковому номеру получаю id ревью, если null - значит введен номер ревью не доступный в списке
             Long idReview = allReviewsAndIndex.get(command) != null ? allReviewsAndIndex.get(command) : 0L;
             if (idReview > 0L) {
-                Review review = context.getReviewService().getReviewById(idReview);
+                Review review = reviewService.getReviewById(idReview);
                 //проверяю остались ли свободные места в выбранном ревью
-                if (context.getStudentReviewService().getNumberStudentReviewByIdReview(review.getId()) < 3) {
-                    context.getStudentReviewService().addStudentReview(new StudentReview(context.getUser(), review));
+                if (studentReviewService.getNumberStudentReviewByIdReview(review.getId()) < 3) {
+                    studentReviewService.addStudentReview(new StudentReview(context.getUser(), review));
                     //сохраняю дату ревью для следующего шага и очищаю данные в Storage для этого шага
                     List<String> list = new ArrayList<>();
                     list.add(StringParser.localDateTimeToString(review.getDate()));
@@ -110,9 +119,9 @@ public class UserPassReviewGetListReview extends Step {
                 //сюда мы могли попасть только если выбранное ревью пересекается с одним из наших
                 //сейчас мы сюда попасть не можем (т. к. проверка на пересечение исключена)
                 // получаю ревью на которое нет возможности записаться
-                Review reviewNoAccess = context.getReviewService().getReviewById(Math.abs(idReview));
+                Review reviewNoAccess = reviewService.getReviewById(Math.abs(idReview));
                 // получаю список моих ревью, которые пересекаются с выбранным ревью
-                List<Review> reviewsMy = context.getReviewService().getMyReviewForDate(vkId, reviewNoAccess.getDate(), 59);
+                List<Review> reviewsMy = reviewService.getMyReviewForDate(vkId, reviewNoAccess.getDate(), 59);
 
                 StringBuilder reviewList = new StringBuilder("Не возможно записаться на данное ревью. В это время вы уже назначены проверящим на ревью:\n");
                 Integer i = 1;
@@ -147,11 +156,9 @@ public class UserPassReviewGetListReview extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        StorageService storageService = context.getStorageService();
-        ReviewService reviewService = context.getReviewService();
         Integer vkId = context.getVkId();
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
-        ////Set<Review> reviewsSetNoAccess = new HashSet<>();
+        //Set<Review> reviewsSetNoAccess = new HashSet<>();
         if (reviewsIndex.get(vkId).isEmpty()) {
             return "К сожалению, сейчас никто не готов принять " +
                     "ревью, напиши в общее обсуждение сообщение с просьбой добавить кого-то " +
@@ -164,19 +171,19 @@ public class UserPassReviewGetListReview extends Step {
                 "ответе число соответствующее удобному для тебя времени.\n\n");
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
         for (Map.Entry<Integer, Long> indexesMap : reviewsIndex.get(vkId).entrySet()) {
-            ////if (reviewsSetNoAccess.contains(review)) {
-            ////    indexList.put(i, -review.getId());
-            ////} else {
-            ////    indexList.put(i, review.getId());
-            ////}
+            //if (reviewsSetNoAccess.contains(review)) {
+            //    indexList.put(i, -review.getId());
+            //} else {
+            //    indexList.put(i, review.getId());
+            //}
             reviewList.append("[")
                     .append(indexesMap.getKey())
                     .append("]")
                     .append(" дата: ")
                     .append(reviewService.getReviewById(indexesMap.getValue()).getDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
-            ////if (reviewsSetNoAccess.contains(review)) {
-            ////    reviewList.append(" (запись невозможна: вы проводите ревью в это время)");
-            ////}
+            //if (reviewsSetNoAccess.contains(review)) {
+            //    reviewList.append(" (запись невозможна: вы проводите ревью в это время)");
+            //}
             reviewList.append("\n");
         }
         return reviewList.toString();

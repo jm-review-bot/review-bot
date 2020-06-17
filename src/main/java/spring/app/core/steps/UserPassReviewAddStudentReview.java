@@ -11,9 +11,13 @@ import static spring.app.util.Keyboards.USER_MENU_KB;
 
 @Component
 public class UserPassReviewAddStudentReview extends Step {
-    public UserPassReviewAddStudentReview() {
+
+    private final StorageService storageService;
+
+    public UserPassReviewAddStudentReview(StorageService storageService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", USER_MENU_KB);
+        this.storageService = storageService;
     }
 
     @Override
@@ -22,7 +26,6 @@ public class UserPassReviewAddStudentReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        StorageService storageService = context.getStorageService();
         String command = StringParser.toWordsArray(context.getInput())[0];
         if ("главное".equals(command)) {
             sendUserToNextStep(context, USER_MENU);
@@ -37,7 +40,6 @@ public class UserPassReviewAddStudentReview extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        StorageService storageService = context.getStorageService();
         //получаю дату ревью с прошлого шага
         String date = storageService.getUserStorage(context.getVkId(), USER_PASS_REVIEW_GET_LIST_REVIEW).get(0);
         return String.format("Ты записан на ревью в %s, для отмены записи - в меню нажми кнопку \"Отменить ревью\". " +

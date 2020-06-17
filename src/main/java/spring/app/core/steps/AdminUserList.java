@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.SEARCH_OR_BACK;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 /**
  * @author AkiraRokudo on 19.05.2020 in one of sun day
@@ -21,8 +22,13 @@ import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 @Component
 public class AdminUserList extends Step {
 
-    public AdminUserList() {
-        super("", SEARCH_OR_BACK);
+    private final StorageService storageService;
+    private final UserService userService;
+
+    public AdminUserList(StorageService storageService, UserService userService) {
+        super("", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.userService = userService;
     }
 
     @Override
@@ -140,5 +146,4 @@ public class AdminUserList extends Step {
     public String getDynamicKeyboard(BotContext context) {
         return "";
     }
-
 }

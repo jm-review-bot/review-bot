@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.service.abstraction.StorageService;
 
 import java.util.List;
 
@@ -18,8 +19,11 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminProposalChangeFullnameAddedUser extends Step {
 
-    public AdminProposalChangeFullnameAddedUser() {
+    private final StorageService storageService;
+
+    public AdminProposalChangeFullnameAddedUser(StorageService storageService) {
         super("", "");
+        this.storageService = storageService;
     }
 
     @Override
@@ -30,7 +34,7 @@ public class AdminProposalChangeFullnameAddedUser extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String currentInput = context.getInput();
         if (currentInput.equals("ввести новое имя фамилию")) {
-            context.getStorageService().removeUserStorage(context.getVkId(), ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
+            storageService.removeUserStorage(context.getVkId(), ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
             sendUserToNextStep(context, ADMIN_CHANGE_ADDED_USER_FULLNAME);
         } else if (currentInput.equals("оставить имя как есть")) {
             sendUserToNextStep(context, ADMIN_SET_THEME_ADDED_USER);
@@ -42,24 +46,16 @@ public class AdminProposalChangeFullnameAddedUser extends Step {
     @Override
     public String getDynamicText(BotContext context) {
 
-        List<String> savedInput = context.getStorageService().getUserStorage(context.getVkId(), ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
+        List<String> savedInput = storageService.getUserStorage(context.getVkId(), ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
 
-        if (savedInput != null) {
-            return savedInput.get(0);
-        } else {
-            return "Изменение Имени и Фамилии добавленного пользователя невозможно. Нажмите 'Назад' чтобы вернуться на шаг добавления пользователей";
-        }
+        return savedInput != null ? savedInput.get(0) :
+                "Изменение Имени и Фамилии добавленного пользователя невозможно. Нажмите 'Назад' чтобы вернуться на шаг добавления пользователей";
     }
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
 
-        List<String> savedInput = context.getStorageService().getUserStorage(context.getVkId(), ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
-
-        if (savedInput != null) {
-            return CHANGE_OR_NOT_ADDED_USER_FULLNAME;
-        } else {
-            return DEF_BACK_KB;
-        }
+        List<String> savedInput = storageService.getUserStorage(context.getVkId(), ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
+        return savedInput != null ? CHANGE_OR_NOT_ADDED_USER_FULLNAME : DEF_BACK_KB;
     }
 }
