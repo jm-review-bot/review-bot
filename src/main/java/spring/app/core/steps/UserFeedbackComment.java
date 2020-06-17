@@ -26,7 +26,7 @@ public class UserFeedbackComment extends Step {
     public UserFeedbackComment(FeedbackService feedbackService, StorageService storageService,
                                StudentReviewService studentReviewService) {
         super("Дайте ваш развернутый комментарий, замечания, предложения (необязательно). " +
-                "Если не хотите заполнять это поле - нажмите кнопку 'Главное меню'.", USER_FEEDBACK_ENDING_KB);
+                "Если не хотите заполнять это поле - нажмите кнопку \"Закончить\".", USER_FEEDBACK_ENDING_KB);
         this.feedbackService = feedbackService;
         this.storageService = storageService;
         this.studentReviewService = studentReviewService;

@@ -23,9 +23,7 @@ public class UserStartReviewCore extends Step {
     private final QuestionService questionService;
     private final StudentReviewService studentReviewService;
     private final StudentReviewAnswerService studentReviewAnswerService;
-    private final ReviewService reviewService;
     private final ThemeService themeService;
-    private final RoleService roleService;
     private final VkService vkService;
     @Value("${review.point_for_take_review}")
     private int pointForTakeReview;
@@ -34,15 +32,13 @@ public class UserStartReviewCore extends Step {
     //Хранит по vkId набор айдишников студентов которым можно задать вопрос. На старте - всем студентам на ревью
     private final Map<Integer, List<Long>> possibleAnswerer = new HashMap<>();
 
-    public UserStartReviewCore(StorageService storageService, UserService userService, ReviewService reviewService,
+    public UserStartReviewCore(StorageService storageService, UserService userService,
                                QuestionService questionService, StudentReviewService studentReviewService,
                                StudentReviewAnswerService studentReviewAnswerService, ThemeService themeService,
-                               VkService vkService, RoleService roleService) {
+                               VkService vkService) {
         super("", "");
         this.storageService = storageService;
-        this.roleService = roleService;
         this.userService = userService;
-        this.reviewService = reviewService;
         this.questionService = questionService;
         this.studentReviewService = studentReviewService;
         this.studentReviewAnswerService = studentReviewAnswerService;
@@ -166,11 +162,7 @@ public class UserStartReviewCore extends Step {
                 storageService.updateUserStorage(student.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
 
                 Step userStep = context.getStepHolder().getSteps().get(USER_FEEDBACK_CONFIRMATION);
-                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(),
-                        userService, themeService, reviewService,
-                        roleService, vkService, questionService,
-                        context.getStepHolder(), studentReviewAnswerService, studentReviewService,
-                        storageService);
+                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(), context.getStepHolder());
 
                 student.setChatStep(USER_FEEDBACK_CONFIRMATION);
                 student.setViewed(true);

@@ -11,7 +11,7 @@ public class BotContext {
     private final Role role;
     private final StepHolder stepHolder;
 
-    public BotContext(User user, Integer vkId, String input, Role role, UserService userService, ThemeService themeService, ReviewService reviewService, RoleService roleService, VkService vkService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService, StorageService storageService) {
+    public BotContext(User user, Integer vkId, String input, Role role, StepHolder stepHolder) {
         this.user = user;
         this.vkId = vkId;
         this.input = input;
