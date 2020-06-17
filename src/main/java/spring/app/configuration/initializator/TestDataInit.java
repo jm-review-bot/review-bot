@@ -70,6 +70,21 @@ public class TestDataInit {
     private Step adminRemoveUser;
 
     @Autowired
+    private Step adminEditReviewGetUserList;
+
+    @Autowired
+    private Step adminEditReviewGetThemeList;
+
+    @Autowired
+    private Step adminEditReviewGetReviewList;
+
+    @Autowired
+    private Step adminEditReviewGetReviewInfo;
+
+    @Autowired
+    private Step adminEditReviewChangeReview;
+
+    @Autowired
     private Step adminProposalChangeFullnameAddedUser;
 
     @Autowired
@@ -185,6 +200,15 @@ public class TestDataInit {
         nikolay.setChatStep(StepSelector.START);
         userService.addUser(nikolay);
 
+        User kirill = new User();
+        kirill.setFirstName("Кирилл");
+        kirill.setLastName("Башарин");
+        kirill.setReviewPoint(4);
+        kirill.setVkId(36654046);
+        kirill.setRole(roleAdmin);
+        kirill.setChatStep(StepSelector.START);
+        userService.addUser(kirill);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -198,6 +222,11 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
         steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_USER_LIST, adminEditReviewGetUserList);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_THEME_LIST, adminEditReviewGetThemeList);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST, adminEditReviewGetReviewList);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO, adminEditReviewGetReviewInfo);
+        steps.put(StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW, adminEditReviewChangeReview);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
@@ -574,5 +603,62 @@ public class TestDataInit {
         criticalWeightFirstStudentReview3.setReview(criticalWeightReview3);
         studentReviewService.addStudentReview(criticalWeightFirstStudentReview3);
 
+        //еще 4 вопроса
+        Question changeReviewQuestion = new Question();
+        changeReviewQuestion.setAnswer("д");
+        changeReviewQuestion.setPosition(1);
+        changeReviewQuestion.setQuestion("Назовите букву которая следует за буквой идущей после буквы в");
+        changeReviewQuestion.setTheme(core);
+        changeReviewQuestion.setWeight(1);
+        questionService.addQuestion(changeReviewQuestion);
+
+        Question changeReviewQuestion2 = new Question();
+        changeReviewQuestion2.setAnswer("от 0 до 50 процентов");
+        changeReviewQuestion2.setPosition(2);
+        changeReviewQuestion2.setQuestion("Если у папы рецесивный ген кривой нос, а у мамы доминантный орлиный, какой диапазон вероятностей кривого носа у их ребенка?");
+        changeReviewQuestion2.setTheme(core);
+        changeReviewQuestion2.setWeight(2);
+        questionService.addQuestion(changeReviewQuestion2);
+
+        Question changeReviewQuestion3 = new Question();
+        changeReviewQuestion3.setAnswer("четыре и восемь");
+        changeReviewQuestion3.setPosition(3);
+        changeReviewQuestion3.setQuestion("назовите четвертую и 7 цифру после запятой корня числа пи");
+        changeReviewQuestion3.setTheme(core);
+        changeReviewQuestion3.setWeight(3);
+        questionService.addQuestion(changeReviewQuestion3);
+
+        Question changeReviewQuestion4 = new Question();
+        changeReviewQuestion4.setAnswer("Исаак");
+        changeReviewQuestion4.setPosition(4);
+        changeReviewQuestion4.setQuestion("Как зовут Ньютона?");
+        changeReviewQuestion4.setTheme(core);
+        changeReviewQuestion4.setWeight(4);
+        questionService.addQuestion(changeReviewQuestion4);
+
+        //и связи под него
+        StudentReviewAnswer changeReviewAnswerQuestion = new StudentReviewAnswer();
+        changeReviewAnswerQuestion.setStudentReview(studentForCriticalWeightCoreSuccesReview);
+        changeReviewAnswerQuestion.setRight(true);
+        changeReviewAnswerQuestion.setQuestion(changeReviewQuestion);
+        studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion);
+
+        StudentReviewAnswer changeReviewAnswerQuestion2 = new StudentReviewAnswer();
+        changeReviewAnswerQuestion2.setStudentReview(studentForCriticalWeightCoreSuccesReview);
+        changeReviewAnswerQuestion2.setRight(true);
+        changeReviewAnswerQuestion2.setQuestion(changeReviewQuestion2);
+        studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion2);
+
+        StudentReviewAnswer changeReviewAnswerQuestion3 = new StudentReviewAnswer();
+        changeReviewAnswerQuestion3.setStudentReview(studentForCriticalWeightCoreSuccesReview);
+        changeReviewAnswerQuestion3.setRight(true);
+        changeReviewAnswerQuestion3.setQuestion(changeReviewQuestion3);
+        studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion3);
+
+        StudentReviewAnswer changeReviewAnswerQuestion4 = new StudentReviewAnswer();
+        changeReviewAnswerQuestion4.setStudentReview(studentForCriticalWeightCoreSuccesReview);
+        changeReviewAnswerQuestion4.setRight(true);
+        changeReviewAnswerQuestion4.setQuestion(changeReviewQuestion4);
+        studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion4);
     }
 }

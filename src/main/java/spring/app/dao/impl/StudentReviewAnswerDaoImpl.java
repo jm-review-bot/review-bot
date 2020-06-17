@@ -17,23 +17,23 @@ public class StudentReviewAnswerDaoImpl extends AbstractDao<Long, StudentReviewA
     }
 
     @Override
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void bulkDeleteByUserId(Long id) {
         // Write all pending changes to the DB
         entityManager.flush();
         // Remove all entities from the persistence context
         entityManager.clear();
         entityManager.createQuery("DELETE FROM StudentReviewAnswer x " +
-                        "WHERE x IN (SELECT sra FROM StudentReviewAnswer sra " +
-                                            "JOIN StudentReview sr ON sra.studentReview.id = sr.id " +
-                                             "WHERE sr.user.id =:id)")
+                "WHERE x IN (SELECT sra FROM StudentReviewAnswer sra " +
+                "JOIN StudentReview sr ON sra.studentReview.id = sr.id " +
+                "WHERE sr.user.id =:id)")
                 .setParameter("id", id)
                 .executeUpdate();
     }
 
     @Override
-    public List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId (Long studentReviewId) {
-        return entityManager.createQuery("SELECT sra FROM StudentReviewAnswer sra WHERE sra.studentReview.id = :student_review_id", StudentReviewAnswer.class)
+    public List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId(Long studentReviewId) {
+        return entityManager.createQuery("SELECT sra FROM StudentReviewAnswer sra LEFT JOIN FETCH sra.question q WHERE sra.studentReview.id = :student_review_id", StudentReviewAnswer.class)
                 .setParameter("student_review_id", studentReviewId)
                 .getResultList();
     }
