@@ -8,7 +8,10 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.Theme;
 import spring.app.model.User;
+import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -20,15 +23,26 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class UserTakeReviewAddDate extends Step {
+
+    private final StorageService storageService;
+    private final ReviewService reviewService;
+    private final ThemeService themeService;
+    private final UserService userService;
+
     @Value("${review.duration}")
     private int reviewDuration;
 
     @Value("${review.time_limit.before_starting_review}")
     private int timeLimitBeforeReview;
 
-    public UserTakeReviewAddDate() {
+    public UserTakeReviewAddDate(StorageService storageService, ReviewService reviewService,
+                                 ThemeService themeService, UserService userService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.reviewService = reviewService;
+        this.themeService = themeService;
+        this.userService = userService;
     }
 
     @Override
@@ -37,7 +51,6 @@ public class UserTakeReviewAddDate extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        StorageService storageService = context.getStorageService();
         String userInput = context.getInput();
         Integer vkId = context.getVkId();
         LocalDateTime plannedStartReviewTime;
@@ -56,14 +69,14 @@ public class UserTakeReviewAddDate extends Step {
                 throw new ProcessInputException("Некорректный ввод данных...\n\n Пример корректного ответа 02.06.2020 17:30");
             }
             if (plannedStartReviewTime.isAfter(LocalDateTime.now())) {
-                List<Review> conflictReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId, plannedStartReviewTime, reviewDuration);
-                List<Review> conflictStudentReviews = context.getReviewService().getOpenReviewsByStudentVkId(vkId, plannedStartReviewTime, reviewDuration);
+                List<Review> conflictReviews = reviewService.getOpenReviewsByReviewerVkId(vkId, plannedStartReviewTime, reviewDuration);
+                List<Review> conflictStudentReviews = reviewService.getOpenReviewsByStudentVkId(vkId, plannedStartReviewTime, reviewDuration);
                 if (!conflictReviews.isEmpty()) {
                     Review conflictReview = conflictReviews.get(0);
                     StringBuilder conflictExceptionMessage = new StringBuilder();
                     conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, которое ты планируешь провести.")
                             .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
-                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
+                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", themeService.getThemeByReviewId(conflictReview.getId()).getTitle()))
                             .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
                             .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
@@ -73,23 +86,23 @@ public class UserTakeReviewAddDate extends Step {
                     StringBuilder conflictExceptionMessage = new StringBuilder();
                     conflictExceptionMessage.append("Новое ревью пересекается с другим ревью, в котором ты участвуешь.")
                             .append(String.format("\n\nОбрати внимание, что длительность ревью %d минут", (reviewDuration + 1)))
-                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", context.getThemeService().getThemeByReviewId(conflictReview.getId()).getTitle()))
+                            .append(String.format("\n\nПересечение с ревью:\nТема: %s", themeService.getThemeByReviewId(conflictReview.getId()).getTitle()))
                             .append(String.format("\nДата начала ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate())))
                             .append(String.format("\nДата окончания ревью: %s", StringParser.localDateTimeToString(conflictReview.getDate().plusMinutes(reviewDuration + 1))))
                             .append("\n\nПовтори ввод или вернись назад к выбору темы ревью");
                     throw new ProcessInputException(conflictExceptionMessage.toString());
                 } else {
                     //все хорошо с валидацией, создаем ревью.
-                    User user = context.getUserService().getByVkId(vkId);
+                    User user = userService.getByVkId(vkId);
                     Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
-                    Theme theme = context.getThemeService().getThemeById(themeId);
-                    context.getReviewService().addReview(new Review(user, theme, true, plannedStartReviewTime));
+                    Theme theme = themeService.getThemeById(themeId);
+                    reviewService.addReview(new Review(user, theme, true, plannedStartReviewTime));
                     storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME);
                     storageService.removeUserStorage(vkId, USER_TAKE_REVIEW_ADD_DATE);
                     String textForSend = String.format(String.format("Супер! Твоё ревью добавлено в сетку расписания, " +
                             "в день и время когда оно наступит нажми на кнопку " +
                             "\"Начать ревью\"\n\nВаше ревью '%%s' %%s было успешно добавлено в сетку расписания\n\n"), theme.getTitle(), userInput);
-                    context.getStorageService().updateUserStorage(vkId, USER_MENU, Arrays.asList(textForSend));
+                    storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(textForSend));
                     sendUserToNextStep(context, USER_MENU);
                 }
             } else {
@@ -100,10 +113,9 @@ public class UserTakeReviewAddDate extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        StorageService storageService = context.getStorageService();
         Integer vkId = context.getVkId();
         Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
-        Theme theme = context.getThemeService().getThemeById(themeId);
+        Theme theme = themeService.getThemeById(themeId);
         StringBuilder textBuilder = new StringBuilder();
 
         textBuilder.append(String.format("Ты выбрал тему: %s", theme.getTitle()))

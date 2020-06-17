@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
@@ -18,8 +19,11 @@ import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER;
 @Component
 public class AdminInputNewVkIdEditedUser extends Step {
 
-    public AdminInputNewVkIdEditedUser() {
+    private final StorageService storageService;
+
+    public AdminInputNewVkIdEditedUser(StorageService storageService) {
         super("В ответ на данное сообщение отправьте ссылку, или новый vkid", "");
+        this.storageService = storageService;
     }
 
     @Override
@@ -38,7 +42,7 @@ public class AdminInputNewVkIdEditedUser extends Step {
             parsedInput = currentInput;
         }
         if (parsedInput != null) {
-            context.getStorageService().updateUserStorage(context.getVkId(), ADMIN_INPUT_NEW_VKID_EDITED_USER, Arrays.asList(parsedInput));
+            storageService.updateUserStorage(context.getVkId(), ADMIN_INPUT_NEW_VKID_EDITED_USER, Arrays.asList(parsedInput));
             sendUserToNextStep(context, ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID);
         } else {
             throw new ProcessInputException("Введенный текст не является vkid или ссылкой на профиль");
