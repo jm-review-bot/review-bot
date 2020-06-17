@@ -120,6 +120,9 @@ public class TestDataInit {
     @Autowired
     private Step userStartReviewCore;
 
+    @Autowired
+    private Step userStartChooseReview;
+
     public TestDataInit() {
     }
 
@@ -197,6 +200,15 @@ public class TestDataInit {
         kirill.setChatStep(StepSelector.START);
         userService.addUser(kirill);
 
+        User dima = new User();
+        dima.setFirstName("Дмитрий");
+        dima.setLastName("Шепелев");
+        dima.setReviewPoint(10);
+        dima.setVkId(147150209);
+        dima.setRole(roleAdmin);
+        dima.setChatStep(StepSelector.START);
+        userService.addUser(dima);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -224,6 +236,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
         steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
+        steps.put(StepSelector.USER_START_CHOOSE_REVIEW, userStartChooseReview);
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
@@ -321,6 +334,27 @@ public class TestDataInit {
         springReviewPassed4.setUser(maksim);
         reviewService.addReview(springReviewPassed4);
 
+        Review springReviewPassed5 = new Review();
+        springReviewPassed5.setDate(LocalDateTime.of(2020, 6, 16, 12, 5));
+        springReviewPassed5.setOpen(true);
+        springReviewPassed5.setTheme(core);
+        springReviewPassed5.setUser(dima);
+        reviewService.addReview(springReviewPassed5);
+
+        Review springReviewPassed6 = new Review();
+        springReviewPassed6.setDate(LocalDateTime.of(2020, 6, 16, 13, 5));
+        springReviewPassed6.setOpen(true);
+        springReviewPassed6.setTheme(algorithm);
+        springReviewPassed6.setUser(dima);
+        reviewService.addReview(springReviewPassed6);
+
+        Review springReviewPassed7 = new Review();
+        springReviewPassed7.setDate(LocalDateTime.of(2020, 6, 16, 13, 5));
+        springReviewPassed7.setOpen(true);
+        springReviewPassed7.setTheme(spring);
+        springReviewPassed7.setUser(dima);
+        reviewService.addReview(springReviewPassed7);
+
         // add student reviews
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(anton);
@@ -342,6 +376,12 @@ public class TestDataInit {
         studentReview4.setUser(roman);
         studentReview4.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview4);
+
+        StudentReview studentReview5 = new StudentReview();
+        studentReview5.setUser(anton);
+        studentReview5.setPassed(false);
+        studentReview5.setReview(springReviewPassed5);
+        studentReviewService.addStudentReview(studentReview5);
 
         // add Questions
         Question question1 = new Question();
