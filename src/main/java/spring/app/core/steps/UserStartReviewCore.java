@@ -23,7 +23,9 @@ public class UserStartReviewCore extends Step {
     private final QuestionService questionService;
     private final StudentReviewService studentReviewService;
     private final StudentReviewAnswerService studentReviewAnswerService;
+    private final ReviewService reviewService;
     private final ThemeService themeService;
+    private final RoleService roleService;
     private final VkService vkService;
     @Value("${review.point_for_take_review}")
     private int pointForTakeReview;
@@ -32,13 +34,15 @@ public class UserStartReviewCore extends Step {
     //Хранит по vkId набор айдишников студентов которым можно задать вопрос. На старте - всем студентам на ревью
     private final Map<Integer, List<Long>> possibleAnswerer = new HashMap<>();
 
-    public UserStartReviewCore(StorageService storageService, UserService userService,
+    public UserStartReviewCore(StorageService storageService, UserService userService, ReviewService reviewService,
                                QuestionService questionService, StudentReviewService studentReviewService,
                                StudentReviewAnswerService studentReviewAnswerService, ThemeService themeService,
-                               VkService vkService) {
+                               VkService vkService, RoleService roleService) {
         super("", "");
         this.storageService = storageService;
+        this.roleService = roleService;
         this.userService = userService;
+        this.reviewService = reviewService;
         this.questionService = questionService;
         this.studentReviewService = studentReviewService;
         this.studentReviewAnswerService = studentReviewAnswerService;
@@ -157,22 +161,22 @@ public class UserStartReviewCore extends Step {
                     }
                 }
                 reviewResults.append(String.format("\nЗа участие в ревью списано: %d RP, твой баланс теперь составляет: %d RP\n", theme.getReviewPoint(), student.getReviewPoint()));
-
-//                sendUserToNextStep(context, USER_FEEDBACK_CONFIRMATION);
-
                 reviewResults.append("\nДля улучшения качества обучения дайте обратную связь после ревью.");
-                // отправляем студенту результаты ревью
+
                 storageService.updateUserStorage(student.getVkId(), USER_FEEDBACK_CONFIRMATION, Arrays.asList(studentReview.getId().toString()));
 
                 Step userStep = context.getStepHolder().getSteps().get(USER_FEEDBACK_CONFIRMATION);
-                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(), context.getStepHolder());
+                BotContext studentContext = new BotContext(student, student.getVkId(), "", student.getRole(),
+                        userService, themeService, reviewService,
+                        roleService, vkService, questionService,
+                        context.getStepHolder(), studentReviewAnswerService, studentReviewService,
+                        storageService);
 
                 student.setChatStep(USER_FEEDBACK_CONFIRMATION);
                 student.setViewed(true);
                 userService.updateUser(student);
-
+                // отправляем студенту результаты ревью
                 vkService.sendMessage(reviewResults.toString(), userStep.getComposeKeyboard(studentContext), student.getVkId());
-
             }
         }
     }
