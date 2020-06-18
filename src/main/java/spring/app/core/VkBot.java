@@ -52,7 +52,6 @@ public class VkBot implements ChatBot {
         StepSelector userStep;
         boolean isViewed;
         Step currentStep;
-
         // Получаем сообщение из вк
         for (Message message : messages) {
             // Берем vkid пользователя
@@ -79,7 +78,6 @@ public class VkBot implements ChatBot {
                 sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
                 return;
             }
-
             Role role = user.getRole();
             context = new BotContext(user, userVkId, input, role, stepHolder);
             // выясняем степ в котором находится User
@@ -87,7 +85,6 @@ public class VkBot implements ChatBot {
             // видел ли User этот шаг
             isViewed = user.isViewed();
             currentStep = stepHolder.getSteps().get(userStep);
-
             if (!isViewed) {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
                 currentStep.enter(context);

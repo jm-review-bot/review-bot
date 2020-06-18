@@ -132,7 +132,6 @@ public class UserPassReviewGetListReview extends Step {
                             .append("Дата: " + StringParser.localDateTimeToString(review.getDate()) + "\n");
                     i++;
                 }
-
                 throw new ProcessInputException(reviewList.toString());
             } else {
                 throw new ProcessInputException("Введен неверный номер ревью...");

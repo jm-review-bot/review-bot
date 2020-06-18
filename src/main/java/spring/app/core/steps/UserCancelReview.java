@@ -18,7 +18,6 @@ import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.USER_MENU_KB;
 import static spring.app.util.Keyboards.YES_NO_KB;
 
-
 @Component
 public class UserCancelReview extends Step {
 

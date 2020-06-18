@@ -8,6 +8,40 @@ public class Keyboards {
 
     public final static String ROW_DELIMETER_FR = "],[";
 
+    public final static String USER_MENU_D_FR = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Сдать ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Принять ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"3\\\"}\",\n" +
+            "          \"label\": \"Отменить ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n";
+
+    public final static String DELETE_REVIEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отменить ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n";
+
     public final static String DELETE_STUDENT_REVIEW = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
@@ -319,5 +353,22 @@ public class Keyboards {
             "          \"label\": \"Назад\"\n" +
             "        },\n" +
             "        \"color\": \"default\"\n" +
+            "      }\n";
+
+    public final static String CANCEL_OR_DELETE = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Да, отменить ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
             "      }\n";
 }

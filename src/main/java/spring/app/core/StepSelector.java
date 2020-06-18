@@ -1,5 +1,4 @@
 package spring.app.core;
-
 public enum StepSelector {
     START,
     USER_MENU,
@@ -28,5 +27,7 @@ public enum StepSelector {
     USER_CANCEL_REVIEW,
     USER_START_REVIEW_HANGOUTS_LINK,
     USER_START_REVIEW_RULES,
-    USER_START_REVIEW_CORE
+    USER_START_REVIEW_CORE,
+    REVIEWER_DELETE_REVIEW,
+    SELECTING_REVIEW_TO_DELETE
 }
