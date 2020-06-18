@@ -4,102 +4,74 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.util.StringParser;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_KB;
-import static spring.app.util.Keyboards.USER_MENU_DELETE_STUDENT_REVIEW;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
+import static spring.app.util.Keyboards.DELETE_STUDENT_REVIEW;
 
 @Component
 public class UserPassReviewAddTheme extends Step {
-    private Set<Integer> idsIfCancelStudentReview = new HashSet<>();
-    private Map<Integer, Theme> themes = new HashMap<>();
+
+    private final StorageService storageService;
+    private final ThemeService themeService;
+    private final StudentReviewService studentReviewService;
+
+    public UserPassReviewAddTheme(StorageService storageService, ThemeService themeService,
+                                  StudentReviewService studentReviewService) {
+        //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
+        super("", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.themeService = themeService;
+        this.studentReviewService = studentReviewService;
+    }
 
     @Override
     public void enter(BotContext context) {
-        StorageService storageService = context.getStorageService();
-        Integer vkId = context.getVkId();
-        StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-        if (studentReview != null) {
-            text = String.format("Вы уже записаны на ревью:\n" +
-                            "Тема: %s\n" +
-                            "Дата: %s\n" +
-                            "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
-                    StringParser.localDateTimeToString(studentReview.getReview().getDate()));
-
-            keyboard = USER_MENU_DELETE_STUDENT_REVIEW;
-
-        } else {
-            StringBuilder themeList = new StringBuilder();
-            if (storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME) != null){
-                themeList.append("Выбранное Вами ревью уже заполнено!\n\n");
-                storageService.removeUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME);
-            }
-            //формирую список тем и вывожу его как нумерованный список
-            context.getThemeService().getAllThemes().forEach(theme -> themes.putIfAbsent(theme.getPosition(), theme));
-            themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
-
-            for (Integer position : themes.keySet()) {
-                themeList.append("[")
-                        .append(position)
-                        .append("] ")
-                        .append(themes.get(position).getTitle())
-                        .append(", стоимость ")
-                        .append(themes.get(position).getReviewPoint())
-                        .append(" RP")
-                        .append("\n");
-            }
-
-            text = themeList.toString();
-
-            if (idsIfCancelStudentReview.contains(vkId)) {
-                text = "Ревью отменено.\n\n" + text;
-                idsIfCancelStudentReview.remove(vkId);
-            }
-
-            keyboard = BACK_KB;
+        StringBuilder themeList = new StringBuilder();
+        themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
+        for (Theme theme : themeService.getAllThemes()) {
+            themeList.append("[")
+                    .append(theme.getPosition())
+                    .append("] ")
+                    .append(theme.getTitle())
+                    .append(", стоимость ")
+                    .append(theme.getReviewPoint())
+                    .append(" RP")
+                    .append("\n");
         }
+        storageService.updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME, Arrays.asList(themeList.toString()));
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
-        StorageService storageService = context.getStorageService();
-        StudentReview studentReview = context.getStudentReviewService().getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
         if (studentReview == null && StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
+            Theme selectedTheme = themeService.getAllThemes().stream().filter(theme -> theme.getPosition().equals(command)).findFirst().orElse(null);
             //проверяем или номер темы не выходит за рамки
-            if (command > 0 & command <= themes.size()) {
-                Theme theme = context.getThemeService().getByPosition(command);
+            if (selectedTheme != null) {
                 User user = context.getUser();
                 //проверяем хватает ли РП для сдачи выбранной темы
-                if (theme.getReviewPoint() <= user.getReviewPoint()) {
-                    //получаю список ревью по теме
-                    List<Review> reviewsAll = context.getReviewService().getAllReviewsByTheme(context.getUser().getId(), theme, LocalDateTime.now());
-                    //проверяем наличие открытых ревью по данной теме
-                    if (reviewsAll.isEmpty()) {
-                        nextStep = USER_MENU;
-                        throw new ProcessInputException("К сожалению, сейчас никто не готов принять " +
-                                "ревью, напиши в общее обсуждение сообщение с просьбой добавить кого-то " +
-                                "ревью, чтобы не ждать пока оно появится. Кто-то обязательно откликнется! " +
-                                "Если проверяющего не нашлось сообщи сразу же об этом Станиславу Сорокину или Герману Севостьянову");
-                    } else {
-                        //если нашли хоть одно открытое ревью по выбранной теме, сохраняем ID темы для следующего шага
-                        List<String> list = new ArrayList<>();
-                        list.add(theme.getId().toString());
-                        storageService.updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
-                        nextStep = USER_PASS_REVIEW_GET_LIST_REVIEW;
-                    }
+                if (selectedTheme.getReviewPoint() <= user.getReviewPoint()) {
+                    //сохраняем ID темы для следующего шага
+                    List<String> list = new ArrayList<>();
+                    list.add(selectedTheme.getId().toString());
+                    storageService.updateUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME, list);
+                    sendUserToNextStep(context, USER_PASS_REVIEW_GET_LIST_REVIEW);
                 } else {
                     throw new ProcessInputException("У Вас не хватает РП. Для того чтобы заработать нужное " +
                             "количество РП, необходимо провести ревью.");
@@ -111,16 +83,42 @@ public class UserPassReviewAddTheme extends Step {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
             if ("отмена".equals(command) && studentReview != null) {
-                context.getStudentReviewService().deleteStudentReviewById(studentReview.getId());
-                idsIfCancelStudentReview.add(vkId);
-                nextStep = USER_PASS_REVIEW_ADD_THEME;
+                sendUserToNextStep(context, USER_CANCEL_REVIEW);
             } else if ("/start".equals(command)) {
-                nextStep = START;
+                sendUserToNextStep(context, START);
             } else if ("назад".equals(command)) {
-                nextStep = USER_MENU;
+                sendUserToNextStep(context, USER_MENU);
             } else {
                 throw new ProcessInputException("Введена неверная команда...");
             }
+        }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        if (studentReview != null) {
+            return String.format("Вы уже записаны на ревью:\n" +
+                            "Тема: %s\n" +
+                            "Дата: %s\n" +
+                            "Вы можете отменить запись на это ревью, нажав на кнопку “отмена записи”", studentReview.getReview().getTheme().getTitle(),
+                    StringParser.localDateTimeToString(studentReview.getReview().getDate()));
+        } else {
+            return storageService.getUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME).get(0);
+        }
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        if (studentReview != null) {
+            StringBuilder keys = new StringBuilder();
+            keys
+                    .append(this.getRowDelimiterString())
+                    .append(DELETE_STUDENT_REVIEW);
+            return keys.toString();
+        } else {
+            return "";
         }
     }
 }

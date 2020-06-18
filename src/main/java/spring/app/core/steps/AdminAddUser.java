@@ -8,31 +8,42 @@ import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
+import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.BACK_KB;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
+
+    private final StorageService storageService;
+    private final UserService userService;
+    private final VkService vkService;
+    private final RoleService roleService;
+
+    public AdminAddUser(StorageService storageService, UserService userService,
+                        VkService vkService, RoleService roleService) {
+        super("Введите ссылку на профиль нового пользователя.\n", DEF_BACK_KB);
+        this.storageService = storageService;
+        this.userService = userService;
+        this.vkService = vkService;
+        this.roleService = roleService;
+    }
+
     @Override
     public void enter(BotContext context) {
-        text = "Введите ссылку на профиль нового пользователя.\n";
-        keyboard = BACK_KB;
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        VkService vkService = context.getVkService();
-        UserService userService = context.getUserService();
-        StorageService storageService = context.getStorageService();
-        Role userRole = context.getRoleService().getRoleByName("USER");
+
+        Role userRole = roleService.getRoleByName("USER");
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
 
@@ -42,11 +53,11 @@ public class AdminAddUser extends Step {
         if (wordInput.equals("назад")
                 || wordInput.equals("/admin")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);//т.к. мы на любом последующем шаге все равно придем в этот шаг, то очистку проводим тут.
-            nextStep = ADMIN_MENU;
+            sendUserToNextStep(context, ADMIN_MENU);
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
-            nextStep = START;
-        } else if (parsedInput != null){
+            sendUserToNextStep(context, START);
+        } else if (parsedInput != null) {
             // мы ожидаем от него ссылки на профиль добавляемого  юзера
             try {
                 // получем юзера на основе запроса в VK
@@ -66,9 +77,12 @@ public class AdminAddUser extends Step {
                             .append(addedUser.getVkId())
                             .append(") \n Был успешно добавлен в базу. Оставить имя фамилию без изменений?\n");
                     //подготавливаем почву для следующих шагов
-                    storageService.updateUserStorage(vkId, ADMIN_ADD_USER, Arrays.asList(Long.toString(addedUser.getId())));
-                    storageService.updateUserStorage(vkId, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, Arrays.asList(addedUserText.toString()));
-                    nextStep = ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER;
+                    storageService.updateUserStorage
+                            (vkId, ADMIN_ADD_USER, Arrays.asList(Long.toString(addedUser.getId())));
+                    storageService.updateUserStorage
+                            (vkId, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, Arrays.asList
+                                    (addedUserText.toString()));
+                    sendUserToNextStep(context, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
                 } else {
                     throw new ProcessInputException("Пользователь уже в базе.\n");
                 }
@@ -78,5 +92,16 @@ public class AdminAddUser extends Step {
         } else {
             throw new ProcessInputException("Введена некрректная ссылка.");
         }
+    }
+
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        return "";
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }

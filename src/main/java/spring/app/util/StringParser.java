@@ -22,7 +22,9 @@ import java.util.stream.Collectors;
 public class StringParser {
     private final static Logger log = LoggerFactory.getLogger(StringParser.class);
 
-    private static Pattern numeric = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private static Pattern numeric = Pattern.compile("\\d*");
+
+    private static Pattern realNumeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     //обязательно первая цифра от 0 до 9, далее только цифры с + или без него, разделенные пробелом, max 3 цифры
     private static Pattern validReviewerInputFormat = Pattern.compile("^\\d\\+?\\s?\\d?\\+?\\s?\\d?\\+?");
@@ -35,6 +37,13 @@ public class StringParser {
             return false;
         }
         return numeric.matcher(strNum).matches();
+    }
+
+    public static boolean isRealNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        return realNumeric.matcher(strNum).matches();
     }
 
     /**
@@ -148,27 +157,28 @@ public class StringParser {
         return link.startsWith(prefix);
     }
 
-    public static boolean isValidReviewerInput(String input, int numberOfStudents) {
-        if (validReviewerInputFormat.matcher(input).matches()) {
-            Set<Integer> uniqueNumbers = Arrays.stream(input.split("[^0-9]+"))
-                    .filter(string -> !string.isEmpty())
-                    .map(Integer::parseInt)
-                    .collect(Collectors.toSet()); // множество уникальных чисел в input
-            int numbersWithPluses = input.split(" ").length; // кол-во чисел в input со знаком + или без него
-            int plusesLength = input.replaceAll("[1-9 ]", "").length(); // кол-во плюсов в input
-            for (Integer integer : uniqueNumbers) {
-                if (integer < 1 || integer > numberOfStudents) {
-                    return false;
-                }
-            }
-            if (plusesLength <= 1 && numbersWithPluses >= 1 && numbersWithPluses <= numberOfStudents && uniqueNumbers.size() == numbersWithPluses) {
-                if (numbersWithPluses < numberOfStudents && plusesLength == 1 || numberOfStudents == 1 || numbersWithPluses == numberOfStudents) {
-                    if (plusesLength == 0 || input.lastIndexOf("+") == input.length() - 1) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
+    //TODO: больше не используется.
+//    public static boolean isValidReviewerInput(String input, int numberOfStudents) {
+//        if (validReviewerInputFormat.matcher(input).matches()) {
+//            Set<Integer> uniqueNumbers = Arrays.stream(input.split("[^0-9]+"))
+//                    .filter(string -> !string.isEmpty())
+//                    .map(Integer::parseInt)
+//                    .collect(Collectors.toSet()); // множество уникальных чисел в input
+//            int numbersWithPluses = input.split(" ").length; // кол-во чисел в input со знаком + или без него
+//            int plusesLength = input.replaceAll("[1-9 ]", "").length(); // кол-во плюсов в input
+//            for (Integer integer : uniqueNumbers) {
+//                if (integer < 1 || integer > numberOfStudents) {
+//                    return false;
+//                }
+//            }
+//            if (plusesLength <= 1 && numbersWithPluses >= 1 && numbersWithPluses <= numberOfStudents && uniqueNumbers.size() == numbersWithPluses) {
+//                if (numbersWithPluses < numberOfStudents && plusesLength == 1 || numberOfStudents == 1 || numbersWithPluses == numberOfStudents) {
+//                    if (plusesLength == 0 || input.lastIndexOf("+") == input.length() - 1) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
 }
