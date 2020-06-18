@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.VkService;
 import spring.app.service.impl.StorageServiceImpl;
 import spring.app.util.StringParser;
@@ -14,40 +16,35 @@ import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.core.StepSelector.REVIEWER_DELETE_REVIEW;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class SelectingReviewToDelete extends Step {
-    private StorageServiceImpl ssi;
+
+    private final VkService vkService;
+    private final ReviewService reviewService;
+    private final ThemeService themeService;
 
     @Autowired
-    public SelectingReviewToDelete(StorageServiceImpl ssi) {
-        this.ssi = ssi;
+    private StorageServiceImpl ssi;
+
+    //@Autowired
+    public SelectingReviewToDelete(VkService vkService, ReviewService reviewService, ThemeService themeService) {
+        super("",DEF_BACK_KB);
+        this.reviewService = reviewService;
+        this.vkService = vkService;
+        this.themeService = themeService;
     }
 
     @Override
-    public void enter(BotContext context) {//здесь выводится текст в чате при переходе на этот step
-        //хранилище стэпа REVIEWER_DELETE_REVIEW для каждого vkId юзера хранит айдишник ревью, которое следует отменить
-        List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getVkId());
-        StringBuilder selectReview = new StringBuilder("Выберете ревью, которое хотите отменить:\n");
-        int i = 1;
-        List<String> reviewIds = new ArrayList<>();
-        for (Review review : reviews) {
-            selectReview = selectReview.append("[").append(i).append("] {").append(context.getThemeService().getThemeById(review.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(review.getDate())).append("}\n");
-            i++;
-            reviewIds.add(Long.toString(review.getId()));
-        }
-        ssi.getUserStorage(context.getVkId(), SELECTING_REVIEW_TO_DELETE).addAll(reviewIds);
-        text = selectReview.toString();
-        keyboard = BACK_KB;
+    public void enter(BotContext context) {
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String command = context.getInput();
         if ("Назад".equals(command)) {
-            nextStep = USER_MENU;
+            sendUserToNextStep(context, USER_MENU);
         } else if (StringParser.isNumeric(command)) {
             //это позиция (номер) ревью в списке, выведенном пользователю. это НЕ индекс этого ревью в БД,
             // это именно его номер (позиция) в списке, который выводиился при выполнении метода enter этого стэпа
@@ -55,23 +52,22 @@ public class SelectingReviewToDelete extends Step {
             if ((numberReview > 0) && (numberReview <= ssi.getUserStorage(context.getVkId(), SELECTING_REVIEW_TO_DELETE).size())) {
                 //получаем индекс ревью по её позции в списке выбора......
                 long reviewId = Long.parseLong(ssi.getUserStorage(context.getVkId(), SELECTING_REVIEW_TO_DELETE).get(numberReview - 1));//это индекс ревью в БД
-                Review review = context.getReviewService().getReviewById(reviewId);
-                if ((review == null) || (review.getUser().getVkId() != context.getVkId())) {
-                    String message = "Выбранное ревью отсутствует в базе данных либо вы перестали числиться его создателем. Возможно оно было удалено во время выбора.\n";
+                Review review = reviewService.getReviewById(reviewId);
+                if ((review == null) || (review.getUser().getVkId().intValue() != context.getVkId().intValue())) {
+                    String message = "Выбранное ревью отсутствует в базе данных либо вы перестали числиться его создателем. Возможно, оно было удалено во время выбора.\n";
                     ssi.removeUserStorage(context.getVkId(), SELECTING_REVIEW_TO_DELETE);
-                    List<Review> reviews = context.getReviewService().getOpenReviewsByReviewerVkId(context.getVkId());
-                    VkService vkService = context.getVkService();
+                    List<Review> reviews = reviewService.getOpenReviewsByReviewerVkId(context.getVkId());
                     if (reviews.isEmpty()) {
-                        vkService.sendMessage(message, keyboard, context.getUser().getVkId());
-                        nextStep = USER_MENU;
+                        vkService.sendMessage(message, this.getComposeKeyboard(context), context.getUser().getVkId());
+                        sendUserToNextStep(context, USER_MENU);
                     } else {
-                        nextStep = SELECTING_REVIEW_TO_DELETE;
+                        sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);
                     }
                 } else {
                     //...... и добавляем этот индекс в хранилище REVIEWER_DELETE_REVIEW для извлечения этого индекса на шаге REVIEWER_DELETE_REVIEW и последующего
                     //на вышеупомянутом шаге удаления ревью с этим индексом
                     ssi.updateUserStorage(context.getVkId(), REVIEWER_DELETE_REVIEW, Arrays.asList((Long.toString(reviewId))));
-                    nextStep = REVIEWER_DELETE_REVIEW;
+                    sendUserToNextStep(context, REVIEWER_DELETE_REVIEW);
                 }
             } else {
                 throw new ProcessInputException("Введённое число не является номером какого-либо ревью из списка. Введите корректное число.\n");
@@ -79,5 +75,28 @@ public class SelectingReviewToDelete extends Step {
         } else {
             throw new ProcessInputException("Введена неверная команда...\n");
         }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        //хранилище стэпа REVIEWER_DELETE_REVIEW для каждого vkId юзера хранит айдишник ревью, которое следует отменить
+        List<Review> reviews = reviewService.getOpenReviewsByReviewerVkId(context.getVkId());
+        StringBuilder selectReview = new StringBuilder("Выберете ревью, которое хотите отменить:\n");
+        int i = 1;
+        List<String> reviewIds = new ArrayList<>();
+        for (Review review : reviews) {
+            selectReview = selectReview.append("[").append(i).append("] {").append(themeService.getThemeById(review.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(review.getDate())).append("}\n");
+            i++;
+            reviewIds.add(Long.toString(review.getId()));
+        }
+        int uu = 0;
+        ssi.updateUserStorage(context.getVkId(), SELECTING_REVIEW_TO_DELETE, reviewIds);
+        //ssi.getUserStorage(context.getVkId(), SELECTING_REVIEW_TO_DELETE).addAll(reviewIds);
+        return selectReview.toString();
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        return "";
     }
 }
