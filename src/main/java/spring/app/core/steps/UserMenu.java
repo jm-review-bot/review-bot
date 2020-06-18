@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -9,6 +10,8 @@ import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -25,6 +28,19 @@ public class UserMenu extends Step {
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
+    @Autowired
+    private StorageService storageService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private StudentReviewService studentReviewService;
+
+    public UserMenu(String text, String keyboard) {
+        super(text, keyboard);
+    }
+
     public UserMenu() {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_USER_MENU_KB);
@@ -37,11 +53,10 @@ public class UserMenu extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         Integer vkId = context.getVkId();
-        StorageService storageService = context.getStorageService();
         String command = StringParser.toWordsArray(context.getInput())[0];
         if (command.equals("начать")) { // (Начать прием ревью)
             // получаем список всех ревью, которые проводит пользователь
-            List<Review> userReviews = context.getReviewService().getOpenReviewsByReviewerVkId(vkId);
+            List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
                 // берем из списка то ревью, которое начинается позже текущего времени с самой поздней датой
                 Review nearestReview = userReviews.stream()
@@ -56,7 +71,7 @@ public class UserMenu extends Step {
                 } else {
                     // то смотрим записан ли кто-то на него
                     Long reviewId = nearestReview.getId();
-                    List<User> students = context.getUserService().getStudentsByReviewId(reviewId);
+                    List<User> students = userService.getStudentsByReviewId(reviewId);
                     if (!students.isEmpty()) {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
                         storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
@@ -65,10 +80,10 @@ public class UserMenu extends Step {
                     } else {
                         // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
                         nearestReview.setOpen(false);
-                        context.getReviewService().updateReview(nearestReview);
-                        User user = context.getUserService().getByVkId(vkId);
+                        reviewService.updateReview(nearestReview);
+                        User user = userService.getByVkId(vkId);
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
-                        context.getUserService().updateUser(user);
+                        userService.updateUser(user);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
                     }
                 }
@@ -100,23 +115,29 @@ public class UserMenu extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        User user = context.getUser();
-        String text = String.format(
-                "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
-                        "для удобного использования бота воспользуйтесь кнопками + скрин.\n" +
-                        "На данный момент у вас %d RP (Review Points) для сдачи ревью.\n" +
-                        "RP используются для записи на ревью, когда вы хотите записаться на ревью " +
-                        "вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP " +
-                        "принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, " +
-                        "если вы дали возможность вам сдать, но никто не записался на сдачу " +
-                        "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
-                , user.getFirstName(), user.getReviewPoint());
         Integer vkId = context.getVkId();
-        List<String> currentStorage = context.getStorageService().getUserStorage(vkId, USER_MENU);
+        User user = context.getUser();
+        List<String> currentStorage = storageService.getUserStorage(vkId, USER_MENU);
+        String textUserCancelMenuStep = String.valueOf(storageService.getUserStorage(vkId, USER_CANCEL_REVIEW));
+        String text = "";
+        if (!(textUserCancelMenuStep.equals("null"))) {
+            text += textUserCancelMenuStep + "\n\n";
+        }
+        text += String.format(
+                "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
+                "для удобного использования бота воспользуйтесь кнопками + скрин.\n" +
+                "На данный момент у вас %d RP (Review Points) для сдачи ревью.\n" +
+                "RP используются для записи на ревью, когда вы хотите записаться на ревью " +
+                "вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP " +
+                "принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, " +
+                "если вы дали возможность вам сдать, но никто не записался на сдачу " +
+                "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
+                , user.getFirstName(), user.getReviewPoint());
         if (currentStorage != null) {
             //если кому потребуется выводить кучу текста - пусть стримами бегает по элементам. А пока тут нужен только первый
             text = currentStorage.get(0) + text;
-            context.getStorageService().removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
         }
         return text;
     }
@@ -124,12 +145,11 @@ public class UserMenu extends Step {
     @Override
     public String getDynamicKeyboard(BotContext context) {
         Integer vkId = context.getVkId();
-        ReviewService reviewService = context.getReviewService();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
         List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
         // проверка, записан ли он на другие ревью.
         Review studentReview = null;
-        List<StudentReview> openStudentReview = context.getStudentReviewService().getOpenReviewByStudentVkId(vkId);
+        List<StudentReview> openStudentReview = studentReviewService.getOpenReviewByStudentVkId(vkId);
         if (!openStudentReview.isEmpty()) {
             if (openStudentReview.size() > 1) {
                 //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
