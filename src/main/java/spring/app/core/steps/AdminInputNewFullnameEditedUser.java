@@ -5,6 +5,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.service.abstraction.StorageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,11 @@ import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER;
 @Component
 public class AdminInputNewFullnameEditedUser extends Step {
 
-    public AdminInputNewFullnameEditedUser() {
+    private final StorageService storageService;
+
+    public AdminInputNewFullnameEditedUser(StorageService storageService) {
         super("В ответ на данное сообщение отправьте имя и фамилию в формате {имя} {фамилия}", "");
+        this.storageService = storageService;
     }
 
     @Override
@@ -33,13 +37,13 @@ public class AdminInputNewFullnameEditedUser extends Step {
         Integer vkId = context.getVkId();
         String[] firstAndLastName = newFullName.split(" ");
         if (firstAndLastName.length == 2) {
-            //Проверим, что есть только символы алфавитов
+            // Проверим, что есть только символы алфавитов
             boolean allSymbolAlphabet = newFullName.replaceAll(" ", "").chars().allMatch(Character::isLetter);
             if (allSymbolAlphabet) {
                 List<String> newUserFullName = new ArrayList<>();
                 newUserFullName.add(firstAndLastName[0]);
                 newUserFullName.add(firstAndLastName[1]);
-                context.getStorageService().updateUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, newUserFullName);
+                storageService.updateUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, newUserFullName);
                 sendUserToNextStep(context, ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME);
             } else {
                 throw new ProcessInputException("В новом имени фамилии присутствуют не алфавитные символы");

@@ -6,6 +6,8 @@ import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
 
 import java.util.List;
 
@@ -19,8 +21,13 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminEditUser extends Step {
 
-    public AdminEditUser() {
+    private final StorageService storageService;
+    private final UserService userService;
+
+    public AdminEditUser(StorageService storageService, UserService userService) {
         super("", "");
+        this.storageService = storageService;
+        this.userService = userService;
     }
 
     @Override
@@ -43,12 +50,12 @@ public class AdminEditUser extends Step {
     @Override
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
-        List<String> savedInput = context.getStorageService().getUserStorage(vkId, ADMIN_USERS_LIST);
+        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
         String text;
 
         if (savedInput != null) {
             Long userId = Long.parseLong(savedInput.get(0));
-            User selectedUser = context.getUserService().getUserById(userId);
+            User selectedUser = userService.getUserById(userId);
             text = String.format("Вы выбрали %s %s (%s). Выберите действие", selectedUser.getFirstName(), selectedUser.getLastName(), selectedUser.getVkId());
         } else {
             text = "Изменение параметров выбранного пользователя невозможно. Нажмите 'Назад' чтобы вернуться к списку пользователей";
@@ -59,12 +66,7 @@ public class AdminEditUser extends Step {
     @Override
     public String getDynamicKeyboard(BotContext context) {
         Integer vkId = context.getVkId();
-        List<String> savedInput = context.getStorageService().getUserStorage(vkId, ADMIN_USERS_LIST);
-
-        if (savedInput != null) {
-            return CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK;
-        } else {
-            return DEF_BACK_KB;
-        }
+        List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
+        return savedInput != null ? CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK : DEF_BACK_KB;
     }
 }
