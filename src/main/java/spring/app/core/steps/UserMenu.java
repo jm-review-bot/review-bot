@@ -92,7 +92,7 @@ public class UserMenu extends Step {
             if (reviews.isEmpty()) {
                 throw new ProcessInputException("Произошла ошибка. Вы не запланировали ни одного ревью\n");
             } else {
-                sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);//---
+                sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);
                 storageService.removeUserStorage(vkId, SELECTING_REVIEW_TO_DELETE);
             }
         } else if (command.equals("сдать")) { // (Сдать ревью)
@@ -101,7 +101,6 @@ public class UserMenu extends Step {
             sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_THEME);
         } else if (command.equals("/admin")) {
             if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
-                sendUserToNextStep(context, ADMIN_MENU);
                 storageService.removeUserStorage(vkId, USER_MENU);
                 sendUserToNextStep(context, ADMIN_MENU);
             } else {
@@ -161,7 +160,6 @@ public class UserMenu extends Step {
                     .append(REVIEW_CANCEL_FR);
             isEmpty = false;
         }
-        int y444 = 0;
         //кнопка отмены ревью для студента
         if (studentReview != null) {
             if (!isEmpty) {
