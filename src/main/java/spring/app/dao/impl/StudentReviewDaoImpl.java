@@ -29,7 +29,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
                 "ON sr.review.id = r.id WHERE sr.user.id = :id_user AND r.isOpen = true";
         TypedQuery<StudentReview> query = entityManager.createQuery(str, StudentReview.class)
                 .setParameter("id_user", idUser);
-        return org.springframework.dao.support.DataAccessUtils.singleResult(query.getResultList());
+        return query.getResultList().get(0);
     }
 
     /**
