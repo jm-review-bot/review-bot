@@ -27,7 +27,6 @@ public class ReviewerDeleteReview extends Step {
     private final StudentReviewService studentReviewService;
     private final UserService userService;
 
-    //@Autowired
     public ReviewerDeleteReview(VkService vkService, ReviewService reviewService, ThemeService themeService, StorageService storageService, StudentReviewService studentReviewService, UserService userService) {
         super("",CANCEL_OR_DELETE);//две кнопки: “отмена” и “да, отменить ревью”
         this.reviewService = reviewService;
@@ -51,7 +50,6 @@ public class ReviewerDeleteReview extends Step {
             Review specReview = reviewService.getReviewById(reviewId);
             deleteReview(specReview, context);
             storageService.removeUserStorage(context.getVkId(), REVIEWER_DELETE_REVIEW);
-            //keyboard = BACK_KB;
             sendUserToNextStep(context, USER_MENU);
             StringBuilder message = new StringBuilder("Ревью {").append(themeService.getThemeById(specReview.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(specReview.getDate())).append("} было успешно отменено.\n");
             storageService.updateUserStorage(context.getVkId(), USER_MENU, Arrays.asList((message.toString())));
