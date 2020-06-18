@@ -58,6 +58,7 @@ public class UserStartChooseReview extends Step {
                 Long reviewId = Long.parseLong(reviewIds.get(idNumber - 1));
                 Review reviewById = reviewService.getReviewById(reviewId);
 
+                storageService.removeUserStorage(vkId, USER_START_CHOOSE_REVIEW); // очищаем storage
                 // то смотрим записан ли кто-то на него
                 List<User> students = userService.getStudentsByReviewId(reviewId);
                 if (!students.isEmpty()) {
@@ -82,7 +83,6 @@ public class UserStartChooseReview extends Step {
             } else {
                 throw new ProcessInputException("Вы ввели некорректное число");
             }
-
         } else {
             throw new ProcessInputException("Вы ввели неверный формат числа");
         }

@@ -53,8 +53,6 @@ public class UserMenu extends Step {
         Integer vkId = context.getVkId();
         String command = StringParser.toWordsArray(context.getInput())[0];
         if (command.equals("начать")) { // (Начать прием ревью)
-//            sendUserToNextStep(context, USER_START_CHOOSE_REVIEW);
-//            storageService.removeUserStorage(vkId, USER_MENU);
             // получаем список всех ревью, которые проводит пользователь
             List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
