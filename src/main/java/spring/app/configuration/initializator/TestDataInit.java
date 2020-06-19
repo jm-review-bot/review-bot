@@ -195,7 +195,7 @@ public class TestDataInit {
         userService.addUser(nikolay);
 
         User kirill = new User();
-        kirill.setFirstName("Кирилл");
+        kirill.setFirstName("Кирилл!!!");
         kirill.setLastName("Башарин");
         kirill.setReviewPoint(4);
         kirill.setVkId(36654046);
