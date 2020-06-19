@@ -11,12 +11,12 @@ import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
+import java.util.List;
 
-import static spring.app.core.StepSelector.USER_FEEDBACK_REVIEWER_ASSESSMENT;
-import static spring.app.core.StepSelector.USER_FEEDBACK_REVIEW_ASSESSMENT;
+import static spring.app.core.StepSelector.*;
 
 @Component
-public class UserFeedbackReviewAssessment extends Step {
+public class UserFeedbackAssessment extends Step {
 
     private final StorageService storageService;
     @Value("${lower.bound}")
@@ -24,7 +24,7 @@ public class UserFeedbackReviewAssessment extends Step {
     @Value("${upper.bound}")
     private int upBound;
 
-    public UserFeedbackReviewAssessment(StorageService storageService) {
+    public UserFeedbackAssessment(StorageService storageService) {
         super("", "");
         this.storageService = storageService;
     }
@@ -41,12 +41,19 @@ public class UserFeedbackReviewAssessment extends Step {
 
         if (StringParser.isNumeric(currentInput)) {
             Integer userAssessment = Integer.parseInt(currentInput);
-
+            // проверяем принадлежит ли число указанному интервалу
             if ((userAssessment >= lowBound) && (userAssessment <= upBound)) {
-                storageService.updateUserStorage
-                        (context.getVkId(), USER_FEEDBACK_REVIEW_ASSESSMENT, Arrays.asList(currentInput));
-
-                sendUserToNextStep(context, USER_FEEDBACK_REVIEWER_ASSESSMENT);
+                // проверяем существует ли фидбэк о ревью
+                if (storageService.getUserStorage(context.getVkId(), USER_FEEDBACK_ASSESSMENT) == null) {
+                    storageService.updateUserStorage
+                            (context.getVkId(), USER_FEEDBACK_ASSESSMENT, Arrays.asList(currentInput));
+                }
+                else {
+                    String reviewFeedback = storageService.getUserStorage(context.getVkId(), USER_FEEDBACK_ASSESSMENT).get(0);
+                    storageService.updateUserStorage
+                            (context.getVkId(), USER_FEEDBACK_ASSESSMENT, Arrays.asList(reviewFeedback, currentInput));
+                    sendUserToNextStep(context, USER_FEEDBACK_COMMENT);
+                }
             } else {
                 throw new NoNumbersEnteredException("Некорректный ввод, введите оценку в диапазоне от " + lowBound +
                         " до " + upBound + " числом!");
@@ -58,7 +65,13 @@ public class UserFeedbackReviewAssessment extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        return "Оцените насколько для вас было полезным сдача ревью от " + lowBound + " до " + upBound + "?";
+
+        if (storageService.getUserStorage(context.getVkId(), USER_FEEDBACK_ASSESSMENT) == null) {
+            return "Оцените насколько для вас было полезным сдача ревью от " + lowBound + " до " + upBound + "?";
+        }
+        else {
+            return "Оцените насколько объективен и корректен был принимающий от " + lowBound + " до " + upBound + "?";
+        }
     }
 
     @Override
