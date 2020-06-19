@@ -321,6 +321,21 @@ public class Keyboards {
             "        \"color\": \"negative\"\n" +
             "      }";
 
+    public final static String SEARCH_OR_BACK = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Поиск\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      } ";
+
     public final static String PASS_OR_NOT_PASS_OR_BACK = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
