@@ -50,17 +50,18 @@ public class UserFeedbackComment extends Step {
         // добавляем в бд
         userFeedback.setUser(context.getUser());
         userFeedback.setRatingReview(Integer.valueOf(storageService
-                .getUserStorage(context.getVkId(), USER_FEEDBACK_ASSESSMENT).get(0)));
+                .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_RATING).get(0)));
 
         userFeedback.setRatingReviewer(Integer.valueOf(storageService
-                .getUserStorage(context.getVkId(), USER_FEEDBACK_ASSESSMENT).get(1)));
+                .getUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_RATING).get(0)));
 
         userFeedback.setStudentReview(studentReviewService
                 .getStudentReviewById(Long.valueOf(storageService.getUserStorage(context.getVkId(),
                         USER_FEEDBACK_CONFIRMATION).get(0))));
         feedbackService.addFeedback(userFeedback);
         // очищаем storageService
-        storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_ASSESSMENT);
+        storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEW_RATING);
+        storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_REVIEWER_RATING);
         storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
 
         sendUserToNextStep(context, USER_MENU);

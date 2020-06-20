@@ -37,7 +37,7 @@ public class UserFeedbackConfirmation extends Step {
             storageService.removeUserStorage(context.getVkId(), USER_FEEDBACK_CONFIRMATION);
             sendUserToNextStep(context, USER_MENU);
         } else if (wordInput.equals("начать")) {
-            sendUserToNextStep(context, USER_FEEDBACK_ASSESSMENT);
+            sendUserToNextStep(context, USER_FEEDBACK_REVIEW_RATING);
         } else {
             throw new ProcessInputException("Введена неверная команда. Нажми \"Начать\" чтобы оставить отзыв" +
                     " или \"Отказаться\" для выхода в главное меню.");

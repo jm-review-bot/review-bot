@@ -130,7 +130,10 @@ public class TestDataInit {
     private Step userFeedbackConfirmation;
 
     @Autowired
-    private Step userFeedbackAssessment;
+    private Step userFeedbackReviewRating;
+
+    @Autowired
+    private Step userFeedbackReviewerRating;
 
     @Autowired
     private Step userFeedbackComment;
@@ -245,7 +248,8 @@ public class TestDataInit {
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
         steps.put(StepSelector.USER_FEEDBACK_CONFIRMATION, userFeedbackConfirmation);
-        steps.put(StepSelector.USER_FEEDBACK_ASSESSMENT, userFeedbackAssessment);
+        steps.put(StepSelector.USER_FEEDBACK_REVIEW_RATING, userFeedbackReviewRating);
+        steps.put(StepSelector.USER_FEEDBACK_REVIEWER_RATING, userFeedbackReviewerRating);
         steps.put(StepSelector.USER_FEEDBACK_COMMENT, userFeedbackComment);
 
         //add themes
