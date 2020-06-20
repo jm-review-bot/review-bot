@@ -28,9 +28,6 @@ public class TestDataInit {
     private StudentReviewService studentReviewService;
 
     @Autowired
-    private StudentReviewAnswerService studentReviewAnswerService;
-
-    @Autowired
     private QuestionService questionService;
 
     @Autowired
@@ -318,32 +315,32 @@ public class TestDataInit {
         springReviewPassed4.setUser(maksim);
         reviewService.addReview(springReviewPassed4);
 
-        /**/Review hibReview = new Review();
-        /**/hibReview.setDate(LocalDateTime.of(2021, 4, 18, 11, 13));
-        /**/hibReview.setOpen(true);
-        /**/hibReview.setTheme(hibernate);
-        /**/hibReview.setUser(nikolay);
-        /**/reviewService.addReview(hibReview);
+        Review hibReview = new Review();
+        hibReview.setDate(LocalDateTime.of(2021, 4, 18, 11, 13));
+        hibReview.setOpen(true);
+        hibReview.setTheme(hibernate);
+        hibReview.setUser(nikolay);
+        reviewService.addReview(hibReview);
 
         Review hibReview2 = new Review();
-        /**/hibReview2.setDate(LocalDateTime.of(2022, 4, 18, 11, 13));
-        /**/hibReview2.setOpen(true);
-        /**/hibReview2.setTheme(hibernate);
-        /**/hibReview2.setUser(nikolay);
-        /**/reviewService.addReview(hibReview2);
+        hibReview2.setDate(LocalDateTime.of(2022, 4, 18, 11, 13));
+        hibReview2.setOpen(true);
+        hibReview2.setTheme(hibernate);
+        hibReview2.setUser(nikolay);
+        reviewService.addReview(hibReview2);
 
         // add student reviews
-        /**/StudentReview hibStudentReview = new StudentReview();
-        /**/hibStudentReview.setUser(martyn);
-        /**/hibStudentReview.setPassed(false);
-        /**/hibStudentReview.setReview(hibReview);
-        /**/studentReviewService.addStudentReview(hibStudentReview);
+        StudentReview hibStudentReview = new StudentReview();
+        hibStudentReview.setUser(martyn);
+        hibStudentReview.setPassed(false);
+        hibStudentReview.setReview(hibReview);
+        studentReviewService.addStudentReview(hibStudentReview);
 
         StudentReview hibStudentReview2 = new StudentReview();
-        /**/hibStudentReview2.setUser(ludwig);
-        /**/hibStudentReview2.setPassed(false);
-        /**/hibStudentReview2.setReview(hibReview2);
-        /**/studentReviewService.addStudentReview(hibStudentReview2);
+        hibStudentReview2.setUser(ludwig);
+        hibStudentReview2.setPassed(false);
+        hibStudentReview2.setReview(hibReview2);
+        studentReviewService.addStudentReview(hibStudentReview2);
 
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(anton);
@@ -503,65 +500,6 @@ public class TestDataInit {
         studentForCriticalWeightCoreSuccesReview.setPassed(true);
         studentForCriticalWeightCoreSuccesReview.setReview(studentForCriticalWeightCorePassed);
         studentReviewService.addStudentReview(studentForCriticalWeightCoreSuccesReview);
-
-        //второй юзер сдающий ревью по многопоточке. То есть у него 1 пройденное ревью - кор
-        /*User secondStudentForCriticalWeight = nikolay;
-
-        //Ревью и связь о прохождении кора
-        Review secondStudentForCriticalWeightCorePassed = new Review();
-        secondStudentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
-        secondStudentForCriticalWeightCorePassed.setOpen(false);
-        secondStudentForCriticalWeightCorePassed.setTheme(core);
-        secondStudentForCriticalWeightCorePassed.setUser(secondStudentForCriticalWeight);//кто принимал
-        reviewService.addReview(secondStudentForCriticalWeightCorePassed);
-        StudentReview secondStudentForCriticalWeightCoreSuccesReview = new StudentReview();
-        secondStudentForCriticalWeightCoreSuccesReview.setUser(secondStudentForCriticalWeight);//кто сдавал
-        secondStudentForCriticalWeightCoreSuccesReview.setPassed(true);
-        secondStudentForCriticalWeightCoreSuccesReview.setReview(secondStudentForCriticalWeightCorePassed);
-        studentReviewService.addStudentReview(secondStudentForCriticalWeightCoreSuccesReview);
-
-
-        //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
-        //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
-        Review criticalWeightReview = new Review();
-        criticalWeightReview.setDate(LocalDateTime.of(2020, 6, 5, 2, 35));
-        criticalWeightReview.setOpen(true);
-        criticalWeightReview.setTheme(multithreading);
-        criticalWeightReview.setUser(akira);//кто принимает
-        reviewService.addReview(criticalWeightReview);
-
-        //Связь для ревью.
-        // первый из сдающих
-        StudentReview criticalWeightFirstStudentReview = new StudentReview();
-        criticalWeightFirstStudentReview.setUser(studentForCriticalWeight);//кто сдает
-        criticalWeightFirstStudentReview.setReview(criticalWeightReview);
-        studentReviewService.addStudentReview(criticalWeightFirstStudentReview);
-        //второй сдающий
-        StudentReview criticalWeightSecondStudentReview = new StudentReview();
-        criticalWeightSecondStudentReview.setUser(secondStudentForCriticalWeight);//кто сдает
-        criticalWeightSecondStudentReview.setReview(criticalWeightReview);
-        studentReviewService.addStudentReview(criticalWeightSecondStudentReview);
-
-        //ревью по многопоточке, на котором 1 принимает, 2 сдает ревью.
-        //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
-        Review criticalWeightReview2 = new Review();
-        criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 10, 21, 25));
-        criticalWeightReview2.setOpen(true);
-        criticalWeightReview2.setTheme(multithreading);
-        criticalWeightReview2.setUser(akira);//кто принимает
-        reviewService.addReview(criticalWeightReview2);
-
-        //Связь для ревью.
-        // первый из сдающих
-        StudentReview criticalWeightFirstStudentReview2 = new StudentReview();
-        criticalWeightFirstStudentReview2.setUser(studentForCriticalWeight);//кто сдает
-        criticalWeightFirstStudentReview2.setReview(criticalWeightReview2);
-        studentReviewService.addStudentReview(criticalWeightFirstStudentReview2);
-        //второй сдающий
-        StudentReview criticalWeightSecondStudentReview2 = new StudentReview();
-        criticalWeightSecondStudentReview2.setUser(secondStudentForCriticalWeight);//кто сдает
-        criticalWeightSecondStudentReview2.setReview(criticalWeightReview2);
-        studentReviewService.addStudentReview(criticalWeightSecondStudentReview2);*/
 
         //4 вопроса
         Question criticalQuestion1 = new Question();

@@ -25,7 +25,6 @@ public class SelectingReviewToDelete extends Step {
     private final ThemeService themeService;
     private final StorageService storageService;
 
-    //@Autowired
     public SelectingReviewToDelete(VkService vkService, ReviewService reviewService, ThemeService themeService, StorageService storageService) {
         super("",DEF_BACK_KB);
         this.reviewService = reviewService;
