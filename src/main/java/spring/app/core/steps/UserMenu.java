@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -24,21 +25,25 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class UserMenu extends Step {
 
-    private final StorageService storageService;
-    private final ReviewService reviewService;
-    private final UserService userService;
-    private final StudentReviewService studentReviewService;
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
-    public UserMenu(StorageService storageService, ReviewService reviewService,
-                    UserService userService, StudentReviewService studentReviewService) {
+    @Autowired
+    private StorageService storageService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private StudentReviewService studentReviewService;
+
+    public UserMenu(String text, String keyboard) {
+        super(text, keyboard);
+    }
+
+    public UserMenu() {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_USER_MENU_KB);
-        this.storageService = storageService;
-        this.reviewService = reviewService;
-        this.userService = userService;
-        this.studentReviewService = studentReviewService;
     }
 
     @Override
@@ -110,23 +115,29 @@ public class UserMenu extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        User user = context.getUser();
-        String text = String.format(
-                "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
-                        "для удобного использования бота воспользуйтесь кнопками + скрин.\n" +
-                        "На данный момент у вас %d RP (Review Points) для сдачи ревью.\n" +
-                        "RP используются для записи на ревью, когда вы хотите записаться на ревью " +
-                        "вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP " +
-                        "принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, " +
-                        "если вы дали возможность вам сдать, но никто не записался на сдачу " +
-                        "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
-                , user.getFirstName(), user.getReviewPoint());
         Integer vkId = context.getVkId();
+        User user = context.getUser();
         List<String> currentStorage = storageService.getUserStorage(vkId, USER_MENU);
+        String textUserCancelMenuStep = String.valueOf(storageService.getUserStorage(vkId, USER_CANCEL_REVIEW));
+        String text = "";
+        if (!(textUserCancelMenuStep.equals("null"))) {
+            text += textUserCancelMenuStep + "\n\n";
+        }
+        text += String.format(
+                "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
+                "для удобного использования бота воспользуйтесь кнопками + скрин.\n" +
+                "На данный момент у вас %d RP (Review Points) для сдачи ревью.\n" +
+                "RP используются для записи на ревью, когда вы хотите записаться на ревью " +
+                "вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP " +
+                "принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, " +
+                "если вы дали возможность вам сдать, но никто не записался на сдачу " +
+                "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
+                , user.getFirstName(), user.getReviewPoint());
         if (currentStorage != null) {
             //если кому потребуется выводить кучу текста - пусть стримами бегает по элементам. А пока тут нужен только первый
             text = currentStorage.get(0) + text;
             storageService.removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
         }
         return text;
     }
@@ -157,10 +168,11 @@ public class UserMenu extends Step {
         }
         //кнопка отмены ревью для студента
         if (studentReview != null) {
-            keys
-                    .append(this.getRowDelimiterString())
-                    .append(REVIEW_CANCEL_FR);
-            isEmpty = false;
+            if (!isEmpty) {
+                keys.append(this.getRowDelimiterString());
+                isEmpty = false;
+            }
+            keys.append(REVIEW_CANCEL_FR);
         }
         if (!isEmpty) {
             return keys.toString();
