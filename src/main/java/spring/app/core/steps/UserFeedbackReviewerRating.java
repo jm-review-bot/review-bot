@@ -25,6 +25,6 @@ public class UserFeedbackReviewerRating extends UserBaseFeedbackStep {
 
     @Override
     public String getDynamicText(BotContext context) {
-        return "Оцените насколько объективен и корректен был принимающий от " + getBoundsString();
+        return "Оцените насколько объективен и корректен был принимающий" + getBoundsString();
     }
 }

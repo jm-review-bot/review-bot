@@ -57,7 +57,7 @@ public abstract class UserBaseFeedbackStep extends Step {
      * @return
      */
     public String getBoundsString() {
-        return lowBound + " до " + upBound + "?";
+        return " от " + lowBound + " до " + upBound + "?";
     }
 
     /**
