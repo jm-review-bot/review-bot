@@ -85,6 +85,12 @@ public class TestDataInit {
     private Step adminEditReviewChangeReview;
 
     @Autowired
+    private Step adminSearch;
+
+    @Autowired
+    private Step adminConfirmSearch;
+
+    @Autowired
     private Step adminProposalChangeFullnameAddedUser;
 
     @Autowired
@@ -222,6 +228,8 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);
         steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_VKID, adminConfirmChangeEditedUserVkId);
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
+        steps.put(StepSelector.ADMIN_SEARCH, adminSearch);
+        steps.put(StepSelector.ADMIN_CONFIRM_SEARCH, adminConfirmSearch);
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_USER_LIST, adminEditReviewGetUserList);
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_THEME_LIST, adminEditReviewGetThemeList);
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST, adminEditReviewGetReviewList);
