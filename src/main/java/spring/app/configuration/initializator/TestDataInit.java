@@ -129,6 +129,18 @@ public class TestDataInit {
     @Autowired
     private Step userStartChooseReview;
 
+    @Autowired
+    private Step userFeedbackConfirmation;
+
+    @Autowired
+    private Step userFeedbackReviewRating;
+
+    @Autowired
+    private Step userFeedbackReviewerRating;
+
+    @Autowired
+    private Step userFeedbackComment;
+
     public TestDataInit() {
     }
 
@@ -152,15 +164,6 @@ public class TestDataInit {
         testUser.setChatStep(StepSelector.START);
         userService.addUser(testUser);
 
-        User roman = new User();
-        roman.setFirstName("Роман");
-        roman.setLastName("Евсеев");
-        roman.setReviewPoint(16);
-        roman.setVkId(1374221);
-        roman.setRole(roleUser);
-        roman.setChatStep(StepSelector.START);
-        userService.addUser(roman);
-
         User sergey = new User();
         sergey.setFirstName("Сергей");
         sergey.setLastName("Лебедев");
@@ -169,6 +172,15 @@ public class TestDataInit {
         sergey.setRole(roleAdmin);
         sergey.setChatStep(StepSelector.START);
         userService.addUser(sergey);
+
+        User roman = new User();
+        roman.setFirstName("Роман");
+        roman.setLastName("Евсеев");
+        roman.setReviewPoint(16);
+        roman.setVkId(1374221);
+        roman.setRole(roleUser);
+        roman.setChatStep(StepSelector.START);
+        userService.addUser(roman);
 
         User maksim = new User();
         maksim.setFirstName("Максим");
@@ -248,6 +260,10 @@ public class TestDataInit {
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
+        steps.put(StepSelector.USER_FEEDBACK_CONFIRMATION, userFeedbackConfirmation);
+        steps.put(StepSelector.USER_FEEDBACK_REVIEW_RATING, userFeedbackReviewRating);
+        steps.put(StepSelector.USER_FEEDBACK_REVIEWER_RATING, userFeedbackReviewerRating);
+        steps.put(StepSelector.USER_FEEDBACK_COMMENT, userFeedbackComment);
 
         //add themes
         Theme core = new Theme();
@@ -309,8 +325,8 @@ public class TestDataInit {
         // add reviews
         Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        springReviewPassed.setOpen(true);
-        springReviewPassed.setTheme(hibernate);
+        springReviewPassed.setOpen(false);
+        springReviewPassed.setTheme(spring);
         springReviewPassed.setUser(roman);
         reviewService.addReview(springReviewPassed);
 
@@ -364,8 +380,10 @@ public class TestDataInit {
         reviewService.addReview(springReviewPassed7);
 
         // add student reviews
+
+
         StudentReview studentReview = new StudentReview();
-        studentReview.setUser(anton);
+        studentReview.setUser(sergey);
         studentReview.setPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
@@ -690,5 +708,66 @@ public class TestDataInit {
         changeReviewAnswerQuestion4.setRight(true);
         changeReviewAnswerQuestion4.setQuestion(changeReviewQuestion4);
         studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion4);
+
+        //
+        User andrey = new User();
+        andrey.setFirstName("Андрей");
+        andrey.setLastName("Суетин");
+        andrey.setReviewPoint(4);
+        andrey.setVkId(175396577);
+        andrey.setRole(roleAdmin);
+        andrey.setChatStep(StepSelector.START);
+        userService.addUser(andrey);
+
+        User ale = new User();
+        ale.setFirstName("А");
+        ale.setLastName("К");
+        ale.setReviewPoint(4);
+        ale.setVkId(38398262);
+        ale.setRole(roleUser);
+        ale.setChatStep(StepSelector.START);
+        userService.addUser(ale);
+//
+//
+        Review springReviewPassed12 = new Review();
+        springReviewPassed12.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
+        springReviewPassed12.setOpen(false);
+        springReviewPassed12.setTheme(spring);
+        springReviewPassed12.setUser(anton);
+        reviewService.addReview(springReviewPassed12);
+
+        Review hibernateReviewPassed13 = new Review();
+        hibernateReviewPassed13.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
+        hibernateReviewPassed13.setOpen(false);
+        hibernateReviewPassed13.setTheme(hibernate);
+        hibernateReviewPassed13.setUser(anton);
+        reviewService.addReview(hibernateReviewPassed13);
+
+        Review review11 = new Review();
+        review11.setDate(LocalDateTime.of(2020, 6, 7, 16, 0));
+        review11.setOpen(true);
+        review11.setTheme(spring);
+        review11.setUser(andrey);
+        reviewService.addReview(review11);
+//
+//
+        StudentReview studentReview12 = new StudentReview();
+        studentReview12.setUser(andrey);
+        studentReview12.setPassed(true);
+        studentReview12.setReview(springReviewPassed12);
+        studentReviewService.addStudentReview(studentReview12);
+
+        StudentReview studentReview13 = new StudentReview();
+        studentReview13.setUser(ale);
+        studentReview13.setPassed(true);
+        studentReview13.setReview(hibernateReviewPassed13);
+        studentReviewService.addStudentReview(studentReview13);
+
+        StudentReview studentReview15 = new StudentReview();
+        studentReview15.setUser(ale);
+        studentReview15.setPassed(null);
+        studentReview15.setReview(review11);
+        studentReviewService.addStudentReview(studentReview15);
+//
     }
 }
