@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -19,6 +21,7 @@ import static spring.app.util.Keyboards.YES_NO_KB;
 
 @Component
 public class AdminRemoveUser extends Step {
+    private final static Logger log = LoggerFactory.getLogger(AdminRemoveUser.class);
 
     private final StorageService storageService;
     private final UserService userService;
@@ -47,13 +50,18 @@ public class AdminRemoveUser extends Step {
         String wordInput = StringParser.toWordsArray(currentInput)[0];
 
         if (wordInput.equals("да")) {
-            String selectedUserId = storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0);
-            storageService.clearUsersOfStorage(userService.getUserById(Long.parseLong(selectedUserId)).getVkId());
-            userService.deleteUserById(Long.parseLong(selectedUserId));
+            Long selectedUserId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
+            User userById = userService.getUserById(selectedUserId);
+            storageService.clearUsersOfStorage(userById.getVkId());
+            userService.deleteUserById(selectedUserId);
             //перекинем инфу с удаления на список юзеров. Для унификации. Данная инфа будет использована при возвращении
             String userInfo = storageService.getUserStorage(vkId, ADMIN_REMOVE_USER).get(0);
             storageService.removeUserStorage(vkId, ADMIN_REMOVE_USER);
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(userInfo));
+            log.info(
+                    "Admin (vkId={}) удалил пользователя (vkId={})",
+                    context.getUser().getVkId(), userById.getVkId()
+            );
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else if (wordInput.equals("нет") || wordInput.equals("назад")) {
             //Возвращаемся назад

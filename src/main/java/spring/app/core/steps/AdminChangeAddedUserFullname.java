@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -17,6 +19,7 @@ import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
  */
 @Component
 public class AdminChangeAddedUserFullname extends Step {
+    private final static Logger log = LoggerFactory.getLogger(AdminChangeAddedUserFullname.class);
 
     private final StorageService storageService;
     private final UserService userService;
@@ -43,9 +46,17 @@ public class AdminChangeAddedUserFullname extends Step {
             if (allSymbolAlphabet) {
                 Long addedUserId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0));
                 User addedUser = userService.getUserById(addedUserId);
-                addedUser.setFirstName(firstAndLastName[0]);
-                addedUser.setLastName(firstAndLastName[1]);
+                String oldLastName = addedUser.getLastName();
+                String oldFirstName = addedUser.getFirstName();
+                String newFirstName = firstAndLastName[0];
+                String newLastName = firstAndLastName[1];
+                addedUser.setFirstName(newFirstName);
+                addedUser.setLastName(newLastName);
                 userService.updateUser(addedUser);
+                log.info(
+                        "Admin (vkId={}) изменил имя пользователя (vkId={}) с {} {} на {} {]",
+                        context.getUser().getVkId(), addedUser.getVkId(), oldLastName, oldFirstName, newLastName, newFirstName
+                );
                 sendUserToNextStep(context, ADMIN_SET_THEME_ADDED_USER);
             } else {
                 throw new ProcessInputException("В новом имени фамилии присутствуют не алфавитные символы");
