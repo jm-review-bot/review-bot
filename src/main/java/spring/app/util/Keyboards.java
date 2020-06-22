@@ -228,6 +228,31 @@ public class Keyboards {
             "        \"color\": \"positive\"\n" +
             "      }";
 
+    public final static String FEEDBACK_CONFIRM_KB = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Начать\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Отказаться\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "       }";
+
+    public final static String USER_FEEDBACK_ENDING_KB = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Закончить\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "       }";
+
     public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
