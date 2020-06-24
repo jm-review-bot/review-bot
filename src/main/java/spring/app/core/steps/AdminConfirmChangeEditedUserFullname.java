@@ -64,7 +64,7 @@ public class AdminConfirmChangeEditedUserFullname extends Step {
                 context.getUser().setLastName(newLastName);
             }
             log.info(
-                    "Admin (vkId={}) изменил имя пользователя (vkId={}) с {} {} на {} {]",
+                    "Admin (vkId={}) изменил имя пользователя (vkId={}) с {} {} на {} {}",
                     context.getUser().getVkId(), editingUser.getVkId(), oldLastName, oldFirstName, newLastName, newFirstName
             );
             sendUserToNextStep(context, ADMIN_USERS_LIST);

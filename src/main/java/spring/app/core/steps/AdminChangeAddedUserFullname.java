@@ -54,7 +54,7 @@ public class AdminChangeAddedUserFullname extends Step {
                 addedUser.setLastName(newLastName);
                 userService.updateUser(addedUser);
                 log.info(
-                        "Admin (vkId={}) изменил имя пользователя (vkId={}) с {} {} на {} {]",
+                        "Admin (vkId={}) изменил имя пользователя (vkId={}) с {} {} на {} {}",
                         context.getUser().getVkId(), addedUser.getVkId(), oldLastName, oldFirstName, newLastName, newFirstName
                 );
                 sendUserToNextStep(context, ADMIN_SET_THEME_ADDED_USER);
