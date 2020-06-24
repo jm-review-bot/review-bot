@@ -50,15 +50,6 @@ public class Keyboards {
             "          \"label\": \"Принять ревью\"\n" +
             "        },\n" +
             "        \"color\": \"primary\"\n" +
-            "      }\n"+
-            "     ],[" +
-            "{\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Отмена записи на ревью\"\n" +
-            "        },\n" +
-            "        \"color\": \"negative\"\n" +
             "      }\n";
 
 
