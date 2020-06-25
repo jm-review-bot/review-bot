@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -21,6 +23,7 @@ import static spring.app.util.Keyboards.YES_OR_CANCEL;
  */
 @Component
 public class AdminConfirmChangeEditedUserFullname extends Step {
+    private final static Logger log = LoggerFactory.getLogger(AdminConfirmChangeEditedUserFullname.class);
 
     private final StorageService storageService;
     private final UserService userService;
@@ -46,18 +49,24 @@ public class AdminConfirmChangeEditedUserFullname extends Step {
             List<String> userFullname = storageService.getUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
             String oldFirstName = editingUser.getFirstName();
             String oldLastName = editingUser.getLastName();
-            editingUser.setFirstName(userFullname.get(0));
-            editingUser.setLastName(userFullname.get(1));
+            String newFirstName = userFullname.get(0);
+            String newLastName = userFullname.get(1);
+            editingUser.setFirstName(newFirstName);
+            editingUser.setLastName(newLastName);
             userService.updateUser(editingUser);
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
             //подготовим сообщение для вывода после изменения
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST,
                     Arrays.asList(String.format("Имя пользователя %s %s (%s) успешно изменено на {%s} {%s}\n",
-                            oldFirstName, oldLastName, editingUser.getVkId(), userFullname.get(0), userFullname.get(1))));
+                            oldFirstName, oldLastName, editingUser.getVkId(), newFirstName, newLastName)));
             if (vkId.equals(editingUser.getVkId())) {
-                context.getUser().setFirstName(userFullname.get(0));
-                context.getUser().setLastName(userFullname.get(1));
+                context.getUser().setFirstName(newFirstName);
+                context.getUser().setLastName(newLastName);
             }
+            log.info(
+                    "Admin (vkId={}) изменил имя пользователя (vkId={}) с {} {} на {} {}",
+                    context.getUser().getVkId(), editingUser.getVkId(), oldLastName, oldFirstName, newLastName, newFirstName
+            );
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else if ("отмена".equals(input)) {
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);

@@ -1,8 +1,6 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,7 +18,6 @@ import java.util.List;
 
 @Component
 public class BotScheduler {
-    private final static Logger log = LoggerFactory.getLogger(BotScheduler.class);
     private final VkService vkService;
     private final ReviewService reviewService;
     private final UserService userService;
@@ -46,14 +43,12 @@ public class BotScheduler {
 
     @Scheduled(fixedDelayString = "${bot.operations_interval}")
     public void scheduleFixedDelayTask() {
-        log.trace("Бот работает уже " + (timeCounter++) + " с.");
         List<Message> messages = vkService.getMessages();
         bot.replyForMessages(messages);
     }
 
     @Scheduled(cron = "${bot.expired_review_check_time}")
     public void scheduleCloseExpiredReview() {
-        log.info("Скрипт запущен. Началась проверка просроченных ревью.");
         reviewService.updateAllExpiredReviewsByDate(LocalDateTime.now());
     }
 
@@ -103,7 +98,6 @@ public class BotScheduler {
     // задание для полного очищения кэша в заданное время
     @Scheduled(cron = "${bot.clear_cache}")
     public void scheduleClearCache() {
-        log.info("Скрипт запущен. Началась очистка кэша.");
         storageService.clearStorage();
     }
 }

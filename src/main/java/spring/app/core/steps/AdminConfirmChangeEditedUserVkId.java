@@ -1,5 +1,7 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -20,6 +22,7 @@ import static spring.app.util.Keyboards.YES_OR_CANCEL;
  */
 @Component
 public class AdminConfirmChangeEditedUserVkId extends Step {
+    private final static Logger log = LoggerFactory.getLogger(AdminConfirmChangeEditedUserVkId.class);
 
     private final StorageService storageService;
     private final UserService userService;
@@ -56,6 +59,10 @@ public class AdminConfirmChangeEditedUserVkId extends Step {
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST,
                     Arrays.asList(String.format("Vkid пользователя %s %s (%s) успешно изменено на {%s}\n"
                             , editingUser.getFirstName(), editingUser.getLastName(), oldVkId, newUserVkId)));
+            log.info(
+                    "Admin (vkId={}) изменил vkId пользователя с {} на {}",
+                    context.getUser().getVkId(), oldVkId, newUserVkId
+            );
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else if ("отмена".equals(input)) {
             storageService.removeUserStorage(vkId, ADMIN_INPUT_NEW_VKID_EDITED_USER);

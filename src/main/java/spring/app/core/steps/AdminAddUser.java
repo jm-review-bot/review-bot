@@ -2,6 +2,8 @@ package spring.app.core.steps;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.IncorrectVkIdsException;
@@ -21,6 +23,7 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class AdminAddUser extends Step {
+    private final static Logger log = LoggerFactory.getLogger(AdminAddUser.class);
 
     private final StorageService storageService;
     private final UserService userService;
@@ -82,6 +85,10 @@ public class AdminAddUser extends Step {
                     storageService.updateUserStorage
                             (vkId, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, Arrays.asList
                                     (addedUserText.toString()));
+                    log.info(
+                            "Admin (vkId={}) добавил пользователя (vkId={})",
+                            context.getUser().getVkId(), addedUser.getVkId()
+                    );
                     sendUserToNextStep(context, ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER);
                 } else {
                     throw new ProcessInputException("Пользователь уже в базе.\n");
