@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -24,21 +25,25 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class UserMenu extends Step {
 
-    private final StorageService storageService;
-    private final ReviewService reviewService;
-    private final StudentReviewService studentReviewService;
-    private final UserService userService;
-
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
-    public UserMenu(ReviewService reviewService, StorageService storageService, StudentReviewService studentReviewService, UserService userService) {
+    @Autowired
+    private StorageService storageService;
+    @Autowired
+    private ReviewService reviewService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private StudentReviewService studentReviewService;
+
+    public UserMenu(String text, String keyboard) {
+        super(text, keyboard);
+    }
+
+    public UserMenu() {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", DEF_USER_MENU_KB);
-        this.reviewService = reviewService;
-        this.storageService = storageService;
-        this.studentReviewService = studentReviewService;
-        this.userService = userService;
     }
 
     @Override
@@ -95,14 +100,20 @@ public class UserMenu extends Step {
                 sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);
                 storageService.removeUserStorage(vkId, SELECTING_REVIEW_TO_DELETE);
             }
+        } else if(command.equals("отмена")) {// (Отменить ревью (!) у сдающего лица [студента])
+            sendUserToNextStep(context, USER_CANCEL_REVIEW);
+            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("сдать")) { // (Сдать ревью)
             sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
+            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
             sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_THEME);
+            storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")) {
+
             if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
-                storageService.removeUserStorage(vkId, USER_MENU);
                 sendUserToNextStep(context, ADMIN_MENU);
+                storageService.removeUserStorage(vkId, USER_MENU);
             } else {
                 throw new ProcessInputException("Недостаточно прав для выполнения команды!");
             }
@@ -113,23 +124,29 @@ public class UserMenu extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        User user = context.getUser();
-        String text = String.format(
-                "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
-                        "для удобного использования бота воспользуйтесь кнопками + скрин.\n" +
-                        "На данный момент у вас %d RP (Review Points) для сдачи ревью.\n" +
-                        "RP используются для записи на ревью, когда вы хотите записаться на ревью " +
-                        "вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP " +
-                        "принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, " +
-                        "если вы дали возможность вам сдать, но никто не записался на сдачу " +
-                        "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
-                , user.getFirstName(), user.getReviewPoint());
         Integer vkId = context.getVkId();
+        User user = context.getUser();
         List<String> currentStorage = storageService.getUserStorage(vkId, USER_MENU);
+        String textUserCancelMenuStep = String.valueOf(storageService.getUserStorage(vkId, USER_CANCEL_REVIEW));
+        String text = "";
+        if (!(textUserCancelMenuStep.equals("null"))) {
+            text += textUserCancelMenuStep + "\n\n";
+        }
+        text += String.format(
+                "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
+                "для удобного использования бота воспользуйтесь кнопками + скрин.\n" +
+                "На данный момент у вас %d RP (Review Points) для сдачи ревью.\n" +
+                "RP используются для записи на ревью, когда вы хотите записаться на ревью " +
+                "вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP " +
+                "принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, " +
+                "если вы дали возможность вам сдать, но никто не записался на сдачу " +
+                "(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP."
+                , user.getFirstName(), user.getReviewPoint());
         if (currentStorage != null) {
             //если кому потребуется выводить кучу текста - пусть стримами бегает по элементам. А пока тут нужен только первый
             text = currentStorage.get(0) + text;
             storageService.removeUserStorage(vkId, USER_MENU);
+            storageService.removeUserStorage(vkId, USER_CANCEL_REVIEW);
         }
         return text;
     }
@@ -166,8 +183,7 @@ public class UserMenu extends Step {
                 keys.append(this.getRowDelimiterString());
                 isEmpty = false;
             }
-            keys.append(this.getRowDelimiterString())
-                    .append(DELETE_STUDENT_REVIEW);
+            keys.append(DELETE_STUDENT_REVIEW);
         }
         if (!isEmpty) {
             return keys.toString();

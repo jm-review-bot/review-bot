@@ -262,6 +262,31 @@ public class Keyboards {
             "        \"color\": \"positive\"\n" +
             "      }";
 
+    public final static String FEEDBACK_CONFIRM_KB = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Начать\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Отказаться\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "       }";
+
+    public final static String USER_FEEDBACK_ENDING_KB = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Закончить\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "       }";
+
     public final static String CHANGE_OR_NOT_ADDED_USER_FULLNAME = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
@@ -329,6 +354,21 @@ public class Keyboards {
             "        },\n" +
             "        \"color\": \"negative\"\n" +
             "      }";
+
+    public final static String SEARCH_OR_BACK = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Поиск\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      } ";
 
     public final static String PASS_OR_NOT_PASS_OR_BACK = "{\n" +
             "        \"action\": {\n" +

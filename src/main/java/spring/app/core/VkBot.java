@@ -17,11 +17,10 @@ import java.util.List;
 
 @Component
 public class VkBot implements ChatBot {
+
     private VkService vkService;
     private UserService userService;
     private StepHolder stepHolder;
-
-
 
     public VkBot(VkService vkService, UserService userService, StepHolder stepHolder) {
         this.vkService = vkService;

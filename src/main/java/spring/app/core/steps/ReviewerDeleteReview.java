@@ -8,7 +8,6 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
-import spring.app.util.Keyboards;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
@@ -70,30 +69,44 @@ public class ReviewerDeleteReview extends Step {
         for (User user : studentsByReview) {
             if (user.getChatStep() == USER_MENU) {
                 //перед отправкой находящемуся на стэпе UserMenu студенту сообщения нужно определить, какие кнопки ему надо отображать
-                //перед отправкой студенту сообщения нужно определить, какие кнопки ему надо отображать
                 StringBuilder keys = new StringBuilder(HEADER_FR);
-                List<StudentReview> studentReviews = studentReviewService.getOpenReviewByStudentVkId(vkId);
-                List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
+                keys.append("[\n");
+                keys.append(DEF_USER_MENU_KB);
+                Integer usVkId = user.getVkId();
+                // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
+                List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(usVkId);
+                // проверка, записан ли он на другие ревью.
+                Review studentReview = null;
+                List<StudentReview> openStudentReview = studentReviewService.getOpenReviewByStudentVkId(usVkId);
+                if (!openStudentReview.isEmpty()) {
+                    if (openStudentReview.size() > 1) {
+                        //TODO:впилить запись в логи - если у нас у студента 2 открытых ревью которые он сдает - это не нормально
+                    }
+                    studentReview = openStudentReview.get(0).getReview();
+                }
+                // формируем блок кнопок
+                boolean isEmpty = true;//если не пустое - добавляем разделитель
+                //кнопка начать ревью для ревьюера
                 if (!userReviews.isEmpty()) {
                     keys
+                            .append(ROW_DELIMETER_FR)
                             .append(REVIEW_START_FR)
-                            .append(ROW_DELIMETER_FR);
+                            .append(ROW_DELIMETER_FR)
+                            .append(REVIEW_CANCEL_FR);
+                    isEmpty = false;
                 }
-                if (!studentReviews.isEmpty()) {
-                    keys
-                            .append(REVIEW_CANCEL_FR)
-                            .append(ROW_DELIMETER_FR);
+                //кнопка отмены ревью для студента
+                if (studentReview != null) {
+                    if (!isEmpty) {
+                        keys.append(ROW_DELIMETER_FR);
+                    }
+                    keys.append(DELETE_STUDENT_REVIEW);
                 }
-                if (!reviewService.getOpenReviewsByReviewerVkId(user.getVkId()).isEmpty()) {
-                    keys.append(Keyboards.USER_MENU_D_FR).
-                            append(FOOTER_FR);
-                } else {
-                    keys.append(DEF_USER_MENU_KB)
-                            .append(FOOTER_FR);
-                }
-                String newKeyboard = keys.toString();
+                keys.append("]\n");
+                keys.append(FOOTER_FR);
+                System.out.println("deleteReview_keybord:\n"+keys.toString());
                 //отправка каждому студенту сообщения message
-                vkService.sendMessage(message.toString(), newKeyboard, user.getVkId());
+                vkService.sendMessage(message.toString(), keys.toString(), usVkId);
             } else {
                 Step userStep = stepHolder.getSteps().get(user.getChatStep());
                 //отправка каждому студенту сообщения message

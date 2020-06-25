@@ -56,7 +56,7 @@ public class UserCancelReview extends Step {
                 studentReviewService.deleteStudentReviewByVkId(vkId);
                 List<String> savedMessage = Arrays.asList("Запись на ревью была удалена.");
                 storageService.updateUserStorage(vkId, USER_CANCEL_REVIEW, savedMessage);
-                sendUserToNextStep(context, USER_CANCEL_REVIEW);
+                sendUserToNextStep(context, USER_MENU);
             } else {
                 throw new ProcessInputException("Введена неверная команда. Нажми \"Да\" для удаления записи на ревью или \"Нет\" для выхода в главное меню.");
             }
