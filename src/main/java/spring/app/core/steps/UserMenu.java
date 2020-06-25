@@ -14,17 +14,19 @@ import spring.app.service.abstraction.StudentReviewService;
 import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
-
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
@@ -59,16 +61,20 @@ public class UserMenu extends Step {
             List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
             if (!userReviews.isEmpty()) {
                 // берем из списка то ревью, которое начинается позже текущего времени с самой поздней датой
-                Review nearestReview = userReviews.stream()
+                List<Review> overdueReviews = userReviews.stream()
                         .filter(review -> review.getDate().isBefore(LocalDateTime.now()))
-                        .max(Comparator.comparing(Review::getDate))
-                        .orElse(null);
-                // если такого ревью нет, сообщаем, что начать ревью можно не раньше установленного в самом ревью времени
-                if (nearestReview == null) {
+                        .sorted(Comparator.comparing(Review::getDate))
+                        .collect(Collectors.toList());
+
+                int overdueReviewsCount = overdueReviews.size();
+
+                if (overdueReviewsCount == 0) {
+                    // если такого ревью нет, сообщаем, что начать ревью можно не раньше установленного в самом ревью времени
                     String notification = "Начать ревью можно не раньше установленного в самом ревью времени";
                     throw new ProcessInputException(notification);
+                } else if (overdueReviewsCount == 1) {
                     // если ревью есть в этом временном диапазоне
-                } else {
+                    Review nearestReview = overdueReviews.get(0);
                     // то смотрим записан ли кто-то на него
                     Long reviewId = nearestReview.getId();
                     List<User> students = userService.getStudentsByReviewId(reviewId);
@@ -86,6 +92,12 @@ public class UserMenu extends Step {
                         userService.updateUser(user);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
                     }
+                } else {
+                    storageService.updateUserStorage(
+                            vkId, USER_START_CHOOSE_REVIEW,
+                            overdueReviews.stream().map(review -> review.getId().toString()).collect(Collectors.toList())
+                    );
+                    sendUserToNextStep(context, USER_START_CHOOSE_REVIEW);
                 }
             } else {
                 // если пользователь не проводит ревью, то показываем сообщение
