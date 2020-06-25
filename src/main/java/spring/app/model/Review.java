@@ -24,7 +24,7 @@ public class Review {
     @Column(name = "is_open")
     private Boolean isOpen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;

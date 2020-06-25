@@ -184,7 +184,9 @@ public class UserMenu extends Step {
         if (!userReviews.isEmpty()) {
             keys
                     .append(this.getRowDelimiterString())
-                    .append(REVIEW_START_FR);
+                    .append(REVIEW_START_FR)
+                    .append(this.getRowDelimiterString())
+                    .append(REVIEW_CANCEL_FR);
             isEmpty = false;
         }
         //кнопка отмены ревью для студента
@@ -193,7 +195,7 @@ public class UserMenu extends Step {
                 keys.append(this.getRowDelimiterString());
                 isEmpty = false;
             }
-            keys.append(REVIEW_CANCEL_FR);
+            keys.append(DELETE_STUDENT_REVIEW);
         }
         if (!isEmpty) {
             return keys.toString();
