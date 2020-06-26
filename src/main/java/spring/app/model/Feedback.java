@@ -21,7 +21,6 @@ public class Feedback {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private StudentReview studentReview;
 
     @Column(name = "rating_reviewer")

@@ -30,4 +30,8 @@ public interface StudentReviewService {
     List<StudentReview> getOpenReviewByStudentVkId(Integer vkId);
 
     StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
+
+    List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId);
+
+    void removeAll(List<StudentReview> studentReviews);
 }

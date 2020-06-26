@@ -90,4 +90,15 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
         return studentReviewDao.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(id);
     }
+
+    @Override
+    public List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId) {
+        return studentReviewDao.getAllStudentReviewsByReviewId(reviewId);
+    }
+
+    @Transactional
+    @Override
+    public void removeAll(List<StudentReview> studentReviews) {
+        studentReviewDao.removeAll(studentReviews);
+    }
 }

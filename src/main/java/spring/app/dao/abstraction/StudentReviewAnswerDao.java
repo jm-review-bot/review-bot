@@ -9,4 +9,6 @@ public interface StudentReviewAnswerDao extends GenericDao<Long, StudentReviewAn
     void bulkDeleteByUserId(Long id);
 
     List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId(Long studentReviewId);
+
+    List<StudentReviewAnswer> getStudentReviewAnswersByQuestionId(Long questionId);
 }

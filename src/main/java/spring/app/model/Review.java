@@ -1,6 +1,8 @@
 package spring.app.model;
 
 import org.hibernate.annotations.*;
+import org.springframework.context.event.EventListener;
+import spring.app.listener.ReviewListener;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(ReviewListener.class)
 @Table(name = "review")
 public class Review {
 
@@ -26,7 +29,6 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewer_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -1,10 +1,13 @@
 package spring.app.model;
 
 
+import spring.app.listener.QuestionListener;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(QuestionListener.class)
 @Table(name = "question")
 public class Question {
 

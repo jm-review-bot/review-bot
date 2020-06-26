@@ -166,4 +166,11 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("id", id)
                 .executeUpdate();
     }
+
+    @Override
+    public List<Review> getAllReviewsByUserId(Long id) {
+        return entityManager.createQuery("SELECT r FROM Review  r WHERE r.user.id = :id", Review.class)
+                .setParameter("id", id)
+                .getResultList();
+    }
 }

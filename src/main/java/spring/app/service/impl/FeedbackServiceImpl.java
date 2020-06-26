@@ -9,11 +9,13 @@ import spring.app.model.Feedback;
 import spring.app.model.Review;
 import spring.app.service.abstraction.FeedbackService;
 
+import java.util.List;
+
 
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
-    private FeedbackDao feedbackDao;
 
+    private FeedbackDao feedbackDao;
 
     @Autowired
     public FeedbackServiceImpl(FeedbackDao feedbackDao) {
@@ -24,5 +26,16 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public void addFeedback(Feedback feedback) {
         feedbackDao.save(feedback);
+    }
+
+    @Override
+    public List<Feedback> getFeedbackByStudentReviewId(Long studentReviewId) {
+        return feedbackDao.getFeedbackByStudentReviewId(studentReviewId);
+    }
+
+    @Transactional
+    @Override
+    public void removeAll(List<Feedback> feedbacks) {
+        feedbackDao.removeAll(feedbacks);
     }
 }

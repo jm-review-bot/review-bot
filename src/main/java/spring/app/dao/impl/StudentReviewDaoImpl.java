@@ -109,4 +109,11 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
                 .setParameter("vkId", vkId)
                 .getResultList();
     }
+
+    @Override
+    public List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId) {
+        return entityManager.createQuery("SELECT sr FROM StudentReview  sr WHERE sr.review.id = :review_id")
+                .setParameter("review_id", reviewId)
+                .getResultList();
+    }
 }
