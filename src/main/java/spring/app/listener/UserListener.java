@@ -1,7 +1,6 @@
 package spring.app.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.stereotype.Component;
 import spring.app.model.Review;
 import spring.app.model.User;
