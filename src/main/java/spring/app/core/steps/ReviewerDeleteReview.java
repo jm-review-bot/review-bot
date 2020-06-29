@@ -65,7 +65,7 @@ public class ReviewerDeleteReview extends Step {
         Integer vkId = context.getVkId();
         //всем участникам этого ревью, т.е. всем студентам, которые были на это ревью записаны - должно отправиться
         //сообщение с текстом: “Ревью {название темы} - {дата и время проведения} было отменено проверяющим”
-        StringBuilder message = new StringBuilder("Ревью {").append(themeService.getThemeById(review.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(review.getDate())).append("} было отменено проверяющим\n");
+        StringBuilder message = new StringBuilder("Ревью ").append(themeService.getThemeById(review.getTheme().getId()).getTitle()).append(" - ").append(StringParser.localDateTimeToString(review.getDate())).append(" было отменено проверяющим\n");
         List<User> studentsByReview = userService.getStudentsByReviewId(review.getId());
         for (User user : studentsByReview) {
             if (user.getChatStep() == USER_MENU) {
