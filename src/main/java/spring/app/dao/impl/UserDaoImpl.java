@@ -29,7 +29,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
             query.setParameter("id", vkId);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            log.info("Пользователь с vkId:{} не обнаружен в базе", vkId);
+            log.error("Пользователь с vkId:{} не обнаружен в базе", vkId);
             throw e;
         }
     }

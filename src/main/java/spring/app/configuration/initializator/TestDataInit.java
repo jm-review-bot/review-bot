@@ -127,6 +127,9 @@ public class TestDataInit {
     private Step userStartReviewCore;
 
     @Autowired
+    private Step userStartChooseReview;
+
+    @Autowired
     private Step userFeedbackConfirmation;
 
     @Autowired
@@ -215,6 +218,15 @@ public class TestDataInit {
         kirill.setChatStep(StepSelector.START);
         userService.addUser(kirill);
 
+        User dima = new User();
+        dima.setFirstName("Дмитрий");
+        dima.setLastName("Шепелев");
+        dima.setReviewPoint(10);
+        dima.setVkId(147150209);
+        dima.setRole(roleAdmin);
+        dima.setChatStep(StepSelector.START);
+        userService.addUser(dima);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -244,6 +256,7 @@ public class TestDataInit {
         steps.put(StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW, userPassReviewGetListReview);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_STUDENT_REVIEW, userPassReviewAddStudentReview);
         steps.put(StepSelector.USER_CANCEL_REVIEW, userCancelReview);
+        steps.put(StepSelector.USER_START_CHOOSE_REVIEW, userStartChooseReview);
         steps.put(StepSelector.USER_START_REVIEW_HANGOUTS_LINK, userStartReviewHangoutsLink);
         steps.put(StepSelector.USER_START_REVIEW_RULES, userStartReviewRules);
         steps.put(StepSelector.USER_START_REVIEW_CORE, userStartReviewCore);
@@ -345,6 +358,27 @@ public class TestDataInit {
         springReviewPassed4.setUser(maksim);
         reviewService.addReview(springReviewPassed4);
 
+        Review springReviewPassed5 = new Review();
+        springReviewPassed5.setDate(LocalDateTime.of(2020, 6, 16, 12, 5));
+        springReviewPassed5.setOpen(true);
+        springReviewPassed5.setTheme(core);
+        springReviewPassed5.setUser(dima);
+        reviewService.addReview(springReviewPassed5);
+
+        Review springReviewPassed6 = new Review();
+        springReviewPassed6.setDate(LocalDateTime.of(2020, 6, 16, 13, 5));
+        springReviewPassed6.setOpen(true);
+        springReviewPassed6.setTheme(algorithm);
+        springReviewPassed6.setUser(dima);
+        reviewService.addReview(springReviewPassed6);
+
+        Review springReviewPassed7 = new Review();
+        springReviewPassed7.setDate(LocalDateTime.of(2020, 6, 16, 13, 5));
+        springReviewPassed7.setOpen(true);
+        springReviewPassed7.setTheme(spring);
+        springReviewPassed7.setUser(dima);
+        reviewService.addReview(springReviewPassed7);
+
         // add student reviews
 
 
@@ -369,6 +403,12 @@ public class TestDataInit {
         studentReview4.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview4);
 
+        StudentReview studentReview5 = new StudentReview();
+        studentReview5.setUser(anton);
+        studentReview5.setPassed(false);
+        studentReview5.setReview(springReviewPassed5);
+        studentReviewService.addStudentReview(studentReview5);
+
         // add Questions
         Question question1 = new Question();
         question1.setAnswer("«Bean» – это объект, который интегрируется и конфигурируется контейнером IOC.");
@@ -378,69 +418,69 @@ public class TestDataInit {
         question1.setWeight(8);
         questionService.addQuestion(question1);
 
-//        Question question2 = new Question();
-//        question2.setAnswer("IOC означает инверсию контроля. Это основной контейнер Java Spring. Он использует вышеупомянутое внедрение зависимостей для управления и настройки различных интегрированных приложений. В настоящее время в Spring может быть два типа IOC – ApplicationContext и BeanFactory.");
-//        question2.setPosition(2);
-//        question2.setQuestion("Опишите IOC своими словами");
-//        question2.setTheme(spring);
-//        question2.setWeight(8);
-//        questionService.addQuestion(question2);
-//
-//        Question question3 = new Question();
-//        question3.setAnswer("Dependency injection (внедрение зависимостей) используется для предоставления определенных специфических зависимостей для объектов. Это шаблон проектирования, который делает ваши проекты более плавными и более подходящими для таких действий, как тестирование.");
-//        question3.setPosition(3);
-//        question3.setQuestion("Что такое Dependency Injection?");
-//        question3.setTheme(spring);
-//        question3.setWeight(8);
-//        questionService.addQuestion(question3);
-//
-//        Question question4 = new Question();
-//        question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
-//        question4.setPosition(4);
-//        question4.setQuestion("Что такое Spring Boot?");
-//        question4.setTheme(spring);
-//        question4.setWeight(8);
-//        questionService.addQuestion(question4);
-//
-//        Question question5 = new Question();
-//        question5.setAnswer("АОП расшифровывается как Аспектно-ориентированное программирование (Aspect-Oriented Programming). Он отличается от ООП (объектно-ориентированного программирования) тем, что ООП фокусируется на классах, в то время как ключевым модульным модулем АОП является аспект. В АОП аспекты реализуют и подчеркивают сквозные проблемы.");
-//        question5.setPosition(5);
-//        question5.setQuestion("Что такое AOP?");
-//        question5.setTheme(spring);
-//        question5.setWeight(8);
-//        questionService.addQuestion(question5);
-//
-//        Question question6 = new Question();
-//        question6.setAnswer("‘Autowriting‘ позволяет разработчику вводить bean-компоненты в свое приложение автоматически, без необходимости ручного вмешательства.");
-//        question6.setPosition(6);
-//        question6.setQuestion("Что такое autowriting?");
-//        question6.setTheme(spring);
-//        question6.setWeight(8);
-//        questionService.addQuestion(question6);
-//
-//        Question question7 = new Question();
-//        question7.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
-//        question7.setPosition(7);
-//        question7.setQuestion("Что такое target object?");
-//        question7.setTheme(spring);
-//        question7.setWeight(8);
-//        questionService.addQuestion(question7);
-//
-//        Question question8 = new Question();
-//        question8.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
-//        question8.setPosition(8);
-//        question8.setQuestion("Что такое DAO?");
-//        question8.setTheme(spring);
-//        question8.setWeight(8);
-//        questionService.addQuestion(question8);
-//
-//        Question question9 = new Question();
-//        question9.setAnswer("Эта команда используется, когда вы хотите сопоставить определенный метод HTTP с определенным классом. Вы можете использовать эту команду как на уровне класса, так и на уровне метода.");
-//        question9.setPosition(9);
-//        question9.setQuestion("Что делает @RequestMapping?");
-//        question9.setTheme(spring);
-//        question9.setWeight(8);
-//        questionService.addQuestion(question9);
+        Question question2 = new Question();
+        question2.setAnswer("IOC означает инверсию контроля. Это основной контейнер Java Spring. Он использует вышеупомянутое внедрение зависимостей для управления и настройки различных интегрированных приложений. В настоящее время в Spring может быть два типа IOC – ApplicationContext и BeanFactory.");
+        question2.setPosition(2);
+        question2.setQuestion("Опишите IOC своими словами");
+        question2.setTheme(spring);
+        question2.setWeight(8);
+        questionService.addQuestion(question2);
+
+        Question question3 = new Question();
+        question3.setAnswer("Dependency injection (внедрение зависимостей) используется для предоставления определенных специфических зависимостей для объектов. Это шаблон проектирования, который делает ваши проекты более плавными и более подходящими для таких действий, как тестирование.");
+        question3.setPosition(3);
+        question3.setQuestion("Что такое Dependency Injection?");
+        question3.setTheme(spring);
+        question3.setWeight(8);
+        questionService.addQuestion(question3);
+
+        Question question4 = new Question();
+        question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
+        question4.setPosition(4);
+        question4.setQuestion("Что такое Spring Boot?");
+        question4.setTheme(spring);
+        question4.setWeight(8);
+        questionService.addQuestion(question4);
+
+        Question question5 = new Question();
+        question5.setAnswer("АОП расшифровывается как Аспектно-ориентированное программирование (Aspect-Oriented Programming). Он отличается от ООП (объектно-ориентированного программирования) тем, что ООП фокусируется на классах, в то время как ключевым модульным модулем АОП является аспект. В АОП аспекты реализуют и подчеркивают сквозные проблемы.");
+        question5.setPosition(5);
+        question5.setQuestion("Что такое AOP?");
+        question5.setTheme(spring);
+        question5.setWeight(8);
+        questionService.addQuestion(question5);
+
+        Question question6 = new Question();
+        question6.setAnswer("‘Autowriting‘ позволяет разработчику вводить bean-компоненты в свое приложение автоматически, без необходимости ручного вмешательства.");
+        question6.setPosition(6);
+        question6.setQuestion("Что такое autowriting?");
+        question6.setTheme(spring);
+        question6.setWeight(8);
+        questionService.addQuestion(question6);
+
+        Question question7 = new Question();
+        question7.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
+        question7.setPosition(7);
+        question7.setQuestion("Что такое target object?");
+        question7.setTheme(spring);
+        question7.setWeight(8);
+        questionService.addQuestion(question7);
+
+        Question question8 = new Question();
+        question8.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
+        question8.setPosition(8);
+        question8.setQuestion("Что такое DAO?");
+        question8.setTheme(spring);
+        question8.setWeight(8);
+        questionService.addQuestion(question8);
+
+        Question question9 = new Question();
+        question9.setAnswer("Эта команда используется, когда вы хотите сопоставить определенный метод HTTP с определенным классом. Вы можете использовать эту команду как на уровне класса, так и на уровне метода.");
+        question9.setPosition(9);
+        question9.setQuestion("Что делает @RequestMapping?");
+        question9.setTheme(spring);
+        question9.setWeight(8);
+        questionService.addQuestion(question9);
 
         Question question10 = new Question();
         question10.setAnswer("В Spring MVC Interceptor может использоваться для обработки запроса клиента до, во время и даже после обработки. Это отличный инструмент, позволяющий избежать нежелательных повторений кода.");
