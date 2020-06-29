@@ -360,4 +360,21 @@ public class Keyboards {
             "        },\n" +
             "        \"color\": \"default\"\n" +
             "      }\n";
+
+    public final static String CANCEL_OR_DELETE = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Отмена\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Да, отменить ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n";
 }

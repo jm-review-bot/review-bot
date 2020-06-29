@@ -103,7 +103,16 @@ public class UserMenu extends Step {
                 // если пользователь не проводит ревью, то показываем сообщение
                 throw new ProcessInputException("Ты еще не объявлял о принятии ревью!\n Сначала ты должен его объвить, для этого нажми на кнопку \"Принять ревью\" и следуй дальнейшим указаниям.");
             }
-        } else if (command.equals("отменить")) { // (Отменить ревью)
+        } else if (command.equals("отменить")) { // (Отменить ревью (!) у принимающего лица [препода])
+            List<Review> reviews = reviewService.getOpenReviewsByReviewerVkId(context.getUser().getVkId());
+            //если нет ни одного ревью, то в чат даётся сообщение об ошибке
+            if (reviews.isEmpty()) {
+                throw new ProcessInputException("Произошла ошибка. Вы не запланировали ни одного ревью\n");
+            } else {
+                sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);
+                storageService.removeUserStorage(vkId, SELECTING_REVIEW_TO_DELETE);
+            }
+        } else if (command.equals("отмена")) { // (Отменить ревью (!) у сдающего лица [студента])
             sendUserToNextStep(context, USER_CANCEL_REVIEW);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("сдать")) { // (Сдать ревью)
@@ -175,7 +184,9 @@ public class UserMenu extends Step {
         if (!userReviews.isEmpty()) {
             keys
                     .append(this.getRowDelimiterString())
-                    .append(REVIEW_START_FR);
+                    .append(REVIEW_START_FR)
+                    .append(this.getRowDelimiterString())
+                    .append(REVIEW_CANCEL_FR);
             isEmpty = false;
         }
         //кнопка отмены ревью для студента
@@ -184,7 +195,7 @@ public class UserMenu extends Step {
                 keys.append(this.getRowDelimiterString());
                 isEmpty = false;
             }
-            keys.append(REVIEW_CANCEL_FR);
+            keys.append(DELETE_STUDENT_REVIEW);
         }
         if (!isEmpty) {
             return keys.toString();
