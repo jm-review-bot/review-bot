@@ -182,13 +182,11 @@ public class UserMenu extends Step {
             isEmpty = false;
         }
         //кнопка отмены ревью для студента
-        if (studentReview != null) {
-            if (!isEmpty) {
-                keys
-                        .append(this.getRowDelimiterString())
-                        .append(DELETE_STUDENT_REVIEW);
-                isEmpty = false;
-            }
+        if (!openStudentReview.isEmpty()) {
+            keys
+                    .append(this.getRowDelimiterString())
+                    .append(DELETE_STUDENT_REVIEW);
+            isEmpty = false;
         }
         if (!isEmpty) {
             return keys.toString();
