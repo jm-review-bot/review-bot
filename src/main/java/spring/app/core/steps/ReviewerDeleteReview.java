@@ -51,7 +51,7 @@ public class ReviewerDeleteReview extends Step {
             deleteReview(specReview, context);
             storageService.removeUserStorage(context.getVkId(), REVIEWER_DELETE_REVIEW);
             sendUserToNextStep(context, USER_MENU);
-            StringBuilder message = new StringBuilder("Ревью {").append(themeService.getThemeById(specReview.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(specReview.getDate())).append("} было успешно отменено.\n");
+            StringBuilder message = new StringBuilder("Ревью ").append(themeService.getThemeById(specReview.getTheme().getId()).getTitle()).append(" - ").append(StringParser.localDateTimeToString(specReview.getDate())).append(" было успешно отменено.\n");
             storageService.updateUserStorage(context.getVkId(), USER_MENU, Arrays.asList((message.toString())));
         } else if ("Отмена".equals(command)) {
             sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);
