@@ -26,11 +26,11 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
      * @param idUser
      */
     public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser) {
-        String str = "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme INNER JOIN Review r " +
+        String queryForListStudentReview = "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme INNER JOIN Review r " +
                 "ON sr.review.id = r.id WHERE sr.user.id = :id_user AND r.isOpen = true";
-        TypedQuery<StudentReview> query = entityManager.createQuery(str, StudentReview.class).setMaxResults(1)
+        TypedQuery<StudentReview> query = entityManager.createQuery(queryForListStudentReview, StudentReview.class).setMaxResults(1)
                 .setParameter("id_user", idUser);
-        return DataAccessUtils.singleResult(query.getResultList());
+        return query.getSingleResult();
     }
 
     /**
