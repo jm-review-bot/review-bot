@@ -82,7 +82,7 @@ public class SelectingReviewToDelete extends Step {
         int i = 1;
         List<String> reviewIds = new ArrayList<>();
         for (Review review : reviews) {
-            selectReview = selectReview.append("[").append(i).append("] {").append(themeService.getThemeById(review.getTheme().getId()).getTitle()).append("} - {").append(StringParser.localDateTimeToString(review.getDate())).append("}\n");
+            selectReview = selectReview.append("[").append(i).append("] ").append(themeService.getThemeById(review.getTheme().getId()).getTitle()).append(" - ").append(StringParser.localDateTimeToString(review.getDate())).append("\n");
             i++;
             reviewIds.add(Long.toString(review.getId()));
         }

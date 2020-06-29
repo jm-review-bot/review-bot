@@ -124,7 +124,7 @@ public class ReviewerDeleteReview extends Step {
         long reviewId = Long.parseLong(storageService.getUserStorage(context.getVkId(), REVIEWER_DELETE_REVIEW).get(0));
         String nameReview = themeService.getThemeById(reviewService.getReviewById(reviewId).getTheme().getId()).getTitle();
         String dateReview = StringParser.localDateTimeToString(reviewService.getReviewById(reviewId).getDate());
-        StringBuilder message = new StringBuilder("Вы действительно хотите отменить ревью {").append(nameReview).append("} - {").append(dateReview).append("}?\n");
+        StringBuilder message = new StringBuilder("Вы действительно хотите отменить ревью ").append(nameReview).append(" - ").append(dateReview).append("?\n");
         return message.toString();
     }
 
