@@ -141,6 +141,12 @@ public class TestDataInit {
     @Autowired
     private Step userFeedbackComment;
 
+    @Autowired
+    private Step reviewerDeleteReview;
+
+    @Autowired
+    private Step selectingReviewToDelete;
+
     public TestDataInit() {
     }
 
@@ -227,6 +233,24 @@ public class TestDataInit {
         dima.setChatStep(StepSelector.START);
         userService.addUser(dima);
 
+        User martyn = new User();
+        martyn.setFirstName("Мартын");
+        martyn.setLastName("Герасимов");
+        martyn.setReviewPoint(8);
+        martyn.setVkId(339070438);
+        martyn.setRole(roleAdmin);
+        martyn.setChatStep(StepSelector.START);
+        userService.addUser(martyn);
+
+        User ludwig = new User();
+        ludwig.setFirstName("Ludwig");
+        ludwig.setLastName("Phantomhive");
+        ludwig.setReviewPoint(8);
+        ludwig.setVkId(270263136);
+        ludwig.setRole(roleAdmin);
+        ludwig.setChatStep(StepSelector.START);
+        userService.addUser(ludwig);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -264,6 +288,8 @@ public class TestDataInit {
         steps.put(StepSelector.USER_FEEDBACK_REVIEW_RATING, userFeedbackReviewRating);
         steps.put(StepSelector.USER_FEEDBACK_REVIEWER_RATING, userFeedbackReviewerRating);
         steps.put(StepSelector.USER_FEEDBACK_COMMENT, userFeedbackComment);
+        steps.put(StepSelector.REVIEWER_DELETE_REVIEW, reviewerDeleteReview);
+        steps.put(StepSelector.SELECTING_REVIEW_TO_DELETE, selectingReviewToDelete);
 
         //add themes
         Theme core = new Theme();
@@ -323,6 +349,27 @@ public class TestDataInit {
         themeService.addTheme(finalReview);
 
         // add reviews
+        Review hibReview = new Review();
+        hibReview.setDate(LocalDateTime.of(2021, 4, 18, 11, 13));
+        hibReview.setOpen(true);
+        hibReview.setTheme(hibernate);
+        hibReview.setUser(nikolay);
+        reviewService.addReview(hibReview);
+
+        Review hibReview2 = new Review();
+        hibReview2.setDate(LocalDateTime.of(2022, 4, 18, 11, 13));
+        hibReview2.setOpen(true);
+        hibReview2.setTheme(hibernate);
+        hibReview2.setUser(nikolay);
+        reviewService.addReview(hibReview2);
+
+        Review revOfSt = new Review();
+        revOfSt.setDate(LocalDateTime.of(3033,1,1,1,1));
+        revOfSt.setOpen(true);
+        revOfSt.setTheme(algorithm);
+        revOfSt.setUser(ludwig);
+        reviewService.addReview(revOfSt);
+
         Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
         springReviewPassed.setOpen(false);
@@ -380,7 +427,23 @@ public class TestDataInit {
         reviewService.addReview(springReviewPassed7);
 
         // add student reviews
+        StudentReview sr = new StudentReview();
+        sr.setUser(nikolay);
+        sr.setPassed(false);
+        sr.setReview(revOfSt);
+        studentReviewService.addStudentReview(sr);
 
+        StudentReview hibStudentReview = new StudentReview();
+        hibStudentReview.setUser(martyn);
+        hibStudentReview.setPassed(false);
+        hibStudentReview.setReview(hibReview);
+        studentReviewService.addStudentReview(hibStudentReview);
+
+        StudentReview hibStudentReview2 = new StudentReview();
+        hibStudentReview2.setUser(ludwig);
+        hibStudentReview2.setPassed(false);
+        hibStudentReview2.setReview(hibReview2);
+        studentReviewService.addStudentReview(hibStudentReview2);
 
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(sergey);
