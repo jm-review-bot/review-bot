@@ -20,7 +20,7 @@ public class Feedback {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "student_review_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private StudentReview studentReview;
 
