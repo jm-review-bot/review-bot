@@ -66,6 +66,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
         Question currentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
+        if (currentQuestion == null) {
+            return;
+        }
+
         Integer currentPosition = currentQuestion.getPosition();
 
         Integer nextPositionValue;
