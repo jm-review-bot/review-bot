@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ThemeService {
     List<Theme> getPassedThemesByUser(Integer vkId);
 
     Theme getThemeByReviewId(Long reviewId);
+
+    void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
 }

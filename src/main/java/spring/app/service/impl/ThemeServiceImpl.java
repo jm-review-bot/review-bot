@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
+import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
@@ -60,5 +61,48 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
+    }
+
+    @Transactional
+    @Override
+    public void shiftThemePosition(Long themeId, int shift) throws ProcessInputException {
+
+        Theme themeToShift = themeDao.getById(themeId);
+        int currentPosition = themeToShift.getPosition();
+        int newPosition = currentPosition + shift;
+
+        int minThemePosition = themeDao.getThemeMinPosition();
+        int maxThemePosition = themeDao.getThemeMaxPosition();
+
+        if (newPosition <= maxThemePosition && newPosition >= minThemePosition) {
+//            Смещаем другие темы, которые находятся между старой и новой позициями изначально смещаемой темы themeToShift
+            if (shift > 0) {
+                for (int i = 1; i <= shift; i++) {
+                    Theme theme = themeDao.getByPosition(currentPosition + i);
+                    theme.setPosition(currentPosition + i - 1);
+                    themeDao.update(theme);
+                }
+            } else if (shift < 0) {
+                for (int i = 1; i <= Math.abs(shift); i++) {
+                    Theme theme = themeDao.getByPosition(currentPosition - i);
+                    theme.setPosition(currentPosition - i + 1);
+                    themeDao.update(theme);
+                }
+            }
+//            Смещаем выранную тему (themeToShift) на указанное количество позиций (shift)
+            themeToShift.setPosition(newPosition);
+            themeDao.update(themeToShift);
+        } else {
+            StringBuilder error = new StringBuilder();
+            error.append("Ошибка: Тема не может быть смещена на ")
+                    .append(Math.abs(shift))
+                    .append(" позиций. Новое положение темы должно быть в диапазоне между ")
+                    .append(minThemePosition)
+                    .append(" и ")
+                    .append(maxThemePosition)
+                    .append(". Текущее положение темы: ")
+                    .append(currentPosition);
+            throw new ProcessInputException(error.toString());
+        }
     }
 }

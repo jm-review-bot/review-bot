@@ -40,4 +40,17 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("id", reviewId)
                 .getSingleResult();
     }
+
+    @Override
+    public Integer getThemeMinPosition() {
+        return entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
+                .getSingleResult();
+    }
+
+    @Override
+    public Integer getThemeMaxPosition() {
+        return entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
+                .getSingleResult();
+    }
+
 }
