@@ -64,7 +64,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Transactional
     @Override
-    public void changeQuestionPositionByThemeIdAndPositionId(Long themeId, Long questionId, Integer positionChange) {
+    public void changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
         Question currentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
         Integer currentPosition = currentQuestion.getPosition();
 

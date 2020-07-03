@@ -18,13 +18,13 @@ public class QuestionPositionController {
 
     @PatchMapping("up")
     public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
-        questionService.changeQuestionPositionByThemeIdAndPositionId(themeId, questionId, -1);
+        questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("down")
     public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
-        questionService.changeQuestionPositionByThemeIdAndPositionId(themeId, questionId, 1);
+        questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
