@@ -81,6 +81,9 @@ public class QuestionServiceImpl implements QuestionService {
         int positionShift;
         if (positionChange > 0) {
             Integer maxPositionValue = questionDao.getQuestionMaxPositionByThemeId(themeId);
+            if (currentPosition == maxPositionValue) {
+                return false;
+            }
 
             nextPositionValue = Math.min(maxPositionValue, currentPosition + positionChange);
 
@@ -89,6 +92,10 @@ public class QuestionServiceImpl implements QuestionService {
             positionShift = -1;
         } else {
             Integer minPositionValue = questionDao.getQuestionMinPositionByThemeId(themeId);
+            if (currentPosition == minPositionValue) {
+                return false;
+            }
+
             nextPositionValue = Math.max(minPositionValue, currentQuestion.getPosition() + positionChange);
 
             positionLow = currentPosition - Math.abs(positionChange);
