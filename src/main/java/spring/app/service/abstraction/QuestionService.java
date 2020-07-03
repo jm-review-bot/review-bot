@@ -20,7 +20,7 @@ public interface QuestionService {
 
     Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
 
-    void changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange);
+    boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange);
 
     List<Question> getQuestionsByThemeId(Long themeId);
 }

@@ -62,12 +62,15 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDao.getQuestionsByThemeId(themeId);
     }
 
+    /*
+    * Возвращает успешность проведения изменения позиции в сущности Question
+    * */
     @Transactional
     @Override
-    public void changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
+    public boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
         Question currentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
         if (currentQuestion == null) {
-            return;
+            return false;
         }
 
         Integer currentPosition = currentQuestion.getPosition();
@@ -97,6 +100,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         currentQuestion.setPosition(nextPositionValue);
         questionDao.update(currentQuestion);
+        return true;
     }
 
 
