@@ -19,4 +19,8 @@ public interface QuestionService {
     List<Question> getQuestionsByReviewId(Long reviewId);
 
     Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
+
+    void changeQuestionPositionByThemeIdAndPositionId(Long themeId, Long questionId, Integer positionChange);
+
+    List<Question> getQuestionsByThemeId(Long themeId);
 }
