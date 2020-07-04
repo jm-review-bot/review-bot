@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
+import spring.app.model.Theme;
 import spring.app.service.abstraction.StudentReviewService;
 
 import java.util.List;
@@ -35,6 +36,18 @@ public class StudentReviewServiceImpl implements StudentReviewService {
         return studentReviewDao.getAll();
     }
 
+    /**
+     * Возвращает все ревью студента по определенной теме
+     *
+     * @param vkId  студента
+     * @param theme тема
+     * @return
+     */
+    @Override
+    public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
+        return studentReviewDao.getAllStudentReviewsByStudentVkIdAndTheme(vkId, theme);
+    }
+
     @Transactional
     @Override
     public void updateStudentReview(StudentReview studentReview) {
@@ -48,7 +61,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser){
+    public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser) {
         return studentReviewDao.getStudentReviewIfAvailableAndOpen(idUser);
     }
 
@@ -66,5 +79,15 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     @Override
     public StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
         return studentReviewDao.getStudentReviewByReviewIdAndStudentId(reviewId, studentId);
+    }
+
+    @Override
+    public List<StudentReview> getOpenReviewByStudentVkId(Integer vkId) {
+        return studentReviewDao.getOpenReviewByStudentVkId(vkId);
+    }
+
+    @Override
+    public StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
+        return studentReviewDao.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(id);
     }
 }

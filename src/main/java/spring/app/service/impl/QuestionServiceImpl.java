@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.QuestionDao;
 import spring.app.model.Question;
 import spring.app.service.abstraction.QuestionService;
-
 import java.util.List;
 
 @Service
@@ -56,5 +55,18 @@ public class QuestionServiceImpl implements QuestionService {
     public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
         return questionDao.getQuestionByStudentReviewAnswerId(studentReviewAnswerId);
     }
+
+    @Override
+    public void deleteQuestionByThemeId(Long themeId , Long questionId) {
+        questionDao.deleteQuestionByThemeId(themeId , questionId);
+    }
+
+    @Override
+    @Transactional
+    public List<Question> getAllQuestionByThemeId(Long id) {
+        return questionDao.getAllQuestionByThemeId(id);
+    }
+
+
 }
 

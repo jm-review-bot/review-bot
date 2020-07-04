@@ -1,10 +1,10 @@
 package spring.app.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -24,19 +24,19 @@ public class Review {
     @Column(name = "is_open")
     private Boolean isOpen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
 
     public Review() {
     }
 
-    public Review (User user, Theme theme, Boolean isOpen, LocalDateTime date) {
+    public Review(User user, Theme theme, Boolean isOpen, LocalDateTime date) {
         this.user = user;
         this.theme = theme;
         this.isOpen = isOpen;
