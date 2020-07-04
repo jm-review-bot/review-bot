@@ -7,12 +7,10 @@ import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 import static spring.app.util.Keyboards.SEARCH_OR_BACK;
