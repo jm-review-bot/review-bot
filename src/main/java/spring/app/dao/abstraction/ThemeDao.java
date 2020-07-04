@@ -11,4 +11,6 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
     List<Theme> getPassedThemesByUser(Integer vkId);
 
     Theme getThemeByReviewId(Long reviewId);
+
+    Integer getThemeMaxPositionValue();
 }

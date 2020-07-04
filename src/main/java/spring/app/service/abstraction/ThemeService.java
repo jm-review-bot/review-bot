@@ -21,4 +21,6 @@ public interface ThemeService {
     List<Theme> getPassedThemesByUser(Integer vkId);
 
     Theme getThemeByReviewId(Long reviewId);
+
+    Integer getThemeMaxPositionValue();
 }

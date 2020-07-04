@@ -48,7 +48,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme getByPosition(Integer position){
+    public Theme getByPosition(Integer position) {
         return themeDao.getByPosition(position);
     }
 
@@ -60,5 +60,10 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
+    }
+
+    @Override
+    public Integer getThemeMaxPositionValue() {
+        return themeDao.getThemeMaxPositionValue();
     }
 }
