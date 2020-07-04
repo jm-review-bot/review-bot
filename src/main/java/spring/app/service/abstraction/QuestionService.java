@@ -1,7 +1,6 @@
 package spring.app.service.abstraction;
 
 import spring.app.model.Question;
-
 import java.util.List;
 
 public interface QuestionService {
@@ -19,4 +18,8 @@ public interface QuestionService {
     List<Question> getQuestionsByReviewId(Long reviewId);
 
     Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
+
+    void deleteQuestionByThemeId (Long themeId , Long questionId);
+
+    List<Question> getAllQuestionByThemeId(Long id);
 }
