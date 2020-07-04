@@ -26,7 +26,6 @@ public class ThemeDto {
     @Positive
     private Integer reviewPoint;
 
-
     public Long getId() {
         return id;
     }
