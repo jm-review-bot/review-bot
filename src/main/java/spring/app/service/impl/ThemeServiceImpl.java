@@ -80,20 +80,18 @@ public class ThemeServiceImpl implements ThemeService {
                 themeDao.shiftThemePosition(currentPosition, newPosition, -1);
             } else if (shift < 0) {
                 themeDao.shiftThemePosition(newPosition, currentPosition, 1);
-                }
+            }
 //            Смещаем выранную тему (themeToShift) на указанное количество позиций (shift)
             themeToShift.setPosition(newPosition);
             themeDao.update(themeToShift);
         } else {
-            StringBuilder error = new StringBuilder();
-            error.append("Ошибка: Тема не может быть смещена на ")
-                    .append(Math.abs(shift))
-                    .append(" позиций. Новое положение темы должно быть в диапазоне между ")
-                    .append(minThemePosition)
-                    .append(" и ")
-                    .append(maxThemePosition)
-                    .append(". Текущее положение темы: ")
-                    .append(currentPosition);
+            String error = String.format(
+                    "Ошибка: Тема не может быть смещена на %d позиций. Новое положение темы должно быть в диапазоне между %d и %d. Текущее положение темы: %d.",
+                    Math.abs(shift),
+                    minThemePosition,
+                    maxThemePosition,
+                    currentPosition
+            );
             throw new ProcessInputException(error.toString());
         }
     }
