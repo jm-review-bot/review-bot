@@ -53,4 +53,13 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .getSingleResult();
     }
 
+    @Override
+    public void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift) {
+        entityManager.createQuery("UPDATE Theme t SET t.position = t.position + (:position_shift) WHERE t.position BETWEEN :position_low AND :position_high")
+                .setParameter("position_shift", positionShift)
+                .setParameter("position_low", positionLow)
+                .setParameter("position_high", positionHigh)
+                .executeUpdate();
+    }
+
 }

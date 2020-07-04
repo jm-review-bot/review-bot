@@ -77,18 +77,10 @@ public class ThemeServiceImpl implements ThemeService {
         if (newPosition <= maxThemePosition && newPosition >= minThemePosition) {
 //            Смещаем другие темы, которые находятся между старой и новой позициями изначально смещаемой темы themeToShift
             if (shift > 0) {
-                for (int i = 1; i <= shift; i++) {
-                    Theme theme = themeDao.getByPosition(currentPosition + i);
-                    theme.setPosition(currentPosition + i - 1);
-                    themeDao.update(theme);
-                }
+                themeDao.shiftThemePosition(currentPosition, newPosition, -1);
             } else if (shift < 0) {
-                for (int i = 1; i <= Math.abs(shift); i++) {
-                    Theme theme = themeDao.getByPosition(currentPosition - i);
-                    theme.setPosition(currentPosition - i + 1);
-                    themeDao.update(theme);
+                themeDao.shiftThemePosition(newPosition, currentPosition, 1);
                 }
-            }
 //            Смещаем выранную тему (themeToShift) на указанное количество позиций (shift)
             themeToShift.setPosition(newPosition);
             themeDao.update(themeToShift);

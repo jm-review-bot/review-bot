@@ -16,4 +16,6 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     Integer getThemeMaxPosition();
 
+    void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);
+
 }
