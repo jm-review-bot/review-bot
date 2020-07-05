@@ -22,24 +22,18 @@ import java.util.stream.Collectors;
 @Validated
 public class QuestionThemeController {
 
+    @Autowired
     private QuestionService questionService;
-    private QuestionMapper  questionMapper;
-    private ThemeService themeService;
 
     @Autowired
-    public QuestionThemeController (QuestionService questionService ,
-                                    QuestionMapper questionMapper ,
-                                    ThemeService themeService) {
-        this.themeService = themeService;
-        this.questionService = questionService;
-        this.questionMapper = questionMapper;
-    }
+    private QuestionMapper  questionMapper;
+
+    @Autowired
+    private ThemeService themeService;
 
     @GetMapping("/{themeId}/question")
-    public @ResponseBody List<QuestionDto> getAll (@PathVariable("themeId") long themeId) {
-        return questionService.getAllQuestionByThemeId(themeId)
-                .stream().map(q -> questionMapper.toDto(q))
-                .collect(Collectors.toList());
+    public List<QuestionDto> getAll (@PathVariable("themeId") long themeId) {
+        return questionMapper.methodName(questionService.getAllQuestionByThemeId(themeId));
     }
 
     @PostMapping("/{themeId}/question")
