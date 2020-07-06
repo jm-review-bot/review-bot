@@ -1,5 +1,6 @@
 package spring.app.dao.abstraction;
 
+import spring.app.dto.ThemeDto;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -12,10 +13,13 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     Theme getThemeByReviewId(Long reviewId);
 
-    Integer getThemeMinPosition();
+    Integer getThemeMaxPositionValue();
 
-    Integer getThemeMaxPosition();
+    Integer getThemeMinPositionValue();
+
+    List<ThemeDto> getAllThemesDto();
+
+    ThemeDto getThemeDtoById(Long themeId);
 
     void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);
-
 }
