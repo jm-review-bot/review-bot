@@ -14,16 +14,19 @@ import spring.app.service.abstraction.ThemeService;
 * */
 
 @RestController
-@RequestMapping("/admin/theme/{themeId}/position")
+@RequestMapping("/admin/theme")
 public class ThemePositionController {
 
-    @Autowired
-    ThemeService themeService;
+    private ThemeService themeService;
+
+    public ThemePositionController(ThemeService themeService) {
+        this.themeService = themeService;
+    }
 
     /*
     * Перемещение темы на одну позицию вверх
     * */
-    @PatchMapping("/up")
+    @PatchMapping("/{themeId}/position/up")
     public ResponseEntity<String> moveThemePositionUp (@PathVariable String themeId) {
         try {
             themeService.shiftThemePosition(Long.parseLong(themeId), -1);
@@ -36,7 +39,7 @@ public class ThemePositionController {
     /*
      * Перемещение темы на одну позицию вниз
      * */
-    @PatchMapping("/down")
+    @PatchMapping("/{themeId}/position/down")
     public ResponseEntity<String> moveThemePositionDown(@PathVariable String themeId) {
         try {
             themeService.shiftThemePosition(Long.parseLong(themeId), 1);
