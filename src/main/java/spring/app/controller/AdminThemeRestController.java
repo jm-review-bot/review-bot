@@ -17,14 +17,17 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/admin/theme")
-public class ThemeController {
+@RequestMapping("/api/admin/theme")
+public class AdminThemeRestController {
 
-    @Autowired
     private ThemeService themeService;
 
-    @Autowired
     private ThemeMapper themeMapper;
+
+    public AdminThemeRestController(ThemeService themeService, ThemeMapper themeMapper) {
+        this.themeService = themeService;
+        this.themeMapper = themeMapper;
+    }
 
     @GetMapping
     public ResponseEntity<List<ThemeDto>> getAllThemes() {
