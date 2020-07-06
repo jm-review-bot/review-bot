@@ -56,5 +56,60 @@ public class QuestionServiceImpl implements QuestionService {
     public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
         return questionDao.getQuestionByStudentReviewAnswerId(studentReviewAnswerId);
     }
+
+    @Override
+    public List<Question> getQuestionsByThemeId(Long themeId) {
+        return questionDao.getQuestionsByThemeId(themeId);
+    }
+
+    /*
+    * Возвращает успешность проведения изменения позиции в сущности Question
+    * */
+    @Transactional
+    @Override
+    public boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
+        Question currentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
+        if (currentQuestion == null) {
+            return false;
+        }
+
+        Integer currentPosition = currentQuestion.getPosition();
+
+        Integer nextPositionValue;
+        int positionLow;
+        int positionHigh;
+        int positionShift;
+        if (positionChange > 0) {
+            Integer maxPositionValue = questionDao.getQuestionMaxPositionByThemeId(themeId);
+            if (currentPosition == maxPositionValue) {
+                return false;
+            }
+
+            nextPositionValue = Math.min(maxPositionValue, currentPosition + positionChange);
+
+            positionLow = currentPosition + 1;
+            positionHigh = currentPosition + positionChange;
+            positionShift = -1;
+        } else {
+            Integer minPositionValue = questionDao.getQuestionMinPositionByThemeId(themeId);
+            if (currentPosition == minPositionValue) {
+                return false;
+            }
+
+            nextPositionValue = Math.max(minPositionValue, currentQuestion.getPosition() + positionChange);
+
+            positionLow = currentPosition - Math.abs(positionChange);
+            positionHigh = currentPosition - 1;
+            positionShift = 1;
+        }
+
+        questionDao.shiftQuestionsPosition(themeId, positionLow, positionHigh, positionShift);
+
+        currentQuestion.setPosition(nextPositionValue);
+        questionDao.update(currentQuestion);
+        return true;
+    }
+
+
 }
 
