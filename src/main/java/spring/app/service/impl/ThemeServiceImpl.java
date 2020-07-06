@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
+import spring.app.dto.ThemeDto;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
@@ -48,7 +49,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme getByPosition(Integer position){
+    public Theme getByPosition(Integer position) {
         return themeDao.getByPosition(position);
     }
 
@@ -60,5 +61,20 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
+    }
+
+    @Override
+    public Integer getThemeMaxPositionValue() {
+        return themeDao.getThemeMaxPositionValue();
+    }
+
+    @Override
+    public List<ThemeDto> getAllThemesDto() {
+        return themeDao.getAllThemesDto();
+    }
+
+    @Override
+    public ThemeDto getThemeDtoById(Long themeId) {
+        return themeDao.getThemeDtoById(themeId);
     }
 }
