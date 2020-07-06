@@ -6,7 +6,6 @@ import spring.app.groups.UpdateGroup;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
-import javax.validation.constraints.Positive;
 
 public class ThemeDto {
 
@@ -17,13 +16,11 @@ public class ThemeDto {
     @NotBlank
     private String title;
 
-    @Positive
     private Integer criticalWeight;
 
     @Null(groups = {CreateGroup.class, UpdateGroup.class})
     private Integer position;
 
-    @Positive
     private Integer reviewPoint;
 
     public Long getId() {

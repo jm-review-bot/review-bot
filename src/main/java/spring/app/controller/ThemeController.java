@@ -59,8 +59,13 @@ public class ThemeController {
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
     public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid ThemeDto themeDto) {
-        Theme theme = themeMapper.themeDtoToThemeEntity(themeDto);
-        themeService.updateTheme(theme);
+        Theme themeById = themeService.getThemeById(themeId);
+        if (themeById == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Theme updatedTheme = themeMapper.themeDtoToThemeEntity(themeDto);
+        updatedTheme.setPosition(themeById.getPosition());
+        themeService.updateTheme(updatedTheme);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
