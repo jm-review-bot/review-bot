@@ -1,24 +1,23 @@
 package spring.app.dto;
 
-import spring.app.groups.NewGroup;
+import spring.app.groups.CreateGroup;
+import spring.app.groups.GetGroup;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
 public class QuestionDto {
 
-    @Null(groups = NewGroup.class)
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = GetGroup.class)
     private Long id;
 
-    @NotNull(groups = NewGroup.class)
     private String title;
 
-    @NotNull(groups = NewGroup.class)
+    @NotNull(groups = GetGroup.class)
     private Integer position;
 
-    @NotNull(groups = NewGroup.class)
     private String answer;
-
-    @NotNull(groups = NewGroup.class)
     private Integer weight;
 
     public QuestionDto () {}

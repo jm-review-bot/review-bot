@@ -8,16 +8,14 @@ import spring.app.model.Question;
 
 import java.util.List;
 
-@Component
 @Mapper(componentModel = "spring")
+@Component
 public interface QuestionMapper {
-
-    QuestionMapper INSTANCE = Mappers.getMapper(QuestionMapper.class);
 
     QuestionDto toDto(Question entity);
 
     Question toEntity(QuestionDto dto);
 
-    List<QuestionDto> getAllQuestionDto (List<Question> questions);
+    List<QuestionDto> getAllQuestionDto(List<Question> questions);
 }
 

@@ -19,7 +19,7 @@ public interface QuestionService {
 
     Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
 
-    void deleteQuestionByThemeId (Long themeId , Long questionId);
+    void deleteQuestion(Long questionId);
 
     List<Question> getAllQuestionByThemeId(Long id);
 }

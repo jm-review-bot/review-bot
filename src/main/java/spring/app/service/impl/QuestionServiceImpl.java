@@ -58,8 +58,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void deleteQuestionByThemeId(Long themeId, Long questionId) {
-        questionDao.deleteQuestionByThemeId(themeId,questionId);
+    @Transactional
+    public void deleteQuestion(Long questionId) {
+        questionDao.deleteQuestion(questionId);
     }
 
     @Override
