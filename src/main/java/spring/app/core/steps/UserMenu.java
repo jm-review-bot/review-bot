@@ -139,8 +139,9 @@ public class UserMenu extends Step {
         List<String> currentStorage = storageService.getUserStorage(vkId, USER_MENU);
         String textUserCancelMenuStep = String.valueOf(storageService.getUserStorage(vkId, USER_CANCEL_REVIEW));
         String text = "";
-        if (!(textUserCancelMenuStep.equals("null"))) {
+        if (!textUserCancelMenuStep.equals("null")) {//если строка textUserCancelMenuStep не пустая
             text += textUserCancelMenuStep + "\n\n";
+            storageService.updateUserStorage(vkId, USER_CANCEL_REVIEW, null);
         }
         text += String.format(
                 "Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, " +
