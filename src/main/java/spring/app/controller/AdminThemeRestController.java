@@ -1,11 +1,11 @@
 package spring.app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.ThemeDto;
+import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 import spring.app.mapper.ThemeMapper;
@@ -21,7 +21,6 @@ import java.util.List;
 public class AdminThemeRestController {
 
     private ThemeService themeService;
-
     private ThemeMapper themeMapper;
 
     public AdminThemeRestController(ThemeService themeService, ThemeMapper themeMapper) {
@@ -69,5 +68,35 @@ public class AdminThemeRestController {
         updatedTheme.setPosition(themeById.getPosition());
         themeService.updateTheme(updatedTheme);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    /*
+     * Перемещение темы на одну позицию вверх
+     *
+     * @param themeId - ID перемещаемой темы
+     * */
+    @PatchMapping("/{themeId}/position/up")
+    public ResponseEntity<String> moveThemePositionUp (@PathVariable String themeId) {
+        try {
+            themeService.shiftThemePosition(Long.parseLong(themeId), -1);
+            return ResponseEntity.ok("Тема перемещена на одну позицию вверх");
+        } catch (ProcessInputException exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
+    }
+
+    /*
+     * Перемещение темы на одну позицию вниз
+     *
+     * @param themeId - ID перемещаемой темы
+     * */
+    @PatchMapping("/{themeId}/position/down")
+    public ResponseEntity<String> moveThemePositionDown(@PathVariable String themeId) {
+        try {
+            themeService.shiftThemePosition(Long.parseLong(themeId), 1);
+            return ResponseEntity.ok("Тема перемещена на одну позицию вниз");
+        } catch (ProcessInputException exception) {
+            return ResponseEntity.badRequest().body(exception.getMessage());
+        }
     }
 }
