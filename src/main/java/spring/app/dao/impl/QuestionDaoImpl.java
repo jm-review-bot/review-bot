@@ -26,4 +26,44 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
                 .setParameter("student_review_answer_id", studentReviewAnswerId)
                 .getSingleResult();
     }
+
+    @Override
+    public List<Question> getQuestionsByThemeId(Long themeId) {
+        return entityManager.createQuery("SELECT q FROM Question q WHERE q.theme.id = :theme_id ORDER BY q.position", Question.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
+    }
+
+    @Override
+    public Question getQuestionByThemeIdAndId(Long themeId, Long questionId) {
+        List<Question> resultList = entityManager.createQuery("SELECT q FROM Question q WHERE q.theme.id = :theme_id AND q.id = :question_id", Question.class)
+                .setParameter("theme_id", themeId)
+                .setParameter("question_id", questionId)
+                .getResultList();
+        return resultList.size() != 0 ? resultList.get(0) : null;
+    }
+
+    @Override
+    public Integer getQuestionMinPositionByThemeId(Long themeId) {
+        return entityManager.createQuery("SELECT min(q.position) FROM Question q WHERE q.theme.id = :theme_id", Integer.class)
+                .setParameter("theme_id", themeId)
+                .getSingleResult();
+    }
+
+    @Override
+    public Integer getQuestionMaxPositionByThemeId(Long themeId) {
+        return entityManager.createQuery("SELECT max(q.position) FROM Question q WHERE q.theme.id = :theme_id", Integer.class)
+                .setParameter("theme_id", themeId)
+                .getSingleResult();
+    }
+
+    @Override
+    public void shiftQuestionsPosition(Long themeId, Integer positionLow, Integer positionHigh, Integer positionShift) {
+        entityManager.createQuery("UPDATE Question q SET q.position = q.position + (:position_shift) WHERE q.theme.id = :theme_id AND  q.position BETWEEN :position_low AND :position_high")
+                .setParameter("theme_id", themeId)
+                .setParameter("position_shift", positionShift)
+                .setParameter("position_low", positionLow)
+                .setParameter("position_high", positionHigh)
+                .executeUpdate();
+    }
 }
