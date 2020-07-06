@@ -14,13 +14,11 @@ import spring.app.service.abstraction.StudentReviewService;
 import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
@@ -103,7 +101,16 @@ public class UserMenu extends Step {
                 // если пользователь не проводит ревью, то показываем сообщение
                 throw new ProcessInputException("Ты еще не объявлял о принятии ревью!\n Сначала ты должен его объвить, для этого нажми на кнопку \"Принять ревью\" и следуй дальнейшим указаниям.");
             }
-        } else if (command.equals("отменить")) { // (Отменить ревью)
+        } else if (command.equals("отменить")) { // (Отменить ревью (!) у принимающего лица [препода])
+            List<Review> reviews = reviewService.getOpenReviewsByReviewerVkId(context.getUser().getVkId());
+            //если нет ни одного ревью, то в чат даётся сообщение об ошибке
+            if (reviews.isEmpty()) {
+                throw new ProcessInputException("Произошла ошибка. Вы не запланировали ни одного ревью\n");
+            } else {
+                sendUserToNextStep(context, SELECTING_REVIEW_TO_DELETE);
+                storageService.removeUserStorage(vkId, SELECTING_REVIEW_TO_DELETE);
+            }
+        } else if (command.equals("отмена")) { // (Отменить ревью (!) у сдающего лица [студента])
             sendUserToNextStep(context, USER_CANCEL_REVIEW);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("сдать")) { // (Сдать ревью)
@@ -175,16 +182,17 @@ public class UserMenu extends Step {
         if (!userReviews.isEmpty()) {
             keys
                     .append(this.getRowDelimiterString())
-                    .append(REVIEW_START_FR);
+                    .append(REVIEW_START_FR)
+                    .append(this.getRowDelimiterString())
+                    .append(REVIEW_CANCEL_FR);
             isEmpty = false;
         }
         //кнопка отмены ревью для студента
-        if (studentReview != null) {
-            if (!isEmpty) {
-                keys.append(this.getRowDelimiterString());
-                isEmpty = false;
-            }
-            keys.append(REVIEW_CANCEL_FR);
+        if (!openStudentReview.isEmpty()) {
+            keys
+                    .append(this.getRowDelimiterString())
+                    .append(DELETE_STUDENT_REVIEW);
+            isEmpty = false;
         }
         if (!isEmpty) {
             return keys.toString();

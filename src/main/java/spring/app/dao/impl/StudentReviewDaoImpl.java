@@ -1,10 +1,10 @@
 package spring.app.dao.impl;
 
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
-import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 
@@ -27,9 +27,9 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser) {
         String str = "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme INNER JOIN Review r " +
                 "ON sr.review.id = r.id WHERE sr.user.id = :id_user AND r.isOpen = true";
-        TypedQuery<StudentReview> query = entityManager.createQuery(str, StudentReview.class)
+        TypedQuery<StudentReview> query = entityManager.createQuery(str, StudentReview.class).setMaxResults(1)
                 .setParameter("id_user", idUser);
-        return org.springframework.dao.support.DataAccessUtils.singleResult(query.getResultList());
+        return DataAccessUtils.singleResult(query.getResultList());
     }
 
     /**
@@ -100,6 +100,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
 
     /**
      * Метод возвращает открытые ревью, на сдачу которого которое записался юзер с
+     *
      * @param vkId
      */
     @Override
@@ -112,7 +113,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
 
     @Override
     public List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId) {
-        return entityManager.createQuery("SELECT sr FROM StudentReview  sr WHERE sr.review.id = :review_id")
+        return entityManager.createQuery("SELECT sr FROM StudentReview sr WHERE sr.review.id = :review_id")
                 .setParameter("review_id", reviewId)
                 .getResultList();
     }
