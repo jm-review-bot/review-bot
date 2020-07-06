@@ -56,5 +56,16 @@ public class QuestionServiceImpl implements QuestionService {
     public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
         return questionDao.getQuestionByStudentReviewAnswerId(studentReviewAnswerId);
     }
+
+    @Override
+    @Transactional
+    public void deleteQuestion(Long questionId) {
+        questionDao.deleteQuestion(questionId);
+    }
+
+    @Override
+    public List<Question> getAllQuestionByThemeId(Long id) {
+        return questionDao.getAllQuestionByThemeId(id);
+    }
 }
 

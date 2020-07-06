@@ -9,4 +9,8 @@ public interface QuestionDao extends GenericDao<Long, Question> {
     List<Question> getQuestionsByReviewId(Long reviewId);
 
     Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
+
+    List<Question> getAllQuestionByThemeId (Long id);
+
+    void deleteQuestion(Long questionId);
 }
