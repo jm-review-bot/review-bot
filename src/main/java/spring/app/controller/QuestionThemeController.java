@@ -32,8 +32,8 @@ public class QuestionThemeController {
     private ThemeService themeService;
 
     @GetMapping("/{themeId}/question")
-    public List<QuestionDto> getAll (@PathVariable("themeId") long themeId) {
-        return questionMapper.methodName(questionService.getAllQuestionByThemeId(themeId));
+    public List<QuestionDto> getAllQuestionByTheme (@PathVariable("themeId") long themeId) {
+        return questionMapper.getAllQuestionDto(questionService.getAllQuestionByThemeId(themeId));
     }
 
     @PostMapping("/{themeId}/question")

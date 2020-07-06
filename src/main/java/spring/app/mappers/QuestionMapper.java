@@ -18,6 +18,6 @@ public interface QuestionMapper {
 
     Question toEntity(QuestionDto dto);
 
-    List<QuestionDto> methodName (List<Question> questions);
+    List<QuestionDto> getAllQuestionDto (List<Question> questions);
 }
 
