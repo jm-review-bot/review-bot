@@ -72,6 +72,9 @@ public class UserStartReviewCore extends Step {
             // выгружаем список строк с вводом ревьюера из STORAGE, парсим эти строки, делаем записи в БД в student_review_answer
             // строки корректные, мы их проверяли в processInput()
             List<String> reviewerInput = storageService.getUserStorage(vkId, USER_START_REVIEW_CORE);
+            if (reviewerInput == null) {
+                reviewerInput = new ArrayList<>();
+            }
             // карта с ключом по студенту и списком вопросов на которые он не смог дать ответ
             Map<User, List<String>> problemQuestions = new HashMap<>();
             // карта с ключом по студенту и суммарным весом его кривых вопросов(не стал мудрить и фигачить лист с парами строка-вес)
