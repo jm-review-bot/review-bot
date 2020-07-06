@@ -62,4 +62,15 @@ public class ThemeDto {
     public void setReviewPoint(Integer reviewPoint) {
         this.reviewPoint = reviewPoint;
     }
+
+    public ThemeDto() {
+    }
+
+    public ThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
+        this.id = id;
+        this.title = title;
+        this.criticalWeight = criticalWeight;
+        this.position = position;
+        this.reviewPoint = reviewPoint;
+    }
 }

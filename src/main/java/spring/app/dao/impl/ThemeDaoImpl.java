@@ -2,6 +2,7 @@ package spring.app.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
+import spring.app.dto.ThemeDto;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -50,5 +51,19 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
         List<Integer> maxPosition = entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
                 .getResultList();
         return maxPosition.size() > 0 ? maxPosition.get(0) : 0;
+    }
+
+    @Override
+    public List<ThemeDto> getAllThemesDto() {
+        return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t ORDER BY t.position", ThemeDto.class)
+                .getResultList();
+    }
+
+    @Override
+    public ThemeDto getThemeDtoById(Long themeId) {
+        List<ThemeDto> themeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
+        return themeDtoByIdList.size() > 0 ? themeDtoByIdList.get(0) : null;
     }
 }

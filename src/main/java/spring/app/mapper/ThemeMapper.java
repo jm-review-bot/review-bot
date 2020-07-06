@@ -13,6 +13,4 @@ public interface ThemeMapper {
     Theme themeDtoToThemeEntity(ThemeDto themeDto);
 
     ThemeDto themeEntityToThemeDto(Theme theme);
-
-    List<ThemeDto> themeEntityListToThemeDtoList(List<Theme> themes);
 }

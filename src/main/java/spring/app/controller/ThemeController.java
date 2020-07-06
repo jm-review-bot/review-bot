@@ -28,17 +28,16 @@ public class ThemeController {
 
     @GetMapping
     public ResponseEntity<List<ThemeDto>> getAllThemes() {
-        List<Theme> allThemes = themeService.getAllThemes();
-        return ResponseEntity.ok(themeMapper.themeEntityListToThemeDtoList(allThemes));
+        return ResponseEntity.ok(themeService.getAllThemesDto());
     }
 
     @GetMapping("/{themeId}")
     public ResponseEntity<ThemeDto> getThemeById(@PathVariable Long themeId) {
-        Theme themeById = themeService.getThemeById(themeId);
-        if (themeById == null) {
+        ThemeDto themeDtoById = themeService.getThemeDtoById(themeId);
+        if (themeDtoById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(themeMapper.themeEntityToThemeDto(themeById));
+        return ResponseEntity.ok(themeDtoById);
     }
 
     @Validated(CreateGroup.class)

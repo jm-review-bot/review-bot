@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import spring.app.dto.ThemeDto;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -23,4 +24,8 @@ public interface ThemeService {
     Theme getThemeByReviewId(Long reviewId);
 
     Integer getThemeMaxPositionValue();
+
+    List<ThemeDto> getAllThemesDto();
+
+    ThemeDto getThemeDtoById(Long themeId);
 }
