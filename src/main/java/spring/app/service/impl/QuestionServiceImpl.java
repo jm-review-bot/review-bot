@@ -73,6 +73,12 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDao.getQuestionDtoById(id);
     }
 
+    @Override
+    @Transactional
+    public void deleteByQuestionTheme(Long themeId, Long questionId) {
+        questionDao.deleteByQuestionTheme(themeId, questionId);
+    }
+
     /*
     * Возвращает успешность проведения изменения позиции в сущности Question
     * */

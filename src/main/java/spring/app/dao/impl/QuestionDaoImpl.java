@@ -77,14 +77,17 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public QuestionDto getQuestionDtoById(Long id) {
-        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.position,q.weight) FROM Question q WHERE q.theme.id = :theme_id", QuestionDto.class)
-                .setParameter("theme_id", id)
-                .getSingleResult();
+        List<QuestionDto> list = entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class)
+                .setParameter("id", id)
+                .getResultList();
+        return list.size() > 0 ? list.get(0) : null;
     }
 
     @Override
-    public void deleteById(Long id) {
-        Question question = entityManager.find(Question.class, id);
-        entityManager.remove(question);
+    public void deleteByQuestionTheme(Long themeId, Long questionId) {
+        entityManager.createQuery("DELETE FROM Question q WHERE q.id = :question_id AND q.theme.id = :theme_id")
+                .setParameter("question_id", questionId)
+                .setParameter("theme_id", themeId)
+                .executeUpdate();
     }
 }
