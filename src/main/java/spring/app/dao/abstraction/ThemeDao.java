@@ -15,7 +15,11 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     Integer getThemeMaxPositionValue();
 
+    Integer getThemeMinPositionValue();
+
     List<ThemeDto> getAllThemesDto();
 
     ThemeDto getThemeDtoById(Long themeId);
+
+    void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);
 }

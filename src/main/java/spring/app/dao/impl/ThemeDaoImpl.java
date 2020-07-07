@@ -54,6 +54,13 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
+    public Integer getThemeMinPositionValue() {
+        List<Integer> maxPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
+                .getResultList();
+        return maxPosition.size() > 0 ? maxPosition.get(0) : 0;
+    }
+
+    @Override
     public List<ThemeDto> getAllThemesDto() {
         return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t ORDER BY t.position", ThemeDto.class)
                 .getResultList();
@@ -65,5 +72,14 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("theme_id", themeId)
                 .getResultList();
         return themeDtoByIdList.size() > 0 ? themeDtoByIdList.get(0) : null;
+    }
+
+    @Override
+    public void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift) {
+        entityManager.createQuery("UPDATE Theme t SET t.position = t.position + (:position_shift) WHERE t.position BETWEEN :position_low AND :position_high")
+                .setParameter("position_shift", positionShift)
+                .setParameter("position_low", positionLow)
+                .setParameter("position_high", positionHigh)
+                .executeUpdate();
     }
 }
