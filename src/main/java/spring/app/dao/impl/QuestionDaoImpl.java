@@ -2,6 +2,7 @@ package spring.app.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.QuestionDao;
+import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 
 import java.util.List;
@@ -65,5 +66,25 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
                 .setParameter("position_low", positionLow)
                 .setParameter("position_high", positionHigh)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<QuestionDto> getAllQuestionDtoByTheme(Long themeId) {
+        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id, q.question, q.answer, q.position, q.weight) FROM Question q WHERE q.theme.id = :theme_id", QuestionDto.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
+    }
+
+    @Override
+    public QuestionDto getQuestionDtoById(Long id) {
+        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.position,q.weight) FROM Question q WHERE q.theme.id = :theme_id", QuestionDto.class)
+                .setParameter("theme_id", id)
+                .getSingleResult();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        Question question = entityManager.find(Question.class, id);
+        entityManager.remove(question);
     }
 }

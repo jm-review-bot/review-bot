@@ -1,5 +1,6 @@
 package spring.app.dao.abstraction;
 
+import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 
 import java.util.List;
@@ -19,4 +20,8 @@ public interface QuestionDao extends GenericDao<Long, Question> {
     Integer getQuestionMaxPositionByThemeId(Long themeId);
 
     void shiftQuestionsPosition(Long themeId, Integer positionLow, Integer positionHigh, Integer positionShift);
+
+    List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
+
+    QuestionDto getQuestionDtoById(Long id);
 }
