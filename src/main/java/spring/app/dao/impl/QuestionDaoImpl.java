@@ -77,7 +77,7 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public QuestionDto getQuestionDtoById(Long id) {
-        List<QuestionDto> list = entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class)
+        List<QuestionDto> list = entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.answer,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class)
                 .setParameter("id", id)
                 .getResultList();
         return list.size() > 0 ? list.get(0) : null;
@@ -85,9 +85,12 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public void deleteByQuestionTheme(Long themeId, Long questionId) {
-        entityManager.createQuery("DELETE FROM Question q WHERE q.id = :question_id AND q.theme.id = :theme_id")
+        Question question = entityManager.createQuery("DELETE FROM Question q WHERE q.id = :question_id AND q.theme.id = :theme_id", Question.class)
                 .setParameter("question_id", questionId)
                 .setParameter("theme_id", themeId)
-                .executeUpdate();
+                .getSingleResult();
+        if (question != null) {
+            entityManager.remove(question);
+        }
     }
 }
