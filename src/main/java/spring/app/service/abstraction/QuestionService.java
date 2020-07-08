@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 
 import java.util.List;
@@ -23,4 +24,10 @@ public interface QuestionService {
     boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange);
 
     List<Question> getQuestionsByThemeId(Long themeId);
+
+    List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
+
+    QuestionDto getQuestionDtoById(Long id);
+
+    void deleteByQuestionTheme(Long themeId, Long questionId);
 }

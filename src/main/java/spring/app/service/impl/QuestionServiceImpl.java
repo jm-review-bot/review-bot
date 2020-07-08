@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.QuestionDao;
+import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 import spring.app.service.abstraction.QuestionService;
 
@@ -60,6 +61,22 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<Question> getQuestionsByThemeId(Long themeId) {
         return questionDao.getQuestionsByThemeId(themeId);
+    }
+
+    @Override
+    public List<QuestionDto> getAllQuestionDtoByTheme(Long themeId) {
+        return questionDao.getAllQuestionDtoByTheme(themeId);
+    }
+
+    @Override
+    public QuestionDto getQuestionDtoById(Long id) {
+        return questionDao.getQuestionDtoById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByQuestionTheme(Long themeId, Long questionId) {
+        questionDao.deleteByQuestionTheme(themeId, questionId);
     }
 
     /*
