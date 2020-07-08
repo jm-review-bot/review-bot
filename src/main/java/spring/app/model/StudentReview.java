@@ -1,14 +1,12 @@
 package spring.app.model;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import spring.app.listener.StudentReviewListener;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(StudentReviewListener.class)
 @Table(name = "student_review")
 public class StudentReview {
 
@@ -23,7 +21,6 @@ public class StudentReview {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Review review;
 
     private Boolean isPassed;

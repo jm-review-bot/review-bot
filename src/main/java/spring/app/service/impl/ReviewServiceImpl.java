@@ -90,4 +90,15 @@ public class ReviewServiceImpl implements ReviewService {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId);
     }
 
+    @Override
+    public List<Review> getAllReviewsByUserId(Long id) {
+        return reviewDao.getAllReviewsByUserId(id);
+    }
+
+    @Transactional
+    @Override
+    public void removeAll(List<Review> reviews) {
+        reviewDao.removeAll(reviews);
+    }
+
 }

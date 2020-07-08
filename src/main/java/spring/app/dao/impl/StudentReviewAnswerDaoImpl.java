@@ -37,4 +37,11 @@ public class StudentReviewAnswerDaoImpl extends AbstractDao<Long, StudentReviewA
                 .setParameter("student_review_id", studentReviewId)
                 .getResultList();
     }
+
+    @Override
+    public List<StudentReviewAnswer> getStudentReviewAnswersByQuestionId(Long questionId) {
+        return entityManager.createQuery("SELECT sra FROM StudentReviewAnswer  sra WHERE  sra.question.id = :question_id", StudentReviewAnswer.class)
+                .setParameter("question_id", questionId)
+                .getResultList();
+    }
 }

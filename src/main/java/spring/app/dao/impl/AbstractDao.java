@@ -49,4 +49,9 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return query.getResultList();
     }
 
+    public void removeAll(List<T> entities) {
+        for (T entity : entities) {
+            entityManager.remove(entity);
+        }
+    }
 }
