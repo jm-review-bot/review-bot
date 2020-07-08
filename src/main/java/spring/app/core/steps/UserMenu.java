@@ -143,15 +143,14 @@ public class UserMenu extends Step {
             text.append(textUserCancelMenuStep).append("\n\n");
             storageService.updateUserStorage(vkId, USER_CANCEL_REVIEW, null);
         }
-        text.append("Привет, %s!\nВы можете сдавать и принимать p2p ревью по разным темам, ")
+        text.append("Привет, ").append(user.getFirstName()).append("!\nВы можете сдавать и принимать p2p ревью по разным темам, ")
                 .append("для удобного использования бота воспользуйтесь кнопками + скрин.\n")
-                .append("На данный момент у вас %d RP (Review Points) для сдачи ревью.\n")
+                .append("На данный момент у вас ").append(user.getReviewPoint()).append(" RP (Review Points) для сдачи ревью.\n")
                 .append("RP используются для записи на ревью, когда вы хотите записаться на ревью ")
                 .append("вам надо потратить RP, первое ревью бесплатное, после его сдачи вы сможете зарабатывать RP ")
                 .append("принимая ревью у других. Если вы приняли 1 ревью то получаете 2 RP, ")
                 .append("если вы дали возможность вам сдать, но никто не записался на сдачу ")
-                .append("(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.")
-                .append(user.getFirstName()).append(user.getReviewPoint());
+                .append("(те вы пытались провести ревью, но не было желающих) то вы получаете 1 RP.");
         if (currentStorage != null) {
             //если кому потребуется выводить кучу текста - пусть стримами бегает по элементам. А пока тут нужен только первый
             text.insert(0,currentStorage.get(0));
