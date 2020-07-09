@@ -30,13 +30,13 @@ function buildThemesAccordion(allThemesDto) {
                                 ${theme.title}
                             </div>
                             <div id="theme-${theme.id}-buttons" class="col-2 text-right">
-                                <button class="btn btn-link" id="nextTheme-${theme.id}" type="button">
+                                <button class="btn btn-link" id="nextTheme-${theme.id}" type="button" data-id="${theme.id}">
                                     <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                                 </button>
-                                <button class="btn btn-link" id="previousTheme-${theme.id}" type="button">
+                                <button class="btn btn-link" id="previousTheme-${theme.id}" type="button" data-id="${theme.id}">
                                     <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
                                 </button>
-                                <button class="btn btn-link" id="updateTheme-${theme.id}" type="button">
+                                <button class="btn btn-link" id="updateTheme-${theme.id}" type="button" data-id="${theme.id}">
                                     <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                                 </button>
                             </div>
