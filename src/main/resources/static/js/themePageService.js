@@ -44,7 +44,7 @@ function buildThemesAccordion(allThemesDto) {
                     </h4>
                 </div>
     
-                <div id="theme-${theme.id}" class="collapse show" aria-labelledby="card-header-theme-${theme.id}">
+                <div id="theme-${theme.id}" class="collapse" aria-labelledby="card-header-theme-${theme.id}">
                     <div class="card-body">
                         <div id="card-theme-${theme.id}" class="card">
                         <!--Здесь располагаются вопросы темы-->
@@ -57,6 +57,6 @@ function buildThemesAccordion(allThemesDto) {
             </div>
         `
         htmlContent += themeHtmlAccordion;
-        $('#theme-accordion').html(htmlContent)
     })
+    $('#theme-accordion').append(htmlContent)
 }
