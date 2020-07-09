@@ -25,7 +25,7 @@ function buildThemesAccordion(allThemesDto) {
                 <div class="card-header">
                     <h4 class="mb-0">
                         <div class="row">
-                            <div class="col-10" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}">
+                            <div class="col-10 theme-expand" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}" data-id="${theme.id}">
                                 ${theme.title}
                             </div>
                             <div class="col-2 text-right">
