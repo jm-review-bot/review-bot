@@ -51,7 +51,7 @@ function buildThemesAccordion(allThemesDto) {
                         </div>
                     </div>
                     <div>
-                        <button id="addQuestion" type="button" class="btn btn-outline-primary btn-lg btn-block">Добавить вопрос</button>
+                        <button id="addQuestion" type="button" class="btn btn-outline-primary btn-lg btn-block" data-id="${theme.id}">Добавить вопрос</button>
                     </div>
                 </div>
             </div>
