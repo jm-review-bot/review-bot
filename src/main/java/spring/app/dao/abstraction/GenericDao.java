@@ -16,4 +16,5 @@ public interface GenericDao<PK extends Serializable, T> {
 
 	void deleteById(PK id);
 
+	void removeAll(List<T> entities);
 }

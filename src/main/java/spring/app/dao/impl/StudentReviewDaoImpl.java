@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
-import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 
@@ -101,6 +100,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
 
     /**
      * Метод возвращает открытые ревью, на сдачу которого которое записался юзер с
+     *
      * @param vkId
      */
     @Override
@@ -108,6 +108,13 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
         return entityManager.createQuery(
                 "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme WHERE srr.isOpen = true AND sr.user.vkId = :vkId", StudentReview.class)
                 .setParameter("vkId", vkId)
+                .getResultList();
+    }
+
+    @Override
+    public List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId) {
+        return entityManager.createQuery("SELECT sr FROM StudentReview sr WHERE sr.review.id = :review_id")
+                .setParameter("review_id", reviewId)
                 .getResultList();
     }
 }

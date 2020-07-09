@@ -1,11 +1,13 @@
 package spring.app.model;
 
 import spring.app.core.StepSelector;
+import spring.app.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(UserListener.class)
 @Table(name = "users")
 public class User {
 
