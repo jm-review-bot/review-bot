@@ -22,10 +22,12 @@ function buildThemesAccordion(allThemesDto) {
     $(allThemesDto).each((i, theme) => {
         let themeHtmlAccordion = `
             <div class="card">
-                <div class="card-header" id="card-header-theme-${theme.id}">
+                <div class="card-header">
                     <h4 class="mb-0">
                         <div class="row">
-                            <div class="col-10" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}">${theme.title}</div>
+                            <div class="col-10" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}">
+                                ${theme.title}
+                            </div>
                             <div class="col-2 text-right">
                                 <button class="move-down-theme btn btn-link" type="button" data-id="${theme.id}">
                                     <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
@@ -47,7 +49,9 @@ function buildThemesAccordion(allThemesDto) {
                         </div>
                     </div>
                     <div>
-                        <button type="button" class="add-question-to-theme btn btn-outline-primary btn-lg btn-block" data-id="${theme.id}">Добавить вопрос</button>
+                        <button type="button" class="add-question-to-theme btn btn-outline-primary btn-lg btn-block" data-id="${theme.id}">
+                            Добавить вопрос
+                        </button>
                     </div>
                 </div>
             </div>
