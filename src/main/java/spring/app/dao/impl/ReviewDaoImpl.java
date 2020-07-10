@@ -20,6 +20,10 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
         super(Review.class);
     }
 
+    public boolean theContains(Review review) {
+        return entityManager.contains(review);
+    }
+
     /**
      * Метод закрывает просроченные ревью в указанное время
      *

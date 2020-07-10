@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 public class TestDataInit {
+    public static Review staticReview;//инициализируется на 362 строке
 
     @Autowired
     private UserService userService;
@@ -356,6 +357,25 @@ public class TestDataInit {
         finalReview.setTitle("Финальное ревью");
         finalReview.setCriticalWeight(8);
         themeService.addTheme(finalReview);
+
+        //__=========================================================================================__
+        staticReview = new Review();
+        staticReview.setDate(LocalDateTime.now().plusMinutes(62));
+        staticReview.setOpen(true);
+        staticReview.setTheme(core);
+        staticReview.setUser(nikolay);
+        reviewService.addReview(staticReview);
+        StudentReview stik = new StudentReview();
+        stik.setUser(ludwig);
+        stik.setPassed(false);
+        stik.setReview(staticReview);
+        studentReviewService.addStudentReview(stik);
+        StudentReview stik2 = new StudentReview();
+        stik2.setUser(martyn);
+        stik2.setPassed(false);
+        stik2.setReview(staticReview);
+        studentReviewService.addStudentReview(stik2);
+        //__=========================================================================================__
 
         // add reviews
         Review hibReview = new Review();

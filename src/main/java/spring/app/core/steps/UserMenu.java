@@ -3,7 +3,9 @@ package spring.app.core.steps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import spring.app.configuration.initializator.TestDataInit;
 import spring.app.core.BotContext;
+import spring.app.dao.impl.ReviewDaoImpl;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
@@ -25,6 +27,8 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
+    @Autowired
+    ReviewDaoImpl reviewDaoImpl;
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
@@ -163,6 +167,21 @@ public class UserMenu extends Step {
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
+        //------------------------------------------------------------------------------------------------------------
+        long idForSpecReview = TestDataInit.staticReview.getId();
+        Review specReview = reviewService.getReviewById(idForSpecReview);
+        //rut.save(specReview);
+        boolean contains = reviewDaoImpl.theContains(specReview);
+        if(contains) {
+            System.out.println("Ревью есть в контексте персистентности!");
+        } else {
+            System.out.println("Ревью нету в контексте персистентности!");
+        }
+        /*
+        Цимес в том, что при пзаходе в Главное Меню выводится "Ревью нету в контексте персистентности!".
+        А должно по идее выводиться "Ревью есть в контексте персистентности!".
+        */
+        //------------------------------------------------------------------------------------------------------------
         Integer vkId = context.getVkId();
         // проверка, есть ли у юзера открытые ревью где он ревьюер - кнопка начать ревью
         List<Review> userReviews = reviewService.getOpenReviewsByReviewerVkId(vkId);
