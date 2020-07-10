@@ -84,12 +84,16 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
     }
 
     @Override
-    public void deleteByQuestionTheme(Long themeId, Long questionId) {
-        List<Question> list = entityManager.createQuery("DELETE FROM Question q WHERE q.id = :question_id AND q.theme.id = :theme_id", Question.class)
+    public void deleteByQuestionTheme(Long questionId) {
+        Question question = entityManager.createQuery("SELECT q FROM Question q WHERE q.id = :question_id", Question.class)
                 .setParameter("question_id", questionId)
-                .setParameter("theme_id", themeId)
-                .getResultList();
-        Question question = list.size() > 0 ? list.get(0) : null;
+                .getSingleResult();
         entityManager.remove(question);
+//        List<Question> list = entityManager.createQuery("DELETE FROM Question q WHERE q.id = :question_id AND q.theme.id = :theme_id", Question.class)
+//                .setParameter("question_id", questionId)
+//                .setParameter("theme_id", themeId)
+//                .getResultList();
+//        Question question = list.size() > 0 ? list.get(0) : null;
+//        entityManager.remove(question);
     }
 }

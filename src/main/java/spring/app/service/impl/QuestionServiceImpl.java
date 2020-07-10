@@ -73,10 +73,20 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDao.getQuestionDtoById(id);
     }
 
+    /*
+    * Метод производит удаление вопроса из темы,
+    * а затем смещает позиции нижестоящих вопросов на одну вверх
+    * */
     @Override
     @Transactional
-    public void deleteByQuestionTheme(Long themeId, Long questionId) {
-        questionDao.deleteByQuestionTheme(themeId, questionId);
+    public void deleteByQuestionTheme(Long questionId) {
+        Question question = questionDao.getById(questionId);
+        Long themeIdOfQuestion = question.getTheme().getId();
+        int questionPosition = question.getPosition();
+        int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
+
+        questionDao.deleteByQuestionTheme(questionId);
+        questionDao.shiftQuestionsPosition(themeIdOfQuestion, questionPosition + 1, maxPosition, -1);
     }
 
     /*

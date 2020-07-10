@@ -25,5 +25,5 @@ public interface QuestionDao extends GenericDao<Long, Question> {
 
     QuestionDto getQuestionDtoById(Long id);
 
-    void deleteByQuestionTheme(Long themeId, Long questionId);
+    void deleteByQuestionTheme(Long questionId);
 }

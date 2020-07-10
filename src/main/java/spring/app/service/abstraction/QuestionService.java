@@ -29,5 +29,5 @@ public interface QuestionService {
 
     QuestionDto getQuestionDtoById(Long id);
 
-    void deleteByQuestionTheme(Long themeId, Long questionId);
+    void deleteByQuestionTheme(Long questionId);
 }
