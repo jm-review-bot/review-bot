@@ -1,7 +1,6 @@
 $(document).on('click', '.theme-expand', function () {
     let themeId = this.dataset.id
-    let listQuestionsDtoByThemeId = getListQuestionsDtoByThemeId(themeId)
-    buildListQuestionsByThemeId(themeId, listQuestionsDtoByThemeId)
+    buildListQuestionsByThemeId(themeId)
 })
 
 function getListQuestionsDtoByThemeId(themeId) {
@@ -17,7 +16,8 @@ function getListQuestionsDtoByThemeId(themeId) {
     return listQuestionsDto
 }
 
-function buildListQuestionsByThemeId(themeId, listQuestions) {
+function buildListQuestionsByThemeId(themeId) {
+    let listQuestions = getListQuestionsDtoByThemeId(themeId)
     let htmlContent = ''
     $(listQuestions).each((i, question) => {
         let htmlQuestion = `
@@ -28,16 +28,16 @@ function buildListQuestionsByThemeId(themeId, listQuestions) {
                         Ответ: ${question.answer}
                     </div>
                     <div class="col-2 text-right">
-                        <button class="move-down-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
+                        <button class="move-down-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
                             <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         </button>
-                        <button class="move-up-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
+                        <button class="move-up-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
                             <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
                         </button>
-                        <button class="edit-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
+                        <button class="edit-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         </button>
-                        <button class="delete-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
+                        <button class="delete-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </button>
                     </div>
