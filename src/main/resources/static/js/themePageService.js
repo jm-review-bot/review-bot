@@ -57,5 +57,5 @@ function buildThemesAccordion(allThemesDto) {
         `
         htmlContent += themeHtmlAccordion;
     })
-    $('#theme-accordion').append(htmlContent)
+    $('#theme-accordion').html(htmlContent)
 }
