@@ -18,7 +18,15 @@ function getAllThemesDto() {
 
 function buildThemesAccordion(allThemesDto) {
     let htmlContent = ''
-    $(allThemesDto).each((i, theme) => {
+    /*
+    * Для того, чтобы темы отображались в порядке возрастания номера позиции,
+    * запускает цикл по количеству тем и из всего массива тем выбирается лишь та,
+    * у которой номер позиции совпадает с текущей итерацией цикла
+    * */
+    for (let i = 1; i <= allThemesDto.length; i++) {
+        let theme = $(allThemesDto).filter(index => {
+            return allThemesDto[index].position == i
+        })[0]
         let themeHtmlAccordion = `
             <div class="card">
                 <div class="card-header">
@@ -56,6 +64,6 @@ function buildThemesAccordion(allThemesDto) {
             </div>
         `
         htmlContent += themeHtmlAccordion;
-    })
+    }
     $('#theme-accordion').html(htmlContent)
 }
