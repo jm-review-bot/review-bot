@@ -28,16 +28,16 @@ function buildListQuestionsByThemeId(themeId, listQuestions) {
                         Ответ: ${question.answer}
                     </div>
                     <div class="col-2 text-right">
-                        <button class="move-down-question btn btn-link" type="button" data-id="${question.id}">
+                        <button class="move-down-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
                             <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         </button>
-                        <button class="move-up-question btn btn-link" type="button" data-id="${question.id}">
+                        <button class="move-up-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
                             <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
                         </button>
-                        <button class="edit-question btn btn-link" type="button" data-id="${question.id}">
+                        <button class="edit-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
                             <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                         </button>
-                        <button class="delete-question btn btn-link" type="button" data-id="${question.id}">
+                        <button class="delete-question btn btn-link" type="button" data-idQuestion="${question.id}" data-idTheme="${themeId}">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </button>
                     </div>
