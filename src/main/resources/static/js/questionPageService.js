@@ -19,7 +19,15 @@ function getListQuestionsDtoByThemeId(themeId) {
 function buildListQuestionsByThemeId(themeId) {
     let listQuestions = getListQuestionsDtoByThemeId(themeId)
     let htmlContent = ''
-    $(listQuestions).each((i, question) => {
+    /*
+    * Для того, чтобы вопросы отображались в порядке возрастания номера позиции,
+    * запускает цикл по количеству вопросов и из всего массива выбирается лишь тот,
+    * у которого номер позиции совпадает с текущей итерацией цикла
+    * */
+    for (let i = 1; i < listQuestions.length; i++) {
+        let question = $(listQuestions).filter(index => {
+            return listQuestions[index] == i
+        })[0]
         let htmlQuestion = `
             <div class="card">
                 <div class="row">
@@ -45,6 +53,6 @@ function buildListQuestionsByThemeId(themeId) {
             </div>
         `
         htmlContent += htmlQuestion
-    })
+    }
     $(document).find(`#card-theme-${themeId}`).html(htmlContent)
 }
