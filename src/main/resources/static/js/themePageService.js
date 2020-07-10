@@ -17,7 +17,6 @@ function getAllThemesDto() {
 }
 
 function buildThemesAccordion(allThemesDto) {
-    $('#theme-accordion').html('')
     let htmlContent = ''
     $(allThemesDto).each((i, theme) => {
         let themeHtmlAccordion = `
