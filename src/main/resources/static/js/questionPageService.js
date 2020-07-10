@@ -18,7 +18,6 @@ function getListQuestionsDtoByThemeId(themeId) {
 }
 
 function buildListQuestionsByThemeId(themeId, listQuestions) {
-    $(document).find(`#card-theme-${themeId}`).html('')
     let htmlContent = ''
     $(listQuestions).each((i, question) => {
         let htmlQuestion = `
