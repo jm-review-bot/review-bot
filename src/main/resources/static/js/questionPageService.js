@@ -24,9 +24,9 @@ function buildListQuestionsByThemeId(themeId) {
     * запускается цикл по количеству вопросов и из всего массива выбирается лишь тот,
     * у которого номер позиции совпадает с текущей итерацией цикла
     * */
-    for (let i = 1; i < listQuestions.length; i++) {
+    for (let i = 1; i <= listQuestions.length; i++) {
         let question = $(listQuestions).filter(index => {
-            return listQuestions[index] == i
+            return listQuestions[index].position == i
         })[0]
         let htmlQuestion = `
             <div class="card">
