@@ -1,7 +1,6 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
-import jdk.nashorn.internal.codegen.types.BooleanType;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
