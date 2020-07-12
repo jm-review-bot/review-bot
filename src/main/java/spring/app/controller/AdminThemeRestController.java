@@ -44,7 +44,7 @@ public class AdminThemeRestController {
 
     @Validated(CreateGroup.class)
     @PostMapping
-    public ResponseEntity<ThemeDto> createTheme(/*@RequestBody*/ @Valid ThemeDto themeDto) {
+    public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
         Theme theme = themeMapper.themeDtoToThemeEntity(themeDto);
         theme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
         themeService.addTheme(theme);
