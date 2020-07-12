@@ -1,5 +1,7 @@
 package spring.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +20,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
+@Api(value = "Admin theme crud operation")
 public class AdminThemeRestController {
 
     private ThemeService themeService;
@@ -29,11 +32,13 @@ public class AdminThemeRestController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Get all", response = ResponseEntity.class)
     public ResponseEntity<List<ThemeDto>> getAllThemes() {
         return ResponseEntity.ok(themeService.getAllThemesDto());
     }
 
     @GetMapping("/{themeId}")
+    @ApiOperation(value = "Get theme by Id", response = ResponseEntity.class)
     public ResponseEntity<ThemeDto> getThemeById(@PathVariable Long themeId) {
         ThemeDto themeDtoById = themeService.getThemeDtoById(themeId);
         if (themeDtoById == null) {
@@ -44,6 +49,7 @@ public class AdminThemeRestController {
 
     @Validated(CreateGroup.class)
     @PostMapping
+    @ApiOperation(value = "Create theme", response = ResponseEntity.class)
     public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
         Theme theme = themeMapper.themeDtoToThemeEntity(themeDto);
         theme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
@@ -52,6 +58,7 @@ public class AdminThemeRestController {
     }
 
     @DeleteMapping("/{themeId}")
+    @ApiOperation(value = "Delete theme", response = ResponseEntity.class)
     public ResponseEntity deleteTheme(@PathVariable Long themeId) {
         themeService.deleteThemeById(themeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -59,6 +66,7 @@ public class AdminThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
+    @ApiOperation(value = "Update theme", response = ResponseEntity.class)
     public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid ThemeDto themeDto) {
         Theme themeById = themeService.getThemeById(themeId);
         if (themeById == null) {
@@ -76,6 +84,7 @@ public class AdminThemeRestController {
      * @param themeId - ID перемещаемой темы
      * */
     @PatchMapping("/{themeId}/position/up")
+    @ApiOperation(value = "Move them position Up", response = ResponseEntity.class)
     public ResponseEntity<String> moveThemePositionUp (@PathVariable String themeId) {
         try {
             themeService.shiftThemePosition(Long.parseLong(themeId), -1);
@@ -91,6 +100,7 @@ public class AdminThemeRestController {
      * @param themeId - ID перемещаемой темы
      * */
     @PatchMapping("/{themeId}/position/down")
+    @ApiOperation(value = "Move them position Down", response = ResponseEntity.class)
     public ResponseEntity<String> moveThemePositionDown(@PathVariable String themeId) {
         try {
             themeService.shiftThemePosition(Long.parseLong(themeId), 1);

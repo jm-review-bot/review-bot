@@ -10,6 +10,11 @@ import spring.app.configuration.initializator.TestDataInit;
 import spring.app.core.StepHolder;
 import spring.app.service.abstraction.RoleService;
 import spring.app.service.abstraction.UserService;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -18,6 +23,7 @@ import java.util.TimeZone;
 @EnableScheduling
 @EnableAsync
 @EnableCaching
+@EnableSwagger2
 public class Main {
 
     public static void main(String[] args) {
@@ -33,6 +39,15 @@ public class Main {
 	@PostConstruct
 	public void init(){
 		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"));
+	}
+
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2)
+				.select()
+				.apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any())
+				.build();
 	}
 
 }
