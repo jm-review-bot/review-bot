@@ -59,11 +59,3 @@ function buildThemesAccordion(allThemesDto) {
     })
     $('#theme-accordion').html(htmlContent)
 }
-
-function addTheme() {
-    let form = document.getElementById('formForAddingTheme').form;
-    let formData = new FormData(form);
-    let xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/api/admin/theme", true);
-    xhttp.send(formData);
-}
