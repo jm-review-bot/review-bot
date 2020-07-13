@@ -1,14 +1,16 @@
 package spring.app.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import org.hibernate.annotations.Type;
+import spring.app.listener.ReviewListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(ReviewListener.class)
 @Table(name = "review")
 public class Review {
 
@@ -24,19 +26,18 @@ public class Review {
     @Column(name = "is_open")
     private Boolean isOpen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
 
     public Review() {
     }
 
-    public Review (User user, Theme theme, Boolean isOpen, LocalDateTime date) {
+    public Review(User user, Theme theme, Boolean isOpen, LocalDateTime date) {
         this.user = user;
         this.theme = theme;
         this.isOpen = isOpen;
@@ -89,7 +90,7 @@ public class Review {
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
         return Objects.equals(id, review.id) &&
-                Objects.equals(date, review.date);
+               Objects.equals(date, review.date);
     }
 
     @Override

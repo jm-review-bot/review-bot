@@ -1,5 +1,8 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -44,7 +47,7 @@ public class Role {
         if (o == null || getClass() != o.getClass()) return false;
         Role role1 = (Role) o;
         return id.equals(role1.id) &&
-                Objects.equals(name, role1.name);
+               Objects.equals(name, role1.name);
     }
 
     @Override

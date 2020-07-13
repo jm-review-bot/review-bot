@@ -1,0 +1,62 @@
+package spring.app.controller;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import spring.app.dto.QuestionDto;
+import spring.app.groups.CreateGroup;
+import spring.app.groups.UpdateGroup;
+import spring.app.mapper.QuestionMapper;
+import spring.app.model.Question;
+import spring.app.model.Theme;
+import spring.app.service.abstraction.QuestionService;
+import spring.app.service.abstraction.ThemeService;
+
+import javax.validation.Valid;
+import java.util.List;
+
+@Validated
+@RestController
+@RequestMapping("/api/admin/theme")
+@Api(value = "Операции связанные с вопросами. Для админа")
+public class AdminQuestionThemeRestController {
+
+    private QuestionService questionService;
+    private QuestionMapper questionMapper;
+    private ThemeService themeService;
+
+    public AdminQuestionThemeRestController(QuestionService questionService, QuestionMapper questionMapper, ThemeService themeService) {
+        this.questionService = questionService;
+        this.questionMapper = questionMapper;
+        this.themeService = themeService;
+    }
+
+    @GetMapping("/{themeId}/question")
+    @ApiOperation(value = "Посмотреть все вопросы", response = ResponseEntity.class)
+    public ResponseEntity<List<QuestionDto>> getAllQuestionDto(@PathVariable Long themeId) {
+        return ResponseEntity.ok(questionService.getAllQuestionDtoByTheme(themeId));
+    }
+
+    @Validated(CreateGroup.class)
+    @PostMapping("/{themeId}/question")
+    @ApiOperation(value = "Добавить вопрос", response = ResponseEntity.class)
+    public ResponseEntity<QuestionDto> createQuestion(@PathVariable long themeId,
+                                                      @RequestBody @Valid QuestionDto questionDto) {
+        Theme theme = themeService.getThemeById(themeId);
+        Question question = questionMapper.questionDtoToQuestionEntity(questionDto);
+        question.setTheme(theme);
+        questionService.addQuestion(question);
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
+    }
+
+    @DeleteMapping("/{themeId}/question/{questionId}")
+    @ApiOperation(value = "Удалить вопрос", response = ResponseEntity.class)
+    public ResponseEntity deleteQuestion(@PathVariable Long themeId,
+                                         @PathVariable Long questionId) {
+        questionService.deleteByQuestionTheme(themeId, questionId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+}

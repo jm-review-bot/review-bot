@@ -1,7 +1,7 @@
 package spring.app.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -17,12 +17,10 @@ public class StudentReviewAnswer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_review_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private StudentReview studentReview;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Question question;
 
     @Column(name = "is_right")
@@ -31,7 +29,7 @@ public class StudentReviewAnswer {
     public StudentReviewAnswer() {
     }
 
-    public StudentReviewAnswer (StudentReview studentReview, Question question, Boolean isRight) {
+    public StudentReviewAnswer(StudentReview studentReview, Question question, Boolean isRight) {
         this.studentReview = studentReview;
         this.question = question;
         this.isRight = isRight;

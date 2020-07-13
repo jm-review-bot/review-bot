@@ -1,5 +1,8 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -27,12 +30,12 @@ public class Theme {
     public Theme() {
     }
 
-    public void setCritical_weight(Integer criticalWeight) {
-        this.criticalWeight = criticalWeight;
+    public Integer getCriticalWeight() {
+        return criticalWeight;
     }
 
-    public Integer getCritical_weight() {
-        return criticalWeight;
+    public void setCriticalWeight(Integer criticalWeight) {
+        this.criticalWeight = criticalWeight;
     }
 
     public Long getId() {
@@ -73,7 +76,7 @@ public class Theme {
         if (o == null || getClass() != o.getClass()) return false;
         Theme theme = (Theme) o;
         return id.equals(theme.id) &&
-                title.equals(theme.title);
+               title.equals(theme.title);
     }
 
     @Override

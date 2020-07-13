@@ -34,5 +34,7 @@ public interface ReviewService {
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
-    Review getOpenReviewByStudentVkId(Integer vkId);
+    List<Review> getAllReviewsByUserId(Long id);
+
+    void removeAll(List<Review> reviews);
 }

@@ -1,11 +1,15 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.core.StepSelector;
+import spring.app.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(UserListener.class)
 @Table(name = "users")
 public class User {
 
