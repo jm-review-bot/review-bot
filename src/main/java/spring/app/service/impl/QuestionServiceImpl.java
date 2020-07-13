@@ -132,7 +132,4 @@ public class QuestionServiceImpl implements QuestionService {
         questionDao.update(currentQuestion);
         return true;
     }
-
-
 }
-
