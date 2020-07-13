@@ -1,5 +1,7 @@
 package spring.app.dao.abstraction;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import spring.app.model.Review;
 import spring.app.model.Theme;
 
@@ -10,6 +12,7 @@ public interface ReviewDao extends GenericDao<Long, Review> {
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
+    @Transactional(propagation = Propagation.MANDATORY)
     void updateAllExpiredReviewsByDate(LocalDateTime localDateTime);
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
@@ -24,6 +27,7 @@ public interface ReviewDao extends GenericDao<Long, Review> {
 
     List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
+    @Transactional(propagation = Propagation.MANDATORY)
     void bulkDeleteByUserId(Long id);
 
     List<Review> getAllReviewsByUserId(Long id);
