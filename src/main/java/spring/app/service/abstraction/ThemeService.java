@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ThemeService {
 
-    void addTheme(FixedTheme fixedTheme);
+    void addTheme(Theme theme);
 
     Theme getThemeById(Long id);
 
