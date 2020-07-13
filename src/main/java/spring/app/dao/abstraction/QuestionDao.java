@@ -27,7 +27,4 @@ public interface QuestionDao extends GenericDao<Long, Question> {
     List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
 
     QuestionDto getQuestionDtoById(Long id);
-
-    @Transactional(propagation = Propagation.MANDATORY)
-    void deleteByQuestionTheme(Long questionId);
 }

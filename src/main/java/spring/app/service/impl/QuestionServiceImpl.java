@@ -81,12 +81,14 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     public void deleteByQuestionTheme(Long questionId) {
         Question question = questionDao.getById(questionId);
-        Long themeIdOfQuestion = question.getTheme().getId();
-        int questionPosition = question.getPosition();
-        int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
+        if (question != null) {
+            Long themeIdOfQuestion = question.getTheme().getId();
+            int questionPosition = question.getPosition();
+            int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
 
-        questionDao.deleteByQuestionTheme(questionId);
-        questionDao.shiftQuestionsPosition(themeIdOfQuestion, questionPosition + 1, maxPosition, -1);
+            questionDao.deleteById(questionId);
+            questionDao.shiftQuestionsPosition(themeIdOfQuestion, questionPosition + 1, maxPosition, -1);
+        }
     }
 
     /*
