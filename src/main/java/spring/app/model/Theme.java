@@ -1,5 +1,8 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -73,7 +76,7 @@ public class Theme {
         if (o == null || getClass() != o.getClass()) return false;
         Theme theme = (Theme) o;
         return id.equals(theme.id) &&
-                title.equals(theme.title);
+               title.equals(theme.title);
     }
 
     @Override

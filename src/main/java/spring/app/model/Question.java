@@ -1,6 +1,8 @@
 package spring.app.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.listener.QuestionListener;
 
 import javax.persistence.*;
@@ -35,12 +37,12 @@ public class Question {
     public Question() {
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public Integer getWeight() {
         return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Long getId() {
@@ -89,7 +91,7 @@ public class Question {
         if (o == null || getClass() != o.getClass()) return false;
         Question question1 = (Question) o;
         return id.equals(question1.id) &&
-                question.equals(question1.question);
+               question.equals(question1.question);
     }
 
     @Override

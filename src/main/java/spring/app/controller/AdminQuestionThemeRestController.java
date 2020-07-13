@@ -1,5 +1,7 @@
 package spring.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -19,6 +21,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
+@Api(value = "Операции связанные с вопросами. Для админа")
 public class AdminQuestionThemeRestController {
 
     private QuestionService questionService;
@@ -32,12 +35,14 @@ public class AdminQuestionThemeRestController {
     }
 
     @GetMapping("/{themeId}/question")
+    @ApiOperation(value = "Посмотреть все вопросы", response = ResponseEntity.class)
     public ResponseEntity<List<QuestionDto>> getAllQuestionDto(@PathVariable Long themeId) {
         return ResponseEntity.ok(questionService.getAllQuestionDtoByTheme(themeId));
     }
 
     @Validated(CreateGroup.class)
     @PostMapping("/{themeId}/question")
+    @ApiOperation(value = "Добавить вопрос", response = ResponseEntity.class)
     public ResponseEntity<QuestionDto> createQuestion(@PathVariable long themeId,
                                                       @RequestBody @Valid QuestionDto questionDto) {
         Theme theme = themeService.getThemeById(themeId);
@@ -48,6 +53,7 @@ public class AdminQuestionThemeRestController {
     }
 
     @DeleteMapping("/{themeId}/question/{questionId}")
+    @ApiOperation(value = "Удалить вопрос", response = ResponseEntity.class)
     public ResponseEntity deleteQuestion(@PathVariable Long themeId,
                                          @PathVariable Long questionId) {
         questionService.deleteByQuestionTheme(themeId, questionId);
