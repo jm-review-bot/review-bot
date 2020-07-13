@@ -5,6 +5,7 @@ import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
+@DiscriminatorColumn(name = "theme_type")
 @Table(name = "theme")
 public class Theme {
 
@@ -16,17 +17,16 @@ public class Theme {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "criticalWeight")
+    @Column(name = "critical_weight")
     private Integer criticalWeight;
+
+    @Column(name = "review_point")
+    private Integer reviewPoint;
 
     @Column(name = "position")
     private Integer position;
 
     public Theme() {
-    }
-
-    public Integer getReviewPoint() {
-        return 0;
     }
 
     public Long getId() {
@@ -59,6 +59,14 @@ public class Theme {
 
     public void setPosition(Integer position) {
         this.position = position;
+    }
+
+    public Integer getReviewPoint() {
+        return reviewPoint;
+    }
+
+    public void setReviewPoint(Integer reviewPoint) {
+        this.reviewPoint = reviewPoint;
     }
 
     @Override

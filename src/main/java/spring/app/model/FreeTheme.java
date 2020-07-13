@@ -3,6 +3,7 @@ package spring.app.model;
 import javax.persistence.*;
 import java.util.List;
 
+@DiscriminatorValue(value = "2")
 @Entity
 @Table(name = "free_theme")
 public class FreeTheme extends Theme {
