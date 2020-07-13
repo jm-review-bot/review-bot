@@ -12,32 +12,26 @@ import java.util.Objects;
 @Entity
 @EntityListeners(ReviewListener.class)
 @Table(name = "review")
-@ApiModel(value = "Ревью")
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для ревью")
     private Long id;
 
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @Column(name = "date")
-    @ApiModelProperty(notes = "Дата проводимого ревью")
     private LocalDateTime date;
 
     @Column(name = "is_open")
-    @ApiModelProperty(notes = "Текущее состояние ревью открыто/закрыто")
     private Boolean isOpen;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", nullable = false)
-    @ApiModelProperty(notes = "Id ревью")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "theme_id", nullable = false)
-    @ApiModelProperty(notes = "Id темы")
     private Theme theme;
 
     public Review() {

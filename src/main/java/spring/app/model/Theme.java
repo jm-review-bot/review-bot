@@ -8,29 +8,23 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "theme")
-@ApiModel(value = "Тема")
 public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для темы")
     private Long id;
 
     @Column(name = "title")
-    @ApiModelProperty(notes = "Заглавие темы")
     private String title;
 
     @Column(name = "criticalWeight")
-    @ApiModelProperty(notes = "Критический вес темы")
     private Integer criticalWeight;
 
     @Column(name = "position")
-    @ApiModelProperty(notes = "Позиция темы")
     private Integer position;
 
     @Column(name = "reviewPoint")
-    @ApiModelProperty(notes = "Ревтю баллы")
     private Integer reviewPoint;
 
     public Theme() {

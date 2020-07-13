@@ -8,27 +8,22 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "student_review_answer")
-@ApiModel(value = "Ответы студента")
 public class StudentReviewAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
-    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для ответов")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_review_id")
-    @ApiModelProperty(notes = "Id ревью студента")
     private StudentReview studentReview;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @ApiModelProperty(notes = "Id вопроса")
     @JoinColumn(name = "question_id")
     private Question question;
 
     @Column(name = "is_right")
-    @ApiModelProperty(notes = "Корректность ответа")
     private Boolean isRight;
 
     public StudentReviewAnswer() {
