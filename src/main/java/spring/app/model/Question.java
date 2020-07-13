@@ -1,6 +1,8 @@
 package spring.app.model;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.listener.QuestionListener;
 
 import javax.persistence.*;
@@ -9,38 +11,45 @@ import java.util.Objects;
 @Entity
 @EntityListeners(QuestionListener.class)
 @Table(name = "question")
+@ApiModel(value = "Вопрос")
 public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
+    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для вопроса")
     private Long id;
 
     @Column(name = "question")
+    @ApiModelProperty(notes = "Тело вопроса")
     private String question;
 
     @Column(name = "answer", columnDefinition = "TEXT")
+    @ApiModelProperty(notes = "Тело ответа")
     private String answer;
 
     @Column(name = "position")
+    @ApiModelProperty(notes = "Позиция вопроса")
     private Integer position;
 
     @Column(name = "weight")
+    @ApiModelProperty(notes = "Вес вопроса")
     private Integer weight;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "theme_id", nullable = false)
+    @ApiModelProperty(notes = "Id темы")
     private Theme theme;
 
     public Question() {
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public Integer getWeight() {
         return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Long getId() {
@@ -89,7 +98,7 @@ public class Question {
         if (o == null || getClass() != o.getClass()) return false;
         Question question1 = (Question) o;
         return id.equals(question1.id) &&
-                question.equals(question1.question);
+               question.equals(question1.question);
     }
 
     @Override

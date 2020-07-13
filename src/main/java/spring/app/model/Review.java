@@ -1,38 +1,43 @@
 package spring.app.model;
 
-import org.hibernate.annotations.*;
-import org.springframework.context.event.EventListener;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.annotations.Type;
 import spring.app.listener.ReviewListener;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @EntityListeners(ReviewListener.class)
 @Table(name = "review")
+@ApiModel(value = "Ревью")
 public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
+    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для ревью")
     private Long id;
 
     @Type(type = "org.hibernate.type.LocalDateTimeType")
     @Column(name = "date")
+    @ApiModelProperty(notes = "Дата проводимого ревью")
     private LocalDateTime date;
 
     @Column(name = "is_open")
+    @ApiModelProperty(notes = "Текущее состояние ревью открыто/закрыто")
     private Boolean isOpen;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", nullable = false)
+    @ApiModelProperty(notes = "Id ревью")
     private User user;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "theme_id", nullable = false)
+    @ApiModelProperty(notes = "Id темы")
     private Theme theme;
 
     public Review() {
@@ -91,7 +96,7 @@ public class Review {
         if (o == null || getClass() != o.getClass()) return false;
         Review review = (Review) o;
         return Objects.equals(id, review.id) &&
-                Objects.equals(date, review.date);
+               Objects.equals(date, review.date);
     }
 
     @Override

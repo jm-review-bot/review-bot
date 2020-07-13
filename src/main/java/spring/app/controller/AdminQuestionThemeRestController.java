@@ -21,7 +21,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
-@Api(value = "Admin question crud operation")
+@Api(value = "Операции связанные с вопросами. Для админа")
 public class AdminQuestionThemeRestController {
 
     private QuestionService questionService;
@@ -35,14 +35,14 @@ public class AdminQuestionThemeRestController {
     }
 
     @GetMapping("/{themeId}/question")
-    @ApiOperation(value = "Get all question", response = ResponseEntity.class)
+    @ApiOperation(value = "Посмотреть все вопросы", response = ResponseEntity.class)
     public ResponseEntity<List<QuestionDto>> getAllQuestionDto(@PathVariable Long themeId) {
         return ResponseEntity.ok(questionService.getAllQuestionDtoByTheme(themeId));
     }
 
     @Validated(CreateGroup.class)
     @PostMapping("/{themeId}/question")
-    @ApiOperation(value = "Create question", response = ResponseEntity.class)
+    @ApiOperation(value = "Добавить вопрос", response = ResponseEntity.class)
     public ResponseEntity<QuestionDto> createQuestion(@PathVariable long themeId,
                                                       @RequestBody @Valid QuestionDto questionDto) {
         Theme theme = themeService.getThemeById(themeId);
@@ -53,7 +53,7 @@ public class AdminQuestionThemeRestController {
     }
 
     @DeleteMapping("/{themeId}/question/{questionId}")
-    @ApiOperation(value = "Delete question", response = ResponseEntity.class)
+    @ApiOperation(value = "Удалить вопрос", response = ResponseEntity.class)
     public ResponseEntity deleteQuestion(@PathVariable Long themeId,
                                          @PathVariable Long questionId) {
         questionService.deleteByQuestionTheme(themeId, questionId);

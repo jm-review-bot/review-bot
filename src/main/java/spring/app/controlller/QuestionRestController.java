@@ -11,7 +11,7 @@ import spring.app.service.abstraction.QuestionService;
 
 @RequestMapping("/admin/theme/{themeId}/question")
 @RestController
-@Api(value = "Question remove Api: up, down ")
+@Api(value = "Операции смещения смещения вопроса вверх/вниз")
 public class QuestionRestController {
 
     private QuestionService questionService;
@@ -21,14 +21,14 @@ public class QuestionRestController {
     }
 
     @PatchMapping("/{questionId}/position/up")
-    @ApiOperation(value = "Move theme question position Up", response = ResponseEntity.class)
+    @ApiOperation(value = "Передвинуть вопрос вверх на следующую позицию", response = ResponseEntity.class)
     public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию выше") : ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/{questionId}/position/down")
-    @ApiOperation(value = "Move theme question position Down", response = ResponseEntity.class)
+    @ApiOperation(value = "Передвинуть вопрос вниз на следующую позицию", response = ResponseEntity.class)
     public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию ниже") : ResponseEntity.badRequest().build();

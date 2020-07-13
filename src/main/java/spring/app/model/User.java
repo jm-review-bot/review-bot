@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.core.StepSelector;
 import spring.app.listener.UserListener;
 
@@ -9,20 +11,25 @@ import java.util.Objects;
 @Entity
 @EntityListeners(UserListener.class)
 @Table(name = "users")
+@ApiModel(value = "Пользователь")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
+    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для пользователя")
     private Long id;
 
     @Column(name = "first_name")
+    @ApiModelProperty(notes = "Имя пользователя")
     private String firstName;
 
     @Column(name = "last_name")
+    @ApiModelProperty(notes = "Фамилия пользователя")
     private String lastName;
 
     @Column(name = "vk_id", unique = true)
+    @ApiModelProperty(notes = "Идентификатор пользователя в Вконтикте")
     private Integer vkId;
 
     /**
@@ -30,6 +37,7 @@ public class User {
      */
     @Column(name = "chat_step")
     @Enumerated(EnumType.ORDINAL)
+    @ApiModelProperty(notes = "Текущий(последний) шаг пользователя в чатботе")
     private StepSelector chatStep;
 
     /**
@@ -38,13 +46,16 @@ public class User {
      * true - ждем от него сообщения, обрабатываем его input
      */
     @Column(name = "is_viewed")
+    @ApiModelProperty(notes = "Факт просмотра пользователем стартового сообщения шага.")
     private boolean isViewed;
 
     @Column(name = "review_point")
+    @ApiModelProperty(notes = "Количество баллов ревью")
     private Integer reviewPoint = 0;
 
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
+    @ApiModelProperty(notes = "Роль пользователя")
     private Role role;
 
     public User() {

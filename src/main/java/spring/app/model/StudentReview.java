@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.listener.StudentReviewListener;
 
 import javax.persistence.*;
@@ -8,19 +10,23 @@ import java.util.Objects;
 @Entity
 @EntityListeners(StudentReviewListener.class)
 @Table(name = "student_review")
+@ApiModel(value = "Ревью студента")
 public class StudentReview {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для ревью")
     @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
+    @ApiModelProperty(notes = "Id студента")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id")
+    @ApiModelProperty(notes = "Id ревью")
     private Review review;
 
     private Boolean isPassed;

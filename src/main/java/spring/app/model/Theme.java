@@ -1,27 +1,36 @@
 package spring.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "theme")
+@ApiModel(value = "Тема")
 public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")
+    @ApiModelProperty(notes = "Генерируемый базой данных идентификатор для темы")
     private Long id;
 
     @Column(name = "title")
+    @ApiModelProperty(notes = "Заглавие темы")
     private String title;
 
     @Column(name = "criticalWeight")
+    @ApiModelProperty(notes = "Критический вес темы")
     private Integer criticalWeight;
 
     @Column(name = "position")
+    @ApiModelProperty(notes = "Позиция темы")
     private Integer position;
 
     @Column(name = "reviewPoint")
+    @ApiModelProperty(notes = "Ревтю баллы")
     private Integer reviewPoint;
 
     public Theme() {
@@ -73,7 +82,7 @@ public class Theme {
         if (o == null || getClass() != o.getClass()) return false;
         Theme theme = (Theme) o;
         return id.equals(theme.id) &&
-                title.equals(theme.title);
+               title.equals(theme.title);
     }
 
     @Override
