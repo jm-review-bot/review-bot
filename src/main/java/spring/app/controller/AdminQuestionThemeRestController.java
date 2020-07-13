@@ -54,7 +54,7 @@ public class AdminQuestionThemeRestController {
     @DeleteMapping("/{themeId}/question/{questionId}")
     public ResponseEntity deleteQuestion(@PathVariable Long themeId,
                                          @PathVariable Long questionId) {
-        questionService.deleteByQuestionTheme(questionId);
+        questionService.deleteQuestionById(questionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

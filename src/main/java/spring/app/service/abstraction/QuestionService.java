@@ -28,6 +28,4 @@ public interface QuestionService {
     List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
 
     QuestionDto getQuestionDtoById(Long id);
-
-    void deleteByQuestionTheme(Long questionId);
 }

@@ -42,10 +42,22 @@ public class QuestionServiceImpl implements QuestionService {
         questionDao.update(question);
     }
 
+    /*
+     * Метод производит удаление вопроса из темы,
+     * а затем смещает позиции нижестоящих вопросов на одну вверх
+     * */
     @Transactional
     @Override
     public void deleteQuestionById(Long id) {
-        questionDao.deleteById(id);
+        Question question = questionDao.getById(id);
+        if (question != null) {
+            Long themeIdOfQuestion = question.getTheme().getId();
+            int questionPosition = question.getPosition();
+            int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
+
+            questionDao.deleteById(id);
+            questionDao.shiftQuestionsPosition(themeIdOfQuestion, questionPosition + 1, maxPosition, -1);
+        }
     }
 
     @Override
@@ -71,24 +83,6 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDto getQuestionDtoById(Long id) {
         return questionDao.getQuestionDtoById(id);
-    }
-
-    /*
-    * Метод производит удаление вопроса из темы,
-    * а затем смещает позиции нижестоящих вопросов на одну вверх
-    * */
-    @Override
-    @Transactional
-    public void deleteByQuestionTheme(Long questionId) {
-        Question question = questionDao.getById(questionId);
-        if (question != null) {
-            Long themeIdOfQuestion = question.getTheme().getId();
-            int questionPosition = question.getPosition();
-            int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
-
-            questionDao.deleteById(questionId);
-            questionDao.shiftQuestionsPosition(themeIdOfQuestion, questionPosition + 1, maxPosition, -1);
-        }
     }
 
     /*
