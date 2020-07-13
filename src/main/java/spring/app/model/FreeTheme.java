@@ -6,6 +6,7 @@ import java.util.List;
 @DiscriminatorValue(value = "2")
 @Entity
 @Table(name = "free_theme")
+@PrimaryKeyJoinColumn(name = "theme_id")
 public class FreeTheme extends Theme {
 
     @ManyToMany
