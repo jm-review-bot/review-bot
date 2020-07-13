@@ -6,7 +6,7 @@ import java.util.Objects;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "theme")
-public abstract class Theme {
+public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
