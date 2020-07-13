@@ -17,7 +17,7 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public List<Theme> getAll() {
-        return entityManager.createQuery("SELECT t FROM FixedTheme t ORDER BY t.position", Theme.class).getResultList();
+        return entityManager.createQuery("SELECT t FROM Theme t ORDER BY t.position", Theme.class).getResultList();
     }
 
     /**

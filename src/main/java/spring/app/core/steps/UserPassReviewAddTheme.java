@@ -5,7 +5,6 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.StudentReview;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
@@ -43,8 +42,8 @@ public class UserPassReviewAddTheme extends Step {
         themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
         for (Theme theme : themeService.getAllThemes()) {
             String themeRow = String.format(
-                "[%d] %s, стоимость %d RP \n",
-                theme.getPosition(), theme.getTitle(), theme.getReviewPoint()
+                    "[%d] %s, стоимость %d RP \n",
+                    theme.getPosition(), theme.getTitle(), theme.getReviewPoint()
             );
         }
         storageService.updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME, Arrays.asList(themeList.toString()));

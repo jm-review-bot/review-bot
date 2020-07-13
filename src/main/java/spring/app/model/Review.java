@@ -80,8 +80,8 @@ public class Review {
         return theme;
     }
 
-    public void setTheme(FixedTheme fixedTheme) {
-        this.theme = fixedTheme;
+    public void setTheme(Theme theme) {
+        this.theme = theme;
     }
 
     @Override

@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 
 import javax.persistence.NoResultException;
@@ -47,7 +46,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
      * Метод возвращает список ревью студента по теме
      *
      * @param vkId
-     * @param fixedTheme
+     * @param theme
      * @return
      */
     @Override

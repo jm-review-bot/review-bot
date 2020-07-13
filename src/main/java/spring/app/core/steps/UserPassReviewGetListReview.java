@@ -6,7 +6,6 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;

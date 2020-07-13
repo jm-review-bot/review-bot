@@ -1,6 +1,5 @@
 package spring.app.service.abstraction;
 
-import spring.app.model.FixedTheme;
 import spring.app.model.Review;
 import spring.app.model.Theme;
 
@@ -29,7 +28,7 @@ public interface ReviewService {
 
     List<Review> getMyReviewForDate(Integer vkId, LocalDateTime localDateTime, Integer numberOfMinutes);
 
-    List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, FixedTheme fixedTheme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes);
+    List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes);
 
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
