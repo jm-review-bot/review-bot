@@ -7,7 +7,7 @@ import java.util.Objects;
 @Entity
 @DiscriminatorColumn(name = "theme_type")
 @Table(name = "theme")
-public class Theme {
+public abstract class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
