@@ -1,5 +1,7 @@
 package spring.app.dao.abstraction;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
@@ -13,6 +15,7 @@ public interface UserDao extends GenericDao<Long, User> {
 
     boolean isExistByVkId(Integer vkId);
 
+    @Transactional(propagation = Propagation.MANDATORY)
     void deleteUserByVkId(Integer vkId) throws NoResultException;
 
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);

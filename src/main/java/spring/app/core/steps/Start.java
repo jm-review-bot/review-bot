@@ -38,10 +38,10 @@ public class Start extends Step {
     @Override
     public String getDynamicText(BotContext context) {
         if (context.getRole().isAdmin()) {
-            return "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
-        } else {
             return "Этот Бот создан для прохождения ревью.\n " +
                     "Нажми \"начать\" для запуска или введи команду /admin для перехода в админку.";
+        } else {
+            return "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
         }
     }
 
