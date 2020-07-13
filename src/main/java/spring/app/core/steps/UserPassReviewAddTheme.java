@@ -45,6 +45,7 @@ public class UserPassReviewAddTheme extends Step {
                     "[%d] %s, стоимость %d RP \n",
                     theme.getPosition(), theme.getTitle(), theme.getReviewPoint()
             );
+            themeList.append(themeRow);
         }
         storageService.updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME, Arrays.asList(themeList.toString()));
     }
