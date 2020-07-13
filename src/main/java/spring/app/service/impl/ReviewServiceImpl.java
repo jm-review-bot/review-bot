@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
+import spring.app.model.FixedTheme;
 import spring.app.model.Review;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ReviewService;
@@ -66,8 +67,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes){
-        return reviewDao.getAllReviewsByThemeAndNotMyReviews(id, theme, localDateTime, dateTimeMyReview, numberOfMinutes);
+    public List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, FixedTheme fixedTheme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes){
+        return reviewDao.getAllReviewsByThemeAndNotMyReviews(id, fixedTheme, localDateTime, dateTimeMyReview, numberOfMinutes);
     }
 
     @Override

@@ -6,6 +6,7 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.ThemeService;

@@ -1,6 +1,7 @@
 package spring.app.dao.abstraction;
 
-import spring.app.dto.ThemeDto;
+import spring.app.dto.FixedThemeDto;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -17,9 +18,9 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     Integer getThemeMinPositionValue();
 
-    List<ThemeDto> getAllThemesDto();
+    List<FixedThemeDto> getAllThemesDto();
 
-    ThemeDto getThemeDtoById(Long themeId);
+    FixedThemeDto getThemeDtoById(Long themeId);
 
     void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);
 }

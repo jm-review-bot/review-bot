@@ -1,6 +1,7 @@
 package spring.app.dao.abstraction;
 
 import spring.app.model.StudentReview;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 
 import java.util.List;

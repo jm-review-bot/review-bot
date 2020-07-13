@@ -301,56 +301,56 @@ public class TestDataInit {
         steps.put(StepSelector.SELECTING_REVIEW_TO_DELETE, selectingReviewToDelete);
 
         //add themes
-        Theme core = new Theme();
+        FixedTheme core = new FixedTheme();
         core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
         core.setCriticalWeight(8);
         themeService.addTheme(core);
 
-        Theme multithreading = new Theme();
+        FixedTheme multithreading = new FixedTheme();
         multithreading.setPosition(2);
         multithreading.setReviewPoint(4);
         multithreading.setTitle("Многопоточность");
         multithreading.setCriticalWeight(8);
         themeService.addTheme(multithreading);
 
-        Theme sql = new Theme();
+        FixedTheme sql = new FixedTheme();
         sql.setPosition(3);
         sql.setReviewPoint(4);
         sql.setTitle("SQL");
         sql.setCriticalWeight(8);
         themeService.addTheme(sql);
 
-        Theme hibernate = new Theme();
+        FixedTheme hibernate = new FixedTheme();
         hibernate.setPosition(4);
         hibernate.setReviewPoint(4);
         hibernate.setTitle("Hibernate");
         hibernate.setCriticalWeight(8);
         themeService.addTheme(hibernate);
 
-        Theme spring = new Theme();
+        FixedTheme spring = new FixedTheme();
         spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
         spring.setCriticalWeight(8);
         themeService.addTheme(spring);
 
-        Theme patterns = new Theme();
+        FixedTheme patterns = new FixedTheme();
         patterns.setPosition(6);
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
         patterns.setCriticalWeight(8);
         themeService.addTheme(patterns);
 
-        Theme algorithm = new Theme();
+        FixedTheme algorithm = new FixedTheme();
         algorithm.setPosition(7);
         algorithm.setReviewPoint(4);
         algorithm.setTitle("Алгоритмы");
         algorithm.setCriticalWeight(8);
         themeService.addTheme(algorithm);
 
-        Theme finalReview = new Theme();
+        FixedTheme finalReview = new FixedTheme();
         finalReview.setPosition(8);
         finalReview.setReviewPoint(4);
         finalReview.setTitle("Финальное ревью");

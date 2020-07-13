@@ -4,8 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
-import spring.app.dto.ThemeDto;
+import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
@@ -23,8 +24,8 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Transactional
     @Override
-    public void addTheme(Theme theme) {
-        themeDao.save(theme);
+    public void addTheme(FixedTheme fixedTheme) {
+        themeDao.save(fixedTheme);
     }
 
     @Override
@@ -75,12 +76,12 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<ThemeDto> getAllThemesDto() {
+    public List<FixedThemeDto> getAllThemesDto() {
         return themeDao.getAllThemesDto();
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
+    public FixedThemeDto getThemeDtoById(Long themeId) {
         return themeDao.getThemeDtoById(themeId);
     }
 

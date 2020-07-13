@@ -1,7 +1,6 @@
 package spring.app.model;
 
 import org.hibernate.annotations.*;
-import org.springframework.context.event.EventListener;
 import spring.app.listener.ReviewListener;
 
 import javax.persistence.*;
@@ -81,8 +80,8 @@ public class Review {
         return theme;
     }
 
-    public void setTheme(Theme theme) {
-        this.theme = theme;
+    public void setTheme(FixedTheme fixedTheme) {
+        this.theme = fixedTheme;
     }
 
     @Override

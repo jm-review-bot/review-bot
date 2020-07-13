@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 
 import javax.persistence.NoResultException;
@@ -46,15 +47,15 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
      * Метод возвращает список ревью студента по теме
      *
      * @param vkId
-     * @param theme
+     * @param fixedTheme
      * @return
      */
     @Override
     public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
         return entityManager.createQuery("SELECT sr FROM StudentReview sr " +
-                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :vkId AND r.theme = :theme", StudentReview.class)
-                .setParameter("vkId", vkId)
-                .setParameter("theme", theme)
+                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :vk_id AND r.theme.id = :theme_id", StudentReview.class)
+                .setParameter("vk_id", vkId)
+                .setParameter("theme_id", theme.getId())
                 .getResultList();
     }
 

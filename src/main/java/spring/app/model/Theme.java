@@ -3,9 +3,10 @@ package spring.app.model;
 import javax.persistence.*;
 import java.util.Objects;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "theme")
-public class Theme {
+public abstract class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -21,18 +22,11 @@ public class Theme {
     @Column(name = "position")
     private Integer position;
 
-    @Column(name = "reviewPoint")
-    private Integer reviewPoint;
-
     public Theme() {
     }
 
-    public Integer getCriticalWeight() {
-        return criticalWeight;
-    }
-
-    public void setCriticalWeight(Integer criticalWeight) {
-        this.criticalWeight = criticalWeight;
+    public Integer getReviewPoint() {
+        return 0;
     }
 
     public Long getId() {
@@ -51,6 +45,14 @@ public class Theme {
         this.title = title;
     }
 
+    public Integer getCriticalWeight() {
+        return criticalWeight;
+    }
+
+    public void setCriticalWeight(Integer criticalWeight) {
+        this.criticalWeight = criticalWeight;
+    }
+
     public Integer getPosition() {
         return position;
     }
@@ -59,25 +61,19 @@ public class Theme {
         this.position = position;
     }
 
-    public Integer getReviewPoint() {
-        return reviewPoint;
-    }
-
-    public void setReviewPoint(Integer reviewPoint) {
-        this.reviewPoint = reviewPoint;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Theme theme = (Theme) o;
         return id.equals(theme.id) &&
-                title.equals(theme.title);
+                title.equals(theme.title) &&
+                criticalWeight.equals(theme.criticalWeight) &&
+                position.equals(theme.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title);
+        return Objects.hash(id, title, criticalWeight, position);
     }
 }

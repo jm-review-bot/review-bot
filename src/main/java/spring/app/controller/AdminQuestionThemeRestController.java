@@ -6,7 +6,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.QuestionDto;
 import spring.app.groups.CreateGroup;
-import spring.app.groups.UpdateGroup;
 import spring.app.mapper.QuestionMapper;
 import spring.app.model.Question;
 import spring.app.model.Theme;

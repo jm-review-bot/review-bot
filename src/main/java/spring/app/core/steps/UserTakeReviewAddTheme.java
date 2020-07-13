@@ -3,6 +3,7 @@ package spring.app.core.steps;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.ThemeService;
@@ -34,8 +35,8 @@ public class UserTakeReviewAddTheme extends Step {
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
         List<Theme> themes = themeService.getAllThemes();
-        for (Theme position : themes) {
-            themeList.append(String.format("[%d] %s\n", position.getPosition(), position.getTitle()));
+        for (Theme theme : themes) {
+            themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());
