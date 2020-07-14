@@ -68,7 +68,9 @@ public class BotScheduler {
             for (User user : users) {
                 // получить текущий step пользователя, чтобы отдать ему в сообщении клавиатуру для этого step
                 Step step = stepHolder.getSteps().get(user.getChatStep());
-                bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать прием ревью\"", step.getKeyboard(), user.getVkId());
+                BotContext userContext = new BotContext(user, user.getVkId(), "",
+                        user.getRole(), stepHolder);
+                bot.sendMessage("Напоминание! Если ты готов начать ревью, то в главном меню нажми кнопку \"Начать ревью\"", step.getComposeKeyboard(userContext), user.getVkId());
             }
         }
     }

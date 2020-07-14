@@ -1,5 +1,7 @@
 package spring.app.dao.abstraction;
 
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 
@@ -13,8 +15,10 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
 
     List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme);
 
+    @Transactional(propagation = Propagation.MANDATORY)
     void bulkDeleteByUserId(Long id);
 
+    @Transactional(propagation = Propagation.MANDATORY)
     void deleteStudentReviewByVkId(Integer vkId);
 
     StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
