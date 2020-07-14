@@ -46,10 +46,15 @@ public class AdminQuestionThemeRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
 
+    @GetMapping("/{themeId}/question/{questionId}")
+    public ResponseEntity<QuestionDto> getQuestionDto(@PathVariable Long questionId) {
+        return ResponseEntity.ok(questionService.getQuestionDtoById(questionId));
+    }
+
     @DeleteMapping("/{themeId}/question/{questionId}")
     public ResponseEntity deleteQuestion(@PathVariable Long themeId,
                                          @PathVariable Long questionId) {
-        questionService.deleteByQuestionTheme(themeId, questionId);
+        questionService.deleteQuestionById(questionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
