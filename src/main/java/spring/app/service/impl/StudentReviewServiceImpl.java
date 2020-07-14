@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StudentReviewService;
 
@@ -40,7 +41,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
      * Возвращает все ревью студента по определенной теме
      *
      * @param vkId  студента
-     * @param theme тема
+     * @param fixedTheme тема
      * @return
      */
     @Override

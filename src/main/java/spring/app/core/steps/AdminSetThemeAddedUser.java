@@ -3,10 +3,7 @@ package spring.app.core.steps;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.Review;
-import spring.app.model.StudentReview;
-import spring.app.model.Theme;
-import spring.app.model.User;
+import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
@@ -59,8 +56,8 @@ public class AdminSetThemeAddedUser extends Step {
                 .append(") ")
                 .append("может начать сдачу ревью:\n");
 
-        for (Theme position : themes) {
-            themeList.append(String.format("[%d] %s\n", position.getPosition(), position.getTitle()));
+        for (Theme theme : themes) {
+            themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
         }
 
         listTheme.add(themeList.toString());
