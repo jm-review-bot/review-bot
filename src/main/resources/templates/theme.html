@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="/css/sidebar.css"/>
     <link rel="stylesheet" href="/css/font-glyphicons.css">
+    <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
 
     <title>theme</title>
 </head>
@@ -44,8 +45,18 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <input id="idInputForNameOfTheNewTheme" type="text" placeholder="Название новой темы" aria-label="Название новой темы"
-                                       aria-describedby="button-for-add-theme">
+                                <div>
+                                    <input id="idInputForNameOfTheNewTheme" type="text" size="50" placeholder="Название новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                                <div>
+                                    <input id="idInputForCriticalWeightOfTheNewTheme" type="number"  min="0" max="9007199254740991" size="50" placeholder="Критический вес новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                                <div>
+                                    <input id="idInputForReviewPointOfTheNewTheme" type="number"  min="0" max="9007199254740991" size="50" placeholder="Количество очков за сдачу новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
