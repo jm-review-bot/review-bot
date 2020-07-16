@@ -1,7 +1,8 @@
 package spring.app.service.abstraction;
 
-import spring.app.dto.ThemeDto;
+import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -28,9 +29,9 @@ public interface ThemeService {
 
     Integer getThemeMinPositionValue();
 
-    List<ThemeDto> getAllThemesDto();
+    List<FixedThemeDto> getAllThemesDto();
 
-    ThemeDto getThemeDtoById(Long themeId);
+    FixedThemeDto getThemeDtoById(Long themeId);
 
     void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
 }

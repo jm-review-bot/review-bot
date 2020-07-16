@@ -52,9 +52,9 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     @Override
     public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
         return entityManager.createQuery("SELECT sr FROM StudentReview sr " +
-                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :vkId AND r.theme = :theme", StudentReview.class)
-                .setParameter("vkId", vkId)
-                .setParameter("theme", theme)
+                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :vk_id AND r.theme.id = :theme_id", StudentReview.class)
+                .setParameter("vk_id", vkId)
+                .setParameter("theme_id", theme.getId())
                 .getResultList();
     }
 
