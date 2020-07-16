@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" type="text/css" href="/css/sidebar.css"/>
     <link rel="stylesheet" href="/css/font-glyphicons.css">
+    <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
 
     <title>theme</title>
 </head>
@@ -32,7 +33,38 @@
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand"></a>
             <form class="form-inline">
-                <a href="#" class="btn btn-primary">Добавить тему</a>
+                <a href="#containerForAddingTheme" class="btn btn-primary" data-toggle="modal">Добавить тему</a>
+                <!--Контейнер для добавления темы-->
+                <div id="containerForAddingTheme" class="modal fade">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Добавление темы</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <input id="idInputForNameOfTheNewTheme" type="text" size="50" placeholder="Название новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                                <div>
+                                    <input id="idInputForCriticalWeightOfTheNewTheme" type="number"  min="0" max="9007199254740991" size="50" placeholder="Критический вес новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                                <div>
+                                    <input id="idInputForReviewPointOfTheNewTheme" type="number"  min="0" max="9007199254740991" size="50" placeholder="Количество очков за сдачу новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                                <button type="button" class="btn btn-primary add-new-theme">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
             <div class="input-group mb-3">
                 <input type="text" class="form-control col-md-2 offset-md-10" placeholder="Поиск" aria-label="Поиск"
@@ -56,6 +88,7 @@
 
 <!-- Custom JavaScript -->
 <script type="text/javascript" src="/js/themePageService.js"></script>
+<script type="text/javascript" src="/js/addTheme.js"></script>
 <script type="text/javascript" src="/js/questionPageService.js"></script>
 <script type="text/javascript" src="/js/deleteQuestionService.js"></script>
 
