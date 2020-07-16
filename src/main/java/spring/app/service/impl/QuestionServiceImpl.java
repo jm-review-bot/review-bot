@@ -51,7 +51,7 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestionById(Long id) {
         Question question = questionDao.getById(id);
         if (question != null) {
-            Long themeIdOfQuestion = question.getTheme().getId();
+            Long themeIdOfQuestion = question.getFixedTheme().getId();
             int questionPosition = question.getPosition();
             int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
 
