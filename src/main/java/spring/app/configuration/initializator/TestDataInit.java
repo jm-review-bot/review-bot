@@ -8,6 +8,7 @@ import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class TestDataInit {
@@ -260,6 +261,11 @@ public class TestDataInit {
         mikhail.setChatStep(StepSelector.START);
         userService.addUser(mikhail);
 
+        // add examiners for free themes
+        ArrayList<User> examinerListFreeTheme = new ArrayList<>();
+        examinerListFreeTheme.add(nikolay);
+        examinerListFreeTheme.add(mikhail);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -300,7 +306,7 @@ public class TestDataInit {
         steps.put(StepSelector.REVIEWER_DELETE_REVIEW, reviewerDeleteReview);
         steps.put(StepSelector.SELECTING_REVIEW_TO_DELETE, selectingReviewToDelete);
 
-        //add themes
+        //add fixed themes
         FixedTheme core = new FixedTheme();
         core.setPosition(1);
         core.setReviewPoint(0);
@@ -356,6 +362,31 @@ public class TestDataInit {
         finalReview.setTitle("Финальное ревью");
         finalReview.setCriticalWeight(8);
         themeService.addTheme(finalReview);
+
+        // add free themes
+        FreeTheme freeTheme1 = new FreeTheme();
+        freeTheme1.setPosition(1);
+        freeTheme1.setReviewPoint(4);
+        freeTheme1.setTitle("Свободная тема 1");
+        freeTheme1.setCriticalWeight(8);
+        freeTheme1.setExaminers(examinerListFreeTheme);
+        themeService.addTheme(freeTheme1);
+
+        FreeTheme freeTheme2 = new FreeTheme();
+        freeTheme2.setPosition(1);
+        freeTheme2.setReviewPoint(4);
+        freeTheme2.setTitle("Свободная тема 2");
+        freeTheme2.setCriticalWeight(8);
+        freeTheme2.setExaminers(examinerListFreeTheme);
+        themeService.addTheme(freeTheme2);
+
+        FreeTheme freeTheme3 = new FreeTheme();
+        freeTheme3.setPosition(1);
+        freeTheme3.setReviewPoint(4);
+        freeTheme3.setTitle("Свободная тема 3");
+        freeTheme3.setCriticalWeight(8);
+        freeTheme3.setExaminers(examinerListFreeTheme);
+        themeService.addTheme(freeTheme3);
 
         // add reviews
         Review hibReview = new Review();
