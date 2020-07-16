@@ -1,7 +1,6 @@
 package spring.app.model;
 
 import org.hibernate.annotations.*;
-import org.springframework.context.event.EventListener;
 import spring.app.listener.ReviewListener;
 
 import javax.persistence.*;

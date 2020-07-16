@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-public class ThemeDto {
+public class FixedThemeDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
@@ -63,10 +63,10 @@ public class ThemeDto {
         this.reviewPoint = reviewPoint;
     }
 
-    public ThemeDto() {
+    public FixedThemeDto() {
     }
 
-    public ThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
+    public FixedThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
         this.id = id;
         this.title = title;
         this.criticalWeight = criticalWeight;
