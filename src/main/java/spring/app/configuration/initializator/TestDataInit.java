@@ -9,6 +9,8 @@ import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 public class TestDataInit {
@@ -99,6 +101,18 @@ public class TestDataInit {
 
     @Autowired
     private Step adminSetThemeAddedUser;
+
+    @Autowired
+    private Step examinerChooseMethodToAddStudent;
+
+    @Autowired
+    private Step examinerChangeReviewStatus;
+
+    @Autowired
+    private Step examinerChooseUserFromDB;
+
+    @Autowired
+    private Step examinerFreeThemesList;
 
     @Autowired
     private Step userTakeReviewAddDate;
@@ -262,9 +276,7 @@ public class TestDataInit {
         userService.addUser(mikhail);
 
         // add examiners for free themes
-        ArrayList<User> examinerListFreeTheme = new ArrayList<>();
-        examinerListFreeTheme.add(nikolay);
-        examinerListFreeTheme.add(mikhail);
+        List<User> examinerListFreeTheme = Arrays.asList(nikolay, mikhail);
 
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
@@ -289,6 +301,10 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
+        steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
+        steps.put(StepSelector.EXAMINER_CHANGE_REVIEW_STATUS, examinerChangeReviewStatus);
+        steps.put(StepSelector.EXAMINER_CHOOSE_USER_FROM_DB, examinerChooseUserFromDB);
+        steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
@@ -365,7 +381,7 @@ public class TestDataInit {
 
         // add free themes
         FreeTheme freeTheme1 = new FreeTheme();
-        freeTheme1.setPosition(1);
+        freeTheme1.setPosition(9);
         freeTheme1.setReviewPoint(4);
         freeTheme1.setTitle("Свободная тема 1");
         freeTheme1.setCriticalWeight(8);
@@ -373,7 +389,7 @@ public class TestDataInit {
         themeService.addTheme(freeTheme1);
 
         FreeTheme freeTheme2 = new FreeTheme();
-        freeTheme2.setPosition(1);
+        freeTheme2.setPosition(10);
         freeTheme2.setReviewPoint(4);
         freeTheme2.setTitle("Свободная тема 2");
         freeTheme2.setCriticalWeight(8);
@@ -381,7 +397,7 @@ public class TestDataInit {
         themeService.addTheme(freeTheme2);
 
         FreeTheme freeTheme3 = new FreeTheme();
-        freeTheme3.setPosition(1);
+        freeTheme3.setPosition(11);
         freeTheme3.setReviewPoint(4);
         freeTheme3.setTitle("Свободная тема 3");
         freeTheme3.setCriticalWeight(8);

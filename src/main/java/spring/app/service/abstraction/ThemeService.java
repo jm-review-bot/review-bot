@@ -4,6 +4,7 @@ import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
+import spring.app.model.User;
 
 import java.util.List;
 
@@ -34,4 +35,8 @@ public interface ThemeService {
     FixedThemeDto getThemeDtoById(Long themeId);
 
     void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
+
+    List<User> getAllExaminersOfFreeThemes();
+
+    List<Theme> getFreeThemesByExaminerId(Long examinerId);
 }

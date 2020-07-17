@@ -45,15 +45,15 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     /**
      * Метод возвращает список ревью студента по теме
      *
-     * @param vkId
+     * @param studentId
      * @param theme
      * @return
      */
     @Override
-    public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
+    public List<StudentReview> getAllStudentReviewsByStudentIdAndTheme(Long studentId, Theme theme) {
         return entityManager.createQuery("SELECT sr FROM StudentReview sr " +
-                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :vk_id AND r.theme.id = :theme_id", StudentReview.class)
-                .setParameter("vk_id", vkId)
+                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :student_id AND r.theme.id = :theme_id", StudentReview.class)
+                .setParameter("student_id", studentId)
                 .setParameter("theme_id", theme.getId())
                 .getResultList();
     }

@@ -1,7 +1,6 @@
 package spring.app.service.abstraction;
 
 import spring.app.model.StudentReview;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface StudentReviewService {
 
     List<StudentReview> getAllStudentReview();
 
-    List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme);
+    List<StudentReview> getAllStudentReviewsByStudentIdAndTheme(Long studentId, Theme theme);
 
     void updateStudentReview(StudentReview studentReview);
 

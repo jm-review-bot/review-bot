@@ -13,7 +13,7 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
 
     Long getNumberStudentReviewByIdReview(Long idReview);
 
-    List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme);
+    List<StudentReview> getAllStudentReviewsByStudentIdAndTheme(Long studentId, Theme theme);
 
     @Transactional(propagation = Propagation.MANDATORY)
     void bulkDeleteByUserId(Long id);

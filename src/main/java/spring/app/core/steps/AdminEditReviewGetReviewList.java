@@ -50,7 +50,7 @@ public class AdminEditReviewGetReviewList extends Step {
         Theme selectedTheme = themeService.getByPosition(Integer.parseInt(selectedThemePosition));
 
         List<String> reviewToChange = new ArrayList<>();
-        studentReviewService.getAllStudentReviewsByStudentVkIdAndTheme(selectedUserVKId, selectedTheme).stream()
+        studentReviewService.getAllStudentReviewsByStudentIdAndTheme(selectedUserVKId, selectedTheme).stream()
                 .forEach(sreview ->
                         reviewToChange.add(sreview.getId().toString())
                 );

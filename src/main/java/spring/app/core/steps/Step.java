@@ -131,6 +131,10 @@ public abstract class Step {
         return ROW_DELIMETER_FR;
     }
 
+    public String getColumnDelimiterString() {
+        return COLUMN_DELIMETER_FR;
+    }
+
     private String getFooterKeyboardString() {
         return FOOTER_FR;
     }

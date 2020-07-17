@@ -8,10 +8,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.User;
-import spring.app.service.abstraction.ReviewService;
-import spring.app.service.abstraction.StorageService;
-import spring.app.service.abstraction.StudentReviewService;
-import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -36,6 +33,8 @@ public class UserMenu extends Step {
     private UserService userService;
     @Autowired
     private StudentReviewService studentReviewService;
+    @Autowired
+    private ThemeService themeService;
 
     public UserMenu(String text, String keyboard) {
         super(text, keyboard);
@@ -120,9 +119,16 @@ public class UserMenu extends Step {
             sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")) {
-
             if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
                 sendUserToNextStep(context, ADMIN_MENU);
+                storageService.removeUserStorage(vkId, USER_MENU);
+            } else {
+                throw new ProcessInputException("Недостаточно прав для выполнения команды!");
+            }
+        } else if (command.equals("проверка")) { // Проверка тем свободной защиты
+            List<User> examinersList = themeService.getAllExaminersOfFreeThemes();
+            if (examinersList.contains(context.getUser())) { // Валидация, что у юзера есть темы свободной защиты, которые он может принять
+                sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
                 storageService.removeUserStorage(vkId, USER_MENU);
             } else {
                 throw new ProcessInputException("Недостаточно прав для выполнения команды!");
@@ -191,6 +197,15 @@ public class UserMenu extends Step {
             keys
                     .append(this.getRowDelimiterString())
                     .append(DELETE_STUDENT_REVIEW);
+            isEmpty = false;
+        }
+        // Кнопка для проверяющих
+        User user =  userService.getByVkId(vkId);
+        List<User> examinersList = themeService.getAllExaminersOfFreeThemes();
+        if (examinersList.contains(user)) {
+            keys
+                    .append(this.getRowDelimiterString())
+                    .append(CHECKING_FREE_THEMES);
             isEmpty = false;
         }
         if (!isEmpty) {
