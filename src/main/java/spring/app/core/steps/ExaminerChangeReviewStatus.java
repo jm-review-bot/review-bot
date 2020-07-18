@@ -58,8 +58,10 @@ public class ExaminerChangeReviewStatus extends Step {
         List<StudentReview> studentReviews = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(studentId, freeTheme);
         Boolean isStudentReviewExists = (studentReviews.size() > 0 ? true : false);
 
-        // Обработка команд пользователя
-        if (command.equalsIgnoreCase("пройдено") || command.equalsIgnoreCase("не пройдено")) {
+        // Обрабатываются команды пользователя
+        boolean commandIsPassed = command.equalsIgnoreCase("пройдено");
+        boolean commandIsNotPassed = command.equalsIgnoreCase("не пройдено");
+        if (commandIsPassed || commandIsNotPassed) {
 
             Review review;
             StudentReview studentReview;
@@ -82,7 +84,7 @@ public class ExaminerChangeReviewStatus extends Step {
             }
 
             // Устанавливается статус ревью
-            studentReview.setPassed(command.equalsIgnoreCase("пройдено") ? true : false);
+            studentReview.setPassed(commandIsPassed ? true : false);
 
             // Вносятся соответствующие изменения в БД
             if (isStudentReviewExists) {

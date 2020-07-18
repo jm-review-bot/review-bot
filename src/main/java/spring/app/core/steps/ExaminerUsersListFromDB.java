@@ -49,7 +49,7 @@ public class ExaminerUsersListFromDB extends Step {
         // Из предыдущего шага извлекается ID темы
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
 
-        // Обработка команд пользователя
+        // Обрабатываются команды пользователя
         if (StringParser.isNumeric(command)) {
 
             // Из БД извлекается информация о студенте и теме
@@ -78,7 +78,6 @@ public class ExaminerUsersListFromDB extends Step {
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
-
         storageService.removeUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB);
     }
 
@@ -86,12 +85,12 @@ public class ExaminerUsersListFromDB extends Step {
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
         List<User> allUsers = userService.getAllUsers();
-        List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
 
         // Из предыдущего шага извлекается ID темы
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 
+        // Бот выводит сообщение со списком всех пользователей из БД
         StringBuilder infoMessage = new StringBuilder();
         infoMessage.append(
                 String.format("Защита темы %s.\nВыберите студента из списка:\n",

@@ -58,12 +58,12 @@ public class ExaminerFreeThemesList extends Step {
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
-
         storageService.removeUserStorage(vkId, EXAMINER_FREE_THEMES_LIST);
     }
 
     @Override
     public String getDynamicText(BotContext context) {
+        // Бот выводит сообщение со списком соответсвующих пользователю тем свободной защиты
         List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
         StringBuilder infoMessage = new StringBuilder();
         infoMessage.append("Выберите тему:\n");

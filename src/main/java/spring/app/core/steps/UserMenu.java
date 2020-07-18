@@ -125,7 +125,7 @@ public class UserMenu extends Step {
             } else {
                 throw new ProcessInputException("Недостаточно прав для выполнения команды!");
             }
-        } else if (command.equals("проверка")) { // Проверка тем свободной защиты
+        } else if (command.equals("проверка")) { // По нажатии на кнопку “Проверка тем свободной защиты” производится переход на следующий шаг для отображения списка соответсвующих пользователю тем
             List<User> examinersList = themeService.getAllExaminersOfFreeThemes();
             if (examinersList.contains(context.getUser())) { // Валидация, что у юзера есть темы свободной защиты, которые он может принять
                 sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
@@ -199,8 +199,9 @@ public class UserMenu extends Step {
                     .append(DELETE_STUDENT_REVIEW);
             isEmpty = false;
         }
-        // Кнопка для проверяющих
-        User user =  userService.getByVkId(vkId);
+
+        // На стартовом шаге проверяющему добавляется кнопка “Проверка тем свободной защиты”
+        User user =  context.getUser();
         List<User> examinersList = themeService.getAllExaminersOfFreeThemes();
         if (examinersList.contains(user)) {
             keys
@@ -208,6 +209,7 @@ public class UserMenu extends Step {
                     .append(CHECKING_FREE_THEMES);
             isEmpty = false;
         }
+
         if (!isEmpty) {
             return keys.toString();
         } else {

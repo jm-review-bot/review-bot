@@ -40,6 +40,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
         // Из предыдущего шага извлекается ID темы
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
 
+        // Обрабатываются команды пользователя
         if (command.equalsIgnoreCase("выбрать из списка")) {
 
             // В следующий шаг передается ID темы
@@ -65,6 +66,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 
+        // Бот выводит сообщение с предложением способа для выбора студента
         return String.format(
                 "Вы выбрали тему \"%s\".\n" +
                         "Вы можете выбрать студента из списка или ввести ссылку на профиль студента вконтакте вручную",
