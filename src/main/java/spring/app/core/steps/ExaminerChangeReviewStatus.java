@@ -84,10 +84,12 @@ public class ExaminerChangeReviewStatus extends Step {
         } else if (command.equalsIgnoreCase("не пройдено")) {
             studentReview.setPassed(false);
         } else if (command.equalsIgnoreCase("назад")) {
-            sendUserToNextStep(context, EXAMINER_CHOOSE_USER_FROM_DB);
-            // В следующий шаг передается ID темы, выбранной пользователем
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB, Arrays.asList(freeThemeId.toString()));
             storageService.removeUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS);
+
+            // В следующий шаг передается ID темы, выбранной пользователем
+            sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
+            storageService.updateUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(freeThemeId.toString()));
+
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
@@ -114,6 +116,7 @@ public class ExaminerChangeReviewStatus extends Step {
         Boolean isStudentReviewExist = Boolean.parseBoolean(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(2));
         Theme theme = themeService.getThemeById(freeThemeId);
         User student = userService.getUserById(studentId);
+
         if (isStudentReviewExist) {
             StudentReview studentReview = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(studentId, theme).get(0);
             return String.format(
@@ -125,7 +128,6 @@ public class ExaminerChangeReviewStatus extends Step {
                     student.getLastName(),
                     (studentReview.getPassed() ? "пройдено" : "не пройдено")
             );
-
         } else {
             return String.format(
                     "Ревью по теме \"%s\". Студент %s %s\n" +

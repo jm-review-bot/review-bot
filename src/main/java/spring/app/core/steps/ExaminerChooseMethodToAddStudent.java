@@ -40,20 +40,21 @@ public class ExaminerChooseMethodToAddStudent extends Step {
         // Из предыдущего шага извлекается ID темы
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
 
-        if (command.equalsIgnoreCase("назад")) {
-            sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
-            storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
-        } else if (command.equalsIgnoreCase("выбрать из списка")) {
-            sendUserToNextStep(context, EXAMINER_CHOOSE_USER_FROM_DB);
-            storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
+        if (command.equalsIgnoreCase("выбрать из списка")) {
 
             // В следующий шаг передается ID темы
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB, Arrays.asList(freeThemeId.toString()));
+            sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
+            storageService.updateUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(freeThemeId.toString()));
+
         } else if (command.equalsIgnoreCase("ввести вручную")) {
             // В ТЗ есть такая кнопка, но нет для нее логики
+        } else if (command.equalsIgnoreCase("назад")) {
+            sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
         } else {
             throw  new ProcessInputException("Введена невенрная команда...");
         }
+
+        storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
     }
 
     @Override

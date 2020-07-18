@@ -47,16 +47,10 @@ public class ExaminerUsersListFromDB extends Step {
         Integer vkId = context.getVkId();
 
         // Из предыдущего шага извлекается ID темы
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB).get(0));
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
 
         // Обработка команд пользователя
-        if (command.equalsIgnoreCase("назад")) {
-            sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
-
-            // В следующий шаг передается ID темы
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(freeThemeId.toString()));
-
-        } else if (StringParser.isNumeric(command)) {
+        if (StringParser.isNumeric(command)) {
 
             // Из БД извлекается информация о студенте и теме
             Integer studentNumber = Integer.parseInt(command);
@@ -75,11 +69,17 @@ public class ExaminerUsersListFromDB extends Step {
             sendUserToNextStep(context, EXAMINER_CHANGE_REVIEW_STATUS);
             storageService.updateUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS, Arrays.asList(freeThemeId.toString(), student.getId().toString(), studentReviewIsExist.toString()));
 
+        } else if (command.equalsIgnoreCase("назад")) {
+            sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
+
+            // В следующий шаг передается ID темы
+            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(freeThemeId.toString()));
+
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
 
-        storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB);
+        storageService.removeUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class ExaminerUsersListFromDB extends Step {
         List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
 
         // Из предыдущего шага извлекается ID темы
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB).get(0));
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 
         StringBuilder infoMessage = new StringBuilder();
