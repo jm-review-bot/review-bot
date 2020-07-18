@@ -58,34 +58,31 @@ public class ExaminerChangeReviewStatus extends Step {
         List<StudentReview> studentReviews = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(studentId, freeTheme);
         Boolean isStudentReviewExists = (studentReviews.size() > 0 ? true : false);
 
-        Review review;
-        StudentReview studentReview;
-        if (!isStudentReviewExists) {
-            // Если такой записи нет, т.е. ревью ещё не создано, то создаются новые экземпляры Review...
-            review = new Review();
-            review.setTheme(freeTheme);
-            review.setOpen(false);
-            review.setUser(context.getUser());
-            review.setDate(LocalDateTime.now());
-            reviewService.addReview(review);
-
-            // ... и StudentReview
-            studentReview = new StudentReview();
-            studentReview.setReview(review);
-            studentReview.setUser(student);
-        } else {
-            // Если такая запись есть, то экземпляр StudentReview извлекается из БД
-            studentReview = studentReviews.get(0);
-        }
-
         // Обработка команд пользователя
         if (command.equalsIgnoreCase("пройдено") || command.equalsIgnoreCase("не пройдено")) {
-            // Устанавливается статус ревью
-            if (command.equalsIgnoreCase("пройдено")) {
-                studentReview.setPassed(true);
-            } else if (command.equalsIgnoreCase("не пройдено")) {
-                studentReview.setPassed(false);
+
+            Review review;
+            StudentReview studentReview;
+            if (!isStudentReviewExists) {
+                // Если такой записи нет, т.е. ревью ещё не создано, то создаются новые экземпляры Review...
+                review = new Review();
+                review.setTheme(freeTheme);
+                review.setOpen(false);
+                review.setUser(context.getUser());
+                review.setDate(LocalDateTime.now());
+                reviewService.addReview(review);
+
+                // ... и StudentReview
+                studentReview = new StudentReview();
+                studentReview.setReview(review);
+                studentReview.setUser(student);
+            } else {
+                // Если такая запись есть, то экземпляр StudentReview извлекается из БД
+                studentReview = studentReviews.get(0);
             }
+
+            // Устанавливается статус ревью
+            studentReview.setPassed(command.equalsIgnoreCase("пройдено") ? true : false);
 
             // Вносятся соответствующие изменения в БД
             if (isStudentReviewExists) {
