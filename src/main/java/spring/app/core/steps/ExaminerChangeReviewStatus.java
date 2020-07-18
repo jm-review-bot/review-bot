@@ -79,10 +79,21 @@ public class ExaminerChangeReviewStatus extends Step {
         }
 
         // Обработка команд пользователя
-        if (command.equalsIgnoreCase("пройдено")) {
-            studentReview.setPassed(true);
-        } else if (command.equalsIgnoreCase("не пройдено")) {
-            studentReview.setPassed(false);
+        if (command.equalsIgnoreCase("пройдено") || command.equalsIgnoreCase("не пройдено")) {
+            // Устанавливается статус ревью
+            if (command.equalsIgnoreCase("пройдено")) {
+                studentReview.setPassed(true);
+            } else if (command.equalsIgnoreCase("не пройдено")) {
+                studentReview.setPassed(false);
+            }
+
+            // Вносятся соответствующие изменения в БД
+            if (isStudentReviewExists) {
+                studentReviewService.updateStudentReview(studentReview);
+            } else {
+                studentReviewService.addStudentReview(studentReview);
+            }
+
         } else if (command.equalsIgnoreCase("назад")) {
             storageService.removeUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS);
 
@@ -92,13 +103,6 @@ public class ExaminerChangeReviewStatus extends Step {
 
         } else {
             throw new ProcessInputException("Введена неверная команда...");
-        }
-
-        // Вносятся соответствующие изменения в БД
-        if (isStudentReviewExists) {
-            studentReviewService.updateStudentReview(studentReview);
-        } else {
-            studentReviewService.addStudentReview(studentReview);
         }
 
         // В текущем шаге обновляются: ID темы, ID студента и информация о наличии в таблице student_review связи студент-тема
