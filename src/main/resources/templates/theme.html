@@ -79,12 +79,12 @@
         <!--Контейнер для тем-->
         <div class="accordion" id="theme-accordion"></div>
 
-        <!-- Модалка для тем -->
+        <!-- Модалка для редактирования темы -->
         <div class="modal" tabindex="-1" role="dialog" id="changeThemeModal">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title theme-title"></h5>
+                        <h5 class="modal-title edit-theme-title"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -101,7 +101,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="saveChanging">Сохранить</button>
+                        <button type="button" class="btn btn-primary" id="saveThemeChanging">Сохранить</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
                     </div>
                 </div>
@@ -113,8 +113,8 @@
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="/webjars/popper.js/1.16.0/popper.min.js"></script>
-<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <!-- Custom JavaScript -->
 <script type="text/javascript" src="/js/themePageService.js"></script>
 <script type="text/javascript" src="/js/addTheme.js"></script>

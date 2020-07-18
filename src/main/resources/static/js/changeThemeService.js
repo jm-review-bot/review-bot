@@ -4,15 +4,14 @@ $(document).on('click' , '.edit-theme' , function () {
 
     openModal(themeDto)
 
-    $('#saveChanging').on('click' , function () {
-        closeWindowAndRefreshPage();
+    $('#saveThemeChanging').on('click' , function () {
+        closeWindowAndRefreshThemesList();
     })
 
     $('.delete-theme-button').on('click' , function () {
-        debugger;
         if (askUserToDeleteTheme(themeDto)) {
             deleteTheme(themeId)
-            closeWindowAndRefreshPage()
+            closeWindowAndRefreshThemesList()
         }
         openModal(themeDto)
     });
@@ -20,20 +19,18 @@ $(document).on('click' , '.edit-theme' , function () {
 
 function openModal(themeDto) {
     $('#changeThemeModal').modal();
-    $('.theme-title').html(themeDto.title);
+    $('.edit-theme-title').html(themeDto.title);
 }
 
-function closeWindowAndRefreshPage() {
+function closeWindowAndRefreshThemesList() {
     $('#changeThemeModal').modal('hide');
     buildThemesAccordion(getAllThemesDto());
 }
 
 function deleteTheme(themeId) {
-    debugger;
     $.ajax({
         url : `/api/admin/theme/${themeId}`,
         type: 'DELETE' ,
-        async: false ,
     })
 }
 
@@ -51,7 +48,6 @@ function getThemeDtoById(themeId) {
 }
 
 function askUserToDeleteTheme(theme) {
-    debugger;
     let title = `Вы действительно хотите удалить тему: ${theme.title} ?`;
     return confirm(title);
 }
