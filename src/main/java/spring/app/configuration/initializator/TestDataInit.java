@@ -274,9 +274,6 @@ public class TestDataInit {
         mikhail.setChatStep(StepSelector.START);
         userService.addUser(mikhail);
 
-        // add examiners for free themes
-        List<User> examinerListFreeTheme = Arrays.asList(nikolay, mikhail);
-
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -384,7 +381,7 @@ public class TestDataInit {
         freeTheme1.setReviewPoint(4);
         freeTheme1.setTitle("Свободная тема 1");
         freeTheme1.setCriticalWeight(8);
-        freeTheme1.setExaminers(examinerListFreeTheme);
+        freeTheme1.setExaminers(Arrays.asList(mikhail, nikolay));
         themeService.addTheme(freeTheme1);
 
         FreeTheme freeTheme2 = new FreeTheme();
@@ -392,7 +389,7 @@ public class TestDataInit {
         freeTheme2.setReviewPoint(4);
         freeTheme2.setTitle("Свободная тема 2");
         freeTheme2.setCriticalWeight(8);
-        freeTheme2.setExaminers(examinerListFreeTheme);
+        freeTheme2.setExaminers(Arrays.asList(nikolay));
         themeService.addTheme(freeTheme2);
 
         FreeTheme freeTheme3 = new FreeTheme();
@@ -400,7 +397,7 @@ public class TestDataInit {
         freeTheme3.setReviewPoint(4);
         freeTheme3.setTitle("Свободная тема 3");
         freeTheme3.setCriticalWeight(8);
-        freeTheme3.setExaminers(examinerListFreeTheme);
+        freeTheme3.setExaminers(Arrays.asList(mikhail));
         themeService.addTheme(freeTheme3);
 
         // add reviews
