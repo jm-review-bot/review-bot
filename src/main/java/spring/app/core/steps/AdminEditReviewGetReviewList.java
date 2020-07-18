@@ -45,12 +45,12 @@ public class AdminEditReviewGetReviewList extends Step {
         Integer vkId = context.getVkId();
 
         String selectedUserVKIds = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_USER_LIST).get(0);
-        Long selectedUserVKId = Long.parseLong(selectedUserVKIds);
+        Long selectedUserId = Long.parseLong(selectedUserVKIds);
         String selectedThemePosition = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_THEME_LIST).get(0);
         Theme selectedTheme = themeService.getByPosition(Integer.parseInt(selectedThemePosition));
 
         List<String> reviewToChange = new ArrayList<>();
-        studentReviewService.getAllStudentReviewsByStudentIdAndTheme(selectedUserVKId, selectedTheme).stream()
+        studentReviewService.getAllStudentReviewsByStudentIdAndTheme(selectedUserId, selectedTheme).stream()
                 .forEach(sreview ->
                         reviewToChange.add(sreview.getId().toString())
                 );

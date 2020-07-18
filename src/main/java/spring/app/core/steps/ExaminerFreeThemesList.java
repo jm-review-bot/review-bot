@@ -37,40 +37,46 @@ public class ExaminerFreeThemesList extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
         Integer vkId = context.getVkId();
-        if (command.equalsIgnoreCase("назад")) {
-            sendUserToNextStep(context, USER_MENU);
-            storageService.removeUserStorage(vkId, EXAMINER_FREE_THEMES_LIST);
-        } else if (StringParser.isNumeric(command)) {
+
+        // Обрабатываются команды пользователя
+        if (StringParser.isNumeric(command)) {
+
+            // Выбранная тема извлекается из БД
             Integer selectedNumber = Integer.parseInt(command);
-            List<Theme> themes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
-            if (selectedNumber <= 0 || selectedNumber > themes.size()) {
+            List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
+            if (selectedNumber <= 0 || selectedNumber > freeThemes.size()) {
                 throw new ProcessInputException("Введено неподходящее число");
             }
-            Theme theme = themes.get(selectedNumber - 1);
+            Theme freeTheme = freeThemes.get(selectedNumber - 1);
+
+            // В следующий шаг передается ID выбранной темы
             sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
-            storageService.removeUserStorage(vkId, EXAMINER_FREE_THEMES_LIST);
-            // В следующий шаг передается ID выбранной пользователем темы
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(theme.getId().toString()));
+            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(freeTheme.getId().toString()));
+
+        } else if (command.equalsIgnoreCase("назад")) {
+            sendUserToNextStep(context, USER_MENU);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
+
+        storageService.removeUserStorage(vkId, EXAMINER_FREE_THEMES_LIST);
     }
 
     @Override
     public String getDynamicText(BotContext context) {
-        List<Theme> freeThemesByUserId = themeService.getFreeThemesByExaminerId(context.getUser().getId());
-        StringBuilder freeThemesString = new StringBuilder();
-        freeThemesString.append("Выберите тему:\n");
-        for (int i = 0; i < freeThemesByUserId.size(); i++) {
-            freeThemesString.append(
+        List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
+        StringBuilder infoMessage = new StringBuilder();
+        infoMessage.append("Выберите тему:\n");
+        for (int i = 0; i < freeThemes.size(); i++) {
+            infoMessage.append(
                     String.format(
                             "[%d] %s\n",
                             i + 1,
-                            freeThemesByUserId.get(i).getTitle()
+                            freeThemes.get(i).getTitle()
                     )
             );
         }
-        return freeThemesString.toString();
+        return infoMessage.toString();
     }
 
     @Override

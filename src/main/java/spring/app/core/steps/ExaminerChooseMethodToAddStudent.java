@@ -36,16 +36,19 @@ public class ExaminerChooseMethodToAddStudent extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
         Integer vkId = context.getVkId();
-        // Из предыдущего шага извлекается ID темы, выбранной пользователем
-        Long themeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
+
+        // Из предыдущего шага извлекается ID темы
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
+
         if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
             storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
         } else if (command.equalsIgnoreCase("выбрать из списка")) {
             sendUserToNextStep(context, EXAMINER_CHOOSE_USER_FROM_DB);
-            // В следующий шаг передается ID темы, выбранной пользователем
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB, Arrays.asList(themeId.toString()));
             storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
+
+            // В следующий шаг передается ID темы
+            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB, Arrays.asList(freeThemeId.toString()));
         } else if (command.equalsIgnoreCase("ввести вручную")) {
             // В ТЗ есть такая кнопка, но нет для нее логики
         } else {
@@ -56,13 +59,15 @@ public class ExaminerChooseMethodToAddStudent extends Step {
     @Override
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
-        // Из предыдущего шага извлекается ID темы, выбранной пользователем
-        Long themeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
-        Theme theme = themeService.getThemeById(themeId);
+
+        // Из предыдущего шага извлекается ID темы
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
+        Theme freeTheme = themeService.getThemeById(freeThemeId);
+
         return String.format(
                 "Вы выбрали тему \"%s\".\n" +
                         "Вы можете выбрать студента из списка или ввести ссылку на профиль студента вконтакте вручную",
-                theme.getTitle()
+                freeTheme.getTitle()
         );
     }
 

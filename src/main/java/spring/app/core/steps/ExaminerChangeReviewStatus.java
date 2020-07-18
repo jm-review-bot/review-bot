@@ -49,21 +49,21 @@ public class ExaminerChangeReviewStatus extends Step {
         String command = context.getInput();
 
         // Из предыдущего шага извлекаютя ID темы и ID студента
-        Long themeId = Long.parseLong(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(0));
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(0));
         Long studentId = Long.parseLong(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(1));
-        Theme theme = themeService.getThemeById(themeId);
+        Theme freeTheme = themeService.getThemeById(freeThemeId);
         User student = userService.getUserById(studentId);
 
         // Выполняется проверка, есть ли в таблице student_review запись, связанная с этим студентом и с записью из таблицы free_theme
-        List<StudentReview> studentReviews = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(studentId, theme);
-        Boolean studentReviewIsExists = (studentReviews.size() > 0 ? true : false);
+        List<StudentReview> studentReviews = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(studentId, freeTheme);
+        Boolean isStudentReviewExists = (studentReviews.size() > 0 ? true : false);
 
         Review review;
         StudentReview studentReview;
-        if (!studentReviewIsExists) {
+        if (!isStudentReviewExists) {
             // Если такой записи нет, т.е. ревью ещё не создано, то создаются новые экземпляры Review...
             review = new Review();
-            review.setTheme(theme);
+            review.setTheme(freeTheme);
             review.setOpen(false);
             review.setUser(context.getUser());
             review.setDate(LocalDateTime.now());
@@ -78,43 +78,43 @@ public class ExaminerChangeReviewStatus extends Step {
             studentReview = studentReviews.get(0);
         }
 
+        // Обработка команд пользователя
         if (command.equalsIgnoreCase("пройдено")) {
             studentReview.setPassed(true);
-            if (studentReviewIsExists) {
-                studentReviewService.updateStudentReview(studentReview);
-            } else {
-                studentReviewService.addStudentReview(studentReview);
-            }
         } else if (command.equalsIgnoreCase("не пройдено")) {
             studentReview.setPassed(false);
-            if (studentReviewIsExists) {
-                studentReviewService.updateStudentReview(studentReview);
-            } else {
-                studentReviewService.addStudentReview(studentReview);
-            }
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_CHOOSE_USER_FROM_DB);
             // В следующий шаг передается ID темы, выбранной пользователем
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB, Arrays.asList(themeId.toString()));
+            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_USER_FROM_DB, Arrays.asList(freeThemeId.toString()));
             storageService.removeUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
+
+        // Вносятся соответствующие изменения в БД
+        if (isStudentReviewExists) {
+            studentReviewService.updateStudentReview(studentReview);
+        } else {
+            studentReviewService.addStudentReview(studentReview);
+        }
+
         // В текущем шаге обновляются: ID темы, ID студента и информация о наличии в таблице student_review связи студент-тема
-        studentReviewIsExists = true;
-        storageService.updateUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS, Arrays.asList(themeId.toString(), studentId.toString(), studentReviewIsExists.toString()));
+        isStudentReviewExists = true;
+        storageService.updateUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS, Arrays.asList(freeThemeId.toString(), studentId.toString(), isStudentReviewExists.toString()));
     }
 
     @Override
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
-        // Из предыдущего шага получаем информацию о ID темы, ID студента и существовании в таблице student_review связи студент-тема
-        Long themeId = Long.parseLong(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(0));
+
+        // Из предыдущего шага извлекаются ID темы, ID студента и информация о существовании в таблице student_review связи студент-тема
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(0));
         Long studentId = Long.parseLong(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(1));
-        Boolean studentReviewIsExist = Boolean.parseBoolean(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(2));
-        Theme theme = themeService.getThemeById(themeId);
+        Boolean isStudentReviewExist = Boolean.parseBoolean(storageService.getUserStorage(vkId, StepSelector.EXAMINER_CHANGE_REVIEW_STATUS).get(2));
+        Theme theme = themeService.getThemeById(freeThemeId);
         User student = userService.getUserById(studentId);
-        if (studentReviewIsExist) {
+        if (isStudentReviewExist) {
             StudentReview studentReview = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(studentId, theme).get(0);
             return String.format(
                     "Ревью по теме \"%s\". Студент %s %s\n" +
