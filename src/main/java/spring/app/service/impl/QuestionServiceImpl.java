@@ -61,11 +61,6 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void removeQuestions(List<Question> questions) {
-        questionDao.removeAll(questions);
-    }
-
-    @Override
     public List<Question> getQuestionsByReviewId(Long reviewId) {
         return questionDao.getQuestionsByReviewId(reviewId);
     }
