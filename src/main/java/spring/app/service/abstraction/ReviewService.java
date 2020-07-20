@@ -38,5 +38,5 @@ public interface ReviewService {
 
     List<Review> getAllReviewsByUserId(Long id);
 
-    void removeAll(List<Review> reviews);
+    void deleteListRevies(List<Review> reviews);
 }

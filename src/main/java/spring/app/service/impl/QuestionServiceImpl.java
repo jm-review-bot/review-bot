@@ -61,6 +61,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public void deleteListQuestions(List<Question> questions) {
+        for (Question question : questions) {
+            deleteQuestionById(question.getId());
+        };
+    }
+
+    @Override
     public List<Question> getQuestionsByReviewId(Long reviewId) {
         return questionDao.getQuestionsByReviewId(reviewId);
     }
