@@ -60,11 +60,16 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
+    /*
+    * Здесь используется метод deleteQuestionById(Long id), а не
+    * removeAll(List<Question> questions), потому что все вопросы
+    * имеют позиции и это необходимо учитывать при их удалении
+    * */
     @Override
     public void removeAll(List<Question> questions) {
         for (Question question : questions) {
             deleteQuestionById(question.getId());
-        };
+        }
     }
 
     @Override
