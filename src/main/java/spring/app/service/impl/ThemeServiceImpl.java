@@ -46,12 +46,15 @@ public class ThemeServiceImpl implements ThemeService {
     @Transactional
     @Override
     public void deleteThemeById(Long id) {
-        Integer maxThemePosition = themeDao.getThemeMaxPositionValue();
-        Integer themePosition = themeDao.getById(id).getPosition();
-        if (maxThemePosition != themePosition) {
-            themeDao.shiftThemePosition(themePosition, maxThemePosition, -1);
+        Theme theme = themeDao.getById(id);
+        if (theme != null) {
+            Integer maxThemePosition = themeDao.getThemeMaxPositionValue();
+            Integer themePosition = themeDao.getById(id).getPosition();
+            if (maxThemePosition != themePosition) {
+                themeDao.shiftThemePosition(themePosition, maxThemePosition, -1);
+            }
+            themeDao.deleteById(id);
         }
-        themeDao.deleteById(id);
     }
 
     @Override
