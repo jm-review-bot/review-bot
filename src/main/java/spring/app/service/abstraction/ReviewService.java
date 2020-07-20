@@ -32,6 +32,8 @@ public interface ReviewService {
 
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
+    List<Review> getAllReviewsByThemeId(Long themeId);
+
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
     List<Review> getAllReviewsByUserId(Long id);

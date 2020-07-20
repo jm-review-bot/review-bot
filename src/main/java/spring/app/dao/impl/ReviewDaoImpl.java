@@ -128,6 +128,13 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .getResultList();
     }
 
+    @Override
+    public List<Review> getAllReviewsByThemeId(Long themeId) {
+        return entityManager.createQuery("SELECT r FROM Review r WHERE r.theme.id = :theme_id", Review.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
+    }
+
     /**
      * Метод возвращает ревью по выбранной теме при условии, что записанных на ревью менее трех
      *
