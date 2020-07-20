@@ -1,22 +1,22 @@
-
 $(function(){
+    let currentThemeId = null;
+    let currentThemeDto = null;
 
     $('.edit-theme').on('click' , function () {
-        let themeId = this.dataset.id
-        let themeDto = getThemeDtoById(themeId)
-        openModal(themeDto)
+        currentThemeId = this.dataset.id;
+        currentThemeDto = getThemeDtoById(currentThemeId);
+        openModal(currentThemeDto);
+    });
 
-        $('.delete-theme-button').on('click' , function () {
-            if (askUserToDeleteTheme(themeDto)) {
-                deleteTheme(themeId)
-                closeWindowAndRefreshThemesList()
-            }
-            openModal(themeDto)
-        });
-
-        $('#saveThemeChanging').click(function () {
+    $('.delete-theme-button').on('click' , function () {
+        if (askUserToDeleteTheme(currentThemeDto)) {
+            deleteTheme(currentThemeId);
             closeWindowAndRefreshThemesList();
-        });
+        }
+    });
+
+    $('#saveThemeChanging').click(function () {
+        closeWindowAndRefreshThemesList();
     });
 
     function openModal(themeDto) {
@@ -37,7 +37,7 @@ $(function(){
     }
 
     function getThemeDtoById(themeId) {
-        let themeDto
+        let themeDto;
         $.ajax({
             url : `/api/admin/theme/${themeId}` ,
             type : 'GET' ,
@@ -54,26 +54,4 @@ $(function(){
         return confirm(title);
     }
 
-})
-
-/*
-$(document).on('click' , '.edit-theme' , function () {
-    let themeId = this.dataset.id
-    let themeDto = getThemeDtoById(themeId)
-
-    openModal(themeDto)
-
-    $('#saveThemeChanging').on('click' , function () {
-        closeWindowAndRefreshThemesList();
-    })
-
-    $('.delete-theme-button').on('click' , function () {
-        if (askUserToDeleteTheme(themeDto)) {
-            deleteTheme(themeId)
-            closeWindowAndRefreshThemesList()
-        }
-        openModal(themeDto)
-    });
-})
-*/
-
+});
