@@ -3,34 +3,22 @@ package spring.app.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.app.dao.abstraction.QuestionDao;
-import spring.app.dao.abstraction.ReviewDao;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.Question;
-import spring.app.model.Review;
 import spring.app.model.Theme;
-import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.ThemeService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class ThemeServiceImpl implements ThemeService {
 
     private ThemeDao themeDao;
-    private QuestionDao questionDao;
-    private ReviewDao reviewDao;
 
     @Autowired
-    public ThemeServiceImpl(ThemeDao themeDao,
-                            QuestionDao questionDao,
-                            ReviewDao reviewDao) {
+    public ThemeServiceImpl(ThemeDao themeDao) {
         this.themeDao = themeDao;
-        this.questionDao  = questionDao;
-        this.reviewDao = reviewDao;
     }
 
     @Transactional
@@ -55,20 +43,14 @@ public class ThemeServiceImpl implements ThemeService {
         themeDao.update(theme);
     }
 
-    /*
-    * Метод перед удалением темы проверяет, есть ли связанные с ней вопросы.
-    * Если вопросы есть, то в первую очередь удаляются найденные вопросы,
-    * а потом только сама тема
-    *
-    * @param id - ID удаляемой темы
-    * */
     @Transactional
     @Override
     public void deleteThemeById(Long id) {
-        List<Question> questions = questionDao.getQuestionsByThemeId(id);
-        questionDao.removeAll(questions);
-        List<Review> reviews = reviewDao.getAllReviewsByThemeId(id);
-        reviewDao.removeAll(reviews);
+        Integer maxThemePosition = themeDao.getThemeMaxPositionValue();
+        Integer themePosition = themeDao.getById(id).getPosition();
+        if (maxThemePosition != themePosition) {
+            themeDao.shiftThemePosition(themePosition, maxThemePosition, -1);
+        }
         themeDao.deleteById(id);
     }
 

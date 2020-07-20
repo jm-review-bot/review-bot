@@ -30,6 +30,9 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public List<Question> getQuestionsByThemeId(Long themeId) {
+        List<Question> questions = entityManager.createQuery("SELECT q FROM Question q WHERE q.theme.id = :theme_id ORDER BY q.position", Question.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
         return entityManager.createQuery("SELECT q FROM Question q WHERE q.theme.id = :theme_id ORDER BY q.position", Question.class)
                 .setParameter("theme_id", themeId)
                 .getResultList();

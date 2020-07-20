@@ -129,7 +129,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     }
 
     @Override
-    public List<Review> getAllReviewsByThemeId(Long themeId) {
+    public List<Review> getReviewsByThemeId(Long themeId) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.theme.id = :theme_id", Review.class)
                 .setParameter("theme_id", themeId)
                 .getResultList();
