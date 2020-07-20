@@ -31,8 +31,8 @@ public class ThemeListener {
     private void removeRelatedEntities(Theme theme) {
         Long themeId = theme.getId();
         List<Question> questions = questionService.getQuestionsByThemeId(themeId);
-        questionService.deleteListQuestions(questions);
+        questionService.removeAll(questions);
         List<Review> reviews = reviewService.getReviewsByThemeId(themeId);
-        reviewService.deleteListRevies(reviews);
+        reviewService.removeAll(reviews);
     }
 }

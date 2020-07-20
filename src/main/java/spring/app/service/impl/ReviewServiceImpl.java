@@ -102,7 +102,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Transactional
     @Override
-    public void deleteListRevies(List<Review> reviews) {
+    public void removeAll(List<Review> reviews) {
         reviewDao.removeAll(reviews);
     }
 

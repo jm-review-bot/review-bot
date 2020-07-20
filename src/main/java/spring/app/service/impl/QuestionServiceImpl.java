@@ -61,7 +61,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void deleteListQuestions(List<Question> questions) {
+    public void removeAll(List<Question> questions) {
         for (Question question : questions) {
             deleteQuestionById(question.getId());
         };

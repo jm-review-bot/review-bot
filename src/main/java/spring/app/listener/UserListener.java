@@ -23,6 +23,6 @@ public class UserListener {
     @PreRemove
     private void removeRelatedEntities(User user) {
         List<Review> allReviewsByUserId = reviewService.getAllReviewsByUserId(user.getId());
-        reviewService.deleteListRevies(allReviewsByUserId);
+        reviewService.removeAll(allReviewsByUserId);
     }
 }
