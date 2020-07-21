@@ -22,7 +22,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
 
     public ExaminerChooseMethodToAddStudent(StorageService storageService,
                                             ThemeService themeService) {
-        super("", "");
+        super("", CHOOSE_FROM_LIST + "," + ENTER_MANUALLY + DEF_BACK_KB);
         this.storageService = storageService;
         this.themeService = themeService;
     }
@@ -77,13 +77,6 @@ public class ExaminerChooseMethodToAddStudent extends Step {
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
-        StringBuilder keys = new StringBuilder();
-        keys
-                .append(CHOOSE_FROM_LIST)
-                .append(this.getColumnDelimiterString())
-                .append(ENTER_MANUALLY)
-                .append(this.getRowDelimiterString())
-                .append(DEF_BACK_KB);
-        return keys.toString();
+        return "";
     }
 }
