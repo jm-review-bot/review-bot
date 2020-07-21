@@ -12,7 +12,6 @@ $('.delete-theme-button').on('click' , function () {
     let themeDto = getThemeDtoById(themeId);
     if (askUserToDeleteTheme(themeDto)) {
         deleteTheme(themeId);
-        buildThemesAccordion(getAllThemesDto());
         closeWindowAndRefreshThemesList();
         buildThemesAccordion(getAllThemesDto());
     }
