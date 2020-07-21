@@ -77,13 +77,51 @@
         <h1>Список всех доступных тем</h1>
 
         <!--Контейнер для тем-->
-        <div class="accordion" id="theme-accordion"></div>
+        <div class="accordion" id="theme-accordion">
+            <!-- Список тем, заполняется с помощью JS -->
+        </div>
+    </div>
+</div>
+
+<!--Модальное окно для добавления нового вопроса темы-->
+<div class="modal fade" id="add-question-modal-window" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Новый вопрос
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-question-form">
+                    <div class="form-group">
+                        Текст вопроса:
+                        <textarea rows="10" input class="col" type="text" name="question" placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Ответ на вопрос:
+                        <textarea rows="10" input class="col" type="text" name="answer" placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Вес вопроса:
+                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required autocomplete="off">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="/webjars/popper.js/1.16.0/popper.min.js"></script>
+<script type="text/javascript" src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
 <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 <!-- Custom JavaScript -->
@@ -91,6 +129,7 @@
 <script type="text/javascript" src="/js/addTheme.js"></script>
 <script type="text/javascript" src="/js/questionPageService.js"></script>
 <script type="text/javascript" src="/js/deleteQuestionService.js"></script>
+<script type="text/javascript" src="/js/addQuestionService.js"></script>
 
 </body>
 </html>
