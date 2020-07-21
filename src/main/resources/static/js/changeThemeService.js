@@ -12,6 +12,8 @@ $(function(){
         if (askUserToDeleteTheme(currentThemeDto)) {
             deleteTheme(currentThemeId);
             closeWindowAndRefreshThemesList();
+            buildThemesAccordion(getAllThemesDto());
+            buildThemesAccordion(getAllThemesDto());
         }
     });
 
@@ -33,7 +35,8 @@ $(function(){
         $.ajax({
             url : `/api/admin/theme/${themeId}`,
             type: 'DELETE' ,
-            success : closeWindowAndRefreshThemesList()
+            async : true ,
+            success : buildThemesAccordion(getAllThemesDto())
         });
     };
 
