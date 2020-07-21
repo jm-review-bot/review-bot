@@ -49,6 +49,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
 
         } else if (command.equalsIgnoreCase("ввести вручную")) {
             // В ТЗ есть такая кнопка, но нет для нее логики
+            throw new ProcessInputException("Такой функционал в ТЗ еще не описан. Пожалуйста, выбирете \"Выбрать из списка\"");
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
         } else {
