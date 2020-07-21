@@ -13,7 +13,6 @@ $('.delete-theme-button').on('click' , function () {
     if (askUserToDeleteTheme(themeDto)) {
         deleteTheme(themeId);
         closeWindowAndRefreshThemesList();
-        buildThemesAccordion(getAllThemesDto());
     }
 });
 
