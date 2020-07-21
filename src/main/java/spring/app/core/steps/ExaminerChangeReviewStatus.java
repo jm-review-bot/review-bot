@@ -84,7 +84,7 @@ public class ExaminerChangeReviewStatus extends Step {
             }
 
             // Устанавливается статус ревью
-            studentReview.setPassed(commandIsPassed ? true : false);
+            studentReview.setPassed(commandIsPassed);
 
             // Вносятся соответствующие изменения в БД
             if (isStudentReviewExists) {
