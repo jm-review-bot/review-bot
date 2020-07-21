@@ -33,8 +33,9 @@ $(function(){
         $.ajax({
             url : `/api/admin/theme/${themeId}`,
             type: 'DELETE' ,
-        })
-    }
+            success : closeWindowAndRefreshThemesList()
+        });
+    };
 
     function getThemeDtoById(themeId) {
         let themeDto;
