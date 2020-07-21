@@ -22,7 +22,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
 
     public ExaminerChooseMethodToAddStudent(StorageService storageService,
                                             ThemeService themeService) {
-        super("", CHOOSE_FROM_LIST + "," + ENTER_MANUALLY + DEF_BACK_KB);
+        super("", CHOOSE_FROM_LIST + COLUMN_DELIMETER_FR + ENTER_MANUALLY + ROW_DELIMETER_FR + DEF_BACK_KB);
         this.storageService = storageService;
         this.themeService = themeService;
     }
