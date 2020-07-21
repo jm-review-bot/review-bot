@@ -484,7 +484,6 @@ public class TestDataInit {
         // add Questions
         Question question1 = new Question();
         question1.setAnswer("«Bean» – это объект, который интегрируется и конфигурируется контейнером IOC.");
-        question1.setPosition(1);
         question1.setQuestion("Что такое bean??");
         question1.setFixedTheme(spring);
         question1.setWeight(8);
@@ -492,7 +491,6 @@ public class TestDataInit {
 
         Question question2 = new Question();
         question2.setAnswer("IOC означает инверсию контроля. Это основной контейнер Java Spring. Он использует вышеупомянутое внедрение зависимостей для управления и настройки различных интегрированных приложений. В настоящее время в Spring может быть два типа IOC – ApplicationContext и BeanFactory.");
-        question2.setPosition(2);
         question2.setQuestion("Опишите IOC своими словами");
         question2.setFixedTheme(spring);
         question2.setWeight(8);
@@ -500,7 +498,6 @@ public class TestDataInit {
 
         Question question3 = new Question();
         question3.setAnswer("Dependency injection (внедрение зависимостей) используется для предоставления определенных специфических зависимостей для объектов. Это шаблон проектирования, который делает ваши проекты более плавными и более подходящими для таких действий, как тестирование.");
-        question3.setPosition(3);
         question3.setQuestion("Что такое Dependency Injection?");
         question3.setFixedTheme(spring);
         question3.setWeight(8);
@@ -508,7 +505,6 @@ public class TestDataInit {
 
         Question question4 = new Question();
         question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
-        question4.setPosition(4);
         question4.setQuestion("Что такое Spring Boot?");
         question4.setFixedTheme(spring);
         question4.setWeight(8);
@@ -516,7 +512,6 @@ public class TestDataInit {
 
         Question question5 = new Question();
         question5.setAnswer("АОП расшифровывается как Аспектно-ориентированное программирование (Aspect-Oriented Programming). Он отличается от ООП (объектно-ориентированного программирования) тем, что ООП фокусируется на классах, в то время как ключевым модульным модулем АОП является аспект. В АОП аспекты реализуют и подчеркивают сквозные проблемы.");
-        question5.setPosition(5);
         question5.setQuestion("Что такое AOP?");
         question5.setFixedTheme(spring);
         question5.setWeight(8);
@@ -524,7 +519,6 @@ public class TestDataInit {
 
         Question question6 = new Question();
         question6.setAnswer("‘Autowriting‘ позволяет разработчику вводить bean-компоненты в свое приложение автоматически, без необходимости ручного вмешательства.");
-        question6.setPosition(6);
         question6.setQuestion("Что такое autowriting?");
         question6.setFixedTheme(spring);
         question6.setWeight(8);
@@ -532,7 +526,6 @@ public class TestDataInit {
 
         Question question7 = new Question();
         question7.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
-        question7.setPosition(7);
         question7.setQuestion("Что такое target object?");
         question7.setFixedTheme(spring);
         question7.setWeight(8);
@@ -540,7 +533,6 @@ public class TestDataInit {
 
         Question question8 = new Question();
         question8.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
-        question8.setPosition(8);
         question8.setQuestion("Что такое DAO?");
         question8.setFixedTheme(spring);
         question8.setWeight(8);
@@ -548,7 +540,6 @@ public class TestDataInit {
 
         Question question9 = new Question();
         question9.setAnswer("Эта команда используется, когда вы хотите сопоставить определенный метод HTTP с определенным классом. Вы можете использовать эту команду как на уровне класса, так и на уровне метода.");
-        question9.setPosition(9);
         question9.setQuestion("Что делает @RequestMapping?");
         question9.setFixedTheme(spring);
         question9.setWeight(8);
@@ -556,7 +547,6 @@ public class TestDataInit {
 
         Question question10 = new Question();
         question10.setAnswer("В Spring MVC Interceptor может использоваться для обработки запроса клиента до, во время и даже после обработки. Это отличный инструмент, позволяющий избежать нежелательных повторений кода.");
-        question10.setPosition(10);
         question10.setQuestion("Что такое MVC Interceptor?");
         question10.setFixedTheme(spring);
         question10.setWeight(8);
@@ -681,7 +671,6 @@ public class TestDataInit {
         //4 вопроса
         Question criticalQuestion1 = new Question();
         criticalQuestion1.setAnswer("Герои мультика");
-        criticalQuestion1.setPosition(1);
         criticalQuestion1.setQuestion("Кто такие фиксики");
         criticalQuestion1.setFixedTheme(multithreading);
         criticalQuestion1.setWeight(1);
@@ -689,7 +678,6 @@ public class TestDataInit {
 
         Question criticalQuestion2 = new Question();
         criticalQuestion2.setAnswer("Столько же, сколько накануне, ибо Йозеф еще спит");
-        criticalQuestion2.setPosition(2);
         criticalQuestion2.setQuestion("Сколько будет весить Йозеф, если греки выступили на рассвете?");
         criticalQuestion2.setFixedTheme(multithreading);
         criticalQuestion2.setWeight(2);
@@ -697,7 +685,6 @@ public class TestDataInit {
 
         Question criticalQuestion3 = new Question();
         criticalQuestion3.setAnswer("Путь праведника труден, ибо препятствуют ему себялюбивые и тираны из злых людей.");
-        criticalQuestion3.setPosition(3);
         criticalQuestion3.setQuestion("Назовите первое предложение Ветхого Завета, Книги Иезекииля,Главы 25,17 Стиха ");
         criticalQuestion3.setFixedTheme(multithreading);
         criticalQuestion3.setWeight(3);
@@ -705,7 +692,6 @@ public class TestDataInit {
 
         Question criticalQuestion4 = new Question();
         criticalQuestion4.setAnswer("завершает работу цикла");
-        criticalQuestion4.setPosition(4);
         criticalQuestion4.setQuestion("Что делает оператор break?");
         criticalQuestion4.setFixedTheme(multithreading);
         criticalQuestion4.setWeight(4);
@@ -726,7 +712,6 @@ public class TestDataInit {
         //еще 4 вопроса
         Question changeReviewQuestion = new Question();
         changeReviewQuestion.setAnswer("д");
-        changeReviewQuestion.setPosition(1);
         changeReviewQuestion.setQuestion("Назовите букву которая следует за буквой идущей после буквы в");
         changeReviewQuestion.setFixedTheme(core);
         changeReviewQuestion.setWeight(1);
@@ -734,7 +719,6 @@ public class TestDataInit {
 
         Question changeReviewQuestion2 = new Question();
         changeReviewQuestion2.setAnswer("от 0 до 50 процентов");
-        changeReviewQuestion2.setPosition(2);
         changeReviewQuestion2.setQuestion("Если у папы рецесивный ген кривой нос, а у мамы доминантный орлиный, какой диапазон вероятностей кривого носа у их ребенка?");
         changeReviewQuestion2.setFixedTheme(core);
         changeReviewQuestion2.setWeight(2);
@@ -742,7 +726,6 @@ public class TestDataInit {
 
         Question changeReviewQuestion3 = new Question();
         changeReviewQuestion3.setAnswer("четыре и восемь");
-        changeReviewQuestion3.setPosition(3);
         changeReviewQuestion3.setQuestion("назовите четвертую и 7 цифру после запятой корня числа пи");
         changeReviewQuestion3.setFixedTheme(core);
         changeReviewQuestion3.setWeight(3);
@@ -750,7 +733,6 @@ public class TestDataInit {
 
         Question changeReviewQuestion4 = new Question();
         changeReviewQuestion4.setAnswer("Исаак");
-        changeReviewQuestion4.setPosition(4);
         changeReviewQuestion4.setQuestion("Как зовут Ньютона?");
         changeReviewQuestion4.setFixedTheme(core);
         changeReviewQuestion4.setWeight(4);
