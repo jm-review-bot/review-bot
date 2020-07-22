@@ -42,6 +42,7 @@ public class ExaminerFreeThemesList extends Step {
         if (StringParser.isNumeric(command)) {
 
             // Выбранная тема извлекается из БД
+            // TODO: Придумать как можно проще. Начнем решать, если появятся проблемы с производительностью
             Integer selectedNumber = Integer.parseInt(command);
             List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
             if (selectedNumber <= 0 || selectedNumber > freeThemes.size()) {

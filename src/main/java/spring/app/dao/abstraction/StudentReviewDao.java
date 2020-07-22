@@ -28,4 +28,6 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
     List<StudentReview> getOpenReviewByStudentVkId(Integer vkId);
 
     List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId);
+
+    boolean isExistStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
 }

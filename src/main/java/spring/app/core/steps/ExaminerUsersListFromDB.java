@@ -11,6 +11,7 @@ import spring.app.model.User;
 import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,28 +47,29 @@ public class ExaminerUsersListFromDB extends Step {
         String command = context.getInput();
         Integer vkId = context.getVkId();
 
-        // Из предыдущего шага извлекается ID темы
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
+        /* Из текущего шага извлекается ID темы и ID всех пользователей:
+        * 0й элемент - ID темы
+        * с 1го до последнего - ID пользователей
+        * */
+        List<String> themeIdAndUsersIds = storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB);
+        Long freeThemeId = Long.parseLong(themeIdAndUsersIds.get(0));
 
         // Обрабатываются команды пользователя
         if (StringParser.isNumeric(command)) {
-
-            // Из БД извлекается информация о студенте и теме
             Integer studentNumber = Integer.parseInt(command);
-            List<User> allUsers = userService.getAllUsers();
-            if (studentNumber <= 0 || studentNumber > allUsers.size()) {
+            if (studentNumber <= 0 || studentNumber > themeIdAndUsersIds.size() - 1) {
                 throw new ProcessInputException("Введено неподходящее число");
             }
-            User student = allUsers.get(studentNumber - 1);
-            Theme freeTheme = themeService.getThemeById(freeThemeId);
+
+            // Из списка получаем выбранный пользователем ID
+            Long studentId = Long.parseLong(themeIdAndUsersIds.get(studentNumber));
 
             // Выполняется проверка, есть ли в таблице student_review запись, связанная с этим студентом и с записью из таблицы free_theme
-            List<StudentReview> studentReviews = studentReviewService.getAllStudentReviewsByStudentIdAndTheme(student.getId(), freeTheme);
-            Boolean studentReviewIsExist = (studentReviews.size() > 0 ? true : false);
+            Boolean isExistStudentReview = studentReviewService.isExistStudentReviewByStudentIdAndThemeId(studentId, freeThemeId);
 
             // В следующий шаг передаются: ID темы, ID студента и информация о наличии в таблице student_review связи студент-тема
             sendUserToNextStep(context, EXAMINER_CHANGE_REVIEW_STATUS);
-            storageService.updateUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS, Arrays.asList(freeThemeId.toString(), student.getId().toString(), studentReviewIsExist.toString()));
+            storageService.updateUserStorage(vkId, EXAMINER_CHANGE_REVIEW_STATUS, Arrays.asList(freeThemeId.toString(), studentId.toString(), isExistStudentReview.toString()));
 
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
@@ -89,6 +91,17 @@ public class ExaminerUsersListFromDB extends Step {
         // Из предыдущего шага извлекается ID темы
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
+
+        /* В текущий шаг закладывается ID темы и ID всех пользователей:
+         * 0й элемент - ID темы
+         * с 1го до последнего - ID пользователей
+         * */
+        List<String> themeIdAndUsersIds = new ArrayList<>();
+        themeIdAndUsersIds.add(freeThemeId.toString());
+        for (User user : allUsers) {
+            themeIdAndUsersIds.add(user.getId().toString());
+        }
+        storageService.updateUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB, themeIdAndUsersIds);
 
         // Бот выводит сообщение со списком всех пользователей из БД
         StringBuilder infoMessage = new StringBuilder();

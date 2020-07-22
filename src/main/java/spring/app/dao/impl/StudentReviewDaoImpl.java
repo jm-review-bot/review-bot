@@ -117,4 +117,13 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
                 .setParameter("review_id", reviewId)
                 .getResultList();
     }
+
+    @Override
+    public boolean isExistStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+        Long count = entityManager.createQuery("SELECT COUNT (sr) FROM StudentReview sr where sr.user.id = :student_id AND sr.review.theme.id = :theme_id", Long.class)
+                .setParameter("student_id", studentId)
+                .setParameter("theme_id", themeId)
+                .getSingleResult();
+        return count > 0;
+    }
 }
