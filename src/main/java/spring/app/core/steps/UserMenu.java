@@ -201,9 +201,7 @@ public class UserMenu extends Step {
         }
 
         // На стартовом шаге проверяющему добавляется кнопка “Проверка тем свободной защиты”
-        User user =  context.getUser();
-        List<User> examinersList = themeService.getAllExaminersOfFreeThemes();
-        if (examinersList.contains(user)) {
+        if (userService.isUserExaminer(context.getUser().getId())) {
             keys
                     .append(this.getRowDelimiterString())
                     .append(CHECKING_FREE_THEMES);

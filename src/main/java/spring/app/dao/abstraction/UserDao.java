@@ -23,4 +23,8 @@ public interface UserDao extends GenericDao<Long, User> {
     List<User> getStudentsByReviewId(Long reviewId);
 
     List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    Long getUsersCount();
+
+    boolean isUserExaminer(Long userId);
 }
