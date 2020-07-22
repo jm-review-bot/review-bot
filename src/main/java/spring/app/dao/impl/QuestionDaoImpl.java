@@ -46,16 +46,18 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public Integer getQuestionMinPositionByThemeId(Long themeId) {
-        return entityManager.createQuery("SELECT min(q.position) FROM Question q WHERE q.theme.id = :theme_id", Integer.class)
+        List<Integer> minPositionInsideList = entityManager.createQuery("SELECT min(q.position) FROM Question q where q.theme.id = :theme_id", Integer.class)
                 .setParameter("theme_id", themeId)
-                .getSingleResult();
+                .getResultList();
+        return minPositionInsideList.contains(null) ? 0 : minPositionInsideList.get(0);
     }
 
     @Override
     public Integer getQuestionMaxPositionByThemeId(Long themeId) {
-        return entityManager.createQuery("SELECT max(q.position) FROM Question q WHERE q.theme.id = :theme_id", Integer.class)
+        List<Integer> maxPositionInsideList = entityManager.createQuery("SELECT max(q.position) FROM Question q where q.theme.id = :theme_id", Integer.class)
                 .setParameter("theme_id", themeId)
-                .getSingleResult();
+                .getResultList();
+        return maxPositionInsideList.contains(null) ? 0 : maxPositionInsideList.get(0);
     }
 
     @Override
