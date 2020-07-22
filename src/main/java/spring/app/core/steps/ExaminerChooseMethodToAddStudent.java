@@ -37,33 +37,24 @@ public class ExaminerChooseMethodToAddStudent extends Step {
         String command = context.getInput();
         Integer vkId = context.getVkId();
 
-        // Из предыдущего шага извлекается ID темы
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
-
         // Обрабатываются команды пользователя
         if (command.equalsIgnoreCase("выбрать из списка")) {
-
-            // В следующий шаг передается ID темы
             sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
-            storageService.updateUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(freeThemeId.toString()));
-
         } else if (command.equalsIgnoreCase("ввести вручную")) {
             // В ТЗ есть такая кнопка, но нет для нее логики
-            throw new ProcessInputException("Такой функционал в ТЗ еще не описан. Пожалуйста, выбирете \"Выбрать из списка\"");
+            throw new ProcessInputException("Функционал в еще разработке. Пожалуйста, выбирете \"Выбрать из списка\"");
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
         } else {
             throw  new ProcessInputException("Введена невенрная команда...");
         }
-
-        storageService.removeUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
     }
 
     @Override
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
 
-        // Из предыдущего шага извлекается ID темы
+        // Из текущего шага извлекается ID темы
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 

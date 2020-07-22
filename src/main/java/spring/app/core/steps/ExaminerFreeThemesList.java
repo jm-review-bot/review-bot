@@ -6,10 +6,12 @@ import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.util.StringParser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,36 +38,51 @@ public class ExaminerFreeThemesList extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
-        Integer vkId = context.getVkId();
+        Integer examinerVkId = context.getVkId();
 
         // Обрабатываются команды пользователя
         if (StringParser.isNumeric(command)) {
 
-            // Выбранная тема извлекается из БД
-            // TODO: Придумать как можно проще. Начнем решать, если появятся проблемы с производительностью
+            // Из хранилища текущего шага извлекается список ID тем, доступных экзаменатору
+            List<String> freeThemesIds = storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST);
+
+            // Проверяется введеный номер темы и из списка выбирается соответствующий ID
             Integer selectedNumber = Integer.parseInt(command);
-            List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
-            if (selectedNumber <= 0 || selectedNumber > freeThemes.size()) {
+            if (selectedNumber <= 0 || selectedNumber > freeThemesIds.size()) {
                 throw new ProcessInputException("Введено неподходящее число");
             }
-            Theme freeTheme = freeThemes.get(selectedNumber - 1);
+            String freeThemeId = freeThemesIds.get(selectedNumber - 1);
 
             // В следующий шаг передается ID выбранной темы
             sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
-            storageService.updateUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(freeTheme.getId().toString()));
+            storageService.updateUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(freeThemeId));
 
         } else if (command.equalsIgnoreCase("назад")) {
+
+            // Пользователь переходит в главное меню и очищаются хранилища всех шагов, связанных с экзаменатором
             sendUserToNextStep(context, USER_MENU);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
+
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
-        storageService.removeUserStorage(vkId, EXAMINER_FREE_THEMES_LIST);
     }
 
     @Override
     public String getDynamicText(BotContext context) {
+        User examiner = context.getUser();
+
+        // Из БД извлекается список всех тем, доступных экзаменатору, и сохраняются их ID в хранилище текущего шага
+        List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(examiner.getId());
+        List<String> freeThemesIds = new ArrayList<>();
+        for (Theme freeTheme : freeThemes) {
+            freeThemesIds.add(freeTheme.getId().toString());
+        }
+        storageService.updateUserStorage(examiner.getVkId(), EXAMINER_FREE_THEMES_LIST, freeThemesIds);
+
         // Бот выводит сообщение со списком соответсвующих пользователю тем свободной защиты
-        List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(context.getUser().getId());
         StringBuilder infoMessage = new StringBuilder();
         infoMessage.append("Выберите тему:\n");
         for (int i = 0; i < freeThemes.size(); i++) {

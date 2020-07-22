@@ -110,6 +110,9 @@ public class TestDataInit {
     private Step examinerFreeThemesList;
 
     @Autowired
+    private Step examinerGetInfoLastReview;
+
+    @Autowired
     private Step examinerUsersListFromDB;
 
     @Autowired
@@ -299,6 +302,7 @@ public class TestDataInit {
         steps.put(StepSelector.EXAMINER_CHANGE_REVIEW_STATUS, examinerChangeReviewStatus);
         steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
         steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
+        steps.put(StepSelector.EXAMINER_GET_INFO_LAST_REVIEW, examinerGetInfoLastReview);
         steps.put(StepSelector.EXAMINER_USERS_LIST_FROM_DB, examinerUsersListFromDB);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);

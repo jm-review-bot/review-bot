@@ -404,4 +404,21 @@ public class Keyboards {
             "        },\n" +
             "        \"color\": \"primary\"\n" +
             "      }\n";
+
+    public final static String EDIT_OLD_OR_ADD_NEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Редактировать старое\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Добавить новое\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n";
 }
