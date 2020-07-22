@@ -1,9 +1,9 @@
-#idInputForNameOfTheNewTheme {
-    width: 50ch;
+#newThemeNameInput {
+    width: 50px;
 }
-#idInputForCriticalWeightOfTheNewTheme {
-    width: 50ch;
+#criticalWeightNewThemeInput {
+    width: 50px;
 }
-#idInputForReviewPointOfTheNewTheme {
-    width: 50ch;
+#reviewPointNewThemeInput {
+    width: 50px;
 }
