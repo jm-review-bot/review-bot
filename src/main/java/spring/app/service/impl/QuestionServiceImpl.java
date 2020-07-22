@@ -23,6 +23,8 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     @Override
     public void addQuestion(Question question) {
+        Integer maxPosition = questionDao.getQuestionMaxPositionByThemeId(question.getTheme().getId());
+        question.setPosition(maxPosition + 1);
         questionDao.save(question);
     }
 
