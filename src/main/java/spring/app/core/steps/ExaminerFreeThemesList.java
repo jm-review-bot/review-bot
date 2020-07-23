@@ -61,10 +61,12 @@ public class ExaminerFreeThemesList extends Step {
 
             // Пользователь переходит в главное меню и очищаются хранилища всех шагов, связанных с экзаменатором
             sendUserToNextStep(context, USER_MENU);
-            storageService.removeUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_ADD_NEW_STUDENT_REVIEW);
             storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
-            storageService.removeUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST);
             storageService.removeUserStorage(examinerVkId, EXAMINER_GET_INFO_LAST_REVIEW);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
 
         } else {
             throw new ProcessInputException("Введена неверная команда...");

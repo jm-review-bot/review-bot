@@ -101,10 +101,13 @@ public class TestDataInit {
     private Step adminSetThemeAddedUser;
 
     @Autowired
-    private Step examinerChangeReviewStatus;
+    private Step examinerAddNewStudentReview;
 
     @Autowired
     private Step examinerChooseMethodToAddStudent;
+
+    @Autowired
+    private Step examinerChooseOldStudentReviewToEdit;
 
     @Autowired
     private Step examinerFreeThemesList;
@@ -299,8 +302,9 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
-        steps.put(StepSelector.EXAMINER_CHANGE_REVIEW_STATUS, examinerChangeReviewStatus);
+        steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW, examinerAddNewStudentReview);
         steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
+        steps.put(StepSelector.EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT, examinerChooseOldStudentReviewToEdit);
         steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
         steps.put(StepSelector.EXAMINER_GET_INFO_LAST_REVIEW, examinerGetInfoLastReview);
         steps.put(StepSelector.EXAMINER_USERS_LIST_FROM_DB, examinerUsersListFromDB);

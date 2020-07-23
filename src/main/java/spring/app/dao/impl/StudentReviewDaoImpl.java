@@ -118,11 +118,13 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
                 .getResultList();
     }
 
+    // Метод возвращает последнее ревью студента по выбранной теме
     @Override
     public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
-        List<StudentReview> studentReviews = entityManager.createQuery("SELECT sr FROM StudentReview sr where sr.user.id = :student_id AND sr.review.theme.id = :theme_id HAVING max(sr.review.date)", StudentReview.class)
+        List<StudentReview> studentReviews = entityManager.createQuery("SELECT sr FROM StudentReview sr  WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id ORDER BY sr.review.date DESC", StudentReview.class)
                 .setParameter("student_id", studentId)
                 .setParameter("theme_id", themeId)
+                .setMaxResults(1)
                 .getResultList();
         return (studentReviews.size() > 0 ? studentReviews.get(0) : null);
     }

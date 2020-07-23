@@ -13,6 +13,7 @@ import spring.app.service.abstraction.StudentReviewService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
+
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
@@ -42,6 +43,18 @@ public class ExaminerGetInfoLastReview extends Step{
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
+        String command = context.getInput();
+
+        // Обрабатываются команды пользователя
+        if (command.equalsIgnoreCase("редактировать старое")) {
+            sendUserToNextStep(context, EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT);
+        } else if (command.equalsIgnoreCase("добавить новое")) {
+            sendUserToNextStep(context, EXAMINER_ADD_NEW_STUDENT_REVIEW);
+        } else if (command.equalsIgnoreCase("назад")) {
+            sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
+        } else {
+            throw new ProcessInputException("Введена неверная команда...");
+        }
 
     }
 
@@ -60,7 +73,7 @@ public class ExaminerGetInfoLastReview extends Step{
         // Бот выводит сообщение со статусом поледнего ревью студента по выбранной теме
         if (lastStudentReview != null) {
             return String.format(
-                    "Ревью по теме %s. Студент %s %s\n." +
+                    "Ревью по теме %s. Студент %s %s.\n" +
                             "Статус последнего ревью: %s.\n" +
                             "Выберите действие:",
                     freeTheme.getTitle(),
@@ -70,7 +83,7 @@ public class ExaminerGetInfoLastReview extends Step{
             );
         } else {
             return String.format(
-                    "Ревью по теме %s. Студент %s %s\n." +
+                    "Ревью по теме %s. Студент %s %s.\n" +
                             "Статус последнего ревью: не проводилось.\n" +
                             "Выберите действие:",
                     freeTheme.getTitle(),
