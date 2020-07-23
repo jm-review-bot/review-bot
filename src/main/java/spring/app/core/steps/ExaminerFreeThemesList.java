@@ -64,6 +64,7 @@ public class ExaminerFreeThemesList extends Step {
             storageService.removeUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST);
             storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
             storageService.removeUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_GET_INFO_LAST_REVIEW);
 
         } else {
             throw new ProcessInputException("Введена неверная команда...");

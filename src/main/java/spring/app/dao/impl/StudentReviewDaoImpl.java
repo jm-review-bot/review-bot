@@ -119,11 +119,11 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     }
 
     @Override
-    public boolean isExistStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
-        Long count = entityManager.createQuery("SELECT COUNT (sr) FROM StudentReview sr where sr.user.id = :student_id AND sr.review.theme.id = :theme_id", Long.class)
+    public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+        List<StudentReview> studentReviews = entityManager.createQuery("SELECT sr FROM StudentReview sr where sr.user.id = :student_id AND sr.review.theme.id = :theme_id HAVING max(sr.review.date)", StudentReview.class)
                 .setParameter("student_id", studentId)
                 .setParameter("theme_id", themeId)
-                .getSingleResult();
-        return count > 0;
+                .getResultList();
+        return (studentReviews.size() > 0 ? studentReviews.get(0) : null);
     }
 }

@@ -35,5 +35,5 @@ public interface StudentReviewService {
 
     void removeAll(List<StudentReview> studentReviews);
 
-    boolean isExistStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
+    StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
 }

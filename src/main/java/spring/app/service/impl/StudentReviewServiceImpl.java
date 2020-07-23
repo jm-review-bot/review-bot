@@ -103,7 +103,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public boolean isExistStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
-        return studentReviewDao.isExistStudentReviewByStudentIdAndThemeId(studentId, themeId);
+    public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+        return studentReviewDao.getLastStudentReviewByStudentIdAndThemeId(studentId, themeId);
     }
 }

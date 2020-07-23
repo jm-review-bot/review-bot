@@ -125,7 +125,7 @@ public class UserMenu extends Step {
             } else {
                 throw new ProcessInputException("Недостаточно прав для выполнения команды!");
             }
-        } else if (command.equals("проверка")) { // По нажатии на кнопку “Проверка тем свободной защиты” производится переход на следующий шаг для отображения списка соответсвующих пользователю тем
+        } else if (command.equals("проверка")) { // Проверка тем свободной защиты
             if (userService.isUserExaminer(context.getUser().getId())) { // Валидация, что у юзера есть темы свободной защиты, которые он может принять
                 sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
                 storageService.removeUserStorage(vkId, USER_MENU);
