@@ -97,11 +97,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Long getUsersCount() {
-        return userDao.getUsersCount();
-    }
-
-    @Override
     public boolean isUserExaminer(Long userId) {
         return userDao.isUserExaminer(userId);
     }

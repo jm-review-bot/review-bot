@@ -29,7 +29,5 @@ public interface UserService {
 
     List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 
-    Long getUsersCount();
-
     boolean isUserExaminer(Long userId);
 }

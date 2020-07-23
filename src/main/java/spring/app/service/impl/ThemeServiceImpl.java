@@ -119,11 +119,6 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<User> getAllExaminersOfFreeThemes() {
-        return themeDao.getAllExaminersOfFreeThemes();
-    }
-
-    @Override
     public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
         return themeDao.getFreeThemesByExaminerId(examinerId);
     }

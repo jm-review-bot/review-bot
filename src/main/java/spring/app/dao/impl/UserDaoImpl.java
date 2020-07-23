@@ -83,12 +83,6 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
-    public Long getUsersCount() {
-        return entityManager.createQuery("SELECT COUNT(u) FROM User u", Long.class)
-                .getSingleResult();
-    }
-
-    @Override
     public boolean isUserExaminer(Long userId) {
         Long count = entityManager.createQuery("SELECT COUNT (t) FROM FreeTheme t JOIN t.examiners u where u.id = : user_id", Long.class)
                 .setParameter("user_id", userId)

@@ -86,12 +86,6 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public List<User> getAllExaminersOfFreeThemes() {
-        return entityManager.createQuery("SELECT DISTINCT u FROM FreeTheme t JOIN t.examiners u", User.class)
-                .getResultList();
-    }
-
-    @Override
     public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
         return entityManager.createQuery("SELECT t FROM FreeTheme t JOIN t.examiners e WHERE e.id = :examiner_id ORDER BY t.position", Theme.class)
                 .setParameter("examiner_id", examinerId)

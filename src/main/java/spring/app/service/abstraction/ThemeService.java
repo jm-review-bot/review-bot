@@ -36,7 +36,5 @@ public interface ThemeService {
 
     void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
 
-    List<User> getAllExaminersOfFreeThemes();
-
     List<Theme> getFreeThemesByExaminerId(Long examinerId);
 }
