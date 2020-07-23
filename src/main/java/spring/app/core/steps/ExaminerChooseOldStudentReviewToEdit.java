@@ -16,7 +16,7 @@ public class ExaminerChooseOldStudentReviewToEdit extends Step {
     StorageService storageService;
 
     public ExaminerChooseOldStudentReviewToEdit(StorageService storageService) {
-        super("", DEF_BACK_KB);
+        super("Данный функционал ещё находится в разработке", DEF_BACK_KB);
         this.storageService = storageService;
     }
 
@@ -36,7 +36,7 @@ public class ExaminerChooseOldStudentReviewToEdit extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        return "Данный функционал ещё находится в разработке";
+        return "";
     }
 
     @Override

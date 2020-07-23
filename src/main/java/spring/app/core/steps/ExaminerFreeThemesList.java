@@ -77,7 +77,7 @@ public class ExaminerFreeThemesList extends Step {
     public String getDynamicText(BotContext context) {
         User examiner = context.getUser();
 
-        /* Бот выводит сообщение со списком соответсвующих пользователю тем свободной защиты и формирует список их ID,
+        /* Бот выводит сообщение со списком соответсвующих пользователю тем свободной защиты и формирует список c их ID,
         * чтобы отправить их в хранилище текущего шага */
         List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(examiner.getId());
         List<String> freeThemesIds = new ArrayList<>();

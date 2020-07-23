@@ -44,8 +44,8 @@ public class AdminEditReviewGetReviewList extends Step {
     public void enter(BotContext context) {
         Integer vkId = context.getVkId();
 
-        String selectedUserVKIds = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_USER_LIST).get(0);
-        Long selectedUserId = Long.parseLong(selectedUserVKIds);
+        String selectedUserIds = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_USER_LIST).get(0);
+        Long selectedUserId = Long.parseLong(selectedUserIds);
         String selectedThemePosition = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_THEME_LIST).get(0);
         Theme selectedTheme = themeService.getByPosition(Integer.parseInt(selectedThemePosition));
 

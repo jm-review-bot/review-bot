@@ -23,17 +23,14 @@ public class ExaminerUsersListFromDB extends Step {
     private StorageService storageService;
     private UserService userService;
     private ThemeService themeService;
-    private StudentReviewService studentReviewService;
 
     public ExaminerUsersListFromDB(StorageService storageService,
                                    UserService userService,
-                                   ThemeService themeService,
-                                   StudentReviewService studentReviewService) {
+                                   ThemeService themeService) {
         super("", DEF_BACK_KB);
         this.userService = userService;
         this.storageService = storageService;
         this.themeService = themeService;
-        this.studentReviewService = studentReviewService;
     }
 
     @Override
@@ -80,7 +77,7 @@ public class ExaminerUsersListFromDB extends Step {
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_FREE_THEMES_LIST).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 
-        /* Бот выводит сообщение со списком всех пользователей из БД и формирует список их ID,
+        /* Бот выводит сообщение со списком всех пользователей из БД и формирует список с их ID,
          * чтобы отправить их в хранилище текущего шага */
         List<String> usersIds = new ArrayList<>();
         StringBuilder infoMessage = new StringBuilder();

@@ -62,8 +62,8 @@ public class ExaminerGetInfoLastReview extends Step{
     public String getDynamicText(BotContext context) {
         Integer examinerVkId = context.getVkId();
 
-        /* Из шага EXAMINER_USERS_LIST_FROM_DB извлекается ID студента, из шага EXAMINER_FREE_THEMES_LIST - ID темы и
-         * на остновании полученных данных из БД извлекается последнее ревью студента, если таковое есть */
+        /* Из шага EXAMINER_USERS_LIST_FROM_DB извлекается ID студента, из шага EXAMINER_FREE_THEMES_LIST - ID темы.
+         * На остновании полученных данных из БД извлекается последнее ревью студента, если таковое есть */
         Long studentId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
         User student = userService.getUserById(studentId);
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST).get(0));

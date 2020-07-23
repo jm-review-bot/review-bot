@@ -9,8 +9,6 @@ import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.ThemeService;
 
-import java.util.Arrays;
-
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
