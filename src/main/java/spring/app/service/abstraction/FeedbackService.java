@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import spring.app.dto.FeedbackDto;
 import spring.app.model.Feedback;
 
 import java.util.List;
@@ -7,6 +8,10 @@ import java.util.List;
 public interface FeedbackService {
 
     void addFeedback(Feedback feedback);
+
+    FeedbackDto getFeedbackDtoById(Long id);
+
+    List<FeedbackDto> getAllFeedbacksDto();
 
     List<Feedback> getFeedbackByStudentReviewId(Long studentReviewId);
 
