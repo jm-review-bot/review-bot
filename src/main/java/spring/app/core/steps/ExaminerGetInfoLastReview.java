@@ -44,6 +44,7 @@ public class ExaminerGetInfoLastReview extends Step{
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
+        Integer examinerVkId = context.getVkId();
 
         // Обрабатываются команды пользователя
         if (command.equalsIgnoreCase("редактировать старое")) {
@@ -52,6 +53,7 @@ public class ExaminerGetInfoLastReview extends Step{
             sendUserToNextStep(context, EXAMINER_ADD_NEW_STUDENT_REVIEW);
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_GET_INFO_LAST_REVIEW);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

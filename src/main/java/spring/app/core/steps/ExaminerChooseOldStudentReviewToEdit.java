@@ -27,8 +27,12 @@ public class ExaminerChooseOldStudentReviewToEdit extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
+        Integer examinerVkId = context.getVkId();
+
+        // Обрабатываются команды пользователя
         if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_GET_INFO_LAST_REVIEW);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

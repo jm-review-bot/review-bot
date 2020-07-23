@@ -44,7 +44,7 @@ public class ExaminerAddNewStudentReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
-        Integer vkId = context.getVkId();
+        Integer examinerVkId = context.getVkId();
         String command = context.getInput();
 
         // Обрабатываются команды пользователя
@@ -53,8 +53,8 @@ public class ExaminerAddNewStudentReview extends Step {
         if (commandIsPassed || commandIsNotPassed) {
 
             // Из шага EXAMINER_FREE_THEMES_LIST извлекается ID темы и из шага EXAMINER_USERS_LIST_FROM_DB - ID студента
-            Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_FREE_THEMES_LIST).get(0));
-            Long studentId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
+            Long freeThemeId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST).get(0));
+            Long studentId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB).get(0));
             Theme freeTheme = themeService.getThemeById(freeThemeId);
             User student = userService.getUserById(studentId);
 
@@ -74,13 +74,14 @@ public class ExaminerAddNewStudentReview extends Step {
             studentReviewService.addStudentReview(studentReview);
 
             // В текущем шаге сохраняется информация о статусе нового ревью
-            storageService.updateUserStorage(vkId, EXAMINER_ADD_NEW_STUDENT_REVIEW, Arrays.asList(commandIsPassed.toString()));
+            storageService.updateUserStorage(examinerVkId, EXAMINER_ADD_NEW_STUDENT_REVIEW, Arrays.asList(commandIsPassed.toString()));
 
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_ADD_NEW_STUDENT_REVIEW);
 
             // Перед тем, как вернуться на шаг назад, необходимо !!!ОБЯЗАТЕЛЬНО!!! очистить хранилище текущего шага
-            storageService.removeUserStorage(vkId, EXAMINER_ADD_NEW_STUDENT_REVIEW);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_ADD_NEW_STUDENT_REVIEW);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

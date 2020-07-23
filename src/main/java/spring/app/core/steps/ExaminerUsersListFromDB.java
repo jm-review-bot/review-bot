@@ -41,14 +41,14 @@ public class ExaminerUsersListFromDB extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
-        Integer vkId = context.getVkId();
+        Integer examinerVkId = context.getVkId();
 
         // Обрабатываются команды пользователя
         if (StringParser.isNumeric(command)) {
 
             // Из текущего шага извлекается список ID пользователей, а из шага EXAMINER_FREE_THEMES_LIST - ID темы
-            List<String> usersIds = storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB);
-            Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_FREE_THEMES_LIST).get(0));
+            List<String> usersIds = storageService.getUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
+            Long freeThemeId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST).get(0));
 
             // Проверяется корректность ввода пользователем и из списка извлекается ID выбранного пользователя
             Integer studentNumber = Integer.parseInt(command);
@@ -59,10 +59,11 @@ public class ExaminerUsersListFromDB extends Step {
 
             // В текущий шаг сохраняется ID студента
             sendUserToNextStep(context, EXAMINER_GET_INFO_LAST_REVIEW);
-            storageService.updateUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(studentId.toString()));
+            storageService.updateUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(studentId.toString()));
 
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }

@@ -33,7 +33,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
-        Integer vkId = context.getVkId();
+        Integer examinerVkId = context.getVkId();
 
         // Обрабатываются команды пользователя
         if (command.equalsIgnoreCase("выбрать из списка")) {
@@ -43,6 +43,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
             throw new ProcessInputException("Функционал в еще разработке. Пожалуйста, выбирете \"Выбрать из списка\"");
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
+            storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
         } else {
             throw  new ProcessInputException("Введена невенрная команда...");
         }
