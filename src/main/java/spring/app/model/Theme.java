@@ -1,9 +1,12 @@
 package spring.app.model;
 
+import spring.app.listener.ThemeListener;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(ThemeListener.class)
 @Table(name = "theme")
 public class Theme {
 
