@@ -486,7 +486,6 @@ public class TestDataInit {
 
         // add Feedbacks
         Feedback feedback1 = new Feedback();
-        //feedback1.setId(0L);
         feedback1.setStudentReview(studentReview4);
         feedback1.setComment("comment_(feedback1)");
         feedback1.setRatingReview(1);
@@ -495,7 +494,6 @@ public class TestDataInit {
         feedbackService.addFeedback(feedback1);
 
         Feedback feedback2 = new Feedback();
-        //feedback2.setId(1L);
         feedback2.setStudentReview(studentReview5);
         feedback2.setComment("comment_(feedback2)");
         feedback2.setRatingReview(2);
