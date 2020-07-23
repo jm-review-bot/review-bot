@@ -46,15 +46,15 @@
                             </div>
                             <div class="modal-body">
                                 <div>
-                                    <input id="idInputForNameOfTheNewTheme" type="text" size="50" placeholder="Название новой темы"
+                                    <input id="newThemeNameInput" type="text" size="50" placeholder="Название новой темы"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
-                                    <input id="idInputForCriticalWeightOfTheNewTheme" type="number"  min="0" max="9007199254740991" size="50" placeholder="Критический вес новой темы"
+                                    <input id="criticalWeightNewThemeInput" type="number"  min="0" max="9007199254740991" size="50" placeholder="Критический вес новой темы"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
-                                    <input id="idInputForReviewPointOfTheNewTheme" type="number"  min="0" max="9007199254740991" size="50" placeholder="Количество очков за сдачу новой темы"
+                                    <input id="reviewPointNewThemeInput" type="number"  min="0" max="9007199254740991" size="50" placeholder="Количество очков за сдачу новой темы"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                             </div>
@@ -79,6 +79,34 @@
         <!--Контейнер для тем-->
         <div class="accordion" id="theme-accordion">
             <!-- Список тем, заполняется с помощью JS -->
+        </div>
+        <!-- Модалка для редактирования темы -->
+        <div class="modal" tabindex="-1" role="dialog" id="changeThemeModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title edit-theme-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- выпадающие элементы -->
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Дополнительно
+                            </button>
+                            <div class="dropdown-menu">
+                                <button class="dropdown-item delete-theme-button" type="button">Удалить</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="saveThemeChanging">Сохранить</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -130,6 +158,6 @@
 <script type="text/javascript" src="/js/questionPageService.js"></script>
 <script type="text/javascript" src="/js/deleteQuestionService.js"></script>
 <script type="text/javascript" src="/js/addQuestionService.js"></script>
-
+<script type="text/javascript" src="/js/editThemeService.js"></script>
 </body>
 </html>

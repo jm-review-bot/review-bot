@@ -1,7 +1,7 @@
 $('.add-new-theme').click(function () {
-        let title = $('#idInputForNameOfTheNewTheme').val();
-        let criticalWeight = $('#idInputForCriticalWeightOfTheNewTheme').val();
-        let reviewPoint = $('#idInputForReviewPointOfTheNewTheme').val();
+        let title = $('#newThemeNameInput').val();
+        let criticalWeight = $('#criticalWeightNewThemeInput').val();
+        let reviewPoint = $('#reviewPointNewThemeInput').val();
         let json = {
             title:title,
             criticalWeight:criticalWeight,
