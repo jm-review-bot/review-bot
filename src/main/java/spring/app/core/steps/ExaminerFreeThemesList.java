@@ -53,9 +53,9 @@ public class ExaminerFreeThemesList extends Step {
             }
             String freeThemeId = freeThemesIds.get(selectedNumber - 1);
 
-            // В следующий шаг передается ID выбранной темы
+            // В хранилище текущего шага помещается ID выбранной темы
             sendUserToNextStep(context, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
-            storageService.updateUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, Arrays.asList(freeThemeId));
+            storageService.updateUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST, Arrays.asList(freeThemeId));
 
         } else if (command.equalsIgnoreCase("назад")) {
 
@@ -74,26 +74,24 @@ public class ExaminerFreeThemesList extends Step {
     public String getDynamicText(BotContext context) {
         User examiner = context.getUser();
 
-        // Из БД извлекается список всех тем, доступных экзаменатору, и сохраняются их ID в хранилище текущего шага
+        /* Бот выводит сообщение со списком соответсвующих пользователю тем свободной защиты и формирует список их ID,
+        * чтобы отправить их в хранилище текущего шага */
         List<Theme> freeThemes = themeService.getFreeThemesByExaminerId(examiner.getId());
         List<String> freeThemesIds = new ArrayList<>();
-        for (Theme freeTheme : freeThemes) {
-            freeThemesIds.add(freeTheme.getId().toString());
-        }
-        storageService.updateUserStorage(examiner.getVkId(), EXAMINER_FREE_THEMES_LIST, freeThemesIds);
-
-        // Бот выводит сообщение со списком соответсвующих пользователю тем свободной защиты
         StringBuilder infoMessage = new StringBuilder();
         infoMessage.append("Выберите тему:\n");
         for (int i = 0; i < freeThemes.size(); i++) {
+            Theme freeTheme = freeThemes.get(i);
             infoMessage.append(
                     String.format(
                             "[%d] %s\n",
                             i + 1,
-                            freeThemes.get(i).getTitle()
+                            freeTheme.getTitle()
                     )
             );
+            freeThemesIds.add(freeTheme.getId().toString());
         }
+        storageService.updateUserStorage(examiner.getVkId(), EXAMINER_FREE_THEMES_LIST, freeThemesIds);
         return infoMessage.toString();
     }
 

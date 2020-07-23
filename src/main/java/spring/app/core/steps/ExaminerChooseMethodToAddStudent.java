@@ -54,8 +54,8 @@ public class ExaminerChooseMethodToAddStudent extends Step {
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
 
-        // Из текущего шага извлекается ID темы
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
+        // Из предыдущего шага извлекается ID темы
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_FREE_THEMES_LIST).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 
         // Бот выводит сообщение с предложением способа для выбора студента

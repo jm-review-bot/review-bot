@@ -46,12 +46,13 @@ public class ExaminerUsersListFromDB extends Step {
         String command = context.getInput();
         Integer vkId = context.getVkId();
 
-        // Из текущего шага извлекаются ID пользователей, а из предыдущего - ID темы
-        List<String> usersIds = storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB);
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
-
         // Обрабатываются команды пользователя
         if (StringParser.isNumeric(command)) {
+
+            // Из текущего шага извлекается список ID пользователей, а из 2х шагов назад - ID темы
+            List<String> usersIds = storageService.getUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB);
+            Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_FREE_THEMES_LIST).get(0));
+
             Integer studentNumber = Integer.parseInt(command);
             if (studentNumber <= 0 || studentNumber > usersIds.size()) {
                 throw new ProcessInputException("Введено неподходящее число");
@@ -63,8 +64,9 @@ public class ExaminerUsersListFromDB extends Step {
             // Выполняется проверка, есть ли в таблице student_review запись, связанная с этим студентом и с записью из таблицы free_theme
             Boolean isExistStudentReview = studentReviewService.isExistStudentReviewByStudentIdAndThemeId(studentId, freeThemeId);
 
-            // В следующий шаг передаются ID студента и информация о наличии связи студент-тема
+            // В текущий шаг сохраняется ID студента, а в следующий передается информация о наличии связи студент-тема
             sendUserToNextStep(context, EXAMINER_GET_INFO_LAST_REVIEW);
+            storageService.updateUserStorage(vkId, EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(studentId.toString()));
             storageService.updateUserStorage(vkId, EXAMINER_GET_INFO_LAST_REVIEW, Arrays.asList(freeThemeId.toString(), studentId.toString(), isExistStudentReview.toString()));
 
         } else if (command.equalsIgnoreCase("назад")) {
@@ -79,14 +81,12 @@ public class ExaminerUsersListFromDB extends Step {
         Integer vkId = context.getVkId();
         List<User> allUsers = userService.getAllUsers();
 
-        // Из предыдущего шага извлекается ID темы
-        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT).get(0));
+        // Из 2х шагов извлекается ID темы
+        Long freeThemeId = Long.parseLong(storageService.getUserStorage(vkId, EXAMINER_FREE_THEMES_LIST).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
 
-        /* Бот выводит сообщение со списком всех пользователей из БД и
-        * параллельно формирует список ID пользователей, чтобы заложить
-        * его в текущий шаг
-        * */
+        /* Бот выводит сообщение со списком всех пользователей из БД и формирует список их ID,
+         * чтобы отправить их в хранилище текущего шага */
         List<String> usersIds = new ArrayList<>();
         StringBuilder infoMessage = new StringBuilder();
         infoMessage.append(
