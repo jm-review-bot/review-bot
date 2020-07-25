@@ -13,19 +13,27 @@ public class FeedbackDto {
     private Long id;
 
     @NotBlank
-    private String reviewerName;
+    private String reviewerFirstName;
 
     @NotBlank
-    private String studentName;
+    private String reviewerLastName;
+
+    @NotBlank
+    private String studentFirstName;
+
+    @NotBlank
+    private String studentLastName;
 
     private String studentComment;
     private Integer ratingReviewer;
     private Integer ratingReview;
 
-    public FeedbackDto(@Null(groups = CreateGroup.class) @NotNull(groups = UpdateGroup.class) Long id, @NotBlank String reviewerName, @NotBlank String studentName, String studentComment, Integer ratingReviewer, Integer ratingReview) {
+    public FeedbackDto(@Null(groups = CreateGroup.class) @NotNull(groups = UpdateGroup.class) Long id, @NotBlank String reviewerFirstName, @NotBlank String reviewerLastName, @NotBlank String studentFirstName, @NotBlank String studentLastName, String studentComment, Integer ratingReviewer, Integer ratingReview) {
         this.id = id;
-        this.reviewerName = reviewerName;
-        this.studentName = studentName;
+        this.reviewerFirstName = reviewerFirstName;
+        this.reviewerLastName = reviewerLastName;
+        this.studentFirstName = studentFirstName;
+        this.studentLastName = studentLastName;
         this.studentComment = studentComment;
         this.ratingReviewer = ratingReviewer;
         this.ratingReview = ratingReview;
@@ -39,20 +47,36 @@ public class FeedbackDto {
         this.id = id;
     }
 
-    public String getReviewerName() {
-        return reviewerName;
+    public String getReviewerFirstName() {
+        return reviewerFirstName;
     }
 
-    public void setReviewerName(String reviewerName) {
-        this.reviewerName = reviewerName;
+    public void setReviewerFirstName(String reviewerFirstName) {
+        this.reviewerFirstName = reviewerFirstName;
     }
 
-    public String getStudentName() {
-        return studentName;
+    public String getReviewerLastName() {
+        return reviewerLastName;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setReviewerLastName(String reviewerLastName) {
+        this.reviewerLastName = reviewerLastName;
+    }
+
+    public String getStudentFirstName() {
+        return studentFirstName;
+    }
+
+    public void setStudentFirstName(String studentFirstName) {
+        this.studentFirstName = studentFirstName;
+    }
+
+    public String getStudentLastName() {
+        return studentLastName;
+    }
+
+    public void setStudentLastName(String studentLastName) {
+        this.studentLastName = studentLastName;
     }
 
     public String getStudentComment() {
