@@ -7,6 +7,7 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.StudentReviewService;
@@ -157,6 +158,52 @@ public class UserPassReviewGetListReview extends Step {
     @Override
     public String getDynamicText(BotContext context) {
         Integer vkId = context.getVkId();
+
+        // Из шага USER_PASS_REVIEW_ADD_THEME извлекается ID выбранной темы
+        Long selectedThemeId = Long.parseLong(storageService.getUserStorage(vkId, USER_PASS_REVIEW_ADD_THEME).get(0));
+        Theme selectedTheme = themeService.getThemeById(selectedThemeId);
+        Integer selectedThemePosition = selectedTheme.getPosition();
+
+        // Выполняется проверка, что пользователь сдал все предыдущие темы
+        if (selectedThemePosition > 1) { // Для первой темы такая проверка не требуется
+            List<Theme> allThemes = themeService.getAllThemes();
+            List<Theme> passedThemes = themeService.getPassedThemesByUser(vkId);
+            boolean isPassedPreviousThemes = true;
+            StringBuilder infoMessage = new StringBuilder();
+            infoMessage.append(
+                    String.format(
+                            "Тема \"%s\" не доступна для защиты. Чтобы получить доступ к защите этой темы сдайте следующие темы:\n\n",
+                            selectedTheme.getTitle()
+                    )
+            );
+            for (int i = 0; i < selectedTheme.getPosition() - 1; i++) {
+                Theme theme = allThemes.get(i);
+                if (!passedThemes.contains(theme)) {
+                    isPassedPreviousThemes = false;
+                    infoMessage.append(theme.getTitle() + "\n");
+                }
+            }
+            if (!isPassedPreviousThemes) {
+                return infoMessage.toString();
+            }
+        }
+
+        // В случае выбора темы со свободной защитой, пользователь должен связаться с экзаменаторами самостоятельно
+        if (themeService.isFreeTheme(selectedThemeId)) {
+            StringBuilder infoMessage = new StringBuilder();
+            infoMessage.append(
+                    String.format(
+                            "Тема со свободной защитой: \"%s\". Напишите любому проверяющему и договоритесь о созвоне:\n\n",
+                            selectedTheme.getTitle()
+                    )
+            );
+            List<User> examiners = themeService.getExaminersByFreeThemeId(selectedThemeId);
+            for (User examiner : examiners) {
+                infoMessage.append(examiner.getFirstName() + " " + examiner.getLastName() + "\n");
+            }
+            return infoMessage.toString();
+        }
+
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
         //Set<Review> reviewsSetNoAccess = new HashSet<>();
         if (reviewsIndex.get(vkId).isEmpty()) {
