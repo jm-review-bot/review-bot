@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.StudentReviewService;
 
@@ -40,13 +39,13 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     /**
      * Возвращает все ревью студента по определенной теме
      *
-     * @param vkId  студента
-     * @param fixedTheme тема
+     * @param theme тема
+     * @param studentId  студента
      * @return
      */
     @Override
-    public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
-        return studentReviewDao.getAllStudentReviewsByStudentVkIdAndTheme(vkId, theme);
+    public List<StudentReview> getAllStudentReviewsByStudentIdAndTheme(Long studentId, Theme theme) {
+        return studentReviewDao.getAllStudentReviewsByStudentIdAndTheme(studentId, theme);
     }
 
     @Transactional
@@ -101,5 +100,10 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     @Override
     public void removeAll(List<StudentReview> studentReviews) {
         studentReviewDao.removeAll(studentReviews);
+    }
+
+    @Override
+    public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+        return studentReviewDao.getLastStudentReviewByStudentIdAndThemeId(studentId, themeId);
     }
 }

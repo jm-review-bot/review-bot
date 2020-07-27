@@ -23,7 +23,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Transactional
     @Override
     public void addQuestion(Question question) {
-        Integer maxPosition = questionDao.getQuestionMaxPositionByThemeId(question.getTheme().getId());
+        Integer maxPosition = questionDao.getQuestionMaxPositionByThemeId(question.getFixedTheme().getId());
         question.setPosition(maxPosition + 1);
         questionDao.save(question);
     }
@@ -53,7 +53,7 @@ public class QuestionServiceImpl implements QuestionService {
     public void deleteQuestionById(Long id) {
         Question question = questionDao.getById(id);
         if (question != null) {
-            Long themeIdOfQuestion = question.getTheme().getId();
+            Long themeIdOfQuestion = question.getFixedTheme().getId();
             int questionPosition = question.getPosition();
             int maxPosition = questionDao.getQuestionMaxPositionByThemeId(themeIdOfQuestion);
 
