@@ -29,18 +29,18 @@ public class Question {
     private Integer weight;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id", nullable = false)
-    private Theme theme;
+    @JoinColumn(name = "fixed_theme_id", nullable = false)
+    private FixedTheme fixedTheme;
 
     public Question() {
     }
 
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
     public Integer getWeight() {
         return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public Long getId() {
@@ -75,12 +75,12 @@ public class Question {
         this.position = position;
     }
 
-    public Theme getTheme() {
-        return theme;
+    public FixedTheme getFixedTheme() {
+        return fixedTheme;
     }
 
-    public void setTheme(Theme theme) {
-        this.theme = theme;
+    public void setFixedTheme(FixedTheme fixedTheme) {
+        this.fixedTheme = fixedTheme;
     }
 
     @Override

@@ -4,9 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
-import spring.app.dto.ThemeDto;
+import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import java.util.List;
@@ -87,12 +88,12 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<ThemeDto> getAllThemesDto() {
+    public List<FixedThemeDto> getAllThemesDto() {
         return themeDao.getAllThemesDto();
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
+    public FixedThemeDto getThemeDtoById(Long themeId) {
         return themeDao.getThemeDtoById(themeId);
     }
 
@@ -127,5 +128,10 @@ public class ThemeServiceImpl implements ThemeService {
             );
             throw new ProcessInputException(error.toString());
         }
+    }
+
+    @Override
+    public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
+        return themeDao.getFreeThemesByExaminerId(examinerId);
     }
 }
