@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/font-glyphicons.css">
+    <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
+
+    <title>feedback</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="sidenav">
+        <div>
+            KJUJ
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action"
+               href="/admin/feedback">Обратная связь</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action" href="/admin/theme">Темы</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action"
+               href="#">Вопросы</a>
+        </div>
+    </div>
+    <div class="main">
+        <h1>Список всех доступных фидбэков</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя студента</th>
+                <th>Фамилия студента</th>
+                <th>Имя проверяющего</th>
+                <th>Фамилия проверяющего</th>
+                <th>Оценка ревью</th>
+                <th>Оценка проверющего</th>
+                <th>button_for_viewing_the_comment</th>
+            </tr>
+            </thead>
+            <!--Контейнер для фидбэков-->
+            <tbody id="feedback-accordion">
+            <!-- Список фидбэков, заполняется с помощью JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Модалка для просмотра фидбэковского комментария студента -->
+<div class="modal" tabindex="-1" role="dialog" id="modalFormForStudentComment">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Просмотр комментария студента</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="studentComment">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script type="text/javascript" src="/js/themePageService.js"></script>
+<script type="text/javascript" src="/js/addTheme.js"></script>
+<script type="text/javascript" src="/js/questionPageService.js"></script>
+<script type="text/javascript" src="/js/deleteQuestionService.js"></script>
+<script type="text/javascript" src="/js/addQuestionService.js"></script>
+<script type="text/javascript" src="/js/editThemeService.js"></script>
+<script type="text/javascript" src="/js/feedbackPageService.js"></script>
+</body>
+</html>
