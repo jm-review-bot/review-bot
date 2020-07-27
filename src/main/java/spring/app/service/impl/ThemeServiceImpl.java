@@ -44,10 +44,22 @@ public class ThemeServiceImpl implements ThemeService {
         themeDao.update(theme);
     }
 
+    /*
+     * Метод производит удаление темы, а затем смещает
+     * позиции нижестоящих тем на одну вверх
+     * */
     @Transactional
     @Override
     public void deleteThemeById(Long id) {
-        themeDao.deleteById(id);
+        Theme theme = themeDao.getById(id);
+        if (theme != null) {
+            Integer maxThemePosition = themeDao.getThemeMaxPositionValue();
+            Integer themePosition = theme.getPosition();
+            if (maxThemePosition != themePosition) {
+                themeDao.shiftThemePosition(themePosition, maxThemePosition, -1);
+            }
+            themeDao.deleteById(id);
+        }
     }
 
     @Override
