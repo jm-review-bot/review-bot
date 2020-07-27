@@ -11,4 +11,6 @@ public interface FeedbackService {
     List<Feedback> getFeedbackByStudentReviewId(Long studentReviewId);
 
     void removeAll(List<Feedback> feedbacks);
+
+    List<Feedback> getFeedbacksByStudentId(Long studentId);
 }

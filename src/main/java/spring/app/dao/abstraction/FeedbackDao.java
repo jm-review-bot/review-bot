@@ -7,4 +7,6 @@ import java.util.List;
 public interface FeedbackDao extends GenericDao<Long, Feedback> {
 
     List<Feedback> getFeedbackByStudentReviewId(Long studentReviewId);
+
+    List<Feedback> getFeedbacksByStudentId(Long studentId);
 }

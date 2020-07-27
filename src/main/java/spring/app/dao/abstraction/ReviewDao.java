@@ -29,8 +29,5 @@ public interface ReviewDao extends GenericDao<Long, Review> {
 
     List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    void bulkDeleteByUserId(Long id);
-
     List<Review> getAllReviewsByUserId(Long id);
 }

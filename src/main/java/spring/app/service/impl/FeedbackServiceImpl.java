@@ -38,4 +38,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     public void removeAll(List<Feedback> feedbacks) {
         feedbackDao.removeAll(feedbacks);
     }
+
+    @Override
+    public List<Feedback> getFeedbacksByStudentId(Long studentId) {
+        return feedbackDao.getFeedbackByStudentReviewId(studentId);
+    }
 }
