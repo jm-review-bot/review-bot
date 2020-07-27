@@ -7,7 +7,9 @@ import spring.app.dao.abstraction.ReviewDao;
 import spring.app.dao.abstraction.StudentReviewAnswerDao;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
+import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
 import java.time.LocalDateTime;
@@ -20,14 +22,16 @@ public class UserServiceImpl implements UserService {
     private final StudentReviewAnswerDao studentReviewAnswerDao;
     private final StudentReviewDao studentReviewDao;
     private final ReviewDao reviewDao;
+    private final ThemeService themeService;
 
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, StudentReviewAnswerDao studentReviewAnswerDao, StudentReviewDao studentReviewDao, ReviewDao reviewDao) {
+    public UserServiceImpl(UserDao userDao, StudentReviewAnswerDao studentReviewAnswerDao, StudentReviewDao studentReviewDao, ReviewDao reviewDao , ThemeService themeService) {
         this.userDao = userDao;
         this.studentReviewAnswerDao = studentReviewAnswerDao;
         this.studentReviewDao = studentReviewDao;
         this.reviewDao = reviewDao;
+        this.themeService = themeService;
     }
 
     @Transactional
@@ -95,4 +99,26 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return userDao.getStudentsByReviewPeriod(periodStart, periodEnd);
     }
+
+    @Override
+    public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
+        return userDao.getExaminersInThisTheme(themeId);
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
+        return userDao.getExaminersInNotThisTheme(themeId);
+    }
+
+    @Override
+    public void deleteReviewerByThemeId (long themeId , long examinerId) {
+        userDao.deleteReviewerByThemeId(themeId , examinerId);
+    }
+
+    @Override
+    public ReviewerDto addNewReviewer (long themeId , ReviewerDto reviewerDto) {
+        themeService.addThemeIdToFreeTheme(themeId);
+        return userDao.addNewReviewer(themeId,reviewerDto);
+    }
+
 }

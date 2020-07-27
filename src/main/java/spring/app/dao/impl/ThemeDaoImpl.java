@@ -83,4 +83,11 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("position_high", positionHigh)
                 .executeUpdate();
     }
+
+    @Override
+    public void addThemeIdToFreeTheme(long themeId) {
+        entityManager.createNativeQuery("insert into free_theme (theme_id) values (?)")
+                .setParameter(1 , themeId)
+                .executeUpdate();
+    }
 }

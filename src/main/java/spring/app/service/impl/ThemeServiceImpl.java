@@ -117,4 +117,9 @@ public class ThemeServiceImpl implements ThemeService {
             throw new ProcessInputException(error.toString());
         }
     }
+
+    @Override
+    public void addThemeIdToFreeTheme(long themeId) {
+        themeDao.addThemeIdToFreeTheme(themeId);
+    }
 }

@@ -25,4 +25,7 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     @Transactional(propagation = Propagation.MANDATORY)
     void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    void addThemeIdToFreeTheme(long id);
 }

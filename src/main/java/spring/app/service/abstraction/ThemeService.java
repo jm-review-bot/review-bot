@@ -34,4 +34,6 @@ public interface ThemeService {
     FixedThemeDto getThemeDtoById(Long themeId);
 
     void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
+
+    void addThemeIdToFreeTheme (long themeId);
 }

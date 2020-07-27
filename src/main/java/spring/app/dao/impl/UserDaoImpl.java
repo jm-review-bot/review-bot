@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
+import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
@@ -80,5 +81,39 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .setParameter("period_start", periodStart)
                 .setParameter("period_end", periodEnd)
                 .getResultList();
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
+        return entityManager.createQuery("select new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) from User u where u.user_free_theme_id =:theme_id")
+                .setParameter("theme_id" , themeId)
+                .getResultList();
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
+        return entityManager.createQuery("select new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) from User u where not u.free.theme.id =:theme_id ")
+                .setParameter("theme_id" , themeId)
+                .getResultList();
+    }
+
+    @Override
+    public void deleteReviewerByThemeId(long themeId , long examinerId) {
+        entityManager.createNativeQuery("DELETE * FROM free_theme f WHERE f.free.theme.id = ? AND f.examiner.id = ?")
+                .setParameter(1,themeId)
+                .setParameter(2,examinerId)
+                .executeUpdate();
+    }
+
+    @Override
+    public ReviewerDto addNewReviewer(long themeId , ReviewerDto reviewerDto) {
+        List<ReviewerDto> examiners = entityManager.createNativeQuery("insert into user_free_theme (free_theme_id , examiner_id) values (? , ?)")
+                .setParameter(1 , themeId)
+                .setParameter(2,reviewerDto.getId())
+                .getResultList();
+        if (examiners.size() > 0) {
+            return examiners.get(0);
+        }
+        return null;
     }
 }
