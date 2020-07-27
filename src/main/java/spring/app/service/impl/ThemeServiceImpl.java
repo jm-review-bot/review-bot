@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import java.util.List;
@@ -44,10 +44,22 @@ public class ThemeServiceImpl implements ThemeService {
         themeDao.update(theme);
     }
 
+    /*
+     * Метод производит удаление темы, а затем смещает
+     * позиции нижестоящих тем на одну вверх
+     * */
     @Transactional
     @Override
     public void deleteThemeById(Long id) {
-        themeDao.deleteById(id);
+        Theme theme = themeDao.getById(id);
+        if (theme != null) {
+            Integer maxThemePosition = themeDao.getThemeMaxPositionValue();
+            Integer themePosition = theme.getPosition();
+            if (maxThemePosition != themePosition) {
+                themeDao.shiftThemePosition(themePosition, maxThemePosition, -1);
+            }
+            themeDao.deleteById(id);
+        }
     }
 
     @Override
@@ -116,6 +128,11 @@ public class ThemeServiceImpl implements ThemeService {
             );
             throw new ProcessInputException(error.toString());
         }
+    }
+
+    @Override
+    public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
+        return themeDao.getFreeThemesByExaminerId(examinerId);
     }
 
     @Override

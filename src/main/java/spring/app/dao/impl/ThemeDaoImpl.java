@@ -5,6 +5,7 @@ import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
+import spring.app.model.User;
 
 import java.util.List;
 
@@ -82,6 +83,13 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("position_low", positionLow)
                 .setParameter("position_high", positionHigh)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
+        return entityManager.createQuery("SELECT t FROM FreeTheme t JOIN t.examiners e WHERE e.id = :examiner_id ORDER BY t.position", Theme.class)
+                .setParameter("examiner_id", examinerId)
+                .getResultList();
     }
 
     @Override

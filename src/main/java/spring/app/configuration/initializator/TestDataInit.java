@@ -8,6 +8,7 @@ import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Map;
 
 public class TestDataInit {
@@ -98,6 +99,24 @@ public class TestDataInit {
 
     @Autowired
     private Step adminSetThemeAddedUser;
+
+    @Autowired
+    private Step examinerAddNewStudentReview;
+
+    @Autowired
+    private Step examinerChooseMethodToAddStudent;
+
+    @Autowired
+    private Step examinerChooseOldStudentReviewToEdit;
+
+    @Autowired
+    private Step examinerFreeThemesList;
+
+    @Autowired
+    private Step examinerGetInfoLastReview;
+
+    @Autowired
+    private Step examinerUsersListFromDB;
 
     @Autowired
     private Step userTakeReviewAddDate;
@@ -283,6 +302,12 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
+        steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW, examinerAddNewStudentReview);
+        steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
+        steps.put(StepSelector.EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT, examinerChooseOldStudentReviewToEdit);
+        steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
+        steps.put(StepSelector.EXAMINER_GET_INFO_LAST_REVIEW, examinerGetInfoLastReview);
+        steps.put(StepSelector.EXAMINER_USERS_LIST_FROM_DB, examinerUsersListFromDB);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
@@ -300,7 +325,7 @@ public class TestDataInit {
         steps.put(StepSelector.REVIEWER_DELETE_REVIEW, reviewerDeleteReview);
         steps.put(StepSelector.SELECTING_REVIEW_TO_DELETE, selectingReviewToDelete);
 
-        //add themes
+        //add fixed themes
         FixedTheme core = new FixedTheme();
         core.setPosition(1);
         core.setReviewPoint(0);
@@ -356,6 +381,31 @@ public class TestDataInit {
         finalReview.setTitle("Финальное ревью");
         finalReview.setCriticalWeight(8);
         themeService.addTheme(finalReview);
+
+        // add free themes
+        FreeTheme freeTheme1 = new FreeTheme();
+        freeTheme1.setPosition(9);
+        freeTheme1.setReviewPoint(4);
+        freeTheme1.setTitle("Свободная тема 1");
+        freeTheme1.setCriticalWeight(8);
+        freeTheme1.setExaminers(Arrays.asList(mikhail, nikolay));
+        themeService.addTheme(freeTheme1);
+
+        FreeTheme freeTheme2 = new FreeTheme();
+        freeTheme2.setPosition(10);
+        freeTheme2.setReviewPoint(4);
+        freeTheme2.setTitle("Свободная тема 2");
+        freeTheme2.setCriticalWeight(8);
+        freeTheme2.setExaminers(Arrays.asList(nikolay));
+        themeService.addTheme(freeTheme2);
+
+        FreeTheme freeTheme3 = new FreeTheme();
+        freeTheme3.setPosition(11);
+        freeTheme3.setReviewPoint(4);
+        freeTheme3.setTitle("Свободная тема 3");
+        freeTheme3.setCriticalWeight(8);
+        freeTheme3.setExaminers(Arrays.asList(mikhail));
+        themeService.addTheme(freeTheme3);
 
         // add reviews
         Review hibReview = new Review();

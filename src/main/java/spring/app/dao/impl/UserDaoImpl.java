@@ -84,6 +84,14 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
+    public boolean isUserExaminer(Long userId) {
+        Long count = entityManager.createQuery("SELECT COUNT (t) FROM FreeTheme t JOIN t.examiners u where u.id = : user_id", Long.class)
+                .setParameter("user_id", userId)
+                .getSingleResult();
+        return count > 0;
+    }
+
+    @Override
     public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
         return entityManager.createQuery("select new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) from User u where u.user_free_theme_id =:theme_id")
                 .setParameter("theme_id" , themeId)

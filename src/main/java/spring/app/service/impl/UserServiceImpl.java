@@ -101,6 +101,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean isUserExaminer(Long userId) {
+        return userDao.isUserExaminer(userId);
+    }
+
+    @Override
     public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
         return userDao.getExaminersInThisTheme(themeId);
     }
