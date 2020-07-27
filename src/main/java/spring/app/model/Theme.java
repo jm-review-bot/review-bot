@@ -1,10 +1,13 @@
 package spring.app.model;
 
+import spring.app.listener.ThemeListener;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
+@EntityListeners(ThemeListener.class)
 @DiscriminatorColumn(name = "theme_type")
 @Table(name = "theme")
 public abstract class Theme {
