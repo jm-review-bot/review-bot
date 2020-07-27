@@ -358,31 +358,6 @@ public class TestDataInit {
         finalReview.setCriticalWeight(8);
         themeService.addTheme(finalReview);
 
-        // add free themes
-        FreeTheme freeTheme1 = new FreeTheme();
-        freeTheme1.setPosition(9);
-        freeTheme1.setReviewPoint(4);
-        freeTheme1.setTitle("Свободная тема 1");
-        freeTheme1.setCriticalWeight(8);
-        freeTheme1.setExaminers(Arrays.asList(mikhail, nikolay));
-        themeService.addTheme(freeTheme1);
-
-        FreeTheme freeTheme2 = new FreeTheme();
-        freeTheme2.setPosition(10);
-        freeTheme2.setReviewPoint(4);
-        freeTheme2.setTitle("Свободная тема 2");
-        freeTheme2.setCriticalWeight(8);
-        freeTheme2.setExaminers(Arrays.asList(nikolay));
-        themeService.addTheme(freeTheme2);
-
-        FreeTheme freeTheme3 = new FreeTheme();
-        freeTheme3.setPosition(11);
-        freeTheme3.setReviewPoint(4);
-        freeTheme3.setTitle("Свободная тема 3");
-        freeTheme3.setCriticalWeight(8);
-        freeTheme3.setExaminers(Arrays.asList(mikhail));
-        themeService.addTheme(freeTheme3);
-
         // add reviews
         Review hibReview = new Review();
         hibReview.setDate(LocalDateTime.of(2021, 4, 18, 11, 13));
