@@ -13,7 +13,7 @@ $(document).on('click', '.move-down-question', function () {
     let themeId = this.dataset.idtheme
     let questionId = this.dataset.idquestion
     $.ajax({
-        url: `/admin/theme/${themeId}/question/${questionId}/position/down`,
+        url: `/api/admin/theme/${themeId}/question/${questionId}/position/down`,
         type: 'patch',
         success: function() {
             buildListQuestionsByThemeId(themeId)
@@ -39,7 +39,7 @@ $(document).on('click', '.move-up-question', function () {
     let themeId = this.dataset.idtheme
     let questionId = this.dataset.idquestion
     $.ajax({
-        url: `/admin/theme/${themeId}/question/${questionId}/position/up`,
+        url: `/api/admin/theme/${themeId}/question/${questionId}/position/up`,
         type: 'patch',
         success: function() {
             buildListQuestionsByThemeId(themeId)
