@@ -1,4 +1,4 @@
-package spring.app.controlller;
+package spring.app.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
