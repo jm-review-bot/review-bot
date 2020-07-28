@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface FeedbackDao extends GenericDao<Long, Feedback> {
 
+    String getStudentCommentByFeedbackId(Long id);
+
     FeedbackDto getFeedbackDtoById(Long id);
 
     List<FeedbackDto> getAllFeedbacksDto();
