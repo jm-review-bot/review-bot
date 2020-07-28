@@ -1,13 +1,20 @@
-/*По нажатию кнопки "Редактировать вопрос" открывается модальное окно с формой.
-* Данные формы заполняются текущими полями выбранного вопроса */
+/*
+* По нажатию на "Редактировать вопрос" открывается модальное окно
+* с формой для редактирования вопроса, которая уже заполнена текущими
+* существующими полями. В форму передается IDs темы и редактируемого вопроса.
+*
+* edit-question - кнопка, по которой должно открываться
+* модальное окно для редактирования вопроса.
+*
+* this.dataset.idtheme - ID темы, который заложен в кнопку.
+* this.dataset.idquestion - ID вопроса, который заложен в кнопку.
+* */
 $(document).on('click', '.edit-question', function () {
 
-    // На основании данных, заложенных в кнопку, из БД извлекается QuestionDto
     let questionId = this.dataset.idquestion
     let themeId = this.dataset.idtheme
     let questionDto = getQuestionByQuestionIdAndThemeId(questionId, themeId)
 
-    // Форма для редактирования заполняется текущими полями вопроса, затем открывается модальное окно с этой формой
     $('#edit-question-form :input[name~="question"]').val(questionDto.question)
     $('#edit-question-form :input[name~="answer"]').val(questionDto.answer)
     $('#edit-question-form :input[name~="weight"]').val(questionDto.weight)
@@ -16,12 +23,18 @@ $(document).on('click', '.edit-question', function () {
 
 })
 
-/* По нажатию кнопки "Сохранить" в модальном окне редактирования вопроса
-* вносятся соответствующие изменения в БД */
+/*
+* После подтверждения пользователем (нажатия на "Сохранить")
+* собираются данные формы в questionDto и отправляются на бэкенд.
+* В случае успешной процедуры должны закрыться модальное окно,
+* обновиться список вопросов темы и очиститься форма.
+*
+* this.dataset.idtheme - ID темы, который заложен в форму.
+* this.dataset.idquestion - ID вопроса, который заложен в форму.
+* */
 $(document).on('submit', '#edit-question-form', function (event) {
     event.preventDefault()
 
-    // Из БД извлекается редактируемый вопрос QuestionDto и в него вносятся измения, указанные пользователем
     let questionId = this.dataset.idquestion
     let themeId = this.dataset.idtheme
     let questionDto = getQuestionByQuestionIdAndThemeId(questionId, themeId)
@@ -29,7 +42,6 @@ $(document).on('submit', '#edit-question-form', function (event) {
     questionDto.answer = this.answer.value
     questionDto.weight = this.weight.value
 
-    // На основании данных формы отправляется запрос на сервер
     $.ajax({
         url: `/api/admin/theme/${themeId}/question/${questionId}`,
         type: 'post',
