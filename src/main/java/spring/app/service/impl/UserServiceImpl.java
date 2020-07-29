@@ -116,14 +116,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteReviewerByThemeId (long themeId , long examinerId) {
-        userDao.deleteReviewerByThemeId(themeId , examinerId);
+    @Transactional
+    public User addNewReviewer(long themeId , long userId) {
+        themeService.addThemeIdToFreeTheme(themeId);
+        User user = userDao.getById(userId);
+        return userDao.addNewReviewer(user);
     }
 
     @Override
-    public ReviewerDto addNewReviewer (long themeId , ReviewerDto reviewerDto) {
-        themeService.addThemeIdToFreeTheme(themeId);
-        return userDao.addNewReviewer(themeId,reviewerDto);
+    @Transactional
+    public void deleteReviewerFromTheme(long themeId, long reviewerId) {
+        userDao.deleteReviewerFromTheme(themeId , reviewerId);
     }
-
 }

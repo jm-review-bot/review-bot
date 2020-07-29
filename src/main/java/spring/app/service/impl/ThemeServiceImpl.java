@@ -135,8 +135,4 @@ public class ThemeServiceImpl implements ThemeService {
         return themeDao.getFreeThemesByExaminerId(examinerId);
     }
 
-    @Override
-    public void addThemeIdToFreeTheme(long themeId) {
-        themeDao.addThemeIdToFreeTheme(themeId);
-    }
 }

@@ -94,8 +94,7 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public void addThemeIdToFreeTheme(long themeId) {
-        entityManager.createNativeQuery("insert into free_theme (theme_id) values (?)")
-                .setParameter(1 , themeId)
+        entityManager.createNativeQuery("insert into user_free_theme (theme_id) values ("+themeId +")")
                 .executeUpdate();
     }
 }

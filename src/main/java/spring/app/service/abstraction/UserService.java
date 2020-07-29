@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
 
@@ -36,7 +37,7 @@ public interface UserService {
 
     List<ReviewerDto> getExaminersInNotThisTheme (long themeId) ;
 
-    void deleteReviewerByThemeId (long themeId , long examinerId);
+    User addNewReviewer (long themeId , long userId);
 
-    ReviewerDto addNewReviewer (long themeId , ReviewerDto reviewerDto);
+    void deleteReviewerFromTheme (long themeId , long reviewerId);
 }

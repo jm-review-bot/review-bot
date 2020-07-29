@@ -30,5 +30,5 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
     List<Theme> getFreeThemesByExaminerId(Long examinerId);
 
     @Transactional(propagation = Propagation.MANDATORY)
-    void addThemeIdToFreeTheme(long id);
+    void addThemeIdToFreeTheme (long themeId);
 }

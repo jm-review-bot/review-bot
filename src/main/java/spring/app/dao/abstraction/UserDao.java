@@ -33,7 +33,8 @@ public interface UserDao extends GenericDao<Long, User> {
 
     List<ReviewerDto> getExaminersInNotThisTheme (long themeId) ;
 
-    void deleteReviewerByThemeId (long themeId , long examinerId);
+    @Transactional(propagation = Propagation.MANDATORY)
+    User addNewReviewer (User user);
 
-    ReviewerDto addNewReviewer (long themeId , ReviewerDto reviewerDto);
+    void deleteReviewerFromTheme (long themeId , long reviewerId);
 }
