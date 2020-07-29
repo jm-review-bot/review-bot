@@ -485,21 +485,58 @@ public class TestDataInit {
         studentReviewService.addStudentReview(studentReview5);
 
         // add Feedbacks
+        int a = 0; // Начальное значение диапазона - "от"
+        int b = 10; // Конечное значение диапазона - "до"
+
+        int random_number1 = a + (int) (Math.random() * b); // Генерация 1-го числа
+        System.out.println("1-ое случайное число: " + random_number1);
+
+        int random_number2 = a + (int) (Math.random() * b); // Генерация 2-го числа
+        System.out.println("2-ое случайное число: " + random_number2);
+
+        int random_number3 = a + (int) (Math.random() * b); // Генерация 3-го числа
+        System.out.println("3-е случайное число: " + random_number3);
+        int random_number4 = a + (int) (Math.random() * b); // Генерация 3-го числа
+        System.out.println("4-е случайное число: " + random_number4);
         Feedback feedback1 = new Feedback();
         feedback1.setStudentReview(studentReview4);
         feedback1.setComment("comment_(feedback1)");
         feedback1.setRatingReview(1);
-        feedback1.setRatingReviewer(1);
+        feedback1.setRatingReviewer(2);
         feedback1.setUser(roman);
         feedbackService.addFeedback(feedback1);
 
         Feedback feedback2 = new Feedback();
         feedback2.setStudentReview(studentReview5);
         feedback2.setComment("comment_(feedback2)");
-        feedback2.setRatingReview(2);
-        feedback2.setRatingReviewer(2);
+        feedback2.setRatingReview(3);
+        feedback2.setRatingReviewer(4);
         feedback2.setUser(anton);
         feedbackService.addFeedback(feedback2);
+
+        Feedback feedback3 = new Feedback();
+        feedback3.setStudentReview(studentReview5);
+        feedback3.setComment("comment_(feedback3)");
+        feedback3.setRatingReview(5);
+        feedback3.setRatingReviewer(6);
+        feedback3.setUser(anton);
+        feedbackService.addFeedback(feedback3);
+
+        Feedback feedback4 = new Feedback();
+        feedback4.setStudentReview(studentReview5);
+        feedback4.setComment("comment_(feedback4)");
+        feedback4.setRatingReview(7);
+        feedback4.setRatingReviewer(8);
+        feedback4.setUser(anton);
+        feedbackService.addFeedback(feedback4);
+
+        Feedback feedback5 = new Feedback();
+        feedback5.setStudentReview(studentReview5);
+        feedback5.setComment("comment_(feedback5)");
+        feedback5.setRatingReview(9);
+        feedback5.setRatingReviewer(10);
+        feedback5.setUser(anton);
+        feedbackService.addFeedback(feedback5);
 
         // add Questions
         Question question1 = new Question();

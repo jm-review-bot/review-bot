@@ -30,6 +30,11 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public String getStudentCommentByFeedbackId(Long id) {
+        return feedbackDao.getStudentCommentByFeedbackId(id);
+    }
+
+    @Override
     public FeedbackDto getFeedbackDtoById(Long id) {
         return feedbackDao.getFeedbackDtoById(id);
     }

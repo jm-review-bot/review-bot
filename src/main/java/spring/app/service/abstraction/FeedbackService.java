@@ -9,6 +9,8 @@ public interface FeedbackService {
 
     void addFeedback(Feedback feedback);
 
+    String getStudentCommentByFeedbackId(Long id);
+
     FeedbackDto getFeedbackDtoById(Long id);
 
     List<FeedbackDto> getAllFeedbacksDto();

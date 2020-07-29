@@ -32,7 +32,7 @@ function getStudentCommentByFeedbackId(feedbackId) {
     return studentComment;
 }
 
-function getTheTextOfTheComment(studentComment) {//modalFormForStudentComment
+function getTheTextOfTheComment(studentComment) {
     let htmlContent = `
                 <p>${studentComment}</p>
         `;
@@ -44,15 +44,25 @@ function buildFeedbacksAccordion(allFeedbacksDto) {
     let htmlContent = ''
     for (let i = 0; i < allFeedbacksDto.length; i++) {
         let feedback = $(allFeedbacksDto)[i];
+        let ratingReview = feedback.ratingReview;
+        let ratingReviewer = feedback.ratingReviewer;
+        let tdRatingReviewColor = ratingReview < 6 ?
+                "#"+dec2hex(0)+dec2hex(255)+dec2hex(Math.round((63.75)*(ratingReview-1)))
+            :
+                "#"+dec2hex(255)+dec2hex(0)+dec2hex(Math.round((63.75)*(10-ratingReview)));
+        let tdRatingReviewerColor = ratingReviewer < 6 ?
+                "#"+dec2hex(0)+dec2hex(255)+dec2hex(Math.round((63.75)*(ratingReviewer-1)))
+            :
+                "#"+dec2hex(255)+dec2hex(0)+dec2hex(Math.round((63.75)*(10-ratingReviewer)));
         let themeHtmlAccordion = `
               <tr>
                   <th>${feedback.id}</th>
                   <td>${feedback.studentFirstName}</td>
                   <td>${feedback.studentLastName}</td>
-                  <td>${feedback.reviewerFirstName}</td>
+                  <td >${feedback.reviewerFirstName}</td>
                   <td>${feedback.reviewerLastName}</td>
-                  <td>${feedback.ratingReview}</td>
-                  <td>${feedback.ratingReviewer}</td>
+                  <td bgcolor=${tdRatingReviewColor}>${ratingReview}</td>
+                  <td bgcolor=${tdRatingReviewerColor}>${ratingReviewer}</td>
                   <td>
                       <button type="button" class="btn btn-dark" data-feedback-id="${feedback.id}" data-feedback-comment="${feedback.studentComment}" onclick="getTheTextOfTheComment(this.dataset.feedbackComment)">
                       комментарий
@@ -63,4 +73,12 @@ function buildFeedbacksAccordion(allFeedbacksDto) {
         htmlContent += themeHtmlAccordion;
     }
     $('#feedback-accordion').html(htmlContent);
+}
+
+function dec2hex(d){
+    if(d>15) {
+        return d.toString(16)
+    } else {
+        return "0"+d.toString(16)
+    }
 }
