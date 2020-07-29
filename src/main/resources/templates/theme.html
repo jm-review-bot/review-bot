@@ -12,6 +12,10 @@
     <link rel="stylesheet" href="/css/font-glyphicons.css">
     <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
 
+    <!-- CSRF-protection -->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <title>theme</title>
 </head>
 <body>
@@ -32,6 +36,13 @@
     <div class="main">
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand"></a>
+            <div>
+                <form action="/logout">
+                    <button class="btn btn-outline-danger">
+                        LOGOUT
+                    </button>
+                </form>
+            </div>
             <form class="form-inline">
                 <a href="#containerForAddingTheme" class="btn btn-primary" data-toggle="modal">Добавить тему</a>
                 <!--Контейнер для добавления темы-->

@@ -2,6 +2,7 @@ package spring.app.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.QuestionDto;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Validated
 @RestController
+@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/admin/theme")
 public class AdminQuestionThemeRestController {
 

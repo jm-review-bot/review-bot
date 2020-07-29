@@ -35,6 +35,14 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
+    public User getByUsername(String username) {
+        List<User> userList = entityManager.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
+                .setParameter("username", username)
+                .getResultList();
+        return (userList.size() > 0 ? userList.get(0) : null);
+    }
+
+    @Override
     public boolean isExistByVkId(Integer vkId) {
         try {
             entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :id", User.class).setParameter("id", vkId).getSingleResult();

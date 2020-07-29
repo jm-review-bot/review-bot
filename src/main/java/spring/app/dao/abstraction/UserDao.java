@@ -13,6 +13,8 @@ public interface UserDao extends GenericDao<Long, User> {
 
     User getByVkId(Integer vkId) throws NoResultException;
 
+    User getByUsername(String username);
+
     boolean isExistByVkId(Integer vkId);
 
     @Transactional(propagation = Propagation.MANDATORY)

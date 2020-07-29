@@ -1,6 +1,7 @@
 package spring.app.controlller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +10,7 @@ import spring.app.service.abstraction.QuestionService;
 
 @RequestMapping("/admin/theme/{themeId}/question")
 @RestController
+@PreAuthorize("hasAuthority('ADMIN')")
 public class QuestionRestController {
 
     private QuestionService questionService;
