@@ -103,7 +103,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
-        List<ReviewerDto> reviewers =  entityManager.createQuery("select distinct new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) from FreeTheme ft join ft.examiners u where not ft.id =:theme_id")
+        List<ReviewerDto> reviewers =  entityManager.createQuery("select distinct new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) from FreeTheme ft join ft.examiners u where ft.id <>:theme_id")
                 .setParameter("theme_id" , themeId)
                 .getResultList();
         return reviewers.size() > 0 ? reviewers : null;
@@ -121,6 +121,13 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .setParameter("theme_id" , themeId)
                 .setParameter("reviewer_id" , reviewerId)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<User> getExaminersByFreeThemeId(Long freeThemeId) {
+        return entityManager.createQuery("SELECT ft.examiners FROM FreeTheme ft WHERE ft.id = :free_theme_id")
+                .setParameter("free_theme_id", freeThemeId)
+                .getResultList();
     }
 
 }

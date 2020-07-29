@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.model.FixedTheme;
+import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
 
@@ -93,8 +94,10 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public void addThemeIdToFreeTheme(long themeId) {
-        entityManager.createNativeQuery("insert into user_free_theme (theme_id) values ("+themeId +")")
-                .executeUpdate();
+    public FreeTheme getFreeThemeById(long id) {
+        List<FreeTheme> freeThemes = entityManager.createQuery("select ft from FreeTheme ft where ft.id =:id")
+                .setParameter("id" , id)
+                .getResultList();
+        return freeThemes.size() > 0 ? freeThemes.get(0) : null;
     }
 }

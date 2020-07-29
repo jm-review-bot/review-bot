@@ -37,4 +37,6 @@ public interface UserDao extends GenericDao<Long, User> {
     User addNewReviewer (User user);
 
     void deleteReviewerFromTheme (long themeId , long reviewerId);
+
+    List<User> getExaminersByFreeThemeId(Long freeThemeId) ;
 }

@@ -8,6 +8,8 @@ import spring.app.dao.abstraction.StudentReviewAnswerDao;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
+import spring.app.model.FreeTheme;
+import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
@@ -118,9 +120,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public User addNewReviewer(long themeId , long userId) {
-        themeService.addThemeIdToFreeTheme(themeId);
-        User user = userDao.getById(userId);
-        return userDao.addNewReviewer(user);
+        List<User> users = userDao.getExaminersByFreeThemeId(themeId);
+        users.add(userDao.getById(userId));
+        FreeTheme freeTheme = themeService.getFreeThemeById(themeId);
+        freeTheme.setExaminers(users);
+        themeService.updateTheme(freeTheme);
+        return userDao.getById(userId);
     }
 
     @Override
@@ -128,4 +133,6 @@ public class UserServiceImpl implements UserService {
     public void deleteReviewerFromTheme(long themeId, long reviewerId) {
         userDao.deleteReviewerFromTheme(themeId , reviewerId);
     }
+
+
 }

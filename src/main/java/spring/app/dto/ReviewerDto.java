@@ -12,9 +12,9 @@ public class ReviewerDto {
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
     private long id;
-    @NotBlank
+    @NotBlank(groups = CreateGroup.class)
     private String firstName;
-    @NotBlank
+    @NotBlank(groups = CreateGroup.class)
     private String lastName;
     private Integer vkId;
     private boolean isViewed;

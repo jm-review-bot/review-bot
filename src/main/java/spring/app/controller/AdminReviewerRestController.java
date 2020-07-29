@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.ReviewerDto;
 import spring.app.groups.CreateGroup;
+import spring.app.groups.UpdateGroup;
 import spring.app.mapper.ReviewerMapper;
 import spring.app.model.User;
 import spring.app.service.abstraction.ReviewService;
@@ -42,7 +43,7 @@ public class AdminReviewerRestController {
        return ResponseEntity.ok(examiners);
     }
 
-    @Validated(CreateGroup.class)
+    @Validated(UpdateGroup.class)
     @PostMapping("/{themeId}/reviewer")
     public ResponseEntity<ReviewerDto> create (@PathVariable long themeId ,
                                                @RequestBody @Valid ReviewerDto reviewerDto) {

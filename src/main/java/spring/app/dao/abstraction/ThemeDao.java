@@ -3,6 +3,7 @@ package spring.app.dao.abstraction;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.FixedThemeDto;
+import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
 
@@ -29,6 +30,5 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     List<Theme> getFreeThemesByExaminerId(Long examinerId);
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    void addThemeIdToFreeTheme (long themeId);
+    FreeTheme getFreeThemeById (long id);
 }
