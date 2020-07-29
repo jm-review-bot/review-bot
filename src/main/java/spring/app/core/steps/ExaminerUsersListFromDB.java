@@ -46,9 +46,8 @@ public class ExaminerUsersListFromDB extends Step {
         // Обрабатываются команды пользователя
         if (StringParser.isNumeric(command)) {
 
-            // Из текущего шага извлекается список ID пользователей, а из шага EXAMINER_FREE_THEMES_LIST - ID темы
+            // Из текущего шага извлекается список ID пользователей
             List<String> usersIds = storageService.getUserStorage(examinerVkId, EXAMINER_USERS_LIST_FROM_DB);
-            Long freeThemeId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST).get(0));
 
             // Проверяется корректность ввода пользователем и из списка извлекается ID выбранного пользователя
             Integer studentNumber = Integer.parseInt(command);
