@@ -485,19 +485,6 @@ public class TestDataInit {
         studentReviewService.addStudentReview(studentReview5);
 
         // add Feedbacks
-        int a = 0; // Начальное значение диапазона - "от"
-        int b = 10; // Конечное значение диапазона - "до"
-
-        int random_number1 = a + (int) (Math.random() * b); // Генерация 1-го числа
-        System.out.println("1-ое случайное число: " + random_number1);
-
-        int random_number2 = a + (int) (Math.random() * b); // Генерация 2-го числа
-        System.out.println("2-ое случайное число: " + random_number2);
-
-        int random_number3 = a + (int) (Math.random() * b); // Генерация 3-го числа
-        System.out.println("3-е случайное число: " + random_number3);
-        int random_number4 = a + (int) (Math.random() * b); // Генерация 3-го числа
-        System.out.println("4-е случайное число: " + random_number4);
         Feedback feedback1 = new Feedback();
         feedback1.setStudentReview(studentReview4);
         feedback1.setComment("comment_(feedback1)");
