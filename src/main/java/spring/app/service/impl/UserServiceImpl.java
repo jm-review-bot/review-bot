@@ -11,6 +11,7 @@ import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
+import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -101,6 +102,15 @@ public class UserServiceImpl implements UserService {
     // Метод нужен для реализации UserDetailService.В рамках проекта username - это VkId пользователя
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.getByVkId(Integer.parseInt(username));
+        if (StringParser.isNumeric(username)) {
+            User user = userDao.getByVkId(Integer.parseInt(username));
+            if (user != null) {
+                return user;
+            } else {
+                throw new UsernameNotFoundException("Пользователя нет в БД");
+            }
+        } else {
+            throw new UsernameNotFoundException("Логин не похож на VkId");
+        }
     }
 }
