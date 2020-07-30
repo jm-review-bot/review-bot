@@ -16,7 +16,7 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
 
     @Override
     public String getStudentCommentByFeedbackId(Long id) {
-        return entityManager.createQuery("SELECT new java.lang.String(f.comment) FROM Feedback f WHERE f.id = :idFeedback", String.class)
+        return entityManager.createQuery("SELECT f.comment FROM Feedback f WHERE f.id = :idFeedback", String.class)
                 .setParameter("idFeedback", id).getSingleResult();
     }
 
