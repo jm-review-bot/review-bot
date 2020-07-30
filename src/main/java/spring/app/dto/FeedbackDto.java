@@ -24,7 +24,6 @@ public class FeedbackDto {
     @NotBlank
     private String studentLastName;
 
-    private String studentComment;
     private Integer ratingReviewer;
     private Integer ratingReview;
 
@@ -34,7 +33,6 @@ public class FeedbackDto {
         this.reviewerLastName = reviewerLastName;
         this.studentFirstName = studentFirstName;
         this.studentLastName = studentLastName;
-        this.studentComment = studentComment;
         this.ratingReviewer = ratingReviewer;
         this.ratingReview = ratingReview;
     }
@@ -77,14 +75,6 @@ public class FeedbackDto {
 
     public void setStudentLastName(String studentLastName) {
         this.studentLastName = studentLastName;
-    }
-
-    public String getStudentComment() {
-        return studentComment;
-    }
-
-    public void setStudentComment(String studentComment) {
-        this.studentComment = studentComment;
     }
 
     public Integer getRatingReviewer() {
