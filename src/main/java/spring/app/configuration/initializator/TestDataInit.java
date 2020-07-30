@@ -221,8 +221,7 @@ public class TestDataInit {
         nikolay.setAccountNonLocked(true);
         nikolay.setCredentialsNonExpired(true);
         nikolay.setEnabled(true);
-        nikolay.setUsername("nikolay");
-        nikolay.setPassword(passwordEncoder.encode("nikolay"));
+        nikolay.setPassword(passwordEncoder.encode("97957185"));
         userService.addUser(nikolay);
 
         User kirill = new User();
@@ -272,8 +271,7 @@ public class TestDataInit {
         mikhail.setAccountNonLocked(true);
         mikhail.setCredentialsNonExpired(true);
         mikhail.setEnabled(true);
-        mikhail.setUsername("mikhail");
-        mikhail.setPassword(passwordEncoder.encode("mikhail"));
+        mikhail.setPassword(passwordEncoder.encode("27939840"));
         userService.addUser(mikhail);
 
         // add steps
