@@ -45,16 +45,16 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     /**
      * Метод возвращает список ревью студента по теме
      *
-     * @param vkId
+     * @param studentId
      * @param theme
      * @return
      */
     @Override
-    public List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme) {
+    public List<StudentReview> getAllStudentReviewsByStudentIdAndTheme(Long studentId, Theme theme) {
         return entityManager.createQuery("SELECT sr FROM StudentReview sr " +
-                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :vkId AND r.theme = :theme", StudentReview.class)
-                .setParameter("vkId", vkId)
-                .setParameter("theme", theme)
+                "JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :student_id AND r.theme.id = :theme_id", StudentReview.class)
+                .setParameter("student_id", studentId)
+                .setParameter("theme_id", theme.getId())
                 .getResultList();
     }
 
@@ -116,5 +116,16 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
         return entityManager.createQuery("SELECT sr FROM StudentReview sr WHERE sr.review.id = :review_id")
                 .setParameter("review_id", reviewId)
                 .getResultList();
+    }
+
+    // Метод возвращает последнее ревью студента по выбранной теме
+    @Override
+    public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+        List<StudentReview> studentReviews = entityManager.createQuery("SELECT sr FROM StudentReview sr  WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id ORDER BY sr.review.date DESC", StudentReview.class)
+                .setParameter("student_id", studentId)
+                .setParameter("theme_id", themeId)
+                .setMaxResults(1)
+                .getResultList();
+        return (studentReviews.size() > 0 ? studentReviews.get(0) : null);
     }
 }

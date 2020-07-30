@@ -28,4 +28,6 @@ public interface UserService {
     List<User> getStudentsByReviewId(Long reviewId);
 
     List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    boolean isUserExaminer(Long userId);
 }

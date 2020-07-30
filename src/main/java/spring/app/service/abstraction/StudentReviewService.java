@@ -13,7 +13,7 @@ public interface StudentReviewService {
 
     List<StudentReview> getAllStudentReview();
 
-    List<StudentReview> getAllStudentReviewsByStudentVkIdAndTheme(Long vkId, Theme theme);
+    List<StudentReview> getAllStudentReviewsByStudentIdAndTheme(Long studentId, Theme theme);
 
     void updateStudentReview(StudentReview studentReview);
 
@@ -34,4 +34,6 @@ public interface StudentReviewService {
     List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId);
 
     void removeAll(List<StudentReview> studentReviews);
+
+    StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
 }

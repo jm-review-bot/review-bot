@@ -95,4 +95,9 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return userDao.getStudentsByReviewPeriod(periodStart, periodEnd);
     }
+
+    @Override
+    public boolean isUserExaminer(Long userId) {
+        return userDao.isUserExaminer(userId);
+    }
 }

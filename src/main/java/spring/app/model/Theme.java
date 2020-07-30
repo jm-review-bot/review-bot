@@ -5,10 +5,12 @@ import spring.app.listener.ThemeListener;
 import javax.persistence.*;
 import java.util.Objects;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @EntityListeners(ThemeListener.class)
+@DiscriminatorColumn(name = "theme_type")
 @Table(name = "theme")
-public class Theme {
+public abstract class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -18,24 +20,16 @@ public class Theme {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "criticalWeight")
+    @Column(name = "critical_weight")
     private Integer criticalWeight;
+
+    @Column(name = "review_point")
+    private Integer reviewPoint;
 
     @Column(name = "position")
     private Integer position;
 
-    @Column(name = "reviewPoint")
-    private Integer reviewPoint;
-
     public Theme() {
-    }
-
-    public Integer getCriticalWeight() {
-        return criticalWeight;
-    }
-
-    public void setCriticalWeight(Integer criticalWeight) {
-        this.criticalWeight = criticalWeight;
     }
 
     public Long getId() {
@@ -52,6 +46,14 @@ public class Theme {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Integer getCriticalWeight() {
+        return criticalWeight;
+    }
+
+    public void setCriticalWeight(Integer criticalWeight) {
+        this.criticalWeight = criticalWeight;
     }
 
     public Integer getPosition() {
@@ -76,11 +78,13 @@ public class Theme {
         if (o == null || getClass() != o.getClass()) return false;
         Theme theme = (Theme) o;
         return id.equals(theme.id) &&
-                title.equals(theme.title);
+                title.equals(theme.title) &&
+                criticalWeight.equals(theme.criticalWeight) &&
+                position.equals(theme.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title);
+        return Objects.hash(id, title, criticalWeight, position);
     }
 }
