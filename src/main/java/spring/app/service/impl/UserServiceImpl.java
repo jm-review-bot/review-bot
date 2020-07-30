@@ -98,8 +98,9 @@ public class UserServiceImpl implements UserService {
         return userDao.getStudentsByReviewPeriod(periodStart, periodEnd);
     }
 
+    // Метод нужен для реализации UserDetailService.В рамках проекта username - это VkId пользователя
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userDao.getByUsername(username);
+        return userDao.getByVkId(Integer.parseInt(username));
     }
 }

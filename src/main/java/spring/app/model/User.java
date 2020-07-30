@@ -50,9 +50,6 @@ public class User implements UserDetails {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @Column(name = "username", unique = true)
-    private String username;
-
     @Column(name = "password")
     private String password;
 
@@ -158,13 +155,10 @@ public class User implements UserDetails {
         isViewed = viewed;
     }
 
-    public void setUsername(String username) {
-        this.username = vkId.toString();
-    }
-
+    // Метод нужен для реализации UserDetails.В рамках проекта username - это VkId пользователя
     @Override
     public String getUsername() {
-        return username;
+        return vkId.toString();
     }
 
     public String getPassword() {
@@ -173,20 +167,6 @@ public class User implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-
-        return id.equals(user.id) && vkId.equals(user.vkId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, vkId);
     }
 
     @Override
@@ -223,5 +203,19 @@ public class User implements UserDetails {
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+
+        return id.equals(user.id) && vkId.equals(user.vkId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, vkId);
     }
 }
