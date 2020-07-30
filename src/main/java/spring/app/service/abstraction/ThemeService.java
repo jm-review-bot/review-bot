@@ -3,6 +3,7 @@ package spring.app.service.abstraction;
 import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.FixedTheme;
+import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
 
@@ -38,5 +39,5 @@ public interface ThemeService {
 
     List<Theme> getFreeThemesByExaminerId(Long examinerId);
 
-    void addThemeIdToFreeTheme (long themeId);
+    FreeTheme getFreeThemeById (long id);
 }
