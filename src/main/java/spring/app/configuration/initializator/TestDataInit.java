@@ -147,6 +147,9 @@ public class TestDataInit {
     @Autowired
     private Step selectingReviewToDelete;
 
+    @Autowired
+    private FeedbackService feedbackService;
+
     public TestDataInit() {
     }
 
@@ -480,6 +483,23 @@ public class TestDataInit {
         studentReview5.setPassed(false);
         studentReview5.setReview(springReviewPassed5);
         studentReviewService.addStudentReview(studentReview5);
+
+        // add Feedbacks
+        Feedback feedback1 = new Feedback();
+        feedback1.setStudentReview(studentReview4);
+        feedback1.setComment("comment_(feedback1)");
+        feedback1.setRatingReview(1);
+        feedback1.setRatingReviewer(1);
+        feedback1.setUser(roman);
+        feedbackService.addFeedback(feedback1);
+
+        Feedback feedback2 = new Feedback();
+        feedback2.setStudentReview(studentReview5);
+        feedback2.setComment("comment_(feedback2)");
+        feedback2.setRatingReview(2);
+        feedback2.setRatingReviewer(2);
+        feedback2.setUser(anton);
+        feedbackService.addFeedback(feedback2);
 
         // add Questions
         Question question1 = new Question();
