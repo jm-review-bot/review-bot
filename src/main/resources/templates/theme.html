@@ -112,7 +112,7 @@
 </div>
 
 <!--Модальное окно для добавления нового вопроса темы-->
-<div class="modal fade" id="add-question-modal-window" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="add-question-modal-window" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -147,6 +147,43 @@
     </div>
 </div>
 
+<!--Модальное окно для редактирования вопроса темы-->
+<div class="modal fade" id="edit-question-modal-window" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Редактировать вопрос
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-question-form">
+                    <div class="form-group">
+                        Текст вопроса:
+                        <textarea rows="10" input class="col" type="text" name="question" placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Ответ на вопрос:
+                        <textarea rows="10" input class="col" type="text" name="answer" placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Вес вопроса:
+                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required autocomplete="off">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -159,5 +196,8 @@
 <script type="text/javascript" src="/js/deleteQuestionService.js"></script>
 <script type="text/javascript" src="/js/addQuestionService.js"></script>
 <script type="text/javascript" src="/js/editThemeService.js"></script>
+<script type="text/javascript" src="/js/editQuestionService.js"></script>
+<script type="text/javascript" src="/js/positionQuestionService.js"></script>
+
 </body>
 </html>

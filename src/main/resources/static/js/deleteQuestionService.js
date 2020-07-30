@@ -1,10 +1,10 @@
 $(document).on('click', '.delete-question', function () {
     let themeId = this.dataset.idtheme
-    let questionID = this.dataset.idquestion
-    let questionDto = getQuestionDtoByThemeIdAndQuestionId(themeId, questionID)
+    let questionId = this.dataset.idquestion
+    let questionDto = getQuestionDtoByThemeIdAndQuestionId(themeId, questionId)
 
     if (askUserToDeleteQuestion(questionDto)) {
-        deleteQuestionByThemeIdAndQuestionId(themeId, questionID)
+        deleteQuestionByThemeIdAndQuestionId(themeId, questionId)
         buildListQuestionsByThemeId(themeId)
     }
 })
