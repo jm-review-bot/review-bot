@@ -28,7 +28,7 @@ $(document).on('submit', '#add-question-form', function (event) {
     let questionDto = {
         question : this.question.value,
         answer : this.answer.value,
-        weight : this.answer.weight
+        weight : this.weight.value
     }
 
     $.ajax({
