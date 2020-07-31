@@ -22,9 +22,9 @@ import java.util.Collection;
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    PasswordEncoder passwordEncoder;
-    RoleService roleService;
-    UserService userService;
+    private PasswordEncoder passwordEncoder;
+    private RoleService roleService;
+    private UserService userService;
 
     @Autowired
     public SecurityConfig(@Lazy PasswordEncoder passwordEncoder,
@@ -56,6 +56,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .authorizeRequests()
+                .antMatchers("api/admin/**")
+                .hasAnyAuthority("ADMIN")
+                    .and()
+                .authorizeRequests()
+                .antMatchers("/admin/**")
+                .hasAnyAuthority("ADMIN")
+                    .and()
+                .authorizeRequests()
+                .antMatchers("/user/**")
+                .hasAnyAuthority("USER")
+                    .and()
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()

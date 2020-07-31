@@ -19,7 +19,6 @@ import java.util.List;
 
 @Validated
 @RestController
-@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/admin/theme")
 public class AdminQuestionThemeRestController {
 

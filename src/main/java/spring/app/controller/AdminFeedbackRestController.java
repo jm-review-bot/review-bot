@@ -14,7 +14,6 @@ import java.util.List;
 
 @Validated
 @RestController
-@PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/api/admin/feedback")
 public class AdminFeedbackRestController {
     private FeedbackService feedbackService;
