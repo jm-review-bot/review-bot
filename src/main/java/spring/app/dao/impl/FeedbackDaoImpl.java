@@ -40,4 +40,12 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
                 .setParameter("student_review_id", studentReviewId)
                 .getResultList();
     }
+
+    @Override
+    public List<Feedback> getFeedbacksByStudentId(Long studentId) {
+        return entityManager
+                .createQuery("SELECT f FROM Feedback f WHERE f.user.id = :student_id", Feedback.class)
+                .setParameter("student_id", studentId)
+                .getResultList();
+    }
 }

@@ -101,4 +101,9 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     public void removeAll(List<StudentReview> studentReviews) {
         studentReviewDao.removeAll(studentReviews);
     }
+
+    @Override
+    public List<StudentReview> getStudentReviewsByStudentId(Long studentId) {
+        return studentReviewDao.getStudentReviewsByStudentId(studentId);
+    }
 }

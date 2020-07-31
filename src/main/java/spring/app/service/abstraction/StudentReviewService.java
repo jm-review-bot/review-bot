@@ -34,4 +34,6 @@ public interface StudentReviewService {
     List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId);
 
     void removeAll(List<StudentReview> studentReviews);
+
+    List<StudentReview> getStudentReviewsByStudentId(Long studentId);
 }

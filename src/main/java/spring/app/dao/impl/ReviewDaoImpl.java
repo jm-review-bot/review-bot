@@ -160,20 +160,6 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("id", vkId).getResultList();
     }
 
-
-
-    @Override
-    @Transactional(propagation = Propagation.MANDATORY)
-    public void bulkDeleteByUserId(Long id) {
-        // Write all pending changes to the DB
-        entityManager.flush();
-        // Remove all entities from the persistence context
-        entityManager.clear();
-        entityManager.createQuery("DELETE FROM Review WHERE user.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
-    }
-
     @Override
     public List<Review> getAllReviewsByUserId(Long id) {
         return entityManager.createQuery("SELECT r FROM Review  r WHERE r.user.id = :id", Review.class)
