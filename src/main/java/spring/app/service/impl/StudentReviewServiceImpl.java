@@ -105,10 +105,10 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     @Override
     public List<StudentReview> getStudentReviewsByStudentId(Long studentId) {
         return studentReviewDao.getStudentReviewsByStudentId(studentId);
+    }
 
     @Override
     public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
         return studentReviewDao.getLastStudentReviewByStudentIdAndThemeId(studentId, themeId);
-
     }
 }
