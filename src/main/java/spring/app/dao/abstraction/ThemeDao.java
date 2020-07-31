@@ -4,7 +4,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.FixedThemeDto;
 import spring.app.model.Theme;
-import spring.app.model.User;
 
 import java.util.List;
 
@@ -20,9 +19,9 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     Integer getThemeMinPositionValue();
 
-    List<FixedThemeDto> getAllThemesDto();
+    List<FixedThemeDto> getAllFixedThemesDto();
 
-    FixedThemeDto getThemeDtoById(Long themeId);
+    FixedThemeDto getFixedThemeDtoById(Long themeId);
 
     @Transactional(propagation = Propagation.MANDATORY)
     void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);

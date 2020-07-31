@@ -2,7 +2,6 @@ package spring.app.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.FixedThemeDto;
@@ -32,12 +31,12 @@ public class AdminThemeRestController {
 
     @GetMapping
     public ResponseEntity<List<FixedThemeDto>> getAllThemes() {
-        return ResponseEntity.ok(themeService.getAllThemesDto());
+        return ResponseEntity.ok(themeService.getAllFixedThemesDto());
     }
 
     @GetMapping("/{themeId}")
     public ResponseEntity<FixedThemeDto> getThemeById(@PathVariable Long themeId) {
-        FixedThemeDto fixedThemeDtoById = themeService.getThemeDtoById(themeId);
+        FixedThemeDto fixedThemeDtoById = themeService.getFixedThemeDtoById(themeId);
         if (fixedThemeDtoById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

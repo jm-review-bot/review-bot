@@ -9,7 +9,6 @@ import spring.app.dao.abstraction.UserDao;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 

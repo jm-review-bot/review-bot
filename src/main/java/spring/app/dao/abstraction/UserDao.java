@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -18,11 +18,8 @@ $('.delete-theme-button').on('click' , function () {
 });
 
 function closeWindowAndRefreshThemesList() {
-    console.log("editThemeService_closeWindowAndRefreshThemesList_1metka");
     $('#changeThemeModal').modal('hide');
-    console.log("editThemeService_closeWindowAndRefreshThemesList_2metka");
     buildThemesAccordion(getAllThemesDto());
-    console.log("editThemeService_closeWindowAndRefreshThemesList_3metka");
 }
 
 function getThemeDtoById(themeId) {
