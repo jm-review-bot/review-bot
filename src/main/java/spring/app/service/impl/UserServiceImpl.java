@@ -55,13 +55,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUserById(Long id) {
-        // удаляем StudentReviewAnswer
-        studentReviewAnswerDao.bulkDeleteByUserId(id);
-        // удаляем StudentReview
-        studentReviewDao.bulkDeleteByUserId(id);
-        // удаляем Review
-        reviewDao.bulkDeleteByUserId(id);
-        // удаляем юзера
         userDao.deleteById(id);
     }
 
