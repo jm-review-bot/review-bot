@@ -113,6 +113,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
                 .createQuery("SELECT sr FROM StudentReview sr WHERE sr.user.id = :student_id", StudentReview.class)
                 .setParameter("student_id", studentId)
                 .getResultList();
+    }
 
     // Метод возвращает последнее ревью студента по выбранной теме
     @Override

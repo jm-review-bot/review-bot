@@ -65,7 +65,7 @@ public class AdminQuestionThemeRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Question updatedQuestion = questionMapper.questionDtoToQuestionEntity(questionDto);
-        updatedQuestion.setTheme(question.getTheme());
+        updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
