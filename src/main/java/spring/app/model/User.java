@@ -1,15 +1,18 @@
 package spring.app.model;
 
+import org.springframework.security.core.userdetails.UserDetails;
 import spring.app.core.StepSelector;
 import spring.app.listener.UserListener;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @EntityListeners(UserListener.class)
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -46,6 +49,23 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER, targetEntity = Role.class)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "is_account_non_expired")
+    private boolean isAccountNonExpired;
+
+    @Column(name = "is_account_non_locked")
+    private boolean isAccountNonLocked;
+
+    @Column(name = "is_credentials_non_expired")
+    private boolean isCredentialsNonExpired;
+
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
+
+
 
     public User() {
     }
@@ -114,6 +134,11 @@ public class User {
         this.role = role;
     }
 
+    @Override
+    public Collection<Role> getAuthorities() {
+        return Arrays.asList(role);
+    }
+
     public StepSelector getChatStep() {
         return chatStep;
     }
@@ -128,6 +153,56 @@ public class User {
 
     public void setViewed(boolean viewed) {
         isViewed = viewed;
+    }
+
+    // Метод нужен для реализации UserDetails.В рамках проекта username - это VkId пользователя
+    @Override
+    public String getUsername() {
+        return vkId.toString();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
+    }
+
+    public void setAccountNonExpired(boolean accountNonExpired) {
+        isAccountNonExpired = accountNonExpired;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        isAccountNonLocked = accountNonLocked;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
+    }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+        isCredentialsNonExpired = credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     @Override
