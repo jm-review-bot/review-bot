@@ -95,7 +95,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
-      List<ReviewerDto> reviewers = entityManager.createQuery("select distinct new spring.app.dto.ReviewerDto(u.id,u.firstName,u.lastName) from FreeTheme ft join ft.examiners u where ft.id =:theme_id")
+      List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id,u.firstName,u.lastName) FROM FreeTheme ft JOIN ft.examiners u WHERE ft.id =:theme_id")
                 .setParameter("theme_id" , themeId)
                 .getResultList();
         return reviewers.size() > 0 ? reviewers : null;
@@ -103,7 +103,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
-        List<ReviewerDto> reviewers =  entityManager.createQuery("select distinct new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) from FreeTheme ft join ft.examiners u where ft.id <>:theme_id")
+        List<ReviewerDto> reviewers =  entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) FROM FreeTheme ft JOIN ft.examiners u WHERE NOT ft.id =:theme_id")
                 .setParameter("theme_id" , themeId)
                 .getResultList();
         return reviewers.size() > 0 ? reviewers : null;
@@ -117,7 +117,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     @Transactional(propagation = Propagation.MANDATORY)
     @Override
     public void deleteReviewerFromTheme(long themeId, long reviewerId) {
-        entityManager.createNativeQuery("delete from user_free_theme where free_theme_id =:theme_id and examiner_id =:reviewer_id")
+        entityManager.createNativeQuery("DELETE FROM user_free_theme WHERE free_theme_id =:theme_id AND examiner_id =:reviewer_id")
                 .setParameter("theme_id" , themeId)
                 .setParameter("reviewer_id" , reviewerId)
                 .executeUpdate();
