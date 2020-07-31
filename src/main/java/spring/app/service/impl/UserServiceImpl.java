@@ -92,6 +92,11 @@ public class UserServiceImpl implements UserService {
         return userDao.getStudentsByReviewPeriod(periodStart, periodEnd);
     }
 
+    @Override
+    public boolean isUserExaminer(Long userId) {
+        return userDao.isUserExaminer(userId);
+    }
+
     // Метод нужен для реализации UserDetailService.В рамках проекта username - это VkId пользователя
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

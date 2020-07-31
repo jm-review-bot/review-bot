@@ -2,8 +2,9 @@ package spring.app.dao.abstraction;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import spring.app.dto.ThemeDto;
+import spring.app.dto.FixedThemeDto;
 import spring.app.model.Theme;
+import spring.app.model.User;
 
 import java.util.List;
 
@@ -19,10 +20,12 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     Integer getThemeMinPositionValue();
 
-    List<ThemeDto> getAllThemesDto();
+    List<FixedThemeDto> getAllThemesDto();
 
-    ThemeDto getThemeDtoById(Long themeId);
+    FixedThemeDto getThemeDtoById(Long themeId);
 
     @Transactional(propagation = Propagation.MANDATORY)
     void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);
+
+    List<Theme> getFreeThemesByExaminerId(Long examinerId);
 }

@@ -29,4 +29,6 @@ public interface UserService extends UserDetailsService {
     List<User> getStudentsByReviewId(Long reviewId);
 
     List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    boolean isUserExaminer(Long userId);
 }
