@@ -2,8 +2,10 @@ package spring.app.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
-import spring.app.dto.ThemeDto;
+import spring.app.dto.FixedThemeDto;
+import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
+import spring.app.model.User;
 
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public List<Theme> getPassedThemesByUser(Integer vkId) {
-        return (List<Theme>) entityManager.createNativeQuery("SELECT t.* FROM theme t " +
+        return entityManager.createNativeQuery("SELECT t.* FROM theme t " +
                 "join review r on t.id = r.theme_id join student_review sr on r.id = sr.review_id join users u on sr.student_id = u.id " +
                 "where u.vk_id = :vk_id AND r.is_open = false AND sr.is_passed = true", Theme.class)
                 .setParameter("vk_id", vkId)
@@ -61,17 +63,17 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public List<ThemeDto> getAllThemesDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t ORDER BY t.position", ThemeDto.class)
+    public List<FixedThemeDto> getAllThemesDto() {
+        return entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t ORDER BY t.position", FixedThemeDto.class)
                 .getResultList();
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
-        List<ThemeDto> themeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
+    public FixedThemeDto getThemeDtoById(Long themeId) {
+        List<FixedThemeDto> fixedThemeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t WHERE t.id =:theme_id", FixedThemeDto.class)
                 .setParameter("theme_id", themeId)
                 .getResultList();
-        return themeDtoByIdList.size() > 0 ? themeDtoByIdList.get(0) : null;
+        return fixedThemeDtoByIdList.size() > 0 ? fixedThemeDtoByIdList.get(0) : null;
     }
 
     @Override
@@ -81,5 +83,12 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("position_low", positionLow)
                 .setParameter("position_high", positionHigh)
                 .executeUpdate();
+    }
+
+    @Override
+    public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
+        return entityManager.createQuery("SELECT t FROM FreeTheme t JOIN t.examiners e WHERE e.id = :examiner_id ORDER BY t.position", Theme.class)
+                .setParameter("examiner_id", examinerId)
+                .getResultList();
     }
 }

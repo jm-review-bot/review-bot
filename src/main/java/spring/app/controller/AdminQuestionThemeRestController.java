@@ -8,6 +8,7 @@ import spring.app.dto.QuestionDto;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 import spring.app.mapper.QuestionMapper;
+import spring.app.model.FixedTheme;
 import spring.app.model.Question;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.QuestionService;
@@ -41,8 +42,11 @@ public class AdminQuestionThemeRestController {
     public ResponseEntity<QuestionDto> createQuestion(@PathVariable long themeId,
                                                       @RequestBody @Valid QuestionDto questionDto) {
         Theme theme = themeService.getThemeById(themeId);
+        if (!(theme instanceof FixedTheme)) {
+            return ResponseEntity.badRequest().build();
+        }
         Question question = questionMapper.questionDtoToQuestionEntity(questionDto);
-        question.setTheme(theme);
+        question.setFixedTheme((FixedTheme) theme);
         questionService.addQuestion(question);
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }

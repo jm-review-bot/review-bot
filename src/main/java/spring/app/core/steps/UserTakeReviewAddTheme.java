@@ -34,8 +34,8 @@ public class UserTakeReviewAddTheme extends Step {
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
         List<Theme> themes = themeService.getAllThemes();
-        for (Theme position : themes) {
-            themeList.append(String.format("[%d] %s\n", position.getPosition(), position.getTitle()));
+        for (Theme theme : themes) {
+            themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());

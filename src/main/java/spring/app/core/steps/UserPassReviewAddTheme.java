@@ -41,14 +41,11 @@ public class UserPassReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder();
         themeList.append("Выберите тему, которые вы хотите сдать, в качестве ответа пришлите цифру (номер темы):\n\n");
         for (Theme theme : themeService.getAllThemes()) {
-            themeList.append("[")
-                    .append(theme.getPosition())
-                    .append("] ")
-                    .append(theme.getTitle())
-                    .append(", стоимость ")
-                    .append(theme.getReviewPoint())
-                    .append(" RP")
-                    .append("\n");
+            String themeRow = String.format(
+                    "[%d] %s, стоимость %d RP \n",
+                    theme.getPosition(), theme.getTitle(), theme.getReviewPoint()
+            );
+            themeList.append(themeRow);
         }
         storageService.updateUserStorage(context.getVkId(), USER_PASS_REVIEW_ADD_THEME, Arrays.asList(themeList.toString()));
     }
