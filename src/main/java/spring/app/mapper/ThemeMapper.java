@@ -21,4 +21,8 @@ public interface ThemeMapper {
     FreeTheme freeThemeDtoToFreeThemeEntity(FreeThemeDto freeThemeDto);
 
     FreeThemeDto freeThemeEntityToFreeThemeDto(FreeTheme freeTheme);
+
+    Theme themeDtoToThemeEntity(ThemeDto themeDto);
+
+    ThemeDto themeEntityToThemeDto(Theme theme);
 }
