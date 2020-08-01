@@ -8,9 +8,6 @@ import java.util.List;
 
 public interface StudentReviewAnswerDao extends GenericDao<Long, StudentReviewAnswer> {
 
-    @Transactional(propagation = Propagation.MANDATORY)
-    void bulkDeleteByUserId(Long id);
-
     List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId(Long studentReviewId);
 
     List<StudentReviewAnswer> getStudentReviewAnswersByQuestionId(Long questionId);

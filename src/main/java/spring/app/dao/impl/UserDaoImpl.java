@@ -26,15 +26,10 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public User getByVkId(Integer vkId) throws NoResultException {
-        try {
-            TypedQuery<User> query = entityManager.createQuery(
-                    "SELECT u FROM User u WHERE u.vkId = :id", User.class);
-            query.setParameter("id", vkId);
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            log.error("Пользователь с vkId:{} не обнаружен в базе", vkId);
-            throw e;
-        }
+        List<User> userList = entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId", User.class)
+                .setParameter("vkId", vkId)
+                .getResultList();
+        return userList.size() > 0 ? userList.get(0) : null;
     }
 
     @Override

@@ -1,6 +1,8 @@
 package spring.app.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
@@ -13,6 +15,7 @@ import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
+import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -61,13 +64,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void deleteUserById(Long id) {
-        // удаляем StudentReviewAnswer
-        studentReviewAnswerDao.bulkDeleteByUserId(id);
-        // удаляем StudentReview
-        studentReviewDao.bulkDeleteByUserId(id);
-        // удаляем Review
-        reviewDao.bulkDeleteByUserId(id);
-        // удаляем юзера
         userDao.deleteById(id);
     }
 
@@ -135,4 +131,19 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    // Метод нужен для реализации UserDetailService.В рамках проекта username - это VkId пользователя
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        if (StringParser.isNumeric(username)) {
+            User user = userDao.getByVkId(Integer.parseInt(username));
+            if (user != null) {
+                return user;
+            } else {
+                throw new UsernameNotFoundException("Пользователя нет в БД");
+            }
+        } else {
+            throw new UsernameNotFoundException("Логин не похож на VkId");
+        }
+    }
 }

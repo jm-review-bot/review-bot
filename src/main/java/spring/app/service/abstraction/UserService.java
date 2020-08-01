@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
@@ -7,7 +8,7 @@ import spring.app.model.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     void addUser(User user);
 
