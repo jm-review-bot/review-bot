@@ -3,6 +3,7 @@ package spring.app.dao.impl;
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
+import spring.app.dto.FreeThemeDto;
 import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
@@ -52,28 +53,42 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     public Integer getThemeMaxPositionValue() {
         List<Integer> maxPosition = entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
                 .getResultList();
-        return maxPosition.size() > 0 ? maxPosition.get(0) : 0;
+        return maxPosition.contains(null) ? 0 : maxPosition.get(0);
     }
 
     @Override
     public Integer getThemeMinPositionValue() {
-        List<Integer> maxPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
+        List<Integer> minPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
                 .getResultList();
-        return maxPosition.size() > 0 ? maxPosition.get(0) : 0;
+        return minPosition.contains(null) ? 0 : minPosition.get(0);
     }
 
     @Override
-    public List<FixedThemeDto> getAllThemesDto() {
+    public List<FixedThemeDto> getAllFixedThemesDto() {
         return entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t ORDER BY t.position", FixedThemeDto.class)
                 .getResultList();
     }
 
     @Override
-    public FixedThemeDto getThemeDtoById(Long themeId) {
+    public List<FreeThemeDto> getAllFreeThemesDto() {
+        return entityManager.createQuery("SELECT new spring.app.dto.FreeThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FreeTheme t ORDER BY t.position", FreeThemeDto.class)
+                .getResultList();
+    }
+
+    @Override
+    public FixedThemeDto getFixedThemeDtoById(Long themeId) {
         List<FixedThemeDto> fixedThemeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t WHERE t.id =:theme_id", FixedThemeDto.class)
                 .setParameter("theme_id", themeId)
                 .getResultList();
         return fixedThemeDtoByIdList.size() > 0 ? fixedThemeDtoByIdList.get(0) : null;
+    }
+
+    @Override
+    public FreeThemeDto getFreeThemeDtoById(Long themeId) {
+        List<FreeThemeDto> freeThemeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FreeThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FreeTheme t WHERE t.id =:theme_id", FreeThemeDto.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
+        return freeThemeDtoByIdList.size() > 0 ? freeThemeDtoByIdList.get(0) : null;
     }
 
     @Override

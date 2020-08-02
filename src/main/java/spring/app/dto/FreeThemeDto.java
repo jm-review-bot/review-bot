@@ -20,4 +20,12 @@ public class FreeThemeDto extends ThemeDto {
         super(id, title, criticalWeight, position, reviewPoint);
         this.type = "free";
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }

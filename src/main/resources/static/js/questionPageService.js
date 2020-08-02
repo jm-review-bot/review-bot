@@ -1,8 +1,3 @@
-$(document).on('click', '.theme-expand', function () {
-    let themeId = this.dataset.id
-    buildListQuestionsByThemeId(themeId)
-})
-
 function getListQuestionsDtoByThemeId(themeId) {
     let listQuestionsDto
     $.ajax({

@@ -1,5 +1,7 @@
 package spring.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 
@@ -7,6 +9,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = FixedThemeDto.class, name = "fixed"),
+        @JsonSubTypes.Type(value = FreeThemeDto.class, name = "free")
+})
 public abstract class ThemeDto {
 
     @Null(groups = CreateGroup.class)
@@ -22,6 +29,8 @@ public abstract class ThemeDto {
     private Integer position;
 
     private Integer reviewPoint;
+
+    private String type;
 
     public ThemeDto() {
     }
@@ -76,5 +85,13 @@ public abstract class ThemeDto {
 
     public void setReviewPoint(Integer reviewPoint) {
         this.reviewPoint = reviewPoint;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

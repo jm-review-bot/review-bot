@@ -5,12 +5,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
+import spring.app.dto.FreeThemeDto;
+import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
-import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ThemeServiceImpl implements ThemeService {
@@ -25,6 +29,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Transactional
     @Override
     public void addTheme(Theme theme) {
+        theme.setPosition(themeDao.getThemeMaxPositionValue() + 1);
         themeDao.save(theme);
     }
 
@@ -88,13 +93,28 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<FixedThemeDto> getAllThemesDto() {
-        return themeDao.getAllThemesDto();
+    public List<ThemeDto> getAllThemesDto() {
+        List<FixedThemeDto> allFixedThemesDto = themeDao.getAllFixedThemesDto();
+        List<FreeThemeDto> allFreeThemesDto = themeDao.getAllFreeThemesDto();
+        // Формируется список всех тем в порядке возрастания позиции темы
+        List<ThemeDto> allThemesDto = new ArrayList<>();
+        allThemesDto.addAll(allFixedThemesDto);
+        allThemesDto.addAll(allFreeThemesDto);
+        List<ThemeDto> sortedAllThemesDto = allThemesDto.stream().sorted(Comparator.comparingInt(ThemeDto::getPosition)).collect(Collectors.toList());
+        return sortedAllThemesDto;
     }
 
     @Override
-    public FixedThemeDto getThemeDtoById(Long themeId) {
-        return themeDao.getThemeDtoById(themeId);
+    public ThemeDto getThemeDtoById(Long themeId) {
+        FixedThemeDto fixedThemeDto = themeDao.getFixedThemeDtoById(themeId);
+        if (fixedThemeDto != null) {
+            return fixedThemeDto;
+        }
+        FreeThemeDto freeThemeDto = themeDao.getFreeThemeDtoById(themeId);
+        if (freeThemeDto != null) {
+            return freeThemeDto;
+        }
+        return null;
     }
 
     @Transactional

@@ -2,10 +2,11 @@ package spring.app.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.FixedThemeDto;
+import spring.app.dto.FreeThemeDto;
+import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
@@ -31,26 +32,31 @@ public class AdminThemeRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FixedThemeDto>> getAllThemes() {
+    public ResponseEntity<List<ThemeDto>> getAllThemes() {
         return ResponseEntity.ok(themeService.getAllThemesDto());
     }
 
     @GetMapping("/{themeId}")
-    public ResponseEntity<FixedThemeDto> getThemeById(@PathVariable Long themeId) {
-        FixedThemeDto fixedThemeDtoById = themeService.getThemeDtoById(themeId);
-        if (fixedThemeDtoById == null) {
+    public ResponseEntity<ThemeDto> getThemeById(@PathVariable Long themeId) {
+        ThemeDto themeDto = themeService.getThemeDtoById(themeId);
+        if (themeDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(fixedThemeDtoById);
+        return ResponseEntity.ok(themeDto);
     }
 
     @Validated(CreateGroup.class)
     @PostMapping
-    public ResponseEntity<FixedThemeDto> createTheme(@RequestBody @Valid FixedThemeDto fixedThemeDto) {
-        FixedTheme fixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
-        fixedTheme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
-        themeService.addTheme(fixedTheme);
-        return ResponseEntity.status(HttpStatus.CREATED).body(themeMapper.fixedThemeEntityToFixedThemeDto(fixedTheme));
+    public ResponseEntity<FixedThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
+        String themeType = themeDto.getType();
+        Theme theme = null;
+        if (themeType.equalsIgnoreCase("fixed")) {
+            theme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
+        } else if (themeType.equalsIgnoreCase("free")) {
+            theme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
+        }
+        themeService.addTheme(theme);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{themeId}")
@@ -61,14 +67,20 @@ public class AdminThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
-    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid FixedThemeDto fixedThemeDto) {
+    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid ThemeDto themeDto) {
         Theme themeById = themeService.getThemeById(themeId);
         if (themeById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        FixedTheme updatedFixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
-        updatedFixedTheme.setPosition(themeById.getPosition());
-        themeService.updateTheme(updatedFixedTheme);
+        String themeType = themeDto.getType();
+        Theme updatedTheme = null;
+        if (themeType.equalsIgnoreCase("fixed")) {
+            updatedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
+        } else if (themeType.equalsIgnoreCase("free")) {
+            updatedTheme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
+        }
+        updatedTheme.setPosition(themeById.getPosition());
+        themeService.updateTheme(updatedTheme);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

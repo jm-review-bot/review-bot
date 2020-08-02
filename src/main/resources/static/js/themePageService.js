@@ -29,12 +29,22 @@ function buildThemesAccordion(allThemesDto) {
         let theme = $(allThemesDto).filter(index => {
             return allThemesDto[index].position == i
         })[0]
+
+        // Кнопка для добавления вопроса в тему или проверяющего зависит от типа темы
+        let buttonAddNew = ""
+        if (theme.type == "fixed") {
+            buttonAddNew = "Добавить вопрос"
+        } else if (theme.type == "free") {
+            buttonAddNew = "Добавить проверяющего"
+        }
+
+        // Формируется список тем
         let themeHtmlAccordion = `
             <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="mb-0">
                         <div class="row">
-                            <div class="col-10 theme-expand" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}" data-id="${theme.id}">
+                            <div class="col-10 theme-expand" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}" data-id="${theme.id}" data-type="${theme.type}">
                                 ${theme.title}
                             </div>
                             <div class="col-2 text-right">
@@ -59,7 +69,7 @@ function buildThemesAccordion(allThemesDto) {
                     </div>
                     <div>
                         <button type="button" class="add-question-to-theme btn btn-lg btn-block" data-id="${theme.id}">
-                            Добавить вопрос
+                            ${buttonAddNew}
                         </button>
                     </div>
                 </div>
@@ -68,36 +78,14 @@ function buildThemesAccordion(allThemesDto) {
         htmlContent += themeHtmlAccordion;
     }
     $('#theme-accordion').html(htmlContent)
-    $('.move-down-theme').click(function () {
-            let themeId = this.dataset.id;
-            let url = "/api/admin/theme/"+themeId+"/position/down";
-            $.ajax({
-                type : 'PATCH',
-                url: url,
-                success: function() {
-                    console.log("move-down-theme.click--WIN!");
-                    buildThemesAccordion(getAllThemesDto());//location.reload();
-                },
-                error: function () {
-                    console.log("move-down-theme.click--ERROR!");
-                }
-            });
-        }
-    );
-    $('.move-up-theme').click(function () {
-            let themeId = this.dataset.id;
-            let url = "/api/admin/theme/"+themeId+"/position/up";
-            $.ajax({
-                type : 'PATCH',
-                url: url,
-                success: function() {
-                    console.log("move-up-theme.click--WIN!");
-                    buildThemesAccordion(getAllThemesDto());//location.reload();
-                },
-                error: function () {
-                    console.log("move-up-theme.click--ERROR!");
-                }
-            });
-        }
-    );
 }
+
+$(document).on('click', '.theme-expand', function () {
+    let themeId = this.dataset.id
+    let themeType = this.dataset.type
+    if (themeType == "fixed") {
+        buildListQuestionsByThemeId(themeId)
+    } else if (themeType == "free") {
+        buildListReviewersByThemeId(themeId)
+    }
+})

@@ -17,4 +17,12 @@ public class FixedTheme extends Theme {
         super();
         this.type = "fixed";
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
