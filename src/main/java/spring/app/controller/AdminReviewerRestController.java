@@ -17,14 +17,10 @@ import java.util.List;
 @RequestMapping("/api/admin/theme")
 public class AdminReviewerRestController {
 
-    private ReviewerMapper reviewerMapper;
     private UserService userService;
-    private ReviewService reviewService;
 
-    public AdminReviewerRestController (ReviewerMapper reviewerMapper , UserService userService , ReviewService reviewService) {
-        this.reviewerMapper = reviewerMapper;
+    public AdminReviewerRestController (UserService userService) {
         this.userService = userService;
-        this.reviewService = reviewService;
     }
 
     @GetMapping("/{themeId}/reviewer")
