@@ -6,9 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.ReviewerDto;
 import spring.app.groups.UpdateGroup;
-import spring.app.mapper.ReviewerMapper;
-import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.UserService;
+
 import javax.validation.Valid;
 import java.util.List;
 
