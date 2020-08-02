@@ -23,13 +23,17 @@ public abstract class ThemeDto {
     @NotBlank
     private String title;
 
+    @NotNull
     private Integer criticalWeight;
 
-    @Null(groups = {CreateGroup.class, UpdateGroup.class})
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = UpdateGroup.class)
     private Integer position;
 
+    @NotNull
     private Integer reviewPoint;
 
+    @NotBlank
     private String type;
 
     public ThemeDto() {

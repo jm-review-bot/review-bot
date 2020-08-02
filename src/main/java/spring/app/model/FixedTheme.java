@@ -21,8 +21,4 @@ public class FixedTheme extends Theme {
     public String getType() {
         return type;
     }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

@@ -31,10 +31,6 @@ public class FreeTheme extends Theme {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public List<User> getExaminers() {
         return examiners;
     }

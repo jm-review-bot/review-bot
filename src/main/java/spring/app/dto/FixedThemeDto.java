@@ -24,8 +24,4 @@ public class FixedThemeDto  extends ThemeDto {
     public String getType() {
         return type;
     }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 }

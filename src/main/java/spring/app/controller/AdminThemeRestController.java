@@ -11,7 +11,6 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 import spring.app.mapper.ThemeMapper;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
@@ -48,11 +47,10 @@ public class AdminThemeRestController {
     @Validated(CreateGroup.class)
     @PostMapping
     public ResponseEntity<FixedThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
-        String themeType = themeDto.getType();
         Theme theme = null;
-        if (themeType.equalsIgnoreCase("fixed")) {
+        if (themeDto instanceof FixedThemeDto) {
             theme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
-        } else if (themeType.equalsIgnoreCase("free")) {
+        } else if (themeDto instanceof FreeThemeDto) {
             theme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
         }
         themeService.addTheme(theme);
@@ -68,18 +66,15 @@ public class AdminThemeRestController {
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
     public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid ThemeDto themeDto) {
-        Theme themeById = themeService.getThemeById(themeId);
-        if (themeById == null) {
+        if (themeService.getThemeById(themeId) == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        String themeType = themeDto.getType();
         Theme updatedTheme = null;
-        if (themeType.equalsIgnoreCase("fixed")) {
+        if (themeDto instanceof FixedThemeDto) {
             updatedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
-        } else if (themeType.equalsIgnoreCase("free")) {
+        } else if (themeDto instanceof FreeThemeDto) {
             updatedTheme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
         }
-        updatedTheme.setPosition(themeById.getPosition());
         themeService.updateTheme(updatedTheme);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
