@@ -7,12 +7,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
-import spring.app.model.FreeTheme;
-import spring.app.model.Review;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 

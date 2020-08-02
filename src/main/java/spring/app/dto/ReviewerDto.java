@@ -2,7 +2,6 @@ package spring.app.dto;
 
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
@@ -12,10 +11,13 @@ public class ReviewerDto {
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
     private long id;
+
     @NotBlank(groups = CreateGroup.class)
     private String firstName;
+
     @NotBlank(groups = CreateGroup.class)
     private String lastName;
+
     private Integer vkId;
     private boolean isViewed;
     private Integer reviewPoint;
@@ -31,18 +33,23 @@ public class ReviewerDto {
     public void setId (long id) {
         this.id = id;
     }
+
     public void setFirstName (String firstName) {
         this.firstName = firstName;
     }
+
     public void setLastName (String lastName) {
         this.lastName = lastName;
     }
+
     public void setVkId (Integer vkId) {
         this.vkId = vkId;
     }
+
     public void setViewed(boolean viewed) {
         isViewed = viewed;
     }
+
     public void setReviewPoint(Integer reviewPoint) {
         this.reviewPoint = reviewPoint;
     }

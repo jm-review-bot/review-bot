@@ -11,7 +11,6 @@ import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
 import spring.app.model.FreeTheme;
-import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
