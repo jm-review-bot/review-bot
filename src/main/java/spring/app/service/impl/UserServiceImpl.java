@@ -23,18 +23,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    private final StudentReviewAnswerDao studentReviewAnswerDao;
-    private final StudentReviewDao studentReviewDao;
-    private final ReviewDao reviewDao;
     private final ThemeService themeService;
 
-
     @Autowired
-    public UserServiceImpl(UserDao userDao, StudentReviewAnswerDao studentReviewAnswerDao, StudentReviewDao studentReviewDao, ReviewDao reviewDao , ThemeService themeService) {
+    public UserServiceImpl(UserDao userDao, ThemeService themeService) {
         this.userDao = userDao;
-        this.studentReviewAnswerDao = studentReviewAnswerDao;
-        this.studentReviewDao = studentReviewDao;
-        this.reviewDao = reviewDao;
         this.themeService = themeService;
     }
 
