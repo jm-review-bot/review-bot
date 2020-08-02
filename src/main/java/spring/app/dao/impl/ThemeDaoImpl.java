@@ -4,9 +4,7 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.dto.FreeThemeDto;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
-import spring.app.model.User;
 
 import java.util.List;
 

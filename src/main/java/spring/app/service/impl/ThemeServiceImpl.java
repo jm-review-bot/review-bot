@@ -46,8 +46,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Transactional
     @Override
     public void updateTheme(Theme theme) {
-        Theme themeById = themeDao.getById(theme.getId());
-        theme.setPosition(themeById.getPosition());
+        theme.setPosition(themeDao.getById(theme.getId()).getPosition());
         themeDao.update(theme);
     }
 
