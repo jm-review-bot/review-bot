@@ -16,6 +16,19 @@ function getListQuestionsDtoByThemeId(themeId) {
     return listQuestionsDto
 }
 
+function getThemeDtoById (themeId) {
+    let themeDto;
+    $.ajax({
+        url:`/api/admin/theme/${themeId}` ,
+        type: 'get' ,
+        async: false ,
+        success: (data) => {
+            themeDto = data;
+        }
+    });
+    return themeDto;
+}
+
 function buildListQuestionsByThemeId(themeId) {
     let listQuestions = getListQuestionsDtoByThemeId(themeId)
     let htmlContent = ''
@@ -32,7 +45,7 @@ function buildListQuestionsByThemeId(themeId) {
             <div class="card">
                 <div class="row">
                     <div class="col-10">
-                       ${themeId}. ${question.position}. <h5>${question.question}</h5><br/>
+                        <h5>${getThemeDtoById(themeId).position}.${question.position}. ${question.question}</h5><br/>
                     </div>
                     <div class="col-2 text-right">
                         <button class="move-down-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
@@ -55,3 +68,5 @@ function buildListQuestionsByThemeId(themeId) {
     }
     $(document).find(`#card-theme-${themeId}`).html(htmlContent).css('background-color' , '#3366CC').css('padding' , '10px');
 }
+
+
