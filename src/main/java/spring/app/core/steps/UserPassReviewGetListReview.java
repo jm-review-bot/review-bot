@@ -184,6 +184,7 @@ public class UserPassReviewGetListReview extends Step {
                 }
             }
             if (!isPassedPreviousThemes) {
+                infoMessage.append("Введете подходящий номер темы или вернитесь в главное меню, нажав \"Назад\"");
                 sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
                 return infoMessage.toString();
             }
