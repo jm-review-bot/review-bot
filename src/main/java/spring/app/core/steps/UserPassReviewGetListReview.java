@@ -184,6 +184,7 @@ public class UserPassReviewGetListReview extends Step {
                 }
             }
             if (!isPassedPreviousThemes) {
+                sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
                 return infoMessage.toString();
             }
         }
