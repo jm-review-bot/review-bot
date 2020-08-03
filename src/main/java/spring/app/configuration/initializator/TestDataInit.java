@@ -1,6 +1,7 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.Step;
@@ -12,6 +13,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 public class TestDataInit {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -166,6 +170,9 @@ public class TestDataInit {
     @Autowired
     private Step selectingReviewToDelete;
 
+    @Autowired
+    private FeedbackService feedbackService;
+
     public TestDataInit() {
     }
 
@@ -232,6 +239,11 @@ public class TestDataInit {
         nikolay.setVkId(97957185);
         nikolay.setRole(roleAdmin);
         nikolay.setChatStep(StepSelector.START);
+        nikolay.setAccountNonExpired(true);
+        nikolay.setAccountNonLocked(true);
+        nikolay.setCredentialsNonExpired(true);
+        nikolay.setEnabled(true);
+        nikolay.setPassword(passwordEncoder.encode("97957185"));
         userService.addUser(nikolay);
 
         User kirill = new User();
@@ -277,6 +289,11 @@ public class TestDataInit {
         mikhail.setVkId(27939840);
         mikhail.setRole(roleAdmin);
         mikhail.setChatStep(StepSelector.START);
+        mikhail.setAccountNonExpired(true);
+        mikhail.setAccountNonLocked(true);
+        mikhail.setCredentialsNonExpired(true);
+        mikhail.setEnabled(true);
+        mikhail.setPassword(passwordEncoder.encode("27939840"));
         userService.addUser(mikhail);
 
         // add steps
@@ -530,6 +547,23 @@ public class TestDataInit {
         studentReview5.setPassed(false);
         studentReview5.setReview(springReviewPassed5);
         studentReviewService.addStudentReview(studentReview5);
+
+        // add Feedbacks
+        Feedback feedback1 = new Feedback();
+        feedback1.setStudentReview(studentReview4);
+        feedback1.setComment("comment_(feedback1)");
+        feedback1.setRatingReview(1);
+        feedback1.setRatingReviewer(1);
+        feedback1.setUser(roman);
+        feedbackService.addFeedback(feedback1);
+
+        Feedback feedback2 = new Feedback();
+        feedback2.setStudentReview(studentReview5);
+        feedback2.setComment("comment_(feedback2)");
+        feedback2.setRatingReview(2);
+        feedback2.setRatingReviewer(2);
+        feedback2.setUser(anton);
+        feedbackService.addFeedback(feedback2);
 
         // add Questions
         Question question1 = new Question();

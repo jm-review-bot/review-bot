@@ -1,9 +1,10 @@
 $(function () {
-    let allThemesDto = getAllThemesDto()
-    buildThemesAccordion(allThemesDto)
+    let allThemesDto = getAllThemesDto();
+    buildThemesAccordion(allThemesDto);
 })
 
 function getAllThemesDto() {
+    console.log("themePageService_getAllThemesDto");
     let allThemesDto;
     $.ajax({
         url: '/api/admin/theme',
@@ -17,6 +18,7 @@ function getAllThemesDto() {
 }
 
 function buildThemesAccordion(allThemesDto) {
+    console.log("themePageService_buildThemesAccordion");
     let htmlContent = ''
     /*
     * Для того, чтобы темы отображались в порядке возрастания номера позиции,
@@ -28,7 +30,7 @@ function buildThemesAccordion(allThemesDto) {
             return allThemesDto[index].position == i
         })[0]
         let themeHtmlAccordion = `
-            <div class="card">
+            <div class="card mb-4">
                 <div class="card-header">
                     <h4 class="mb-0">
                         <div class="row">
@@ -56,7 +58,7 @@ function buildThemesAccordion(allThemesDto) {
                         </div>
                     </div>
                     <div>
-                        <button type="button" class="add-question-to-theme btn btn-outline-primary btn-lg btn-block" data-id="${theme.id}">
+                        <button type="button" class="add-question-to-theme btn btn-lg btn-block" data-id="${theme.id}">
                             Добавить вопрос
                         </button>
                     </div>
@@ -66,4 +68,36 @@ function buildThemesAccordion(allThemesDto) {
         htmlContent += themeHtmlAccordion;
     }
     $('#theme-accordion').html(htmlContent)
+    $('.move-down-theme').click(function () {
+            let themeId = this.dataset.id;
+            let url = "/api/admin/theme/"+themeId+"/position/down";
+            $.ajax({
+                type : 'PATCH',
+                url: url,
+                success: function() {
+                    console.log("move-down-theme.click--WIN!");
+                    buildThemesAccordion(getAllThemesDto());//location.reload();
+                },
+                error: function () {
+                    console.log("move-down-theme.click--ERROR!");
+                }
+            });
+        }
+    );
+    $('.move-up-theme').click(function () {
+            let themeId = this.dataset.id;
+            let url = "/api/admin/theme/"+themeId+"/position/up";
+            $.ajax({
+                type : 'PATCH',
+                url: url,
+                success: function() {
+                    console.log("move-up-theme.click--WIN!");
+                    buildThemesAccordion(getAllThemesDto());//location.reload();
+                },
+                error: function () {
+                    console.log("move-up-theme.click--ERROR!");
+                }
+            });
+        }
+    );
 }

@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.FeedbackDao;
 import spring.app.dao.abstraction.ReviewDao;
+import spring.app.dto.FeedbackDto;
 import spring.app.model.Feedback;
 import spring.app.model.Review;
 import spring.app.service.abstraction.FeedbackService;
@@ -29,6 +30,21 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
+    public String getStudentCommentByFeedbackId(Long id) {
+        return feedbackDao.getStudentCommentByFeedbackId(id);
+    }
+
+    @Override
+    public FeedbackDto getFeedbackDtoById(Long id) {
+        return feedbackDao.getFeedbackDtoById(id);
+    }
+
+    @Override
+    public List<FeedbackDto> getAllFeedbacksDto() {
+        return feedbackDao.getAllFeedbacksDto();
+    }
+
+    @Override
     public List<Feedback> getFeedbackByStudentReviewId(Long studentReviewId) {
         return feedbackDao.getFeedbackByStudentReviewId(studentReviewId);
     }
@@ -37,5 +53,10 @@ public class FeedbackServiceImpl implements FeedbackService {
     @Override
     public void removeAll(List<Feedback> feedbacks) {
         feedbackDao.removeAll(feedbacks);
+    }
+
+    @Override
+    public List<Feedback> getFeedbacksByStudentId(Long studentId) {
+        return feedbackDao.getFeedbackByStudentReviewId(studentId);
     }
 }

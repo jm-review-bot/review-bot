@@ -2,6 +2,7 @@ package spring.app.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.QuestionDto;
@@ -65,7 +66,7 @@ public class AdminQuestionThemeRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Question updatedQuestion = questionMapper.questionDtoToQuestionEntity(questionDto);
-        updatedQuestion.setTheme(question.getTheme());
+        updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
