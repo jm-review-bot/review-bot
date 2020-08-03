@@ -16,19 +16,6 @@ function getListQuestionsDtoByThemeId(themeId) {
     return listQuestionsDto
 }
 
-function getThemeDtoById (themeId) {
-    let themeDto;
-    $.ajax({
-        url:`/api/admin/theme/${themeId}` ,
-        type: 'get' ,
-        async: false ,
-        success: (data) => {
-            themeDto = data;
-        }
-    });
-    return themeDto;
-}
-
 function buildListQuestionsByThemeId(themeId) {
     let listQuestions = getListQuestionsDtoByThemeId(themeId)
     let htmlContent = ''
