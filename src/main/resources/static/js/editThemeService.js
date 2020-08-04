@@ -2,9 +2,15 @@ $(document).on('click' , '.edit-theme' , function () {
     let themeId = this.dataset.id;
     let themeDto = getThemeDtoById(themeId);
     $('.edit-theme-title').html(themeDto.title);
-    $('#changeThemeModal').modal();
-    $('.delete-theme-button').attr({'data-id' : themeId});
 
+    // Форма наполняется текущими данными темы
+    $('#edit-theme-form :input[name~="title"]').val(themeDto.title)
+    $('#edit-theme-form :input[name~="criticalWeight"]').val(themeDto.criticalWeight)
+    $('#edit-theme-form :input[name~="reviewPoint"]').val(themeDto.reviewPoint)
+    $('#edit-theme-form').attr({'data-id' : themeId})
+
+    $('#changeThemeModal').modal('show');
+    $('.delete-theme-button').attr({'data-id' : themeId});
 });
 
 $('.delete-theme-button').on('click' , function () {
@@ -51,3 +57,30 @@ function deleteTheme(themeId) {
         success : closeWindowAndRefreshThemesList()
     });
 }
+
+$('#edit-theme-form').on('submit', function (event) {
+    event.preventDefault()
+
+    let themeId = this.dataset.id
+    let themeDto = {
+        id : themeId,
+        title : this.title.value,
+        criticalWeight : this.criticalWeight.value,
+        reviewPoint : this.reviewPoint.value
+    }
+
+    $.ajax({
+        url: `/api/admin/theme/${themeId}`,
+        type: 'put',
+        contentType: "application/json",
+        data: JSON.stringify(themeDto),
+        success: function() {
+            $('#changeThemeModal').modal('hide')
+            buildThemesAccordion(getAllThemesDto())
+            $('#edit-theme-form')[0].reset()
+        },
+        error: function () {
+            alert('При редактировании темы возникла непредвиденная ошибка')
+        }
+    })
+})

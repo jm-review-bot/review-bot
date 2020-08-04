@@ -99,19 +99,34 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <!-- выпадающие элементы -->
-                        <div class="dropdown">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Дополнительно
-                            </button>
-                            <div class="dropdown-menu">
-                                <button class="dropdown-item delete-theme-button" type="button">Удалить</button>
+                        <!-- Форма для редактирования темы -->
+                        <form id="edit-theme-form">
+                            <div class="form-group">
+                                Название темы:
+                                <input class="col" type="text" name="title" placeholder="Введите название темы" required autocomplete="off">
                             </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" id="saveThemeChanging">Сохранить</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                            <div class="form-group">
+                                Критический вес:
+                                <input class="col" type="number" min="0" name="criticalWeight" placeholder="Введите критический вес темы" required autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                Ревью поинты:
+                                <input class="col" type="number" min="0" name="reviewPoint" placeholder="Введите вес вопроса" required autocomplete="off">
+                            </div>
+                            <div class="modal-footer">
+                                <div class="dropdown">
+                                    <!-- выпадающие элементы -->
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Дополнительно
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item delete-theme-button" type="button">Удалить</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
