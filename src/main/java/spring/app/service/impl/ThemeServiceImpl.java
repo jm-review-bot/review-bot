@@ -106,16 +106,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
-        FixedThemeDto fixedThemeDto = themeDao.getFixedThemeDtoById(themeId);
-        if (fixedThemeDto != null) {
-            return fixedThemeDto;
-        }
-        FreeThemeDto freeThemeDto = themeDao.getFreeThemeDtoById(themeId);
-        if (freeThemeDto != null) {
-            return freeThemeDto;
-        }
-        return null;
+    public FixedThemeDto getThemeDtoById(Long themeId) {
+        return themeDao.getThemeDtoById(themeId);
     }
 
     @Transactional
