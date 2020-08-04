@@ -29,16 +29,6 @@ function buildThemesAccordion(allThemesDto) {
         let theme = $(allThemesDto).filter(index => {
             return allThemesDto[index].position == i
         })[0]
-
-        // Кнопка для добавления вопроса в тему или проверяющего зависит от типа темы
-        let buttonAddNew = ""
-        if (theme.type == "fixed") {
-            buttonAddNew = "Добавить вопрос"
-        } else if (theme.type == "free") {
-            buttonAddNew = "Добавить проверяющего"
-        }
-
-        // Формируется список тем
         let themeHtmlAccordion = `
             <div class="card mb-4">
                 <div class="card-header">
@@ -63,14 +53,9 @@ function buildThemesAccordion(allThemesDto) {
                 </div>
                 <div id="theme-${theme.id}" class="collapse" aria-labelledby="card-header-theme-${theme.id}">
                     <div class="card-body">
-                        <div id="card-theme-${theme.id}" class="card">
-                        <!--Здесь располагаются вопросы темы-->
+                        <div id="card-theme-${theme.id}" class="card border-white">
+                        <!--Здесь располагаются вопросы темы или список проверяющих-->
                         </div>
-                    </div>
-                    <div>
-                        <button type="button" class="add-question-to-theme btn btn-lg btn-block" data-id="${theme.id}">
-                            ${buttonAddNew}
-                        </button>
                     </div>
                 </div>
             </div>

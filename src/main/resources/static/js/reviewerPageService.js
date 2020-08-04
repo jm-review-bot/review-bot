@@ -13,14 +13,14 @@ function getListReviewersDtoByThemeId(themeId) {
 
 function buildListReviewersByThemeId(themeId) {
     let listReviewers = getListReviewersDtoByThemeId(themeId)
-    let htmlContent = ''
+    let htmlContent = '<h5 align="center">Список всех проверяющих:</h5></br>'
     for (let i = 0; i < listReviewers.length; i++) {
         let reviewer = $(listReviewers)[i]
         let htmlQuestion = `
-            <div class="card">
+            <div class="card bg-light">
                 <div class="row">
                     <div class="col-10">
-                        ${reviewer.firstName}. ${reviewer.secondName}<br/>
+                        <h5>${reviewer.firstName} ${reviewer.lastName}</h5>
                     </div>
                     <div class="col-2 text-right">
                         <button class="delete-reviewer-from-theme btn btn-link" type="button" data-idreviewer="${reviewer.id}" data-idtheme="${themeId}">
@@ -28,9 +28,16 @@ function buildListReviewersByThemeId(themeId) {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div></br>
         `
         htmlContent += htmlQuestion
     }
+    htmlContent += `
+        <div>
+            <button type="button" class="add-reviewer-to-theme btn btn-lg btn-block" data-id="${themeId}">
+                Добавить проверяющего
+            </button>
+        </div>
+    `
     $(document).find(`#card-theme-${themeId}`).html(htmlContent)
 }
