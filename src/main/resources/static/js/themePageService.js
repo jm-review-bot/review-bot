@@ -63,6 +63,38 @@ function buildThemesAccordion(allThemesDto) {
         htmlContent += themeHtmlAccordion;
     }
     $('#theme-accordion').html(htmlContent)
+    $('.move-down-theme').click(function () {
+            let themeId = this.dataset.id;
+            let url = "/api/admin/theme/"+themeId+"/position/down";
+            $.ajax({
+                type : 'PATCH',
+                url: url,
+                success: function() {
+                    console.log("move-down-theme.click--WIN!");
+                    buildThemesAccordion(getAllThemesDto());//location.reload();
+                },
+                error: function () {
+                    console.log("move-down-theme.click--ERROR!");
+                }
+            });
+        }
+    );
+    $('.move-up-theme').click(function () {
+            let themeId = this.dataset.id;
+            let url = "/api/admin/theme/"+themeId+"/position/up";
+            $.ajax({
+                type : 'PATCH',
+                url: url,
+                success: function() {
+                    console.log("move-up-theme.click--WIN!");
+                    buildThemesAccordion(getAllThemesDto());//location.reload();
+                },
+                error: function () {
+                    console.log("move-up-theme.click--ERROR!");
+                }
+            });
+        }
+    );
 }
 
 $(document).on('click', '.theme-expand', function () {
