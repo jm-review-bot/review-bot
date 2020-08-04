@@ -1,24 +1,14 @@
 package spring.app.model;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.Table;
 
-@DiscriminatorValue(value = "fixed")
+@DiscriminatorValue(value = "1")
 @Entity
 @Table(name = "fixed_theme")
 @PrimaryKeyJoinColumn(name = "theme_id")
 public class FixedTheme extends Theme {
 
-    @NotBlank
-    @Transient
-    private String type;
-
-    public FixedTheme() {
-        super();
-        this.type = "fixed";
-    }
-
-    public String getType() {
-        return type;
-    }
 }

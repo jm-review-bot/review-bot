@@ -1,18 +1,13 @@
 package spring.app.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-@DiscriminatorValue(value = "free")
+@DiscriminatorValue(value = "2")
 @Entity
 @Table(name = "free_theme")
 @PrimaryKeyJoinColumn(name = "theme_id")
 public class FreeTheme extends Theme {
-
-    @NotBlank
-    @Transient
-    private String type;
 
     @ManyToMany
     @JoinTable(
@@ -21,15 +16,6 @@ public class FreeTheme extends Theme {
             inverseJoinColumns = {@JoinColumn(name = "examiner_id")}
     )
     List<User> examiners;
-
-    public FreeTheme() {
-        super();
-        this.type = "free";
-    }
-
-    public String getType() {
-        return type;
-    }
 
     public List<User> getExaminers() {
         return examiners;

@@ -33,9 +33,6 @@ public abstract class ThemeDto {
     @NotNull
     private Integer reviewPoint;
 
-    @NotBlank
-    private String type;
-
     public ThemeDto() {
     }
 
@@ -89,13 +86,5 @@ public abstract class ThemeDto {
 
     public void setReviewPoint(Integer reviewPoint) {
         this.reviewPoint = reviewPoint;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

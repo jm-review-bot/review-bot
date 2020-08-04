@@ -2,7 +2,6 @@ package spring.app.service.abstraction;
 
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.FixedTheme;
 import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 
