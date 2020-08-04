@@ -1,6 +1,7 @@
 package spring.app.configuration.initializator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import spring.app.core.StepHolder;
 import spring.app.core.StepSelector;
 import spring.app.core.steps.Step;
@@ -11,6 +12,9 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 public class TestDataInit {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -216,6 +220,11 @@ public class TestDataInit {
         nikolay.setVkId(97957185);
         nikolay.setRole(roleAdmin);
         nikolay.setChatStep(StepSelector.START);
+        nikolay.setAccountNonExpired(true);
+        nikolay.setAccountNonLocked(true);
+        nikolay.setCredentialsNonExpired(true);
+        nikolay.setEnabled(true);
+        nikolay.setPassword(passwordEncoder.encode("97957185"));
         userService.addUser(nikolay);
 
         User kirill = new User();
@@ -261,6 +270,11 @@ public class TestDataInit {
         mikhail.setVkId(27939840);
         mikhail.setRole(roleAdmin);
         mikhail.setChatStep(StepSelector.START);
+        mikhail.setAccountNonExpired(true);
+        mikhail.setAccountNonLocked(true);
+        mikhail.setCredentialsNonExpired(true);
+        mikhail.setEnabled(true);
+        mikhail.setPassword(passwordEncoder.encode("27939840"));
         userService.addUser(mikhail);
 
         // add steps

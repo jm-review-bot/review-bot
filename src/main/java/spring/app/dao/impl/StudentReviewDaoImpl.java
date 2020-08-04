@@ -69,18 +69,6 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
 
     @Override
     @Transactional(propagation = Propagation.MANDATORY)
-    public void bulkDeleteByUserId(Long id) {
-        // Write all pending changes to the DB
-        entityManager.flush();
-        // Remove all entities from the persistence context
-        entityManager.clear();
-        entityManager.createQuery("DELETE FROM StudentReview WHERE user.id = :id")
-                .setParameter("id", id)
-                .executeUpdate();
-    }
-
-    @Override
-    @Transactional(propagation = Propagation.MANDATORY)
     public void deleteStudentReviewByVkId(Integer vkId) {
         entityManager.flush();
         entityManager.clear();
@@ -115,6 +103,14 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     public List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId) {
         return entityManager.createQuery("SELECT sr FROM StudentReview sr WHERE sr.review.id = :review_id")
                 .setParameter("review_id", reviewId)
+                .getResultList();
+    }
+
+    @Override
+    public List<StudentReview> getStudentReviewsByStudentId(Long studentId) {
+        return entityManager
+                .createQuery("SELECT sr FROM StudentReview sr WHERE sr.user.id = :student_id", StudentReview.class)
+                .setParameter("student_id", studentId)
                 .getResultList();
     }
 }
