@@ -12,13 +12,21 @@
     <link rel="stylesheet" href="/css/font-glyphicons.css">
     <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
 
+    <!-- CSRF-protection -->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <title>theme</title>
 </head>
 <body>
 <div class="container-fluid">
     <div class="sidenav">
         <div>
-            KJUJ
+            <form action="/logout">
+                <button class="btn-block btn-outline-danger">
+                    LOGOUT
+                </button>
+            </form>
         </div>
         <div class="list-group list-group-flush">
             <a class="active list-group-item list-group-item-action" href="#">Темы</a>
