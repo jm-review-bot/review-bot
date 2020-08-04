@@ -1,6 +1,7 @@
 package spring.app.service.abstraction;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
+import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
 
 import java.time.LocalDateTime;
@@ -31,4 +32,12 @@ public interface UserService extends UserDetailsService {
     List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 
     boolean isUserExaminer(Long userId);
+
+    List<ReviewerDto> getExaminersInThisTheme (long themeId) ;
+
+    List<ReviewerDto> getExaminersInNotThisTheme (long themeId) ;
+
+    User addNewReviewer (long themeId , long userId);
+
+    void deleteReviewerFromTheme (long themeId , long reviewerId);
 }
