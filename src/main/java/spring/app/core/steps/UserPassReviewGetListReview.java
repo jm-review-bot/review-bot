@@ -203,6 +203,7 @@ public class UserPassReviewGetListReview extends Step {
             for (User examiner : examiners) {
                 infoMessage.append(examiner.getFirstName() + " " + examiner.getLastName() + "\n");
             }
+            infoMessage.append("\nНажмите \"Назад\" для возврата в предыдущее меню");
             return infoMessage.toString();
         }
 
