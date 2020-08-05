@@ -6,7 +6,6 @@ import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
