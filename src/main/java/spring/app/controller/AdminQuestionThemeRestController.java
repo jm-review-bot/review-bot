@@ -81,8 +81,8 @@ AdminQuestionThemeRestController {
         updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
         log.info(
-                "Admin(vkId={}) изменил вопрос (Question={}) на (Question={}) в (Theme ID ={})",
-                user.getVkId() ,  question.getQuestion() , updatedQuestion.getQuestion() , themeId);
+                "Admin(vkId={}) изменил вопрос (Question={}) в (Theme ID ={})",
+                user.getVkId() ,  question.getQuestion() , themeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
