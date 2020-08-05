@@ -1,7 +1,5 @@
 package spring.app.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -9,9 +7,7 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;

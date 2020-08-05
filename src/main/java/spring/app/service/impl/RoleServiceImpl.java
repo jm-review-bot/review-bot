@@ -7,7 +7,6 @@ import spring.app.dao.abstraction.RoleDao;
 import spring.app.model.Role;
 import spring.app.service.abstraction.RoleService;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Service
