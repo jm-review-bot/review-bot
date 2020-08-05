@@ -10,7 +10,6 @@ import spring.app.service.abstraction.FeedbackService;
 import spring.app.service.abstraction.ReviewService;
 import spring.app.service.abstraction.StudentReviewService;
 
-
 import javax.persistence.PreRemove;
 import java.util.List;
 

@@ -32,7 +32,7 @@ public interface ThemeService {
 
     List<ThemeDto> getAllThemesDto();
 
-    FixedThemeDto getThemeDtoById(Long themeId);
+    FixedThemeDto getFixedThemeDtoById(Long themeId);
 
     void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
 
