@@ -105,5 +105,4 @@ public class ReviewServiceImpl implements ReviewService {
     public void removeAll(List<Review> reviews) {
         reviewDao.removeAll(reviews);
     }
-
 }

@@ -2,6 +2,7 @@ package spring.app.dao.abstraction;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
@@ -24,4 +25,15 @@ public interface UserDao extends GenericDao<Long, User> {
     List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 
     boolean isUserExaminer(Long userId);
+
+    List<ReviewerDto> getExaminersInThisTheme (long themeId) ;
+
+    List<ReviewerDto> getExaminersInNotThisTheme (long themeId) ;
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    User addNewReviewer (User user);
+
+    void deleteReviewerFromTheme (long themeId , long reviewerId);
+
+    List<User> getExaminersByFreeThemeId(Long freeThemeId) ;
 }

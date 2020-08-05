@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
@@ -132,5 +133,10 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
         return themeDao.getFreeThemesByExaminerId(examinerId);
+    }
+
+    @Override
+    public FreeTheme getFreeThemeById(long id) {
+        return themeDao.getFreeThemeById(id);
     }
 }

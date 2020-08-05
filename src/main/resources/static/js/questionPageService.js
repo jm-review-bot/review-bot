@@ -28,12 +28,11 @@ function buildListQuestionsByThemeId(themeId) {
         let question = $(listQuestions).filter(index => {
             return listQuestions[index].position == i
         })[0]
-        let htmlQuestion = `
+        let htmlQuestion = `<br>
             <div class="card">
                 <div class="row">
                     <div class="col-10">
-                        ${question.position}. ${question.question}<br/>
-                        Ответ: ${question.answer}
+                        <h5>${getThemeDtoById(themeId).position}.${question.position}. ${question.question}</h5><br/>
                     </div>
                     <div class="col-2 text-right">
                         <button class="move-down-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
@@ -54,5 +53,7 @@ function buildListQuestionsByThemeId(themeId) {
         `
         htmlContent += htmlQuestion
     }
-    $(document).find(`#card-theme-${themeId}`).html(htmlContent)
+    $(document).find(`#card-theme-${themeId}`).html(htmlContent).css('background-color' , '#3366CC').css('padding' , '10px');
 }
+
+
