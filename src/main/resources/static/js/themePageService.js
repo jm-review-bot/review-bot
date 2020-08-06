@@ -4,7 +4,6 @@ $(function () {
 })
 
 function getAllThemesDto() {
-    console.log("themePageService_getAllThemesDto");
     let allThemesDto;
     $.ajax({
         url: '/api/admin/theme',
@@ -18,7 +17,6 @@ function getAllThemesDto() {
 }
 
 function buildThemesAccordion(allThemesDto) {
-    console.log("themePageService_buildThemesAccordion");
     let htmlContent = ''
     /*
     * Для того, чтобы темы отображались в порядке возрастания номера позиции,
@@ -75,11 +73,10 @@ function buildThemesAccordion(allThemesDto) {
                 type : 'PATCH',
                 url: url,
                 success: function() {
-                    console.log("move-down-theme.click--WIN!");
-                    buildThemesAccordion(getAllThemesDto());//location.reload();
+                    buildThemesAccordion(getAllThemesDto());
                 },
                 error: function () {
-                    console.log("move-down-theme.click--ERROR!");
+                    console.log("move-down-theme_ADD_clickFunction--ERROR!");
                 }
             });
         }
@@ -91,11 +88,10 @@ function buildThemesAccordion(allThemesDto) {
                 type : 'PATCH',
                 url: url,
                 success: function() {
-                    console.log("move-up-theme.click--WIN!");
-                    buildThemesAccordion(getAllThemesDto());//location.reload();
+                    buildThemesAccordion(getAllThemesDto());
                 },
                 error: function () {
-                    console.log("move-up-theme.click--ERROR!");
+                    console.log("move-up-theme_ADD_clickFunction--ERROR!");
                 }
             });
         }
