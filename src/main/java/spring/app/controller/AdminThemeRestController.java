@@ -56,8 +56,8 @@ public class AdminThemeRestController {
         FixedTheme fixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
         fixedTheme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
         themeService.addTheme(fixedTheme);
-        log.info("Admin(vkId={}) добавил тему (Theme={})(ThemeId={})" ,
-                user.getVkId() , fixedThemeDto.getId() + "," + fixedThemeDto.getTitle() + "," + fixedThemeDto.getPosition() , fixedTheme.getId());
+        log.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
+                user.getVkId() , fixedThemeDto.getId() , fixedThemeDto.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(themeMapper.fixedThemeEntityToFixedThemeDto(fixedTheme));
     }
 
@@ -67,8 +67,8 @@ public class AdminThemeRestController {
         Theme theme = themeService.getThemeById(themeId);
         themeService.deleteThemeById(themeId);
         log.info(
-                "Admin(vkId={}) удалил тему (Theme={})(ThemeId={})" ,
-                user.getVkId() , theme.getTitle() , theme.getId());
+                "Админ (vkId={}) удалил тему (ID={} , Title={})" ,
+                user.getVkId() , theme.getId() ,  theme.getTitle() );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -84,8 +84,8 @@ public class AdminThemeRestController {
         updatedFixedTheme.setPosition(themeById.getPosition());
         themeService.updateTheme(updatedFixedTheme);
         log.info(
-                "Admin(vkId={}) изменил позицию темы (FixedTheme={}) на (Position={})" ,
-                user.getVkId(),fixedThemeDto.getId() + "," + fixedThemeDto.getTitle() + "," + fixedThemeDto.getPosition() , themeById.getPosition()
+                "Админ (vkId={}) изменил позицию темы (ID={} , Title={}) на (Position={})" ,
+                user.getVkId(),fixedThemeDto.getId() ,  fixedThemeDto.getTitle() , themeById.getPosition()
         );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -98,7 +98,12 @@ public class AdminThemeRestController {
     @PatchMapping("/{themeId}/position/up")
     public ResponseEntity<String> moveThemePositionUp (@PathVariable String themeId) {
         try {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             themeService.shiftThemePosition(Long.parseLong(themeId), -1);
+            log.info(
+                    "Админ (vkId={}) переместил тему на одну позицию вверх" ,
+                    user.getVkId()
+            );
             return ResponseEntity.ok("Тема перемещена на одну позицию вверх");
         } catch (ProcessInputException exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());
@@ -113,7 +118,12 @@ public class AdminThemeRestController {
     @PatchMapping("/{themeId}/position/down")
     public ResponseEntity<String> moveThemePositionDown(@PathVariable String themeId) {
         try {
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             themeService.shiftThemePosition(Long.parseLong(themeId), 1);
+            log.info(
+                    "Админ (vkId={}) переместил тему на одну позицию вниз" ,
+                    user.getVkId()
+            );
             return ResponseEntity.ok("Тема перемещена на одну позицию вниз");
         } catch (ProcessInputException exception) {
             return ResponseEntity.badRequest().body(exception.getMessage());

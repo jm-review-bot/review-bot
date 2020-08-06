@@ -51,8 +51,8 @@ public class AdminReviewerRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.addNewReviewer(themeId , reviewerDto.getId());
         Theme theme = themeService.getThemeById(themeId);
-        log.info("Admin(vkId={}) добавил ревьювера (Reviewer={}) в тему (Theme={}) (ThemeId={})" ,
-                user.getVkId() , reviewerDto.getId()  + "," + reviewerDto.getFirstName() + "," + reviewerDto.getLastName() , theme.getTitle() , themeId);
+        log.info("Админ (vkId={}) добавил ревьювера (ID={} , Reviewer={}) в тему (ID={} , Title={})" ,
+                user.getVkId() , reviewerDto.getId()  , reviewerDto.getFirstName() + "," + reviewerDto.getLastName() ,  themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewerDto);
     }
 
@@ -63,8 +63,8 @@ public class AdminReviewerRestController {
         userService.deleteReviewerFromTheme(themeId , reviewerId);
         Theme theme = themeService.getThemeById(themeId);
         log.info(
-                "Admin(vkId={}) удалил ревьювера (reviewerId={}) из (Theme={}) (ThemeId={})",
-                user.getVkId() , reviewerId , theme.getTitle() , themeId);
+                "Админ (vkId={}) удалил ревьювера (ID={}) из темы(ID={} , Title={})",
+                user.getVkId() , reviewerId ,  themeId , theme.getTitle());
         return ResponseEntity.noContent().build();
     }
 }

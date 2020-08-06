@@ -56,8 +56,8 @@ public class AdminQuestionThemeRestController {
         question.setFixedTheme((FixedTheme) theme);
         questionService.addQuestion(question);
         log.info(
-                "Admin(vkId={}) добавил вопрос(Question={})(QuestionId={}) в тему (Theme={})(ThemeId={})",
-                user.getVkId() , questionDto.getQuestion() , questionDto.getId() , theme.getTitle() , themeId);
+                "Админ (vkId={}) добавил вопрос(ID={} , Title={}) в тему (ID={} , Title={})",
+                user.getVkId() , questionDto.getId() , questionDto.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
 
@@ -81,8 +81,8 @@ public class AdminQuestionThemeRestController {
         updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
         log.info(
-                "Admin(vkId={}) изменил вопрос (Question={})(QuestionId={}) в теме (Theme={})(themeId={})",
-                user.getVkId() ,  question.getQuestion() , questionId , theme.getTitle() , themeId);
+                "Админ (vkId={}) изменил вопрос (ID={} , Title={}) в теме (ID={} , Title={})",
+                user.getVkId() ,  question.getId() , question.getQuestion() , theme.getId() , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -94,8 +94,8 @@ public class AdminQuestionThemeRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         questionService.deleteQuestionById(questionId);
         log.info(
-                "Admin(vkId={}) удалил вопрос ({})(QuestionId={}) из темы ({})(themeId={}) ," ,
-                user.getVkId() , question.getQuestion() , question , theme.getTitle() , themeId);
+                "Админ (vkId={}) удалил вопрос (ID={} , Title={}) из темы (ID={} , Title={})" ,
+                user.getVkId() , question.getId() , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -105,7 +105,7 @@ public class AdminQuestionThemeRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
             log.info(
-                    "Admin(vkId={}) переместил вопрос(QuestionId={}) на позицию выше" ,
+                    "Админ (vkId={}) переместил вопрос(ID={}) на позицию выше" ,
                     user.getVkId() , questionId
             );
         }
@@ -118,7 +118,7 @@ public class AdminQuestionThemeRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
             log.info(
-                    "Admin(vkId={}) переместил вопрос(QuestionId={}) на позицию ниже" ,
+                    "Админ (vkId={}) переместил вопрос(ID={}) на позицию ниже" ,
                     user.getVkId() , questionId
             );
         }
