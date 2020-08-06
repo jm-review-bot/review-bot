@@ -1,4 +1,4 @@
-$('.add-new-theme').click(function ()
+$('.add-new-theme').click(function () {
         let title = $('#idInputForNameOfTheNewTheme').val();
         let criticalWeight = $('#idInputForCriticalWeightOfTheNewTheme').val();
         let reviewPoint = $('#idInputForReviewPointOfTheNewTheme').val();
