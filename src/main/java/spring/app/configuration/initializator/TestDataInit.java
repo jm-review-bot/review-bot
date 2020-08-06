@@ -427,77 +427,77 @@ public class TestDataInit {
         // add reviews
         Review hibReview = new Review();
         hibReview.setDate(LocalDateTime.of(2021, 4, 18, 11, 13));
-        hibReview.setOpen(true);
+        hibReview.setIsOpen(true);
         hibReview.setTheme(hibernate);
         hibReview.setUser(nikolay);
         reviewService.addReview(hibReview);
 
         Review hibReview2 = new Review();
         hibReview2.setDate(LocalDateTime.of(2022, 4, 18, 11, 13));
-        hibReview2.setOpen(true);
+        hibReview2.setIsOpen(true);
         hibReview2.setTheme(hibernate);
         hibReview2.setUser(nikolay);
         reviewService.addReview(hibReview2);
 
         Review revOfSt = new Review();
         revOfSt.setDate(LocalDateTime.of(3033, 1, 1, 1, 1));
-        revOfSt.setOpen(true);
+        revOfSt.setIsOpen(true);
         revOfSt.setTheme(algorithm);
         revOfSt.setUser(ludwig);
         reviewService.addReview(revOfSt);
 
         Review springReviewPassed = new Review();
         springReviewPassed.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        springReviewPassed.setOpen(false);
+        springReviewPassed.setIsOpen(false);
         springReviewPassed.setTheme(spring);
         springReviewPassed.setUser(roman);
         reviewService.addReview(springReviewPassed);
 
         Review springReview = new Review();
         springReview.setDate(LocalDateTime.of(2020, 4, 18, 13, 0));
-        springReview.setOpen(true);
+        springReview.setIsOpen(true);
         springReview.setTheme(hibernate);
         springReview.setUser(anton);
         reviewService.addReview(springReview);
 
         Review springReviewPassed2 = new Review();
         springReviewPassed2.setDate(LocalDateTime.of(2020, 4, 18, 10, 0));
-        springReviewPassed2.setOpen(true);
+        springReviewPassed2.setIsOpen(true);
         springReviewPassed2.setTheme(hibernate);
         springReviewPassed2.setUser(anton);
         reviewService.addReview(springReviewPassed2);
 
         Review springReviewPassed3 = new Review();
         springReviewPassed3.setDate(LocalDateTime.of(2020, 4, 18, 10, 0));
-        springReviewPassed3.setOpen(true);
+        springReviewPassed3.setIsOpen(true);
         springReviewPassed3.setTheme(hibernate);
         springReviewPassed3.setUser(maksim);
         reviewService.addReview(springReviewPassed3);
 
         Review springReviewPassed4 = new Review();
         springReviewPassed4.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        springReviewPassed4.setOpen(true);
+        springReviewPassed4.setIsOpen(true);
         springReviewPassed4.setTheme(hibernate);
         springReviewPassed4.setUser(maksim);
         reviewService.addReview(springReviewPassed4);
 
         Review springReviewPassed5 = new Review();
         springReviewPassed5.setDate(LocalDateTime.of(2020, 6, 16, 12, 5));
-        springReviewPassed5.setOpen(true);
+        springReviewPassed5.setIsOpen(true);
         springReviewPassed5.setTheme(core);
         springReviewPassed5.setUser(dima);
         reviewService.addReview(springReviewPassed5);
 
         Review springReviewPassed6 = new Review();
         springReviewPassed6.setDate(LocalDateTime.of(2020, 6, 16, 13, 5));
-        springReviewPassed6.setOpen(true);
+        springReviewPassed6.setIsOpen(true);
         springReviewPassed6.setTheme(algorithm);
         springReviewPassed6.setUser(dima);
         reviewService.addReview(springReviewPassed6);
 
         Review springReviewPassed7 = new Review();
         springReviewPassed7.setDate(LocalDateTime.of(2020, 6, 16, 13, 5));
-        springReviewPassed7.setOpen(true);
+        springReviewPassed7.setIsOpen(true);
         springReviewPassed7.setTheme(spring);
         springReviewPassed7.setUser(dima);
         reviewService.addReview(springReviewPassed7);
@@ -505,25 +505,25 @@ public class TestDataInit {
         // add student reviews
         StudentReview sr = new StudentReview();
         sr.setUser(nikolay);
-        sr.setPassed(false);
+        sr.setIsPassed(false);
         sr.setReview(revOfSt);
         studentReviewService.addStudentReview(sr);
 
         StudentReview hibStudentReview = new StudentReview();
         hibStudentReview.setUser(martyn);
-        hibStudentReview.setPassed(false);
+        hibStudentReview.setIsPassed(false);
         hibStudentReview.setReview(hibReview);
         studentReviewService.addStudentReview(hibStudentReview);
 
         StudentReview hibStudentReview2 = new StudentReview();
         hibStudentReview2.setUser(ludwig);
-        hibStudentReview2.setPassed(false);
+        hibStudentReview2.setIsPassed(false);
         hibStudentReview2.setReview(hibReview2);
         studentReviewService.addStudentReview(hibStudentReview2);
 
         StudentReview studentReview = new StudentReview();
         studentReview.setUser(sergey);
-        studentReview.setPassed(true);
+        studentReview.setIsPassed(true);
         studentReview.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview);
 
@@ -544,7 +544,7 @@ public class TestDataInit {
 
         StudentReview studentReview5 = new StudentReview();
         studentReview5.setUser(anton);
-        studentReview5.setPassed(false);
+        studentReview5.setIsPassed(false);
         studentReview5.setReview(springReviewPassed5);
         studentReviewService.addStudentReview(studentReview5);
 
@@ -648,25 +648,25 @@ public class TestDataInit {
         //Ревью и связь о прохождении кора
         Review akiraCorePassed = new Review();
         akiraCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
-        akiraCorePassed.setOpen(false);
+        akiraCorePassed.setIsOpen(false);
         akiraCorePassed.setTheme(core);
         akiraCorePassed.setUser(akira);//кто принимал
         reviewService.addReview(akiraCorePassed);
         StudentReview akiraCoreSuccesReview = new StudentReview();
         akiraCoreSuccesReview.setUser(akira);
-        akiraCoreSuccesReview.setPassed(true);
+        akiraCoreSuccesReview.setIsPassed(true);
         akiraCoreSuccesReview.setReview(akiraCorePassed);
         studentReviewService.addStudentReview(akiraCoreSuccesReview);
         //Ревью и связь о прохождении многопоточки
         Review akiraMultithreadingPassed = new Review();
         akiraMultithreadingPassed.setDate(LocalDateTime.of(2020, 4, 14, 11, 0));
-        akiraMultithreadingPassed.setOpen(false);
+        akiraMultithreadingPassed.setIsOpen(false);
         akiraMultithreadingPassed.setTheme(multithreading);
         akiraMultithreadingPassed.setUser(akira);//кто принимал
         reviewService.addReview(akiraMultithreadingPassed);
         StudentReview akiraMultithreadingSuccesReview = new StudentReview();
         akiraMultithreadingSuccesReview.setUser(akira);
-        akiraMultithreadingSuccesReview.setPassed(true);
+        akiraMultithreadingSuccesReview.setIsPassed(true);
         akiraMultithreadingSuccesReview.setReview(akiraMultithreadingPassed);
         studentReviewService.addStudentReview(akiraMultithreadingSuccesReview);
 
@@ -683,13 +683,13 @@ public class TestDataInit {
         //Ревью и связь о прохождении кора
         Review studentForCriticalWeightCorePassed = new Review();
         studentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
-        studentForCriticalWeightCorePassed.setOpen(false);
+        studentForCriticalWeightCorePassed.setIsOpen(false);
         studentForCriticalWeightCorePassed.setTheme(core);
         studentForCriticalWeightCorePassed.setUser(studentForCriticalWeight);//кто принимал
         reviewService.addReview(studentForCriticalWeightCorePassed);
         StudentReview studentForCriticalWeightCoreSuccesReview = new StudentReview();
         studentForCriticalWeightCoreSuccesReview.setUser(studentForCriticalWeight);
-        studentForCriticalWeightCoreSuccesReview.setPassed(true);
+        studentForCriticalWeightCoreSuccesReview.setIsPassed(true);
         studentForCriticalWeightCoreSuccesReview.setReview(studentForCriticalWeightCorePassed);
         studentReviewService.addStudentReview(studentForCriticalWeightCoreSuccesReview);
 
@@ -699,13 +699,13 @@ public class TestDataInit {
         //Ревью и связь о прохождении кора
         Review secondStudentForCriticalWeightCorePassed = new Review();
         secondStudentForCriticalWeightCorePassed.setDate(LocalDateTime.of(2020, 4, 13, 11, 0));
-        secondStudentForCriticalWeightCorePassed.setOpen(false);
+        secondStudentForCriticalWeightCorePassed.setIsOpen(false);
         secondStudentForCriticalWeightCorePassed.setTheme(core);
         secondStudentForCriticalWeightCorePassed.setUser(secondStudentForCriticalWeight);//кто принимал
         reviewService.addReview(secondStudentForCriticalWeightCorePassed);
         StudentReview secondStudentForCriticalWeightCoreSuccesReview = new StudentReview();
         secondStudentForCriticalWeightCoreSuccesReview.setUser(secondStudentForCriticalWeight);//кто сдавал
-        secondStudentForCriticalWeightCoreSuccesReview.setPassed(true);
+        secondStudentForCriticalWeightCoreSuccesReview.setIsPassed(true);
         secondStudentForCriticalWeightCoreSuccesReview.setReview(secondStudentForCriticalWeightCorePassed);
         studentReviewService.addStudentReview(secondStudentForCriticalWeightCoreSuccesReview);
 
@@ -714,7 +714,7 @@ public class TestDataInit {
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview = new Review();
         criticalWeightReview.setDate(LocalDateTime.of(2020, 6, 5, 2, 35));
-        criticalWeightReview.setOpen(true);
+        criticalWeightReview.setIsOpen(true);
         criticalWeightReview.setTheme(multithreading);
         criticalWeightReview.setUser(akira);//кто принимает
         reviewService.addReview(criticalWeightReview);
@@ -735,7 +735,7 @@ public class TestDataInit {
         //НЕЛЬЗЯ ЗАБЫВАТЬ УКАЗЫВАТЬ ДАТУ
         Review criticalWeightReview2 = new Review();
         criticalWeightReview2.setDate(LocalDateTime.of(2020, 6, 10, 21, 25));
-        criticalWeightReview2.setOpen(true);
+        criticalWeightReview2.setIsOpen(true);
         criticalWeightReview2.setTheme(multithreading);
         criticalWeightReview2.setUser(akira);//кто принимает
         reviewService.addReview(criticalWeightReview2);
@@ -784,7 +784,7 @@ public class TestDataInit {
         //Для проверки функционала всех кнопок меню
         Review criticalWeightReview3 = new Review();
         criticalWeightReview3.setDate(LocalDateTime.of(2020, 6, 3, 23, 25));
-        criticalWeightReview3.setOpen(true);
+        criticalWeightReview3.setIsOpen(true);
         criticalWeightReview3.setTheme(multithreading);
         criticalWeightReview3.setUser(akira);//кто принимает
         reviewService.addReview(criticalWeightReview3);
@@ -825,25 +825,25 @@ public class TestDataInit {
         //и связи под него
         StudentReviewAnswer changeReviewAnswerQuestion = new StudentReviewAnswer();
         changeReviewAnswerQuestion.setStudentReview(studentForCriticalWeightCoreSuccesReview);
-        changeReviewAnswerQuestion.setRight(true);
+        changeReviewAnswerQuestion.setIsRight(true);
         changeReviewAnswerQuestion.setQuestion(changeReviewQuestion);
         studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion);
 
         StudentReviewAnswer changeReviewAnswerQuestion2 = new StudentReviewAnswer();
         changeReviewAnswerQuestion2.setStudentReview(studentForCriticalWeightCoreSuccesReview);
-        changeReviewAnswerQuestion2.setRight(true);
+        changeReviewAnswerQuestion2.setIsRight(true);
         changeReviewAnswerQuestion2.setQuestion(changeReviewQuestion2);
         studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion2);
 
         StudentReviewAnswer changeReviewAnswerQuestion3 = new StudentReviewAnswer();
         changeReviewAnswerQuestion3.setStudentReview(studentForCriticalWeightCoreSuccesReview);
-        changeReviewAnswerQuestion3.setRight(true);
+        changeReviewAnswerQuestion3.setIsRight(true);
         changeReviewAnswerQuestion3.setQuestion(changeReviewQuestion3);
         studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion3);
 
         StudentReviewAnswer changeReviewAnswerQuestion4 = new StudentReviewAnswer();
         changeReviewAnswerQuestion4.setStudentReview(studentForCriticalWeightCoreSuccesReview);
-        changeReviewAnswerQuestion4.setRight(true);
+        changeReviewAnswerQuestion4.setIsRight(true);
         changeReviewAnswerQuestion4.setQuestion(changeReviewQuestion4);
         studentReviewAnswerService.addStudentReviewAnswer(changeReviewAnswerQuestion4);
 
@@ -869,21 +869,21 @@ public class TestDataInit {
 //
         Review springReviewPassed12 = new Review();
         springReviewPassed12.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        springReviewPassed12.setOpen(false);
+        springReviewPassed12.setIsOpen(false);
         springReviewPassed12.setTheme(spring);
         springReviewPassed12.setUser(anton);
         reviewService.addReview(springReviewPassed12);
 
         Review hibernateReviewPassed13 = new Review();
         hibernateReviewPassed13.setDate(LocalDateTime.of(2020, 4, 18, 11, 0));
-        hibernateReviewPassed13.setOpen(false);
+        hibernateReviewPassed13.setIsOpen(false);
         hibernateReviewPassed13.setTheme(hibernate);
         hibernateReviewPassed13.setUser(anton);
         reviewService.addReview(hibernateReviewPassed13);
 
         Review review11 = new Review();
         review11.setDate(LocalDateTime.of(2020, 6, 7, 16, 0));
-        review11.setOpen(true);
+        review11.setIsOpen(true);
         review11.setTheme(spring);
         review11.setUser(andrey);
         reviewService.addReview(review11);
@@ -891,25 +891,25 @@ public class TestDataInit {
 //
         StudentReview studentReview12 = new StudentReview();
         studentReview12.setUser(andrey);
-        studentReview12.setPassed(true);
+        studentReview12.setIsPassed(true);
         studentReview12.setReview(springReviewPassed12);
         studentReviewService.addStudentReview(studentReview12);
 
         StudentReview studentReview13 = new StudentReview();
         studentReview13.setUser(ale);
-        studentReview13.setPassed(true);
+        studentReview13.setIsPassed(true);
         studentReview13.setReview(hibernateReviewPassed13);
         studentReviewService.addStudentReview(studentReview13);
 
         StudentReview studentReview15 = new StudentReview();
         studentReview15.setUser(ale);
-        studentReview15.setPassed(null);
+        studentReview15.setIsPassed(null);
         studentReview15.setReview(review11);
         studentReviewService.addStudentReview(studentReview15);
 
         StudentReview studentReview16 = new StudentReview();
         studentReview16.setUser(mikhail);
-        studentReview16.setPassed(true);
+        studentReview16.setIsPassed(true);
         studentReview16.setReview(springReviewPassed);
         studentReviewService.addStudentReview(studentReview16);
 //

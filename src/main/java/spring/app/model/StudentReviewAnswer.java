@@ -1,8 +1,13 @@
 package spring.app.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "student_review_answer")
 public class StudentReviewAnswer {
@@ -30,38 +35,6 @@ public class StudentReviewAnswer {
         this.studentReview = studentReview;
         this.question = question;
         this.isRight = isRight;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public StudentReview getStudentReview() {
-        return studentReview;
-    }
-
-    public void setStudentReview(StudentReview studentReview) {
-        this.studentReview = studentReview;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public Boolean getRight() {
-        return isRight;
-    }
-
-    public void setRight(Boolean right) {
-        isRight = right;
     }
 
     @Override

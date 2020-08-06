@@ -80,7 +80,7 @@ public class ExaminerGetInfoLastReview extends Step{
                     freeTheme.getTitle(),
                     student.getFirstName(),
                     student.getLastName(),
-                    (lastStudentReview.getPassed() ? "пройдено" : "не пройдено")
+                    (lastStudentReview.getIsPassed() ? "пройдено" : "не пройдено")
             );
         } else {
             return String.format(

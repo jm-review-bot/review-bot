@@ -101,8 +101,8 @@ public class AdminEditReviewGetReviewList extends Step {
             stringBuilder.append("[").append(reviewCounter[0]++).append("] ")
                     .append(StringParser.localDateTimeToString(sreview.getReview().getDate()))
                     .append(" (");
-            if (sreview.getPassed() != null) {
-                if (!sreview.getPassed()) {
+            if (sreview.getIsPassed() != null) {
+                if (!sreview.getIsPassed()) {
                     stringBuilder.append("не ");
                 }
                 stringBuilder.append("пройдено)\n");

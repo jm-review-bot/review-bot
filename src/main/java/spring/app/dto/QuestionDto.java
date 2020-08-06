@@ -1,6 +1,8 @@
 package spring.app.dto;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 
@@ -8,6 +10,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
+@Getter
+@Setter
 public class QuestionDto {
 
     @Null(groups = CreateGroup.class)
@@ -31,46 +35,4 @@ public class QuestionDto {
         this.position = position;
         this.weight = weight;
     }
-
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
 }

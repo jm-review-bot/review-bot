@@ -6,7 +6,11 @@ import spring.app.groups.UpdateGroup;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class FeedbackDto {
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
@@ -36,70 +40,6 @@ public class FeedbackDto {
         this.studentLastName = studentLastName;
         this.studentComment = studentComment;
         this.ratingReviewer = ratingReviewer;
-        this.ratingReview = ratingReview;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getReviewerFirstName() {
-        return reviewerFirstName;
-    }
-
-    public void setReviewerFirstName(String reviewerFirstName) {
-        this.reviewerFirstName = reviewerFirstName;
-    }
-
-    public String getReviewerLastName() {
-        return reviewerLastName;
-    }
-
-    public void setReviewerLastName(String reviewerLastName) {
-        this.reviewerLastName = reviewerLastName;
-    }
-
-    public String getStudentFirstName() {
-        return studentFirstName;
-    }
-
-    public void setStudentFirstName(String studentFirstName) {
-        this.studentFirstName = studentFirstName;
-    }
-
-    public String getStudentLastName() {
-        return studentLastName;
-    }
-
-    public void setStudentLastName(String studentLastName) {
-        this.studentLastName = studentLastName;
-    }
-
-    public String getStudentComment() {
-        return studentComment;
-    }
-
-    public void setStudentComment(String studentComment) {
-        this.studentComment = studentComment;
-    }
-
-    public Integer getRatingReviewer() {
-        return ratingReviewer;
-    }
-
-    public void setRatingReviewer(Integer ratingReviewer) {
-        this.ratingReviewer = ratingReviewer;
-    }
-
-    public Integer getRatingReview() {
-        return ratingReview;
-    }
-
-    public void setRatingReview(Integer ratingReview) {
         this.ratingReview = ratingReview;
     }
 }

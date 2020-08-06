@@ -65,7 +65,7 @@ public class ExaminerAddNewStudentReview extends Step {
             // Создаются новые экземпляры Review ...
             Review review = new Review();
             review.setTheme(freeTheme);
-            review.setOpen(false);
+            review.setIsOpen(false);
             review.setUser(context.getUser());
             review.setDate(LocalDateTime.now());
             reviewService.addReview(review);
@@ -74,7 +74,7 @@ public class ExaminerAddNewStudentReview extends Step {
             StudentReview studentReview = new StudentReview();
             studentReview.setReview(review);
             studentReview.setUser(student);
-            studentReview.setPassed(commandIsPassed);
+            studentReview.setIsPassed(commandIsPassed);
             studentReviewService.addStudentReview(studentReview);
 
             // В текущем шаге сохраняется информация о статусе нового ревью

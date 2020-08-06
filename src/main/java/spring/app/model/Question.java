@@ -1,11 +1,15 @@
 package spring.app.model;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import spring.app.listener.QuestionListener;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Entity
 @EntityListeners(QuestionListener.class)
 @Table(name = "question")
@@ -33,54 +37,6 @@ public class Question {
     private FixedTheme fixedTheme;
 
     public Question() {
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
-    public FixedTheme getFixedTheme() {
-        return fixedTheme;
-    }
-
-    public void setFixedTheme(FixedTheme fixedTheme) {
-        this.fixedTheme = fixedTheme;
     }
 
     @Override

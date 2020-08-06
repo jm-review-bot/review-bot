@@ -1,10 +1,14 @@
 package spring.app.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import spring.app.listener.ThemeListener;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Getter
+@Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @EntityListeners(ThemeListener.class)
@@ -30,46 +34,6 @@ public abstract class Theme {
     private Integer position;
 
     public Theme() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getCriticalWeight() {
-        return criticalWeight;
-    }
-
-    public void setCriticalWeight(Integer criticalWeight) {
-        this.criticalWeight = criticalWeight;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
-    public Integer getReviewPoint() {
-        return reviewPoint;
-    }
-
-    public void setReviewPoint(Integer reviewPoint) {
-        this.reviewPoint = reviewPoint;
     }
 
     @Override
