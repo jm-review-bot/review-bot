@@ -7,7 +7,6 @@ $('.add-new-theme').click(function () {
             criticalWeight:criticalWeight,
             reviewPoint:reviewPoint
         }
-        console.log(json)
         $.ajax({
             url: "/api/admin/theme",
             type: "POST",
