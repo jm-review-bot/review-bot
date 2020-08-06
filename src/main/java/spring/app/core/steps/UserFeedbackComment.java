@@ -1,6 +1,5 @@
 package spring.app.core.steps;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -10,7 +9,6 @@ import spring.app.model.Feedback;
 import spring.app.service.abstraction.FeedbackService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.StudentReviewService;
-import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import static spring.app.core.StepSelector.*;

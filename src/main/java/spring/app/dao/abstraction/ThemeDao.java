@@ -25,7 +25,7 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     List<FreeThemeDto> getAllFreeThemesDto();
 
-    FixedThemeDto getThemeDtoById(Long themeId);
+    FixedThemeDto getFixedThemeDtoById(Long themeId);
 
     @Transactional(propagation = Propagation.MANDATORY)
     void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift);

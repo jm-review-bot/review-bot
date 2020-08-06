@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class ExaminerFreeThemesList extends Step {

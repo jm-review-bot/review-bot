@@ -2,7 +2,6 @@ package spring.app.core;
 
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
 
 public class BotContext {
     private final User user;

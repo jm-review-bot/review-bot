@@ -2,7 +2,6 @@ package spring.app.service.abstraction;
 
 import spring.app.model.Role;
 
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 

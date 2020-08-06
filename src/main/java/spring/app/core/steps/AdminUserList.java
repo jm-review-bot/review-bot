@@ -14,7 +14,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.DEF_BACK_KB;
 import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 
 /**

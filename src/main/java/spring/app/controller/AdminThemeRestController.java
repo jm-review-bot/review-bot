@@ -38,7 +38,7 @@ public class AdminThemeRestController {
 
     @GetMapping("/{themeId}")
     public ResponseEntity<FixedThemeDto> getThemeById(@PathVariable Long themeId) {
-        FixedThemeDto fixedThemeDtoById = themeService.getThemeDtoById(themeId);
+        FixedThemeDto fixedThemeDtoById = themeService.getFixedThemeDtoById(themeId);
         if (fixedThemeDtoById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
