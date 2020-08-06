@@ -24,8 +24,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
-public class
-AdminQuestionThemeRestController {
+public class AdminQuestionThemeRestController {
 
     private final static Logger log = LoggerFactory.getLogger(AdminQuestionThemeRestController.class);
 
@@ -57,7 +56,7 @@ AdminQuestionThemeRestController {
         question.setFixedTheme((FixedTheme) theme);
         questionService.addQuestion(question);
         log.info(
-                "Admin(vkId={}) добавил вопрос(Question={}) в базу темы (Theme={})",
+                "Admin(vkId={}) добавил вопрос(Question={}) в тему (Theme={})",
                 user.getVkId() , questionDto.getQuestion() , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
@@ -74,6 +73,7 @@ AdminQuestionThemeRestController {
                                          @RequestBody @Valid QuestionDto questionDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Question question = questionService.getQuestionById(questionId);
+        Theme theme = themeService.getThemeById(themeId);
         if (question == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -81,19 +81,21 @@ AdminQuestionThemeRestController {
         updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
         log.info(
-                "Admin(vkId={}) изменил вопрос (Question={}) в (Theme ID ={})",
-                user.getVkId() ,  question.getQuestion() , themeId);
+                "Admin(vkId={}) изменил вопрос (Question={}) в теме ({})",
+                user.getVkId() ,  question.getQuestion() , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @DeleteMapping("/{themeId}/question/{questionId}")
     public ResponseEntity deleteQuestion(@PathVariable Long themeId,
                                          @PathVariable Long questionId) {
+        Theme theme = themeService.getThemeById(themeId);
+        Question question = questionService.getQuestionById(questionId);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         questionService.deleteQuestionById(questionId);
         log.info(
-                "Admin(vkId={}) удалил вопрос из темы(Theme={}) , с ид вопроса(Question ID ={})" ,
-                user.getVkId() , themeId , questionId);
+                "Admin(vkId={}) удалил вопрос ({}) из темы ({}) ," ,
+                user.getVkId() , question.getQuestion() , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

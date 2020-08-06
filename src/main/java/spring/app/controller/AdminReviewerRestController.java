@@ -58,7 +58,7 @@ public class AdminReviewerRestController {
         userService.deleteReviewerFromTheme(themeId , reviewerId);
         log.info(
                 "Admin(vkId={}) удалил ревьювера (reviewerId={}) из (Theme={}))",
-                user.getVkId() , themeId , reviewerId , themeId);
+                user.getVkId() , reviewerId , themeId);
         return ResponseEntity.noContent().build();
     }
 }
