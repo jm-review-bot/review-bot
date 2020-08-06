@@ -83,7 +83,7 @@ public class UserMenu extends Step {
                         sendUserToNextStep(context, USER_START_REVIEW_HANGOUTS_LINK);
                     } else {
                         // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
-                        nearestReview.setOpen(false);
+                        nearestReview.setIsOpen(false);
                         reviewService.updateReview(nearestReview);
                         User user = userService.getByVkId(vkId);
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);

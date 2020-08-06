@@ -137,14 +137,14 @@ public class UserStartReviewCore extends Step {
                 // Не быть хотя бы одного ответа у него не может т.к. это возможно только если вопросов на ревью было меньше чем студентов
                 StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
                 if (studentWrongWeight.get(student) != null && studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
-                    studentReview.setPassed(false);
+                    studentReview.setIsPassed(false);
                 } else {
-                    studentReview.setPassed(true);
+                    studentReview.setIsPassed(true);
                 }
                 studentReviewService.updateStudentReview(studentReview);
                 // формируем сообщение для студента с результатами ревью
                 StringBuilder reviewResults = new StringBuilder("Ревью окончено!\nТвой результат: ");
-                if (studentReview.getPassed()) {
+                if (studentReview.getIsPassed()) {
                     reviewResults.append("Ревью пройдено\n");
                 } else {
                     reviewResults.append("Ревью не пройдено.\n\nВот список проблемных вопросов:\n");
