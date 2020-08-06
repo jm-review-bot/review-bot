@@ -9,7 +9,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.ReviewerDto;
 import spring.app.groups.UpdateGroup;
+import spring.app.model.Theme;
 import spring.app.model.User;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
 import javax.validation.Valid;
@@ -23,9 +25,11 @@ public class AdminReviewerRestController {
     private final static Logger log = LoggerFactory.getLogger(AdminReviewerRestController.class);
 
     private UserService userService;
+    private ThemeService themeService;
 
-    public AdminReviewerRestController (UserService userService) {
+    public AdminReviewerRestController (UserService userService , ThemeService themeService) {
         this.userService = userService;
+        this.themeService = themeService;
     }
 
     @GetMapping("/{themeId}/reviewer")
@@ -46,8 +50,9 @@ public class AdminReviewerRestController {
                                                @RequestBody @Valid ReviewerDto reviewerDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.addNewReviewer(themeId , reviewerDto.getId());
-        log.info("Admin(vkId={}) добавил ревьювера (Reviewer=()) в тему (Theme=())" ,
-                user.getVkId() , reviewerDto.getId()  + "," + reviewerDto.getFirstName() + "," + reviewerDto.getLastName() , themeId);
+        Theme theme = themeService.getThemeById(themeId);
+        log.info("Admin(vkId={}) добавил ревьювера (Reviewer={}) в тему (Theme={}) (ThemeId={})" ,
+                user.getVkId() , reviewerDto.getId()  + "," + reviewerDto.getFirstName() + "," + reviewerDto.getLastName() , theme.getTitle() , themeId);
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewerDto);
     }
 
@@ -56,9 +61,10 @@ public class AdminReviewerRestController {
                                          @PathVariable long reviewerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         userService.deleteReviewerFromTheme(themeId , reviewerId);
+        Theme theme = themeService.getThemeById(themeId);
         log.info(
-                "Admin(vkId={}) удалил ревьювера (reviewerId={}) из (Theme={}))",
-                user.getVkId() , reviewerId , themeId);
+                "Admin(vkId={}) удалил ревьювера (reviewerId={}) из (Theme={}) (ThemeId={})",
+                user.getVkId() , reviewerId , theme.getTitle() , themeId);
         return ResponseEntity.noContent().build();
     }
 }

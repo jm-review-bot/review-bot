@@ -56,18 +56,19 @@ public class AdminThemeRestController {
         FixedTheme fixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
         fixedTheme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
         themeService.addTheme(fixedTheme);
-        log.info("Admin(vkId={}) добавил тему (Theme={})" ,
-                user.getVkId() , fixedThemeDto.getId() + "," + fixedThemeDto.getTitle() + "," + fixedThemeDto.getPosition());
+        log.info("Admin(vkId={}) добавил тему (Theme={})(ThemeId={})" ,
+                user.getVkId() , fixedThemeDto.getId() + "," + fixedThemeDto.getTitle() + "," + fixedThemeDto.getPosition() , fixedTheme.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(themeMapper.fixedThemeEntityToFixedThemeDto(fixedTheme));
     }
 
     @DeleteMapping("/{themeId}")
     public ResponseEntity deleteTheme(@PathVariable Long themeId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Theme theme = themeService.getThemeById(themeId);
         themeService.deleteThemeById(themeId);
         log.info(
-                "Admin(vkId={}) удалил тему с ид(Theme={})" ,
-                user.getVkId() , themeId);
+                "Admin(vkId={}) удалил тему (Theme={})(ThemeId={})" ,
+                user.getVkId() , theme.getTitle() , theme.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

@@ -56,8 +56,8 @@ public class AdminQuestionThemeRestController {
         question.setFixedTheme((FixedTheme) theme);
         questionService.addQuestion(question);
         log.info(
-                "Admin(vkId={}) добавил вопрос(Question={}) в тему (Theme={})",
-                user.getVkId() , questionDto.getQuestion() , theme.getTitle());
+                "Admin(vkId={}) добавил вопрос(Question={})(QuestionId={}) в тему (Theme={})(ThemeId={})",
+                user.getVkId() , questionDto.getQuestion() , questionDto.getId() , theme.getTitle() , themeId);
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
 
@@ -68,7 +68,7 @@ public class AdminQuestionThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PostMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity updateQuestion(@PathVariable long themeId ,
+    public ResponseEntity updateQuestion(@PathVariable long themeId,
                                          @PathVariable Long questionId,
                                          @RequestBody @Valid QuestionDto questionDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -81,8 +81,8 @@ public class AdminQuestionThemeRestController {
         updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
         log.info(
-                "Admin(vkId={}) изменил вопрос (Question={}) в теме ({})",
-                user.getVkId() ,  question.getQuestion() , theme.getTitle());
+                "Admin(vkId={}) изменил вопрос (Question={})(QuestionId={}) в теме (Theme={})(themeId={})",
+                user.getVkId() ,  question.getQuestion() , questionId , theme.getTitle() , themeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -94,20 +94,34 @@ public class AdminQuestionThemeRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         questionService.deleteQuestionById(questionId);
         log.info(
-                "Admin(vkId={}) удалил вопрос ({}) из темы ({}) ," ,
-                user.getVkId() , question.getQuestion() , theme.getTitle());
+                "Admin(vkId={}) удалил вопрос ({})(QuestionId={}) из темы ({})(themeId={}) ," ,
+                user.getVkId() , question.getQuestion() , question , theme.getTitle() , themeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{themeId}/question/{questionId}/position/up")
     public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (isChanged) {
+            log.info(
+                    "Admin(vkId={}) переместил вопрос(QuestionId={}) на позицию выше" ,
+                    user.getVkId() , questionId
+            );
+        }
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию выше") : ResponseEntity.badRequest().build();
     }
 
     @PatchMapping("/{themeId}/question/{questionId}/position/down")
     public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (isChanged) {
+            log.info(
+                    "Admin(vkId={}) переместил вопрос(QuestionId={}) на позицию ниже" ,
+                    user.getVkId() , questionId
+            );
+        }
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию ниже") : ResponseEntity.badRequest().build();
     }
 }
