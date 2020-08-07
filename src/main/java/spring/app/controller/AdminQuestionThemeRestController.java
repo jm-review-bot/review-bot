@@ -57,7 +57,7 @@ public class AdminQuestionThemeRestController {
         questionService.addQuestion(question);
         log.info(
                 "Админ (vkId={}) добавил вопрос(ID={} , Title={}) в тему (ID={} , Title={})",
-                user.getVkId() , questionDto.getId() , questionDto.getQuestion() , themeId , theme.getTitle());
+                user.getVkId() , question.getId() , questionDto.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
 
@@ -101,12 +101,13 @@ public class AdminQuestionThemeRestController {
 
     @PatchMapping("/{themeId}/question/{questionId}/position/up")
     public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
+        Question question = questionService.getQuestionById(questionId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
             log.info(
-                    "Админ (vkId={}) переместил вопрос(ID={}) на позицию выше" ,
-                    user.getVkId() , questionId
+                    "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию выше" ,
+                    user.getVkId() , questionId , question.getQuestion()
             );
         }
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию выше") : ResponseEntity.badRequest().build();
@@ -114,12 +115,13 @@ public class AdminQuestionThemeRestController {
 
     @PatchMapping("/{themeId}/question/{questionId}/position/down")
     public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
+        Question question = questionService.getQuestionById(questionId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
             log.info(
-                    "Админ (vkId={}) переместил вопрос(ID={}) на позицию ниже" ,
-                    user.getVkId() , questionId
+                    "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию ниже" ,
+                    user.getVkId() , questionId , question.getQuestion()
             );
         }
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию ниже") : ResponseEntity.badRequest().build();

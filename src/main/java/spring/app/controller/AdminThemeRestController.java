@@ -57,7 +57,7 @@ public class AdminThemeRestController {
         fixedTheme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
         themeService.addTheme(fixedTheme);
         log.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
-                user.getVkId() , fixedThemeDto.getId() , fixedThemeDto.getTitle());
+                user.getVkId() , fixedTheme.getId() , fixedTheme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(themeMapper.fixedThemeEntityToFixedThemeDto(fixedTheme));
     }
 
@@ -84,8 +84,8 @@ public class AdminThemeRestController {
         updatedFixedTheme.setPosition(themeById.getPosition());
         themeService.updateTheme(updatedFixedTheme);
         log.info(
-                "Админ (vkId={}) изменил позицию темы (ID={} , Title={}) на (Position={})" ,
-                user.getVkId(),fixedThemeDto.getId() ,  fixedThemeDto.getTitle() , themeById.getPosition()
+                "Админ (vkId={}) изменил тему (ID={} , Title={})" ,
+                user.getVkId(),updatedFixedTheme.getId() , updatedFixedTheme.getTitle()
         );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -98,11 +98,12 @@ public class AdminThemeRestController {
     @PatchMapping("/{themeId}/position/up")
     public ResponseEntity<String> moveThemePositionUp (@PathVariable String themeId) {
         try {
+            Theme theme = themeService.getThemeById(Long.parseLong(themeId));
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             themeService.shiftThemePosition(Long.parseLong(themeId), -1);
             log.info(
-                    "Админ (vkId={}) переместил тему на одну позицию вверх" ,
-                    user.getVkId()
+                    "Админ (vkId={}) переместил тему (ID={} , Title={}) на одну позицию вверх" ,
+                    user.getVkId() ,theme.getId() , theme.getTitle()
             );
             return ResponseEntity.ok("Тема перемещена на одну позицию вверх");
         } catch (ProcessInputException exception) {
@@ -118,11 +119,12 @@ public class AdminThemeRestController {
     @PatchMapping("/{themeId}/position/down")
     public ResponseEntity<String> moveThemePositionDown(@PathVariable String themeId) {
         try {
+            Theme theme = themeService.getThemeById(Long.parseLong(themeId));
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             themeService.shiftThemePosition(Long.parseLong(themeId), 1);
             log.info(
-                    "Админ (vkId={}) переместил тему на одну позицию вниз" ,
-                    user.getVkId()
+                    "Админ (vkId={}) переместил тему (ID={} , Title={}) на одну позицию вниз" ,
+                    user.getVkId() , theme.getId() , theme.getTitle()
             );
             return ResponseEntity.ok("Тема перемещена на одну позицию вниз");
         } catch (ProcessInputException exception) {
