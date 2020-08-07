@@ -49,10 +49,11 @@ public class AdminReviewerRestController {
     public ResponseEntity<ReviewerDto> create (@PathVariable long themeId ,
                                                @RequestBody @Valid ReviewerDto reviewerDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User reviewer = userService.getUserById(reviewerDto.getId());
         userService.addNewReviewer(themeId , reviewerDto.getId());
         Theme theme = themeService.getThemeById(themeId);
         log.info("Админ (vkId={}) добавил ревьювера (ID={} , Reviewer={}) в тему (ID={} , Title={})" ,
-                user.getVkId() , reviewerDto.getId()  , reviewerDto.getFirstName() + " " + reviewerDto.getLastName() ,  themeId , theme.getTitle());
+                user.getVkId() , reviewer.getId()  , reviewer.getFirstName() + " " + reviewer.getLastName() ,  themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewerDto);
     }
 

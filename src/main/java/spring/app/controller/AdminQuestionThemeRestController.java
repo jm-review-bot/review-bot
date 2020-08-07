@@ -57,7 +57,7 @@ public class AdminQuestionThemeRestController {
         questionService.addQuestion(question);
         log.info(
                 "Админ (vkId={}) добавил вопрос(ID={} , Title={}) в тему (ID={} , Title={})",
-                user.getVkId() , question.getId() , questionDto.getQuestion() , themeId , theme.getTitle());
+                user.getVkId() , question.getId() , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
 
@@ -82,7 +82,7 @@ public class AdminQuestionThemeRestController {
         questionService.updateQuestion(updatedQuestion);
         log.info(
                 "Админ (vkId={}) изменил вопрос (ID={} , Title={}) в теме (ID={} , Title={})",
-                user.getVkId() ,  question.getId() , question.getQuestion() , theme.getId() , theme.getTitle());
+                user.getVkId() ,  questionId , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -95,19 +95,20 @@ public class AdminQuestionThemeRestController {
         questionService.deleteQuestionById(questionId);
         log.info(
                 "Админ (vkId={}) удалил вопрос (ID={} , Title={}) из темы (ID={} , Title={})" ,
-                user.getVkId() , question.getId() , question.getQuestion() , themeId , theme.getTitle());
+                user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/{themeId}/question/{questionId}/position/up")
     public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
         Question question = questionService.getQuestionById(questionId);
+        Theme theme = themeService.getThemeById(themeId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
             log.info(
-                    "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию выше" ,
-                    user.getVkId() , questionId , question.getQuestion()
+                    "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию выше в теме (ID={} , Title={})" ,
+                    user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle()
             );
         }
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию выше") : ResponseEntity.badRequest().build();
@@ -116,12 +117,13 @@ public class AdminQuestionThemeRestController {
     @PatchMapping("/{themeId}/question/{questionId}/position/down")
     public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
         Question question = questionService.getQuestionById(questionId);
+        Theme theme = themeService.getThemeById(themeId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
             log.info(
-                    "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию ниже" ,
-                    user.getVkId() , questionId , question.getQuestion()
+                    "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию ниже в теме (ID={} , Title={})" ,
+                    user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle()
             );
         }
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию ниже") : ResponseEntity.badRequest().build();

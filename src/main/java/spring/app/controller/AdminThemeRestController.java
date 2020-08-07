@@ -68,7 +68,7 @@ public class AdminThemeRestController {
         themeService.deleteThemeById(themeId);
         log.info(
                 "Админ (vkId={}) удалил тему (ID={} , Title={})" ,
-                user.getVkId() , theme.getId() ,  theme.getTitle() );
+                user.getVkId() , themeId ,  theme.getTitle() );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -85,7 +85,7 @@ public class AdminThemeRestController {
         themeService.updateTheme(updatedFixedTheme);
         log.info(
                 "Админ (vkId={}) изменил тему (ID={} , Title={})" ,
-                user.getVkId(),updatedFixedTheme.getId() , updatedFixedTheme.getTitle()
+                user.getVkId(), themeId, updatedFixedTheme.getTitle()
         );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
@@ -103,7 +103,7 @@ public class AdminThemeRestController {
             themeService.shiftThemePosition(Long.parseLong(themeId), -1);
             log.info(
                     "Админ (vkId={}) переместил тему (ID={} , Title={}) на одну позицию вверх" ,
-                    user.getVkId() ,theme.getId() , theme.getTitle()
+                    user.getVkId(), themeId, theme.getTitle()
             );
             return ResponseEntity.ok("Тема перемещена на одну позицию вверх");
         } catch (ProcessInputException exception) {
@@ -124,7 +124,7 @@ public class AdminThemeRestController {
             themeService.shiftThemePosition(Long.parseLong(themeId), 1);
             log.info(
                     "Админ (vkId={}) переместил тему (ID={} , Title={}) на одну позицию вниз" ,
-                    user.getVkId() , theme.getId() , theme.getTitle()
+                    user.getVkId() , themeId, theme.getTitle()
             );
             return ResponseEntity.ok("Тема перемещена на одну позицию вниз");
         } catch (ProcessInputException exception) {
