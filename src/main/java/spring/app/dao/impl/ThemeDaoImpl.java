@@ -50,16 +50,16 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public Integer getThemeMaxPositionValue() {
-        List<Integer> maxPosition = entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
-                .getResultList();
-        return maxPosition.contains(null) ? 0 : maxPosition.get(0);
+        Integer maxPosition = entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
+                .getSingleResult();
+        return maxPosition == null ? 0 : maxPosition;
     }
 
     @Override
     public Integer getThemeMinPositionValue() {
-        List<Integer> minPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
-                .getResultList();
-        return minPosition.contains(null) ? 0 : minPosition.get(0);
+        Integer minPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
+                .getSingleResult();
+        return minPosition == null ? 0 : minPosition;
     }
 
     @Override

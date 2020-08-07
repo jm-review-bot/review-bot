@@ -50,11 +50,11 @@ public class AdminThemeRestController {
     public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
         Theme theme = null;
         ThemeDto addedThemeDto = null;
-        if (themeDto instanceof FixedThemeDto) {
+        if (themeDto.getClass() == FixedThemeDto.class) {
             theme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
             themeService.addTheme(theme);
             addedThemeDto = themeMapper.fixedThemeEntityToFixedThemeDto(theme);
-        } else if (themeDto instanceof FreeThemeDto) {
+        } else if (themeDto.getClass() == FreeThemeDto.class) {
             theme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
             themeService.addTheme(theme);
             addedThemeDto = themeMapper.freeThemeEntityToFreeThemeDto(theme);
