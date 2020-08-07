@@ -6,7 +6,7 @@ $(document).on('click', '.add-reviewer-to-theme', function () {
     let reviewersDtoNotInThisTheme = getListReviewersDtoNotInThisTheme(themeId)
     let htmlContent = ''
     htmlContent += `
-        <option selected value="0">Выбирите из списка...</option>
+        <option selected value="0">Выберите из списка...</option>
     `
     for (let i = 0; i < reviewersDtoNotInThisTheme.length; i++) {
         let reviewer = reviewersDtoNotInThisTheme[i]
