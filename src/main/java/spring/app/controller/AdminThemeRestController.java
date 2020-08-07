@@ -49,13 +49,17 @@ public class AdminThemeRestController {
     @PostMapping
     public ResponseEntity createTheme(@RequestBody @Valid ThemeDto themeDto) {
         Theme theme = null;
+        ThemeDto addedThemeDto = null;
         if (themeDto instanceof FixedThemeDto) {
             theme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
+            themeService.addTheme(theme);
+            addedThemeDto = themeMapper.fixedThemeEntityToFixedThemeDto(theme);
         } else if (themeDto instanceof FreeThemeDto) {
             theme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
+            themeService.addTheme(theme);
+            addedThemeDto = themeMapper.freeThemeEntityToFreeThemeDto(theme);
         }
-        themeService.addTheme(theme);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedThemeDto);
     }
 
     @DeleteMapping("/{themeId}")
