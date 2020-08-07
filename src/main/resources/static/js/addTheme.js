@@ -8,7 +8,7 @@ $('.add-new-theme').click(function () {
             criticalWeight:criticalWeight,
             reviewPoint:reviewPoint,
             type : type
-        }
+        };
         $.ajax({
             url: "/api/admin/theme",
             type: "POST",
