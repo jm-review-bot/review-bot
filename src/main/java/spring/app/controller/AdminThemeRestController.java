@@ -47,7 +47,7 @@ public class AdminThemeRestController {
 
     @Validated(CreateGroup.class)
     @PostMapping
-    public ResponseEntity createTheme(@RequestBody @Valid ThemeDto themeDto) {
+    public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
         Theme theme = null;
         ThemeDto addedThemeDto = null;
         if (themeDto instanceof FixedThemeDto) {
