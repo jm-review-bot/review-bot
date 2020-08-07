@@ -8,6 +8,7 @@ public class FixedThemeDto  extends ThemeDto {
     private final String type = "fixed";
 
     public FixedThemeDto() {
+        super();
     }
 
     public FixedThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
