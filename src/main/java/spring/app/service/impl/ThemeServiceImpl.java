@@ -5,17 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
-import spring.app.dto.FreeThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ThemeServiceImpl implements ThemeService {
