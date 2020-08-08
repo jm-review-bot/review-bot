@@ -180,11 +180,17 @@ public class UserPassReviewGetListReview extends Step {
                 Theme theme = allThemes.get(i);
                 if (!passedThemes.contains(theme)) {
                     isPassedPreviousThemes = false;
-                    infoMessage.append(theme.getTitle() + "\n");
+                    infoMessage.append(
+                            String.format(
+                                    "[%s] %s \n",
+                                    theme.getPosition(),
+                                    theme.getTitle()
+                            )
+                    );
                 }
             }
             if (!isPassedPreviousThemes) {
-                infoMessage.append("\nВведете подходящий номер темы или вернитесь в главное меню, нажав \"Назад\"");
+                infoMessage.append("\nВведите подходящий номер темы или вернитесь в главное меню, нажав \"Назад\"");
                 sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
                 return infoMessage.toString();
             }
