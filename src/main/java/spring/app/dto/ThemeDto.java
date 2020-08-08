@@ -1,7 +1,5 @@
 package spring.app.dto;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 
@@ -9,12 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
 
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
-@JsonSubTypes({
-        @JsonSubTypes.Type(value = FixedThemeDto.class, name = "fixed"),
-        @JsonSubTypes.Type(value = FreeThemeDto.class, name = "free")
-})
-public abstract class ThemeDto {
+public class ThemeDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
@@ -33,6 +26,9 @@ public abstract class ThemeDto {
     @NotNull
     private Integer reviewPoint;
 
+    @NotBlank
+    private String type;
+
     public ThemeDto() {
     }
 
@@ -46,6 +42,20 @@ public abstract class ThemeDto {
         this.criticalWeight = criticalWeight;
         this.position = position;
         this.reviewPoint = reviewPoint;
+    }
+
+    public ThemeDto(Long id,
+                    String title,
+                    Integer criticalWeight,
+                    Integer position,
+                    Integer reviewPoint,
+                    String type) {
+        this.id = id;
+        this.title = title;
+        this.criticalWeight = criticalWeight;
+        this.position = position;
+        this.reviewPoint = reviewPoint;
+        this.type = type;
     }
 
     public Long getId() {
@@ -86,5 +96,13 @@ public abstract class ThemeDto {
 
     public void setReviewPoint(Integer reviewPoint) {
         this.reviewPoint = reviewPoint;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

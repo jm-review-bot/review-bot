@@ -3,7 +3,7 @@ package spring.app.model;
 import javax.persistence.*;
 import java.util.List;
 
-@DiscriminatorValue(value = "2")
+@DiscriminatorValue(value = "free")
 @Entity
 @Table(name = "free_theme")
 @PrimaryKeyJoinColumn(name = "theme_id")

@@ -3,6 +3,7 @@ package spring.app.dao.impl;
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
+import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
 import spring.app.dto.FreeThemeDto;
 import spring.app.model.Theme;
@@ -72,6 +73,13 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     public List<FreeThemeDto> getAllFreeThemesDto() {
         return entityManager.createQuery("SELECT new spring.app.dto.FreeThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FreeTheme t ORDER BY t.position", FreeThemeDto.class)
                 .getResultList();
+    }
+
+    @Override
+    public List<ThemeDto> getAllThemesDto() {
+        List<ThemeDto> test = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t ORDER BY t.position", ThemeDto.class)
+                .getResultList();
+        return test;
     }
 
     @Override

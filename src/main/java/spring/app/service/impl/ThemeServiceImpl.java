@@ -95,14 +95,7 @@ public class ThemeServiceImpl implements ThemeService {
 
     @Override
     public List<ThemeDto> getAllThemesDto() {
-        List<FixedThemeDto> allFixedThemesDto = themeDao.getAllFixedThemesDto();
-        List<FreeThemeDto> allFreeThemesDto = themeDao.getAllFreeThemesDto();
-        // Формируется список всех тем в порядке возрастания позиции темы
-        List<ThemeDto> allThemesDto = new ArrayList<>();
-        allThemesDto.addAll(allFixedThemesDto);
-        allThemesDto.addAll(allFreeThemesDto);
-        List<ThemeDto> sortedAllThemesDto = allThemesDto.stream().sorted(Comparator.comparingInt(ThemeDto::getPosition)).collect(Collectors.toList());
-        return sortedAllThemesDto;
+        return themeDao.getAllThemesDto();
     }
 
     @Override
