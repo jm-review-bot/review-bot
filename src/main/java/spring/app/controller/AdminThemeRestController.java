@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.FixedThemeDto;
-import spring.app.dto.FreeThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
@@ -48,7 +47,7 @@ public class AdminThemeRestController {
     @Validated(CreateGroup.class)
     @PostMapping
     public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
-        Theme theme = null;
+        Theme theme;
         ThemeDto addedThemeDto = null;
         if (themeDto.getType().equals("fixed")) {
             theme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);

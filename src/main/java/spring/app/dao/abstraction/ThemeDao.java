@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
-import spring.app.dto.FreeThemeDto;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -21,10 +20,6 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
     Integer getThemeMaxPositionValue();
 
     Integer getThemeMinPositionValue();
-
-    List<FixedThemeDto> getAllFixedThemesDto();
-
-    List<FreeThemeDto> getAllFreeThemesDto();
 
     List<ThemeDto> getAllThemesDto();
 

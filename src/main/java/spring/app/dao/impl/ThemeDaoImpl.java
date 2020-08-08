@@ -64,18 +64,6 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public List<FixedThemeDto> getAllFixedThemesDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t ORDER BY t.position", FixedThemeDto.class)
-                .getResultList();
-    }
-
-    @Override
-    public List<FreeThemeDto> getAllFreeThemesDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.FreeThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FreeTheme t ORDER BY t.position", FreeThemeDto.class)
-                .getResultList();
-    }
-
-    @Override
     public List<ThemeDto> getAllThemesDto() {
         return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t ORDER BY t.position", ThemeDto.class)
                 .getResultList();
