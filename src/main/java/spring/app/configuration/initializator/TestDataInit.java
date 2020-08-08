@@ -173,9 +173,6 @@ public class TestDataInit {
     @Autowired
     private Step selectingReviewToDelete;
 
-    @Autowired
-    private FeedbackService feedbackService;
-
     public TestDataInit() {
     }
 
