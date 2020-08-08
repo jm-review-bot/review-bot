@@ -9,7 +9,8 @@ import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
 import spring.app.util.Keyboards;
 
 import javax.persistence.NoResultException;

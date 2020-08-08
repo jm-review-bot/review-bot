@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
-import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import java.util.List;
@@ -88,13 +88,13 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<FixedThemeDto> getAllThemesDto() {
-        return themeDao.getAllThemesDto();
+    public List<FixedThemeDto> getAllFixedThemesDto() {
+        return themeDao.getAllFixedThemesDto();
     }
 
     @Override
-    public FixedThemeDto getThemeDtoById(Long themeId) {
-        return themeDao.getThemeDtoById(themeId);
+    public FixedThemeDto getFixedThemeDtoById(Long themeId) {
+        return themeDao.getFixedThemeDtoById(themeId);
     }
 
     @Transactional
@@ -133,5 +133,10 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
         return themeDao.getFreeThemesByExaminerId(examinerId);
+    }
+
+    @Override
+    public FreeTheme getFreeThemeById(long id) {
+        return themeDao.getFreeThemeById(id);
     }
 }

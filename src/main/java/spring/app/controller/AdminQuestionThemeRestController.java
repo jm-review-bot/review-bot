@@ -6,6 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.QuestionDto;
 import spring.app.groups.CreateGroup;
+import spring.app.groups.UpdateGroup;
 import spring.app.mapper.QuestionMapper;
 import spring.app.model.FixedTheme;
 import spring.app.model.Question;
@@ -55,10 +56,36 @@ public class AdminQuestionThemeRestController {
         return ResponseEntity.ok(questionService.getQuestionDtoById(questionId));
     }
 
+    @Validated(UpdateGroup.class)
+    @PostMapping("/{themeId}/question/{questionId}")
+    public ResponseEntity updateQuestion(@PathVariable Long questionId,
+                                         @RequestBody @Valid QuestionDto questionDto) {
+        Question question = questionService.getQuestionById(questionId);
+        if (question == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Question updatedQuestion = questionMapper.questionDtoToQuestionEntity(questionDto);
+        updatedQuestion.setFixedTheme(question.getFixedTheme());
+        questionService.updateQuestion(updatedQuestion);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
     @DeleteMapping("/{themeId}/question/{questionId}")
     public ResponseEntity deleteQuestion(@PathVariable Long themeId,
                                          @PathVariable Long questionId) {
         questionService.deleteQuestionById(questionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping("/{themeId}/question/{questionId}/position/up")
+    public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
+        boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
+        return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию выше") : ResponseEntity.badRequest().build();
+    }
+
+    @PatchMapping("/{themeId}/question/{questionId}/position/down")
+    public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
+        boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
+        return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию ниже") : ResponseEntity.badRequest().build();
     }
 }

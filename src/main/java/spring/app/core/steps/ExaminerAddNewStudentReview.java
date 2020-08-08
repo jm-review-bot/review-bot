@@ -5,7 +5,10 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.*;
+import spring.app.model.Review;
+import spring.app.model.StudentReview;
+import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
+import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 
 @Component
 public class ExaminerAddNewStudentReview extends Step {
