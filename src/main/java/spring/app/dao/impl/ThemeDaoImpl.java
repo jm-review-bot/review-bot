@@ -3,7 +3,9 @@ package spring.app.dao.impl;
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
+import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
+import spring.app.dto.FreeThemeDto;
 import spring.app.model.Theme;
 
 import java.util.List;
@@ -49,21 +51,21 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public Integer getThemeMaxPositionValue() {
-        List<Integer> maxPosition = entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
-                .getResultList();
-        return maxPosition.size() > 0 ? maxPosition.get(0) : 0;
+        Integer maxPosition = entityManager.createQuery("SELECT max(t.position) FROM Theme t", Integer.class)
+                .getSingleResult();
+        return maxPosition == null ? 0 : maxPosition;
     }
 
     @Override
     public Integer getThemeMinPositionValue() {
-        List<Integer> maxPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
-                .getResultList();
-        return maxPosition.size() > 0 ? maxPosition.get(0) : 0;
+        Integer minPosition = entityManager.createQuery("SELECT min(t.position) FROM Theme t", Integer.class)
+                .getSingleResult();
+        return minPosition == null ? 0 : minPosition;
     }
 
     @Override
-    public List<FixedThemeDto> getAllFixedThemesDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t ORDER BY t.position", FixedThemeDto.class)
+    public List<ThemeDto> getAllThemesDto() {
+        return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t ORDER BY t.position", ThemeDto.class)
                 .getResultList();
     }
 
