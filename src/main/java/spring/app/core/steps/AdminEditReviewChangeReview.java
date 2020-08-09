@@ -49,8 +49,8 @@ public class AdminEditReviewChangeReview extends Step {
             boolean isEqualsPass = wordInput.equals("пройдено");
             String selectedStudentReview = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_REVIEW_LIST).get(0);
             StudentReview studentReview = studentReviewService.getStudentReviewById(Long.parseLong(selectedStudentReview));
-            if (studentReview.getPassed() ^ isEqualsPass) { //см. else станет понятно.
-                studentReview.setPassed(isEqualsPass);
+            if (studentReview.getIsPassed() ^ isEqualsPass) { //см. else станет понятно.
+                studentReview.setIsPassed(isEqualsPass);
                 studentReviewService.updateStudentReview(studentReview);
                 //хранить нам ничего не надо, а вот уведомить лист - да
                 storageService.updateUserStorage(vkId, ADMIN_EDIT_REVIEW_CHANGE_REVIEW, new ArrayList<>());

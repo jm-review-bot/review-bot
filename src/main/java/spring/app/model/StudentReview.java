@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import spring.app.listener.StudentReviewListener;
 
 import javax.persistence.*;
@@ -8,6 +10,8 @@ import java.util.Objects;
 @Entity
 @EntityListeners(StudentReviewListener.class)
 @Table(name = "student_review")
+@Getter
+@Setter
 public class StudentReview {
 
     @Id
@@ -37,38 +41,6 @@ public class StudentReview {
     public StudentReview(User user, Review review) {
         this.user = user;
         this.review = review;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Review getReview() {
-        return review;
-    }
-
-    public void setReview(Review review) {
-        this.review = review;
-    }
-
-    public Boolean getPassed() {
-        return isPassed;
-    }
-
-    public void setPassed(Boolean passed) {
-        isPassed = passed;
     }
 
     @Override

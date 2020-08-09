@@ -68,7 +68,7 @@ public class UserStartChooseReview extends Step {
                     sendUserToNextStep(context, USER_START_REVIEW_HANGOUTS_LINK);
                 } else {
                     // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
-                    reviewById.setOpen(false);
+                    reviewById.setIsOpen(false);
                     reviewService.updateReview(reviewById);
                     User user = userService.getByVkId(vkId);
                     user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
