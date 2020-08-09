@@ -1,7 +1,5 @@
 package spring.app.dao.abstraction;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import spring.app.model.StudentReviewAnswer;
 
 import java.util.List;

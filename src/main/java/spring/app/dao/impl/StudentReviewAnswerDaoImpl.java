@@ -1,10 +1,7 @@
 package spring.app.dao.impl;
 
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewAnswerDao;
-import spring.app.model.StudentReview;
 import spring.app.model.StudentReviewAnswer;
 
 import java.util.List;

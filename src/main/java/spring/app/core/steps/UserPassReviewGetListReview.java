@@ -196,6 +196,23 @@ public class UserPassReviewGetListReview extends Step {
             }
         }
 
+        // В случае выбора темы со свободной защитой, пользователь должен связаться с экзаменаторами самостоятельно
+        if (themeService.isFreeTheme(selectedThemeId)) {
+            StringBuilder infoMessage = new StringBuilder();
+            infoMessage.append(
+                    String.format(
+                            "Тема со свободной защитой: \"%s\". Напишите любому проверяющему и договоритесь о созвоне:\n\n",
+                            selectedTheme.getTitle()
+                    )
+            );
+            List<User> examiners = themeService.getExaminersByFreeThemeId(selectedThemeId);
+            for (User examiner : examiners) {
+                infoMessage.append(examiner.getFirstName() + " " + examiner.getLastName() + "\n");
+            }
+            infoMessage.append("\nНажмите \"Назад\" для возврата в предыдущее меню");
+            return infoMessage.toString();
+        }
+
         //с прошлошо шага получаем ID темы и по нему из запроса получаем тему
         //Set<Review> reviewsSetNoAccess = new HashSet<>();
         if (reviewsIndex.get(vkId).isEmpty()) {

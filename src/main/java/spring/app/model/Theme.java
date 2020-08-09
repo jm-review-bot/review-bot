@@ -1,18 +1,16 @@
 package spring.app.model;
 
-import lombok.Getter;
-import lombok.Setter;
 import spring.app.listener.ThemeListener;
 
 import javax.persistence.*;
 import java.util.Objects;
 
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @EntityListeners(ThemeListener.class)
+@DiscriminatorColumn(name = "theme_type")
 @Table(name = "theme")
-@Getter
-@Setter
-public class Theme {
+public abstract class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -22,16 +20,59 @@ public class Theme {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "criticalWeight")
+    @Column(name = "critical_weight")
     private Integer criticalWeight;
+
+    @Column(name = "review_point")
+    private Integer reviewPoint;
 
     @Column(name = "position")
     private Integer position;
 
-    @Column(name = "reviewPoint")
-    private Integer reviewPoint;
+    @Column(name = "theme_type", nullable=false, updatable=false, insertable=false)
+    private String themeType;
 
     public Theme() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Integer getCriticalWeight() {
+        return criticalWeight;
+    }
+
+    public void setCriticalWeight(Integer criticalWeight) {
+        this.criticalWeight = criticalWeight;
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
+
+    public void setPosition(Integer position) {
+        this.position = position;
+    }
+
+    public Integer getReviewPoint() {
+        return reviewPoint;
+    }
+
+    public void setReviewPoint(Integer reviewPoint) {
+        this.reviewPoint = reviewPoint;
     }
 
     @Override
@@ -40,11 +81,13 @@ public class Theme {
         if (o == null || getClass() != o.getClass()) return false;
         Theme theme = (Theme) o;
         return id.equals(theme.id) &&
-                title.equals(theme.title);
+                title.equals(theme.title) &&
+                criticalWeight.equals(theme.criticalWeight) &&
+                position.equals(theme.position);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title);
+        return Objects.hash(id, title, criticalWeight, position);
     }
 }

@@ -1,8 +1,3 @@
-$(document).on('click', '.theme-expand', function () {
-    let themeId = this.dataset.id
-    buildListQuestionsByThemeId(themeId)
-})
-
 function getListQuestionsDtoByThemeId(themeId) {
     let listQuestionsDto
     $.ajax({
@@ -53,6 +48,13 @@ function buildListQuestionsByThemeId(themeId) {
         `
         htmlContent += htmlQuestion
     }
+    htmlContent += `
+        <div>
+            <button type="button" class="add-question-to-theme btn btn-lg btn-block" data-id="${themeId}">
+                Добавить вопрос
+            </button>
+        </div>
+    `
     $(document).find(`#card-theme-${themeId}`).html(htmlContent).css('background-color' , '#3366CC').css('padding' , '10px');
 }
 

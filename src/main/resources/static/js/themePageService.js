@@ -4,7 +4,6 @@ $(function () {
 })
 
 function getAllThemesDto() {
-    console.log("themePageService_getAllThemesDto");
     let allThemesDto;
     $.ajax({
         url: '/api/admin/theme',
@@ -18,7 +17,6 @@ function getAllThemesDto() {
 }
 
 function buildThemesAccordion(allThemesDto) {
-    console.log("themePageService_buildThemesAccordion");
     let htmlContent = ''
     /*
     * Для того, чтобы темы отображались в порядке возрастания номера позиции,
@@ -34,7 +32,7 @@ function buildThemesAccordion(allThemesDto) {
                 <div class="card-header">
                     <h4 class="mb-0">
                         <div class="row">
-                            <div class="col-10 theme-expand" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}" data-id="${theme.id}">
+                            <div class="col-10 theme-expand" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}" data-id="${theme.id}" data-type="${theme.type}">
                                 ${theme.title}
                             </div>
                             <div class="col-2 text-right">
@@ -53,14 +51,9 @@ function buildThemesAccordion(allThemesDto) {
                 </div>
                 <div id="theme-${theme.id}" class="collapse" aria-labelledby="card-header-theme-${theme.id}">
                     <div class="card-body">
-                        <div id="card-theme-${theme.id}" class="card">
-                        <!--Здесь располагаются вопросы темы-->
+                        <div id="card-theme-${theme.id}" class="card border-white">
+                        <!--Здесь располагаются вопросы темы или список проверяющих-->
                         </div>
-                    </div>
-                    <div>
-                        <button type="button" class="add-question-to-theme btn btn-lg btn-block" data-id="${theme.id}">
-                            Добавить вопрос
-                        </button>
                     </div>
                 </div>
             </div>
@@ -75,11 +68,7 @@ function buildThemesAccordion(allThemesDto) {
                 type : 'PATCH',
                 url: url,
                 success: function() {
-                    console.log("move-down-theme.click--WIN!");
-                    buildThemesAccordion(getAllThemesDto());//location.reload();
-                },
-                error: function () {
-                    console.log("move-down-theme.click--ERROR!");
+                    buildThemesAccordion(getAllThemesDto());
                 }
             });
         }
@@ -91,13 +80,19 @@ function buildThemesAccordion(allThemesDto) {
                 type : 'PATCH',
                 url: url,
                 success: function() {
-                    console.log("move-up-theme.click--WIN!");
-                    buildThemesAccordion(getAllThemesDto());//location.reload();
-                },
-                error: function () {
-                    console.log("move-up-theme.click--ERROR!");
+                    buildThemesAccordion(getAllThemesDto());
                 }
             });
         }
     );
 }
+
+$(document).on('click', '.theme-expand', function () {
+    let themeId = this.dataset.id
+    let themeType = this.dataset.type
+    if (themeType == "fixed") {
+        buildListQuestionsByThemeId(themeId)
+    } else if (themeType == "free") {
+        buildListReviewersByThemeId(themeId)
+    }
+})

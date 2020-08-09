@@ -6,6 +6,8 @@ public class Keyboards {
 
     public final static String FOOTER_FR = "]\n}";
 
+    public final static String COLUMN_DELIMETER_FR = ",";
+
     public final static String ROW_DELIMETER_FR = "],[";
 
     public final static String DELETE_STUDENT_REVIEW = "{\n" +
@@ -376,5 +378,47 @@ public class Keyboards {
             "          \"label\": \"Да, отменить ревью\"\n" +
             "        },\n" +
             "        \"color\": \"negative\"\n" +
+            "      }\n";
+
+    public final static String CHECKING_FREE_THEMES = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Проверка тем свободной защиты\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n";
+
+    public final static String CHOOSE_FROM_LIST = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Выбрать из списка\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n";
+
+    public final static String ENTER_MANUALLY = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Ввести вручную\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n";
+
+    public final static String EDIT_OLD_OR_ADD_NEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
+            "          \"label\": \"Редактировать старое\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Добавить новое\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
             "      }\n";
 }
