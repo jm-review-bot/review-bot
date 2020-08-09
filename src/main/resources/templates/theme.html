@@ -40,7 +40,7 @@
     <div class="main">
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand"></a>
-            <form class="form-inline">
+            <form class="form-inline" id="formForAddingTheme">
                 <a href="#containerForAddingTheme" class="btn btn-primary" data-toggle="modal">Добавить тему</a>
                 <!--Контейнер для добавления темы-->
                 <div id="containerForAddingTheme" class="modal fade">
@@ -54,15 +54,18 @@
                             </div>
                             <div class="modal-body">
                                 <div>
-                                    <input id="newThemeNameInput" type="text" size="50" placeholder="Название новой темы"
+                                    <label for="idInputForNameOfTheNewTheme">Название новой темы</label>
+                                    <input class="inputContainerForAddingTheme" id="idInputForNameOfTheNewTheme" type="text"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
-                                    <input id="criticalWeightNewThemeInput" type="number"  min="0" max="9007199254740991" size="50" placeholder="Критический вес новой темы"
+                                    <label for="idInputForCriticalWeightOfTheNewTheme">Критический вес новой темы</label>
+                                    <input class="inputContainerForAddingTheme" id="idInputForCriticalWeightOfTheNewTheme" type="number"  min="0" max="9007199254740991"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
-                                    <input id="reviewPointNewThemeInput" type="number"  min="0" max="9007199254740991" size="50" placeholder="Количество очков за сдачу новой темы"
+                                    <label for="idInputForReviewPointOfTheNewTheme">Количество очков за сдачу новой темы</label>
+                                    <input class="inputContainerForAddingTheme" id="idInputForReviewPointOfTheNewTheme" type="number"  min="0" max="9007199254740991"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                             </div>
