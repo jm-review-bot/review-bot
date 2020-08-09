@@ -48,13 +48,13 @@ function buildFeedbacksAccordion(allFeedbacksDto) {
         let ratingReview = feedback.ratingReview;
         let ratingReviewer = feedback.ratingReviewer;
         let tdRatingReviewColor = ratingReview < 6 ?
-                "#"+dec2hex(255)+dec2hex(0)+dec2hex(Math.round(63.75*(ratingReview-1)))
+            "#"+dec2hex(255)+dec2hex(0)+dec2hex(Math.round(63.75*(ratingReview-1)))
             :
-                "#"+dec2hex(0)+dec2hex(255)+dec2hex(Math.round(63.75*(10-ratingReview)));
+            "#"+dec2hex(0)+dec2hex(255)+dec2hex(Math.round(63.75*(10-ratingReview)));
         let tdRatingReviewerColor = ratingReviewer < 6 ?
-                "#"+dec2hex(255)+dec2hex(0)+dec2hex(Math.round(63.75*(ratingReviewer-1)))
+            "#"+dec2hex(255)+dec2hex(0)+dec2hex(Math.round(63.75*(ratingReviewer-1)))
             :
-                "#"+dec2hex(0)+dec2hex(255)+dec2hex(Math.round(63.75*(10-ratingReviewer)));
+            "#"+dec2hex(0)+dec2hex(255)+dec2hex(Math.round(63.75*(10-ratingReviewer)));
         let themeHtmlAccordion = `
               <tr>
                   <th>${feedback.id}</th>

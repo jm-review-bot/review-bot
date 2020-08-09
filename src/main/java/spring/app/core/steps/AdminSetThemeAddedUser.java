@@ -59,8 +59,8 @@ public class AdminSetThemeAddedUser extends Step {
                 .append(") ")
                 .append("может начать сдачу ревью:\n");
 
-        for (Theme position : themes) {
-            themeList.append(String.format("[%d] %s\n", position.getPosition(), position.getTitle()));
+        for (Theme theme : themes) {
+            themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
         }
 
         listTheme.add(themeList.toString());

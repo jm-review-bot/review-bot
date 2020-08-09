@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
+import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
+import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class ThemeServiceImpl implements ThemeService {
     @Transactional
     @Override
     public void addTheme(Theme theme) {
+        theme.setPosition(themeDao.getThemeMaxPositionValue() + 1);
         themeDao.save(theme);
     }
 
@@ -92,8 +96,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
-        return themeDao.getThemeDtoById(themeId);
+    public FixedThemeDto getFixedThemeDtoById(Long themeId) {
+        return themeDao.getFixedThemeDtoById(themeId);
     }
 
     @Transactional
@@ -127,5 +131,25 @@ public class ThemeServiceImpl implements ThemeService {
             );
             throw new ProcessInputException(error.toString());
         }
+    }
+
+    @Override
+    public List<Theme> getFreeThemesByExaminerId(Long examinerId) {
+        return themeDao.getFreeThemesByExaminerId(examinerId);
+    }
+
+    @Override
+    public FreeTheme getFreeThemeById(long id) {
+        return themeDao.getFreeThemeById(id);
+    }
+
+    @Override
+    public List<User> getExaminersByFreeThemeId(Long freeThemeId) {
+        return themeDao.getExaminersByFreeThemeId(freeThemeId);
+    }
+
+    @Override
+    public boolean isFreeTheme(Long themeId) {
+        return themeDao.isFreeTheme(themeId);
     }
 }
