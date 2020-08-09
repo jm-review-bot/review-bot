@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/font-glyphicons.css">
+    <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
+
+    <!-- CSRF-protection -->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <title>theme</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="sidenav">
+        <div>
+            <form action="/logout">
+                <button class="btn-block btn-outline-danger">
+                    LOGOUT
+                </button>
+            </form>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action"
+               href="/admin/feedback">Обратная связь</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action" href="/admin/theme">Темы</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action"
+               href="#">Вопросы</a>
+        </div>
+    </div>
+    <div class="main">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand"></a>
+            <form class="form-inline">
+                <a href="#containerForAddingTheme" class="btn btn-primary" data-toggle="modal">Добавить тему</a>
+                <!--Контейнер для добавления темы-->
+                <div id="containerForAddingTheme" class="modal fade">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Добавление темы</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div>
+                                    <input id="newThemeNameInput" type="text" size="50" placeholder="Название новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                                <div>
+                                    <input id="criticalWeightNewThemeInput" type="number"  min="0" max="9007199254740991" size="50" placeholder="Критический вес новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                                <div>
+                                    <input id="reviewPointNewThemeInput" type="number"  min="0" max="9007199254740991" size="50" placeholder="Количество очков за сдачу новой темы"
+                                           aria-describedby="button-for-add-theme">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                                <button type="button" class="btn btn-primary add-new-theme">Сохранить</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control col-md-2 offset-md-10" placeholder="Поиск" aria-label="Поиск"
+                       aria-describedby="button-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="button-addon2">Поиск</button>
+                </div>
+            </div>
+        </nav>
+        <h1>Список всех доступных тем</h1>
+
+        <!--Контейнер для тем-->
+        <div class="accordion" id="theme-accordion">
+            <!-- Список тем, заполняется с помощью JS -->
+        </div>
+        <!-- Модалка для редактирования темы -->
+        <div class="modal" tabindex="-1" role="dialog" id="changeThemeModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title edit-theme-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Форма для редактирования темы -->
+                        <form id="edit-theme-form">
+                            <div class="form-group">
+                                Название темы:
+                                <input class="col" type="text" name="title" placeholder="Введите название темы" required autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                Критический вес:
+                                <input class="col" type="number" min="0" name="criticalWeight" placeholder="Введите критический вес темы" required autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                Ревью поинты:
+                                <input class="col" type="number" min="0" name="reviewPoint" placeholder="Введите вес вопроса" required autocomplete="off">
+                            </div>
+                            <div class="modal-footer">
+                                <div class="dropdown">
+                                    <!-- выпадающие элементы -->
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Дополнительно
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <button class="dropdown-item delete-theme-button" type="button">Удалить</button>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                                <button type="submit" class="btn btn-primary">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Модальное окно для добавления нового вопроса темы-->
+<div class="modal fade" id="add-question-modal-window" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Новый вопрос
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-question-form">
+                    <div class="form-group">
+                        Текст вопроса:
+                        <textarea rows="10" input class="col" type="text" name="question" placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Ответ на вопрос:
+                        <textarea rows="10" input class="col" type="text" name="answer" placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Вес вопроса:
+                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required autocomplete="off">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Модальное окно для редактирования вопроса темы-->
+<div class="modal fade" id="edit-question-modal-window" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Редактировать вопрос
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-question-form">
+                    <div class="form-group">
+                        Текст вопроса:
+                        <textarea rows="10" input class="col" type="text" name="question" placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Ответ на вопрос:
+                        <textarea rows="10" input class="col" type="text" name="answer" placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
+                    </div>
+                    <div class="form-group">
+                        Вес вопроса:
+                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required autocomplete="off">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script type="text/javascript" src="/js/ajaxConfig.js"></script>
+<script type="text/javascript" src="/js/themePageService.js"></script>
+<script type="text/javascript" src="/js/addTheme.js"></script>
+<script type="text/javascript" src="/js/questionPageService.js"></script>
+<script type="text/javascript" src="/js/deleteQuestionService.js"></script>
+<script type="text/javascript" src="/js/addQuestionService.js"></script>
+<script type="text/javascript" src="/js/editThemeService.js"></script>
+<script type="text/javascript" src="/js/editQuestionService.js"></script>
+<script type="text/javascript" src="/js/positionQuestionService.js"></script>
+
+</body>
+</html>

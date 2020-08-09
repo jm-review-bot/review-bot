@@ -1,15 +1,19 @@
 package spring.app.model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
+import spring.app.listener.ReviewListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(ReviewListener.class)
 @Table(name = "review")
+@Getter
+@Setter
 public class Review {
 
     @Id
@@ -24,63 +28,22 @@ public class Review {
     @Column(name = "is_open")
     private Boolean isOpen;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reviewer_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "theme_id", nullable = false)
     private Theme theme;
 
     public Review() {
     }
 
-    public Review (User user, Theme theme, Boolean isOpen, LocalDateTime date) {
+    public Review(User user, Theme theme, Boolean isOpen, LocalDateTime date) {
         this.user = user;
         this.theme = theme;
         this.isOpen = isOpen;
         this.date = date;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDateTime date) {
-        this.date = date;
-    }
-
-    public Boolean getOpen() {
-        return isOpen;
-    }
-
-    public void setOpen(Boolean open) {
-        isOpen = open;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Theme getTheme() {
-        return theme;
-    }
-
-    public void setTheme(Theme theme) {
-        this.theme = theme;
     }
 
     @Override

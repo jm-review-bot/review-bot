@@ -51,4 +51,15 @@ public class StudentReviewAnswerServiceImpl implements StudentReviewAnswerServic
     public List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId(Long studentReviewId) {
         return studentReviewAnswerDao.getStudentReviewAnswersByStudentReviewId(studentReviewId);
     }
+
+    @Override
+    public List<StudentReviewAnswer> getStudentReviewAnswersByQuestionId(Long questionId) {
+        return studentReviewAnswerDao.getStudentReviewAnswersByQuestionId(questionId);
+    }
+
+    @Transactional
+    @Override
+    public void removeAll(List<StudentReviewAnswer> studentReviewAnswers) {
+        studentReviewAnswerDao.removeAll(studentReviewAnswers);
+    }
 }

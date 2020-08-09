@@ -84,7 +84,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      * @param localDateTime
      */
     @Override
-    public List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime){
+    public List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime) {
         return entityManager.createQuery("SELECT r FROM Review r WHERE r.user.vkId = :vkId AND r.isOpen = true AND r.date > :date", Review.class)
                 .setParameter("vkId", vkId)
                 .setParameter("date", localDateTime)
@@ -99,7 +99,7 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
      * @param numberOfMinutes
      */
     @Override
-    public List<Review> getMyReviewForDate(Integer vkId, LocalDateTime localDateTime, Integer numberOfMinutes){
+    public List<Review> getMyReviewForDate(Integer vkId, LocalDateTime localDateTime, Integer numberOfMinutes) {
         return entityManager.createQuery("SELECT r FROM Review r join fetch r.theme rt WHERE r.user.vkId = :vkId AND r.isOpen = true AND r.date > :date_start AND r.date < :date_end", Review.class)
                 .setParameter("vkId", vkId)
                 .setParameter("date_start", localDateTime.minusMinutes(numberOfMinutes))
@@ -110,7 +110,12 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     /**
      * Метод возвращает ревью по выбранной теме при условии, что записанных на ревью менее трех
      *
+     * @param id               пользователя которого исключаем
      * @param theme
+     * @param localDateTime
+     * @param dateTimeMyReview
+     * @param numberOfMinutes
+     * @return
      */
     @Override
     public List<Review> getAllReviewsByThemeAndNotMyReviews(Long id, Theme theme, LocalDateTime localDateTime, LocalDateTime dateTimeMyReview, Integer numberOfMinutes) {
@@ -120,6 +125,13 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("date", localDateTime)
                 .setParameter("date_start", dateTimeMyReview.minusMinutes(numberOfMinutes))
                 .setParameter("date_end", dateTimeMyReview.plusMinutes(numberOfMinutes))
+                .getResultList();
+    }
+
+    @Override
+    public List<Review> getReviewsByThemeId(Long themeId) {
+        return entityManager.createQuery("SELECT r FROM Review r WHERE r.theme.id = :theme_id", Review.class)
+                .setParameter("theme_id", themeId)
                 .getResultList();
     }
 
@@ -148,28 +160,10 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
                 .setParameter("id", vkId).getResultList();
     }
 
-    /**
-     * Метод возвращает открытое ревью, на сдачу которого которое записался юзер с
-     * @param vkId
-     */
     @Override
-    public Review getOpenReviewByStudentVkId(Integer vkId) throws NoResultException {
-        return entityManager.createQuery(
-                "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme JOIN FETCH srr.user JOIN Review r ON r.id = sr.review.id WHERE r.isOpen = true AND sr.user.vkId = :vkId", StudentReview.class)
-                .setParameter("vkId", vkId)
-                .getSingleResult()
-                .getReview();
-    }
-
-    @Override
-    @Transactional(propagation= Propagation.MANDATORY)
-    public void bulkDeleteByUserId(Long id) {
-        // Write all pending changes to the DB
-        entityManager.flush();
-        // Remove all entities from the persistence context
-        entityManager.clear();
-        entityManager.createQuery("DELETE FROM Review WHERE user.id = :id")
+    public List<Review> getAllReviewsByUserId(Long id) {
+        return entityManager.createQuery("SELECT r FROM Review  r WHERE r.user.id = :id", Review.class)
                 .setParameter("id", id)
-                .executeUpdate();
+                .getResultList();
     }
 }

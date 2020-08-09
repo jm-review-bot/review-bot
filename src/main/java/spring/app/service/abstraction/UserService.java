@@ -1,11 +1,12 @@
 package spring.app.service.abstraction;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
 import spring.app.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     void addUser(User user);
 
@@ -26,4 +27,6 @@ public interface UserService {
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 
     List<User> getStudentsByReviewId(Long reviewId);
+
+    List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
 }

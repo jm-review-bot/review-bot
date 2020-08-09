@@ -1,10 +1,17 @@
 package spring.app.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import spring.app.listener.ThemeListener;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(ThemeListener.class)
 @Table(name = "theme")
+@Getter
+@Setter
 public class Theme {
 
     @Id
@@ -25,46 +32,6 @@ public class Theme {
     private Integer reviewPoint;
 
     public Theme() {
-    }
-
-    public void setCritical_weight(Integer criticalWeight) {
-        this.criticalWeight = criticalWeight;
-    }
-
-    public Integer getCritical_weight() {
-        return criticalWeight;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
-    public Integer getReviewPoint() {
-        return reviewPoint;
-    }
-
-    public void setReviewPoint(Integer reviewPoint) {
-        this.reviewPoint = reviewPoint;
     }
 
     @Override

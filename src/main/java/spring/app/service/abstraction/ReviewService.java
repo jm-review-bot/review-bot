@@ -32,7 +32,11 @@ public interface ReviewService {
 
     List<Review> getAllReviewsByTheme(Long id, Theme theme, LocalDateTime localDateTime);
 
+    List<Review> getReviewsByThemeId(Long themeId);
+
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId);
 
-    Review getOpenReviewByStudentVkId(Integer vkId);
+    List<Review> getAllReviewsByUserId(Long id);
+
+    void removeAll(List<Review> reviews);
 }

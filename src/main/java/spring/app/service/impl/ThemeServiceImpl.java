@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ThemeDao;
+import spring.app.dto.ThemeDto;
+import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Theme;
 import spring.app.service.abstraction.ThemeService;
 
@@ -41,14 +43,26 @@ public class ThemeServiceImpl implements ThemeService {
         themeDao.update(theme);
     }
 
+    /*
+     * Метод производит удаление темы, а затем смещает
+     * позиции нижестоящих тем на одну вверх
+     * */
     @Transactional
     @Override
     public void deleteThemeById(Long id) {
-        themeDao.deleteById(id);
+        Theme theme = themeDao.getById(id);
+        if (theme != null) {
+            Integer maxThemePosition = themeDao.getThemeMaxPositionValue();
+            Integer themePosition = theme.getPosition();
+            if (maxThemePosition != themePosition) {
+                themeDao.shiftThemePosition(themePosition, maxThemePosition, -1);
+            }
+            themeDao.deleteById(id);
+        }
     }
 
     @Override
-    public Theme getByPosition(Integer position){
+    public Theme getByPosition(Integer position) {
         return themeDao.getByPosition(position);
     }
 
@@ -60,5 +74,58 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
+    }
+
+    @Override
+    public Integer getThemeMaxPositionValue() {
+        return themeDao.getThemeMaxPositionValue();
+    }
+
+    @Override
+    public Integer getThemeMinPositionValue() {
+        return themeDao.getThemeMinPositionValue();
+    }
+
+    @Override
+    public List<ThemeDto> getAllThemesDto() {
+        return themeDao.getAllThemesDto();
+    }
+
+    @Override
+    public ThemeDto getThemeDtoById(Long themeId) {
+        return themeDao.getThemeDtoById(themeId);
+    }
+
+    @Transactional
+    @Override
+    public void shiftThemePosition(Long themeId, int shift) throws ProcessInputException {
+
+        Theme themeToShift = themeDao.getById(themeId);
+        int currentPosition = themeToShift.getPosition();
+        int newPosition = currentPosition + shift;
+
+        int minThemePosition = themeDao.getThemeMinPositionValue();
+        int maxThemePosition = themeDao.getThemeMaxPositionValue();
+
+        if (newPosition <= maxThemePosition && newPosition >= minThemePosition) {
+//            Смещаем другие темы, которые находятся между старой и новой позициями изначально смещаемой темы themeToShift
+            if (shift > 0) {
+                themeDao.shiftThemePosition(currentPosition, newPosition, -1);
+            } else if (shift < 0) {
+                themeDao.shiftThemePosition(newPosition, currentPosition, 1);
+            }
+//            Смещаем выранную тему (themeToShift) на указанное количество позиций (shift)
+            themeToShift.setPosition(newPosition);
+            themeDao.update(themeToShift);
+        } else {
+            String error = String.format(
+                    "Ошибка: Тема не может быть смещена на %d позиций. Новое положение темы должно быть в диапазоне между %d и %d. Текущее положение темы: %d.",
+                    Math.abs(shift),
+                    minThemePosition,
+                    maxThemePosition,
+                    currentPosition
+            );
+            throw new ProcessInputException(error.toString());
+        }
     }
 }

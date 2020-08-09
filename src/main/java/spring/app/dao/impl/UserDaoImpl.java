@@ -23,15 +23,10 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public User getByVkId(Integer vkId) throws NoResultException {
-        try {
-            TypedQuery<User> query = entityManager.createQuery(
-                    "SELECT u FROM User u WHERE u.vkId = :id", User.class);
-            query.setParameter("id", vkId);
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            log.info("Пользователь с vkId:{} не обнаружен в базе", vkId);
-            throw e;
-        }
+        List<User> userList = entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId", User.class)
+                .setParameter("vkId", vkId)
+                .getResultList();
+        return userList.size() > 0 ? userList.get(0) : null;
     }
 
     @Override
@@ -69,6 +64,16 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     public List<User> getStudentsByReviewId(Long reviewId) {
         return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id", User.class)
                 .setParameter("review_id", reviewId)
+                .getResultList();
+    }
+
+    @Override
+    public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        return entityManager.createNativeQuery("SELECT u.* FROM users u JOIN student_review sr ON u.id = sr.student_id " +
+                "WHERE sr.review_id IN " +
+                "(SELECT r.id FROM review r WHERE r.is_open = TRUE AND r.date BETWEEN :period_start AND :period_end)", User.class)
+                .setParameter("period_start", periodStart)
+                .setParameter("period_end", periodEnd)
                 .getResultList();
     }
 }

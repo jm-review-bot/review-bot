@@ -1,8 +1,6 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
@@ -19,30 +17,15 @@ import java.util.List;
 
 @Component
 public class VkBot implements ChatBot {
-    private final static Logger log = LoggerFactory.getLogger(VkBot.class);
+
     private VkService vkService;
     private UserService userService;
-    private RoleService roleService;
-    private ThemeService themeService;
-    private ReviewService reviewService;
-    private QuestionService questionService;
     private StepHolder stepHolder;
-    private StudentReviewService studentReviewService;
-    private StudentReviewAnswerService studentReviewAnswerService;
-    private StorageService storageService;
 
-
-    public VkBot(ThemeService themeService, ReviewService reviewService, VkService vkService, UserService userService, RoleService roleService, QuestionService questionService, StepHolder stepHolder, StudentReviewAnswerService studentReviewAnswerService, StudentReviewService studentReviewService, StorageService storageService) {
+    public VkBot(VkService vkService, UserService userService, StepHolder stepHolder) {
         this.vkService = vkService;
         this.userService = userService;
-        this.roleService = roleService;
         this.stepHolder = stepHolder;
-        this.reviewService = reviewService;
-        this.themeService = themeService;
-        this.questionService = questionService;
-        this.studentReviewService = studentReviewService;
-        this.studentReviewAnswerService = studentReviewAnswerService;
-        this.storageService = storageService;
     }
 
     @Override
@@ -92,27 +75,22 @@ public class VkBot implements ChatBot {
             try {
                 user = userService.getByVkId(userVkId);
             } catch (NoResultException e) {
-                log.warn("Пришло сообщение от незарегистрированного пользователя c vkId: {}", userVkId);
                 sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
                 return;
             }
 
             Role role = user.getRole();
-            context = new BotContext(user, userVkId, input, role, userService, themeService, reviewService, roleService, vkService, questionService, stepHolder, studentReviewAnswerService, studentReviewService, storageService);
+            context = new BotContext(user, userVkId, input, role, stepHolder);
             // выясняем степ в котором находится User
             userStep = user.getChatStep();
             // видел ли User этот шаг
             isViewed = user.isViewed();
-            log.debug("VK_ID юзера: {}, роль: {},  шаг: {}, ранее просмотрен: {}", userVkId, role.getName(),
-                    userStep, isViewed);
             currentStep = stepHolder.getSteps().get(userStep);
 
             if (!isViewed) {
                 // если шаг не просмотрен, заходим в этот контекст и отправляем первое сообщение шага
                 currentStep.enter(context);
-                sendMessage(currentStep.getText(), currentStep.getKeyboard(), userVkId);
-                // подтягиваем юзера из БД, чтобы обновить РП
-                user = context.getUserService().getByVkId(userVkId);
+                sendMessage(currentStep.getComposeText(context), currentStep.getComposeKeyboard(context), userVkId);
                 // юзеру ставим флаг просмотра true
                 user.setViewed(true);
                 // сохраняем изменения
@@ -120,17 +98,13 @@ public class VkBot implements ChatBot {
             } else { // если шаг просмотрен, то обрабатываем его инпут
                 try {
                     currentStep.processInput(context);
-                    // меняем юзеру на следующий шаг только, если не выпало исключения
-                    StepSelector nextStep = currentStep.nextStep();
-                    // Юзеру сеттим следующий шаг и меняем флаг просмотра на противоположный
-                    user.setChatStep(nextStep);
+                    //меняем флаг просмотра на противоположный, если ввод оказался корректным
                     user.setViewed(false);
                     // сохраняем изменения
                     userService.updateUser(user);
                 } catch (ProcessInputException | NoNumbersEnteredException | NoDataEnteredException e) {
                     // отправляем сообщение об ошибке ввода
-                    log.info("Пользователь с vkId: {} ввел неверные данные", userVkId);
-                    sendMessage(e.getMessage(), currentStep.getKeyboard(), userVkId);
+                    sendMessage(e.getMessage(), currentStep.getComposeKeyboard(context), userVkId);
                 }
             }
         }

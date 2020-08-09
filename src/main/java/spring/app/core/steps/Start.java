@@ -5,22 +5,21 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.util.StringParser;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.util.Keyboards.ADMIN_START_KB;
+import static spring.app.util.Keyboards.START_KB;
 
 @Component
 public class Start extends Step {
 
+    public Start() {
+        //статического контекста нет
+        super("", "");
+    }
+
     @Override
     public void enter(BotContext context) {
-
-        text = "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
-        keyboard = START_KB;
-        if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
-            text = "Этот Бот создан для прохождения ревью. " +
-                    "\nНажми \"начать\" для запуска или введи команду /admin для перехода в админку.";
-            keyboard = ADMIN_START_KB;
-        }
     }
 
     @Override
@@ -28,14 +27,30 @@ public class Start extends Step {
         String command = StringParser.toWordsArray(context.getInput())[0];
         if (command.equals("/admin")
                 && context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
-            nextStep = ADMIN_MENU;
+            this.sendUserToNextStep(context, ADMIN_MENU);
         } else if (command.equals("начать")) {
-            nextStep = USER_MENU;
-        } else if (command.equals("/start")) {
-            nextStep = START;
+            sendUserToNextStep(context, USER_MENU);
         } else {
-            keyboard = START_KB;
             throw new ProcessInputException("Введена неверная команда...");
+        }
+    }
+
+    @Override
+    public String getDynamicText(BotContext context) {
+        if (context.getRole().isAdmin()) {
+            return "Этот Бот создан для прохождения ревью.\n " +
+                    "Нажми \"начать\" для запуска или введи команду /admin для перехода в админку.";
+        } else {
+            return "Этот Бот создан для прохождения ревью. \nНажми \"Начать\" для запуска.";
+        }
+    }
+
+    @Override
+    public String getDynamicKeyboard(BotContext context) {
+        if (context.getRole().isAdmin()) { // валидация что юзер имеет роль админ
+            return ADMIN_START_KB;
+        } else {
+            return START_KB;
         }
     }
 }

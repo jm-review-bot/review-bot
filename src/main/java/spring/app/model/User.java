@@ -1,13 +1,22 @@
 package spring.app.model;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.security.core.userdetails.UserDetails;
 import spring.app.core.StepSelector;
+import spring.app.listener.UserListener;
 
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@EntityListeners(UserListener.class)
 @Table(name = "users")
-public class User {
+@Getter
+@Setter
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -45,6 +54,23 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "is_account_non_expired")
+    private boolean isAccountNonExpired;
+
+    @Column(name = "is_account_non_locked")
+    private boolean isAccountNonLocked;
+
+    @Column(name = "is_credentials_non_expired")
+    private boolean isCredentialsNonExpired;
+
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
+
+
+
     public User() {
     }
 
@@ -64,68 +90,40 @@ public class User {
         this.chatStep = chatStep;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public Collection<Role> getAuthorities() {
+        return Arrays.asList(role);
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // Метод нужен для реализации UserDetails.В рамках проекта username - это VkId пользователя
+    @Override
+    public String getUsername() {
+        return vkId.toString();
     }
 
-    public String getFirstName() {
-        return firstName;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    @Override
+    public boolean isAccountNonExpired() {
+        return isAccountNonExpired;
     }
 
-    public String getLastName() {
-        return lastName;
+    @Override
+    public boolean isAccountNonLocked() {
+        return isAccountNonLocked;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return isCredentialsNonExpired;
     }
 
-    public Integer getVkId() {
-        return vkId;
-    }
-
-    public void setVkId(Integer vkId) {
-        this.vkId = vkId;
-    }
-
-    public Integer getReviewPoint() {
-        return reviewPoint;
-    }
-
-    public void setReviewPoint(Integer reviewPoint) {
-        this.reviewPoint = reviewPoint;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public StepSelector getChatStep() {
-        return chatStep;
-    }
-
-    public void setChatStep(StepSelector chatStep) {
-        this.chatStep = chatStep;
-    }
-
-    public boolean isViewed() {
-        return isViewed;
-    }
-
-    public void setViewed(boolean viewed) {
-        isViewed = viewed;
+    @Override
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
     @Override

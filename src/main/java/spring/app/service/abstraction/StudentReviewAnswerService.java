@@ -18,4 +18,7 @@ public interface StudentReviewAnswerService {
 
     List<StudentReviewAnswer> getStudentReviewAnswersByStudentReviewId (Long studentReviewId);
 
+    List<StudentReviewAnswer> getStudentReviewAnswersByQuestionId(Long questionId);
+
+    void removeAll(List<StudentReviewAnswer> studentReviewAnswers);
 }

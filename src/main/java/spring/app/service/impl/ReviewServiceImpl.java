@@ -76,6 +76,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
+    public List<Review> getReviewsByThemeId(Long themeId) {
+        return reviewDao.getReviewsByThemeId(themeId);
+    }
+
+    @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration) {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId, periodStart, reviewDuration);
     }
@@ -91,7 +96,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review getOpenReviewByStudentVkId(Integer vkId) {
-        return reviewDao.getOpenReviewByStudentVkId(vkId);
+    public List<Review> getAllReviewsByUserId(Long id) {
+        return reviewDao.getAllReviewsByUserId(id);
     }
+
+    @Transactional
+    @Override
+    public void removeAll(List<Review> reviews) {
+        reviewDao.removeAll(reviews);
+    }
+
 }
