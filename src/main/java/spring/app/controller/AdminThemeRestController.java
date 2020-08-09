@@ -53,6 +53,7 @@ public class AdminThemeRestController {
     @Validated(CreateGroup.class)
     @PostMapping
     public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme;
         ThemeDto addedThemeDto = null;
         if (themeDto.getType().equals("fixed")) {
@@ -64,6 +65,9 @@ public class AdminThemeRestController {
             themeService.addTheme(theme);
             addedThemeDto = themeMapper.freeThemeEntityToFreeThemeDto(theme);
         }
+
+        log.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
+                user.getVkId() , addedThemeDto.getId() , addedThemeDto.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedThemeDto);
     }
 
