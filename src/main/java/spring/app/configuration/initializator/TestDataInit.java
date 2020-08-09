@@ -177,6 +177,21 @@ public class TestDataInit {
         testUser.setChatStep(StepSelector.START);
         userService.addUser(testUser);
 
+        User admin = new User();
+        admin.setFirstName("Иван");
+        admin.setLastName("Попов");
+        admin.setReviewPoint(1000);
+        admin.setVkId(238449263);
+        admin.setRole(roleAdmin);
+        admin.setPassword(passwordEncoder.encode("123123"));
+        admin.setAccountNonExpired(true);
+        admin.setAccountNonLocked(true);
+        admin.setCredentialsNonExpired(true);
+        admin.setEnabled(true);
+        admin.setChatStep(StepSelector.START);
+        admin.setReviewPoint(1000);
+        userService.addUser(admin);
+
         User sergey = new User();
         sergey.setFirstName("Сергей");
         sergey.setLastName("Лебедев");
