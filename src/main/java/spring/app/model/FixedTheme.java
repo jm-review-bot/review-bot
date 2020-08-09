@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
-@DiscriminatorValue(value = "1")
+@DiscriminatorValue(value = "fixed")
 @Entity
 @Table(name = "fixed_theme")
 @PrimaryKeyJoinColumn(name = "theme_id")

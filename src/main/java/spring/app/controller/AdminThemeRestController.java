@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.FixedThemeDto;
+import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
@@ -36,8 +37,8 @@ public class AdminThemeRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FixedThemeDto>> getAllThemes() {
-        return ResponseEntity.ok(themeService.getAllFixedThemesDto());
+    public ResponseEntity<List<ThemeDto>> getAllThemes() {
+        return ResponseEntity.ok(themeService.getAllThemesDto());
     }
 
     @GetMapping("/{themeId}")
@@ -51,14 +52,19 @@ public class AdminThemeRestController {
 
     @Validated(CreateGroup.class)
     @PostMapping
-    public ResponseEntity<FixedThemeDto> createTheme(@RequestBody @Valid FixedThemeDto fixedThemeDto) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        FixedTheme fixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
-        fixedTheme.setPosition(themeService.getThemeMaxPositionValue() + 1); // автоматическое выстановление позиции
-        themeService.addTheme(fixedTheme);
-        log.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
-                user.getVkId() , fixedTheme.getId() , fixedTheme.getTitle());
-        return ResponseEntity.status(HttpStatus.CREATED).body(themeMapper.fixedThemeEntityToFixedThemeDto(fixedTheme));
+    public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
+        Theme theme;
+        ThemeDto addedThemeDto = null;
+        if (themeDto.getType().equals("fixed")) {
+            theme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
+            themeService.addTheme(theme);
+            addedThemeDto = themeMapper.fixedThemeEntityToFixedThemeDto(theme);
+        } else if (themeDto.getType().equals("free")) {
+            theme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
+            themeService.addTheme(theme);
+            addedThemeDto = themeMapper.freeThemeEntityToFreeThemeDto(theme);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(addedThemeDto);
     }
 
     @DeleteMapping("/{themeId}")
