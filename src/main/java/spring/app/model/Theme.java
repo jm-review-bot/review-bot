@@ -14,7 +14,6 @@ import java.util.Objects;
 @Table(name = "theme")
 @Getter
 @Setter
-public class Theme {
 public abstract class Theme {
 
     @Id
