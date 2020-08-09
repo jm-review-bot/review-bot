@@ -9,6 +9,7 @@ import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Map;
 
 public class TestDataInit {
@@ -36,6 +37,9 @@ public class TestDataInit {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private FeedbackService feedbackService;
 
     @Autowired
     private StepHolder stepHolder;
@@ -104,6 +108,24 @@ public class TestDataInit {
     private Step adminSetThemeAddedUser;
 
     @Autowired
+    private Step examinerAddNewStudentReview;
+
+    @Autowired
+    private Step examinerChooseMethodToAddStudent;
+
+    @Autowired
+    private Step examinerChooseOldStudentReviewToEdit;
+
+    @Autowired
+    private Step examinerFreeThemesList;
+
+    @Autowired
+    private Step examinerGetInfoLastReview;
+
+    @Autowired
+    private Step examinerUsersListFromDB;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -150,9 +172,6 @@ public class TestDataInit {
 
     @Autowired
     private Step selectingReviewToDelete;
-
-    @Autowired
-    private FeedbackService feedbackService;
 
     public TestDataInit() {
     }
@@ -315,6 +334,12 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
+        steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW, examinerAddNewStudentReview);
+        steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
+        steps.put(StepSelector.EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT, examinerChooseOldStudentReviewToEdit);
+        steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
+        steps.put(StepSelector.EXAMINER_GET_INFO_LAST_REVIEW, examinerGetInfoLastReview);
+        steps.put(StepSelector.EXAMINER_USERS_LIST_FROM_DB, examinerUsersListFromDB);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
@@ -332,62 +357,76 @@ public class TestDataInit {
         steps.put(StepSelector.REVIEWER_DELETE_REVIEW, reviewerDeleteReview);
         steps.put(StepSelector.SELECTING_REVIEW_TO_DELETE, selectingReviewToDelete);
 
-        //add themes
-        Theme core = new Theme();
-        core.setPosition(1);
+        //add fixed themes
+        FixedTheme core = new FixedTheme();
         core.setReviewPoint(0);
         core.setTitle("Java Core");
         core.setCriticalWeight(8);
         themeService.addTheme(core);
 
-        Theme multithreading = new Theme();
-        multithreading.setPosition(2);
+        FixedTheme multithreading = new FixedTheme();
         multithreading.setReviewPoint(4);
         multithreading.setTitle("Многопоточность");
         multithreading.setCriticalWeight(8);
         themeService.addTheme(multithreading);
 
-        Theme sql = new Theme();
-        sql.setPosition(3);
+        FixedTheme sql = new FixedTheme();
         sql.setReviewPoint(4);
         sql.setTitle("SQL");
         sql.setCriticalWeight(8);
         themeService.addTheme(sql);
 
-        Theme hibernate = new Theme();
-        hibernate.setPosition(4);
+        FixedTheme hibernate = new FixedTheme();
         hibernate.setReviewPoint(4);
         hibernate.setTitle("Hibernate");
         hibernate.setCriticalWeight(8);
         themeService.addTheme(hibernate);
 
-        Theme spring = new Theme();
-        spring.setPosition(5);
+        FixedTheme spring = new FixedTheme();
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
         spring.setCriticalWeight(8);
         themeService.addTheme(spring);
 
-        Theme patterns = new Theme();
-        patterns.setPosition(6);
+        FixedTheme patterns = new FixedTheme();
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
         patterns.setCriticalWeight(8);
         themeService.addTheme(patterns);
 
-        Theme algorithm = new Theme();
-        algorithm.setPosition(7);
+        FixedTheme algorithm = new FixedTheme();
         algorithm.setReviewPoint(4);
         algorithm.setTitle("Алгоритмы");
         algorithm.setCriticalWeight(8);
         themeService.addTheme(algorithm);
 
-        Theme finalReview = new Theme();
-        finalReview.setPosition(8);
+        FixedTheme finalReview = new FixedTheme();
         finalReview.setReviewPoint(4);
         finalReview.setTitle("Финальное ревью");
         finalReview.setCriticalWeight(8);
         themeService.addTheme(finalReview);
+
+        // add free themes
+        FreeTheme freeTheme1 = new FreeTheme();
+        freeTheme1.setReviewPoint(4);
+        freeTheme1.setTitle("Свободная тема 1");
+        freeTheme1.setCriticalWeight(8);
+        freeTheme1.setExaminers(Arrays.asList(mikhail, nikolay));
+        themeService.addTheme(freeTheme1);
+
+        FreeTheme freeTheme2 = new FreeTheme();
+        freeTheme2.setReviewPoint(4);
+        freeTheme2.setTitle("Свободная тема 2");
+        freeTheme2.setCriticalWeight(8);
+        freeTheme2.setExaminers(Arrays.asList(nikolay));
+        themeService.addTheme(freeTheme2);
+
+        FreeTheme freeTheme3 = new FreeTheme();
+        freeTheme3.setReviewPoint(4);
+        freeTheme3.setTitle("Свободная тема 3");
+        freeTheme3.setCriticalWeight(8);
+        freeTheme3.setExaminers(Arrays.asList(mikhail));
+        themeService.addTheme(freeTheme3);
 
         // add reviews
         Review hibReview = new Review();
@@ -558,70 +597,70 @@ public class TestDataInit {
         Question question1 = new Question();
         question1.setAnswer("«Bean» – это объект, который интегрируется и конфигурируется контейнером IOC.");
         question1.setQuestion("Что такое bean??");
-        question1.setTheme(spring);
+        question1.setFixedTheme(spring);
         question1.setWeight(8);
         questionService.addQuestion(question1);
 
         Question question2 = new Question();
         question2.setAnswer("IOC означает инверсию контроля. Это основной контейнер Java Spring. Он использует вышеупомянутое внедрение зависимостей для управления и настройки различных интегрированных приложений. В настоящее время в Spring может быть два типа IOC – ApplicationContext и BeanFactory.");
         question2.setQuestion("Опишите IOC своими словами");
-        question2.setTheme(spring);
+        question2.setFixedTheme(spring);
         question2.setWeight(8);
         questionService.addQuestion(question2);
 
         Question question3 = new Question();
         question3.setAnswer("Dependency injection (внедрение зависимостей) используется для предоставления определенных специфических зависимостей для объектов. Это шаблон проектирования, который делает ваши проекты более плавными и более подходящими для таких действий, как тестирование.");
         question3.setQuestion("Что такое Dependency Injection?");
-        question3.setTheme(spring);
+        question3.setFixedTheme(spring);
         question3.setWeight(8);
         questionService.addQuestion(question3);
 
         Question question4 = new Question();
         question4.setAnswer("Spring Boot – это версия Spring, цель которой – сделать процесс создания приложений более удобным. Одна из его ключевых особенностей заключается в том, что она устраняет необходимость определения шаблонных конфигураций – несомненно, это порадует многих разработчиков.");
         question4.setQuestion("Что такое Spring Boot?");
-        question4.setTheme(spring);
+        question4.setFixedTheme(spring);
         question4.setWeight(8);
         questionService.addQuestion(question4);
 
         Question question5 = new Question();
         question5.setAnswer("АОП расшифровывается как Аспектно-ориентированное программирование (Aspect-Oriented Programming). Он отличается от ООП (объектно-ориентированного программирования) тем, что ООП фокусируется на классах, в то время как ключевым модульным модулем АОП является аспект. В АОП аспекты реализуют и подчеркивают сквозные проблемы.");
         question5.setQuestion("Что такое AOP?");
-        question5.setTheme(spring);
+        question5.setFixedTheme(spring);
         question5.setWeight(8);
         questionService.addQuestion(question5);
 
         Question question6 = new Question();
         question6.setAnswer("‘Autowriting‘ позволяет разработчику вводить bean-компоненты в свое приложение автоматически, без необходимости ручного вмешательства.");
         question6.setQuestion("Что такое autowriting?");
-        question6.setTheme(spring);
+        question6.setFixedTheme(spring);
         question6.setWeight(8);
         questionService.addQuestion(question6);
 
         Question question7 = new Question();
         question7.setAnswer("Как только аспекты переключаются на объект, он автоматически становится целевым объектом (target object). Некоторые также любят называть его «рекомендованным объектом».");
         question7.setQuestion("Что такое target object?");
-        question7.setTheme(spring);
+        question7.setFixedTheme(spring);
         question7.setWeight(8);
         questionService.addQuestion(question7);
 
         Question question8 = new Question();
         question8.setAnswer("В Spring Framework DAO это объект доступа к данным. Этот инструмент позволяет разработчикам легче подходить и работать с инструментами доступа к данным, особенно на Java.");
         question8.setQuestion("Что такое DAO?");
-        question8.setTheme(spring);
+        question8.setFixedTheme(spring);
         question8.setWeight(8);
         questionService.addQuestion(question8);
 
         Question question9 = new Question();
         question9.setAnswer("Эта команда используется, когда вы хотите сопоставить определенный метод HTTP с определенным классом. Вы можете использовать эту команду как на уровне класса, так и на уровне метода.");
         question9.setQuestion("Что делает @RequestMapping?");
-        question9.setTheme(spring);
+        question9.setFixedTheme(spring);
         question9.setWeight(8);
         questionService.addQuestion(question9);
 
         Question question10 = new Question();
         question10.setAnswer("В Spring MVC Interceptor может использоваться для обработки запроса клиента до, во время и даже после обработки. Это отличный инструмент, позволяющий избежать нежелательных повторений кода.");
         question10.setQuestion("Что такое MVC Interceptor?");
-        question10.setTheme(spring);
+        question10.setFixedTheme(spring);
         question10.setWeight(8);
         questionService.addQuestion(question10);
 
@@ -745,28 +784,28 @@ public class TestDataInit {
         Question criticalQuestion1 = new Question();
         criticalQuestion1.setAnswer("Герои мультика");
         criticalQuestion1.setQuestion("Кто такие фиксики");
-        criticalQuestion1.setTheme(multithreading);
+        criticalQuestion1.setFixedTheme(multithreading);
         criticalQuestion1.setWeight(1);
         questionService.addQuestion(criticalQuestion1);
 
         Question criticalQuestion2 = new Question();
         criticalQuestion2.setAnswer("Столько же, сколько накануне, ибо Йозеф еще спит");
         criticalQuestion2.setQuestion("Сколько будет весить Йозеф, если греки выступили на рассвете?");
-        criticalQuestion2.setTheme(multithreading);
+        criticalQuestion2.setFixedTheme(multithreading);
         criticalQuestion2.setWeight(2);
         questionService.addQuestion(criticalQuestion2);
 
         Question criticalQuestion3 = new Question();
         criticalQuestion3.setAnswer("Путь праведника труден, ибо препятствуют ему себялюбивые и тираны из злых людей.");
         criticalQuestion3.setQuestion("Назовите первое предложение Ветхого Завета, Книги Иезекииля,Главы 25,17 Стиха ");
-        criticalQuestion3.setTheme(multithreading);
+        criticalQuestion3.setFixedTheme(multithreading);
         criticalQuestion3.setWeight(3);
         questionService.addQuestion(criticalQuestion3);
 
         Question criticalQuestion4 = new Question();
         criticalQuestion4.setAnswer("завершает работу цикла");
         criticalQuestion4.setQuestion("Что делает оператор break?");
-        criticalQuestion4.setTheme(multithreading);
+        criticalQuestion4.setFixedTheme(multithreading);
         criticalQuestion4.setWeight(4);
         questionService.addQuestion(criticalQuestion4);
 
@@ -786,28 +825,28 @@ public class TestDataInit {
         Question changeReviewQuestion = new Question();
         changeReviewQuestion.setAnswer("д");
         changeReviewQuestion.setQuestion("Назовите букву которая следует за буквой идущей после буквы в");
-        changeReviewQuestion.setTheme(core);
+        changeReviewQuestion.setFixedTheme(core);
         changeReviewQuestion.setWeight(1);
         questionService.addQuestion(changeReviewQuestion);
 
         Question changeReviewQuestion2 = new Question();
         changeReviewQuestion2.setAnswer("от 0 до 50 процентов");
         changeReviewQuestion2.setQuestion("Если у папы рецесивный ген кривой нос, а у мамы доминантный орлиный, какой диапазон вероятностей кривого носа у их ребенка?");
-        changeReviewQuestion2.setTheme(core);
+        changeReviewQuestion2.setFixedTheme(core);
         changeReviewQuestion2.setWeight(2);
         questionService.addQuestion(changeReviewQuestion2);
 
         Question changeReviewQuestion3 = new Question();
         changeReviewQuestion3.setAnswer("четыре и восемь");
         changeReviewQuestion3.setQuestion("назовите четвертую и 7 цифру после запятой корня числа пи");
-        changeReviewQuestion3.setTheme(core);
+        changeReviewQuestion3.setFixedTheme(core);
         changeReviewQuestion3.setWeight(3);
         questionService.addQuestion(changeReviewQuestion3);
 
         Question changeReviewQuestion4 = new Question();
         changeReviewQuestion4.setAnswer("Исаак");
         changeReviewQuestion4.setQuestion("Как зовут Ньютона?");
-        changeReviewQuestion4.setTheme(core);
+        changeReviewQuestion4.setFixedTheme(core);
         changeReviewQuestion4.setWeight(4);
         questionService.addQuestion(changeReviewQuestion4);
 

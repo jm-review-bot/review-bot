@@ -20,12 +20,18 @@ public class ThemeDto {
     @NotBlank
     private String title;
 
+    @NotNull
     private Integer criticalWeight;
 
-    @Null(groups = {CreateGroup.class, UpdateGroup.class})
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = UpdateGroup.class)
     private Integer position;
 
+    @NotNull
     private Integer reviewPoint;
+
+    @NotBlank
+    private String type;
 
     public ThemeDto() {
     }
@@ -37,4 +43,19 @@ public class ThemeDto {
         this.position = position;
         this.reviewPoint = reviewPoint;
     }
+
+    public ThemeDto(Long id,
+                    String title,
+                    Integer criticalWeight,
+                    Integer position,
+                    Integer reviewPoint,
+                    String type) {
+        this.id = id;
+        this.title = title;
+        this.criticalWeight = criticalWeight;
+        this.position = position;
+        this.reviewPoint = reviewPoint;
+        this.type = type;
+    }
+
 }

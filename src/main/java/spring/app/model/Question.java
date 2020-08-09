@@ -33,8 +33,8 @@ public class Question {
     private Integer weight;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id", nullable = false)
-    private Theme theme;
+    @JoinColumn(name = "fixed_theme_id", nullable = false)
+    private FixedTheme fixedTheme;
 
     public Question() {
     }

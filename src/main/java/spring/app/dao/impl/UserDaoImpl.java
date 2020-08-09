@@ -6,10 +6,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
+import spring.app.dto.ReviewerDto;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,4 +76,50 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .setParameter("period_end", periodEnd)
                 .getResultList();
     }
+
+    @Override
+    public boolean isUserExaminer(Long userId) {
+        Long count = entityManager.createQuery("SELECT COUNT (t) FROM FreeTheme t JOIN t.examiners u where u.id = : user_id", Long.class)
+                .setParameter("user_id", userId)
+                .getSingleResult();
+        return count > 0;
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
+      List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id,u.firstName,u.lastName) FROM FreeTheme ft JOIN ft.examiners u WHERE ft.id =:theme_id")
+                .setParameter("theme_id" , themeId)
+                .getResultList();
+        return reviewers.size() > 0 ? reviewers : null;
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
+        List<ReviewerDto> reviewers =  entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) FROM User u WHERE u NOT IN (SELECT e FROM FreeTheme ft JOIN ft.examiners e WHERE ft.id =:theme_id)")
+                .setParameter("theme_id" , themeId)
+                .getResultList();
+        return reviewers.size() > 0 ? reviewers : null;
+    }
+
+    @Override
+    public User addNewReviewer(User user) {
+        return entityManager.merge(user);
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    @Override
+    public void deleteReviewerFromTheme(long themeId, long reviewerId) {
+        entityManager.createNativeQuery("DELETE FROM user_free_theme WHERE free_theme_id =:theme_id AND examiner_id =:reviewer_id")
+                .setParameter("theme_id" , themeId)
+                .setParameter("reviewer_id" , reviewerId)
+                .executeUpdate();
+    }
+
+    @Override
+    public List<User> getExaminersByFreeThemeId(Long freeThemeId) {
+        return entityManager.createQuery("SELECT ft.examiners FROM FreeTheme ft WHERE ft.id = :free_theme_id")
+                .setParameter("free_theme_id", freeThemeId)
+                .getResultList();
+    }
+
 }
