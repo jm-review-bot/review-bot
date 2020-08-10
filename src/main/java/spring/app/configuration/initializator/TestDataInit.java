@@ -126,6 +126,9 @@ public class TestDataInit {
     private Step examinerUsersListFromDB;
 
     @Autowired
+    private Step examinerAddNewStudent;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -325,6 +328,7 @@ public class TestDataInit {
         steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
         steps.put(StepSelector.EXAMINER_GET_INFO_LAST_REVIEW, examinerGetInfoLastReview);
         steps.put(StepSelector.EXAMINER_USERS_LIST_FROM_DB, examinerUsersListFromDB);
+        steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT, examinerAddNewStudent);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
