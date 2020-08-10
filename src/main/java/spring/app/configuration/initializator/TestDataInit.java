@@ -292,6 +292,15 @@ public class TestDataInit {
         mikhail.setPassword(passwordEncoder.encode("27939840"));
         userService.addUser(mikhail);
 
+        User slyab = new User();
+        slyab.setFirstName("Михаил");
+        slyab.setLastName("Клопотнюк");
+        slyab.setReviewPoint(5);
+        slyab.setVkId(3660561);
+        slyab.setRole(roleAdmin);
+        slyab.setChatStep(StepSelector.START);
+        userService.addUser(slyab);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
