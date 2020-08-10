@@ -39,7 +39,6 @@ public class ExaminerChooseMethodToAddStudent extends Step {
         if (command.equalsIgnoreCase("выбрать из списка")) {
             sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
         } else if (command.equalsIgnoreCase("ввести вручную")) {
-            // В ТЗ есть такая кнопка, но нет для нее логики
             sendUserToNextStep(context, EXAMINER_ADD_NEW_STUDENT);
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
