@@ -40,7 +40,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
             sendUserToNextStep(context, EXAMINER_USERS_LIST_FROM_DB);
         } else if (command.equalsIgnoreCase("ввести вручную")) {
             // В ТЗ есть такая кнопка, но нет для нее логики
-            throw new ProcessInputException("Функционал в еще разработке. Пожалуйста, выбирете \"Выбрать из списка\"");
+            sendUserToNextStep(context, EXAMINER_ADD_NEW_STUDENT);
         } else if (command.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, EXAMINER_FREE_THEMES_LIST);
             storageService.removeUserStorage(examinerVkId, EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT);
