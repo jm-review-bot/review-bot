@@ -16,7 +16,7 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public List<Question> getQuestionsByReviewId(Long reviewId) {
-        return (List<Question>) entityManager.createNativeQuery("select q.* FROM question q INNER JOIN theme t on q.theme_id = t.id JOIN review r on t.id = r.theme_id WHERE r.id = :review_id ORDER BY q.position", Question.class)
+        return entityManager.createQuery("SELECT q FROM Question q INNER JOIN Theme t ON q.fixedTheme.id = t.id JOIN Review r on t.id = r.theme.id WHERE r.id = :review_id ORDER BY q.position", Question.class)
                 .setParameter("review_id", reviewId)
                 .getResultList();
     }
