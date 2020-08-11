@@ -36,8 +36,8 @@ public class AdminUserList extends Step {
         Integer vkId = context.getVkId();
         //определим режим работы - редактирование или удаление.
         String mode = null;
-        if (storageService.getUserStorage(vkId, ADMIN_MENU) != null) {
-            mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
+        if (storageService.getUserStorage(vkId, ADMIN_CHOOSE_ACTION_FOR_USER) != null) {
+            mode = storageService.getUserStorage(vkId, ADMIN_CHOOSE_ACTION_FOR_USER).get(0);
         }
         //посмотрим, не попали ли мы сюда после редактирования\удаления
         String afterModificationMessage = null;
@@ -69,8 +69,8 @@ public class AdminUserList extends Step {
         String wordInput = StringParser.toWordsArray(currentInput)[0];
         if (wordInput.equals("назад")) {
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
-            storageService.removeUserStorage(vkId, ADMIN_MENU);
-            sendUserToNextStep(context, ADMIN_MENU);
+            storageService.removeUserStorage(vkId, ADMIN_CHOOSE_ACTION_FOR_USER);
+            sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
         } else if (wordInput.equals("поиск")) {
             sendUserToNextStep(context, ADMIN_SEARCH);
         } else if (StringParser.isNumeric(wordInput)) {
@@ -82,7 +82,7 @@ public class AdminUserList extends Step {
             }
             String selectedUserId = users.get(selectedNumber - 1);
             storageService.updateUserStorage(vkId, ADMIN_USERS_LIST, Arrays.asList(selectedUserId));
-            String mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
+            String mode = storageService.getUserStorage(vkId, ADMIN_CHOOSE_ACTION_FOR_USER).get(0);
             if ("delete".equals(mode)) {
                 sendUserToNextStep(context, ADMIN_REMOVE_USER);
             } else {
@@ -98,8 +98,8 @@ public class AdminUserList extends Step {
         String text = "";
         Integer vkId = context.getVkId();
         String mode = null;
-        if (storageService.getUserStorage(vkId, ADMIN_MENU) != null) {
-            mode = storageService.getUserStorage(vkId, ADMIN_MENU).get(0);
+        if (storageService.getUserStorage(vkId, ADMIN_CHOOSE_ACTION_FOR_USER) != null) {
+            mode = storageService.getUserStorage(vkId, ADMIN_CHOOSE_ACTION_FOR_USER).get(0);
         }
         String afterModificationMessage = null;
         //Блок для сообщения после изменения\удаления.

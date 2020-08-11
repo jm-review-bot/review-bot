@@ -4,7 +4,6 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.service.abstraction.StorageService;
-import spring.app.util.StringParser;
 
 import java.util.Arrays;
 
@@ -27,27 +26,32 @@ public class AdminMenu extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        String command = StringParser.toWordsArray(context.getInput())[0];
+        String command = context.getInput();
         switch (command) {
-            case "добавить":
-                sendUserToNextStep(context, ADMIN_ADD_USER);
-                break;
-            case "изменить":
-                storageService.updateUserStorage(context.getVkId(), ADMIN_MENU, Arrays.asList("edit"));
-                sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
-                break;
-            case "удалить":
-                storageService.updateUserStorage(context.getVkId(), ADMIN_MENU, Arrays.asList("delete"));
-                sendUserToNextStep(context, ADMIN_USERS_LIST);//в этом шаге все зависит от режима
+            case "Пользователи":
+                switch (context.getRole().getName()) {
+                    case "ADMIN":
+                        sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
+                        break;
+                    default:
+                        sendUserToNextStep(context, USER_MENU);
+                        break;
+                }
                 break;
             case "/start":
                 sendUserToNextStep(context, START);
                 break;
-            case "ревью":
-                sendUserToNextStep(context, ADMIN_EDIT_REVIEW_GET_USER_LIST);
+            case "Ревью":
+                switch (context.getRole().getName()) {
+                    case "ADMIN":
+                        sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
+                        break;
+                    default:
+                        sendUserToNextStep(context, USER_MENU);
+                        break;
+                }
                 break;
-            case "главное":
-            case "Главное":
+            case "Главное меню":
                 sendUserToNextStep(context, USER_MENU);
                 break;
             default:

@@ -56,7 +56,7 @@ public class AdminEditReviewGetUserList extends Step {
         if (wordInput.equals("назад")) {
             //если назад - смотрим последний шаг,и откатываем один селект.
             storageService.removeUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_USER_LIST);
-            sendUserToNextStep(context, ADMIN_MENU);
+            sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
         } else if (StringParser.isNumeric(wordInput)) {
             Integer selectedNumber = Integer.parseInt(wordInput);
             //значит мы выбрали пользователя. Обновим коллекцию
