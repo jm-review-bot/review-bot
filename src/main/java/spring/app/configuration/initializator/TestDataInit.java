@@ -300,20 +300,6 @@ public class TestDataInit {
         ludwig.setChatStep(StepSelector.START);
         userService.addUser(ludwig);
 
-        User mikhail = new User();
-        mikhail.setFirstName("Михаил");
-        mikhail.setLastName("Кузиванов");
-        mikhail.setReviewPoint(4);
-        mikhail.setVkId(27939840);
-        mikhail.setRole(roleAdmin);
-        mikhail.setChatStep(StepSelector.START);
-        mikhail.setAccountNonExpired(true);
-        mikhail.setAccountNonLocked(true);
-        mikhail.setCredentialsNonExpired(true);
-        mikhail.setEnabled(true);
-        mikhail.setPassword(passwordEncoder.encode("27939840"));
-        userService.addUser(mikhail);
-
         User slyab = new User();
         slyab.setFirstName("Михаил");
         slyab.setLastName("Клопотнюк");
@@ -326,6 +312,32 @@ public class TestDataInit {
         slyab.setCredentialsNonExpired(true);
         slyab.setEnabled(true);
         userService.addUser(slyab);
+
+        User userPassedAllThemes = new User();
+        userPassedAllThemes.setFirstName("Сдавший_Все_Темы");
+        userPassedAllThemes.setLastName("Сдавший_Все_Темы");
+        userPassedAllThemes.setVkId(27939840);
+        userPassedAllThemes.setRole(roleAdmin);
+        userPassedAllThemes.setReviewPoint(1000);
+        userPassedAllThemes.setChatStep(StepSelector.START);
+        userPassedAllThemes.setAccountNonExpired(true);
+        userPassedAllThemes.setAccountNonLocked(true);
+        userPassedAllThemes.setCredentialsNonExpired(true);
+        userPassedAllThemes.setEnabled(true);
+        userService.addUser(userPassedAllThemes);
+
+        User userAcceptedAllThemes = new User();
+        userAcceptedAllThemes.setFirstName("Принявший_Все_Темы");
+        userAcceptedAllThemes.setLastName("Принявший_Все_Темы");
+        userAcceptedAllThemes.setVkId(666);
+        userAcceptedAllThemes.setRole(roleUser);
+        userAcceptedAllThemes.setReviewPoint(1000);
+        userAcceptedAllThemes.setChatStep(StepSelector.START);
+        userAcceptedAllThemes.setAccountNonExpired(true);
+        userAcceptedAllThemes.setAccountNonLocked(true);
+        userAcceptedAllThemes.setCredentialsNonExpired(true);
+        userAcceptedAllThemes.setEnabled(true);
+        userService.addUser(userAcceptedAllThemes);
 
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
@@ -428,21 +440,21 @@ public class TestDataInit {
         freeTheme1.setReviewPoint(4);
         freeTheme1.setTitle("Свободная тема 1");
         freeTheme1.setCriticalWeight(8);
-        freeTheme1.setExaminers(Arrays.asList(mikhail, nikolay));
+        freeTheme1.setExaminers(Arrays.asList(userPassedAllThemes, userAcceptedAllThemes, nikolay));
         themeService.addTheme(freeTheme1);
 
         FreeTheme freeTheme2 = new FreeTheme();
         freeTheme2.setReviewPoint(4);
         freeTheme2.setTitle("Свободная тема 2");
         freeTheme2.setCriticalWeight(8);
-        freeTheme2.setExaminers(Arrays.asList(nikolay));
+        freeTheme2.setExaminers(Arrays.asList(userPassedAllThemes, userAcceptedAllThemes, nikolay));
         themeService.addTheme(freeTheme2);
 
         FreeTheme freeTheme3 = new FreeTheme();
         freeTheme3.setReviewPoint(4);
         freeTheme3.setTitle("Свободная тема 3");
         freeTheme3.setCriticalWeight(8);
-        freeTheme3.setExaminers(Arrays.asList(mikhail));
+        freeTheme3.setExaminers(Arrays.asList(userPassedAllThemes, userAcceptedAllThemes));
         themeService.addTheme(freeTheme3);
 
         // add reviews
@@ -523,6 +535,83 @@ public class TestDataInit {
         springReviewPassed7.setUser(dima);
         reviewService.addReview(springReviewPassed7);
 
+        Review review1ForAllPassedUser = new Review();
+        review1ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review1ForAllPassedUser.setTheme(core);
+        review1ForAllPassedUser.setIsOpen(false);
+        review1ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review1ForAllPassedUser);
+
+        Review review2ForAllPassedUser = new Review();
+        review2ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review2ForAllPassedUser.setTheme(multithreading);
+        review2ForAllPassedUser.setIsOpen(false);
+        review2ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review2ForAllPassedUser);
+
+        Review review3ForAllPassedUser = new Review();
+        review3ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review3ForAllPassedUser.setTheme(sql);
+        review3ForAllPassedUser.setIsOpen(false);
+        review3ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review3ForAllPassedUser);
+
+        Review review4ForAllPassedUser = new Review();
+        review4ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review4ForAllPassedUser.setTheme(hibernate);
+        review4ForAllPassedUser.setIsOpen(false);
+        review4ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review4ForAllPassedUser);
+
+        Review review5ForAllPassedUser = new Review();
+        review5ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review5ForAllPassedUser.setTheme(spring);
+        review5ForAllPassedUser.setIsOpen(false);
+        review5ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review5ForAllPassedUser);
+
+        Review review6ForAllPassedUser = new Review();
+        review6ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review6ForAllPassedUser.setTheme(patterns);
+        review6ForAllPassedUser.setIsOpen(false);
+        review6ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review6ForAllPassedUser);
+
+        Review review7ForAllPassedUser = new Review();
+        review7ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review7ForAllPassedUser.setTheme(algorithm);
+        review7ForAllPassedUser.setIsOpen(false);
+        review7ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review7ForAllPassedUser);
+
+        Review review8ForAllPassedUser = new Review();
+        review8ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review8ForAllPassedUser.setTheme(finalReview);
+        review8ForAllPassedUser.setIsOpen(false);
+        review8ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review8ForAllPassedUser);
+
+        Review review9ForAllPassedUser = new Review();
+        review9ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review9ForAllPassedUser.setTheme(freeTheme1);
+        review9ForAllPassedUser.setIsOpen(false);
+        review9ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review9ForAllPassedUser);
+
+        Review review10ForAllPassedUser = new Review();
+        review10ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review10ForAllPassedUser.setTheme(freeTheme2);
+        review10ForAllPassedUser.setIsOpen(false);
+        review10ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review10ForAllPassedUser);
+
+        Review review11ForAllPassedUser = new Review();
+        review11ForAllPassedUser.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        review11ForAllPassedUser.setTheme(freeTheme3);
+        review11ForAllPassedUser.setIsOpen(false);
+        review11ForAllPassedUser.setUser(userAcceptedAllThemes);
+        reviewService.addReview(review11ForAllPassedUser);
+
         // add student reviews
         StudentReview sr = new StudentReview();
         sr.setUser(nikolay);
@@ -568,6 +657,72 @@ public class TestDataInit {
         studentReview5.setIsPassed(false);
         studentReview5.setReview(springReviewPassed5);
         studentReviewService.addStudentReview(studentReview5);
+
+        StudentReview studentReview1ForAllPassedUser = new StudentReview();
+        studentReview1ForAllPassedUser.setIsPassed(true);
+        studentReview1ForAllPassedUser.setReview(review1ForAllPassedUser);
+        studentReview1ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview1ForAllPassedUser);
+
+        StudentReview studentReview2ForAllPassedUser = new StudentReview();
+        studentReview2ForAllPassedUser.setIsPassed(true);
+        studentReview2ForAllPassedUser.setReview(review2ForAllPassedUser);
+        studentReview2ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview2ForAllPassedUser);
+
+        StudentReview studentReview3ForAllPassedUser = new StudentReview();
+        studentReview3ForAllPassedUser.setIsPassed(true);
+        studentReview3ForAllPassedUser.setReview(review3ForAllPassedUser);
+        studentReview3ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview3ForAllPassedUser);
+
+        StudentReview studentReview4ForAllPassedUser = new StudentReview();
+        studentReview4ForAllPassedUser.setIsPassed(true);
+        studentReview4ForAllPassedUser.setReview(review4ForAllPassedUser);
+        studentReview4ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview4ForAllPassedUser);
+
+        StudentReview studentReview5ForAllPassedUser = new StudentReview();
+        studentReview5ForAllPassedUser.setIsPassed(true);
+        studentReview5ForAllPassedUser.setReview(review5ForAllPassedUser);
+        studentReview5ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview5ForAllPassedUser);
+
+        StudentReview studentReview6ForAllPassedUser = new StudentReview();
+        studentReview6ForAllPassedUser.setIsPassed(true);
+        studentReview6ForAllPassedUser.setReview(review6ForAllPassedUser);
+        studentReview6ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview6ForAllPassedUser);
+
+        StudentReview studentReview7ForAllPassedUser = new StudentReview();
+        studentReview7ForAllPassedUser.setIsPassed(true);
+        studentReview7ForAllPassedUser.setReview(review7ForAllPassedUser);
+        studentReview7ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview7ForAllPassedUser);
+
+        StudentReview studentReview8ForAllPassedUser = new StudentReview();
+        studentReview8ForAllPassedUser.setIsPassed(true);
+        studentReview8ForAllPassedUser.setReview(review8ForAllPassedUser);
+        studentReview8ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview8ForAllPassedUser);
+
+        StudentReview studentReview9ForAllPassedUser = new StudentReview();
+        studentReview9ForAllPassedUser.setIsPassed(true);
+        studentReview9ForAllPassedUser.setReview(review9ForAllPassedUser);
+        studentReview9ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview9ForAllPassedUser);
+
+        StudentReview studentReview10ForAllPassedUser = new StudentReview();
+        studentReview10ForAllPassedUser.setIsPassed(true);
+        studentReview10ForAllPassedUser.setReview(review10ForAllPassedUser);
+        studentReview10ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview10ForAllPassedUser);
+
+        StudentReview studentReview11ForAllPassedUser = new StudentReview();
+        studentReview11ForAllPassedUser.setIsPassed(true);
+        studentReview11ForAllPassedUser.setReview(review11ForAllPassedUser);
+        studentReview11ForAllPassedUser.setUser(userPassedAllThemes);
+        studentReviewService.addStudentReview(studentReview11ForAllPassedUser);
 
         // add Feedbacks
         Feedback feedback1 = new Feedback();
@@ -951,12 +1106,6 @@ public class TestDataInit {
         studentReview15.setIsPassed(null);
         studentReview15.setReview(review11);
         studentReviewService.addStudentReview(studentReview15);
-
-        StudentReview studentReview16 = new StudentReview();
-        studentReview16.setUser(mikhail);
-        studentReview16.setIsPassed(true);
-        studentReview16.setReview(springReviewPassed);
-        studentReviewService.addStudentReview(studentReview16);
 //
     }
 }
