@@ -69,7 +69,7 @@ public class AdminThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
-    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid FixedThemeDto fixedThemeDto) {
+    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody ThemeDto fixedThemeDto) {
         Theme themeById = themeService.getThemeById(themeId);
         if (themeById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
