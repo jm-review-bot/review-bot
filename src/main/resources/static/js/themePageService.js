@@ -55,6 +55,11 @@ function buildThemesAccordion(allThemesDto) {
                         <!--Здесь располагаются вопросы темы или список проверяющих-->
                         </div>
                     </div>
+                    <div>
+                        <button type="button" class="add-question-to-theme btn btn-lg btn-block" data-id="${theme.id}">
+                            Добавить вопрос
+                        </button>
+                    </div>
                 </div>
             </div>
         `
