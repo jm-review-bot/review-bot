@@ -2,16 +2,16 @@ package spring.app.dto;
 
 import javax.validation.constraints.NotBlank;
 
-public class FixedThemeDto  extends ThemeDto {
+public class FreeThemeDto extends ThemeDto {
 
     @NotBlank
-    private final String type = "fixed";
+    private final String type = "free";
 
-    public FixedThemeDto() {
+    public FreeThemeDto() {
         super();
     }
 
-    public FixedThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
+    public FreeThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
         super(id, title, criticalWeight, position, reviewPoint);
     }
 
