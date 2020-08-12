@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Getter
 @Setter
-@DiscriminatorValue(value = "1")
+@DiscriminatorValue(value = "fixed")
 @Entity
 @Table(name = "fixed_theme")
 @PrimaryKeyJoinColumn(name = "theme_id")

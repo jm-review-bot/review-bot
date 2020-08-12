@@ -33,6 +33,9 @@ public abstract class Theme {
     @Column(name = "position")
     private Integer position;
 
+    @Column(name = "theme_type", nullable=false, updatable=false, insertable=false)
+    private String themeType;
+
     public Theme() {
     }
 

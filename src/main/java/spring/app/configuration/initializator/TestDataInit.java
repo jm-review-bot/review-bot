@@ -39,6 +39,9 @@ public class TestDataInit {
     private QuestionService questionService;
 
     @Autowired
+    private FeedbackService feedbackService;
+
+    @Autowired
     private StepHolder stepHolder;
 
     @Autowired
@@ -123,6 +126,9 @@ public class TestDataInit {
     private Step examinerUsersListFromDB;
 
     @Autowired
+    private Step examinerAddNewStudent;
+
+    @Autowired
     private Step userTakeReviewAddDate;
 
     @Autowired
@@ -169,9 +175,6 @@ public class TestDataInit {
 
     @Autowired
     private Step selectingReviewToDelete;
-
-    @Autowired
-    private FeedbackService feedbackService;
 
     public TestDataInit() {
     }
@@ -325,6 +328,7 @@ public class TestDataInit {
         steps.put(StepSelector.EXAMINER_FREE_THEMES_LIST, examinerFreeThemesList);
         steps.put(StepSelector.EXAMINER_GET_INFO_LAST_REVIEW, examinerGetInfoLastReview);
         steps.put(StepSelector.EXAMINER_USERS_LIST_FROM_DB, examinerUsersListFromDB);
+        steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT, examinerAddNewStudent);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_THEME, userTakeReviewAddTheme);
         steps.put(StepSelector.USER_TAKE_REVIEW_ADD_DATE, userTakeReviewAddDate);
         steps.put(StepSelector.USER_PASS_REVIEW_ADD_THEME, userPassReviewAddTheme);
@@ -344,56 +348,48 @@ public class TestDataInit {
 
         //add fixed themes
         FixedTheme core = new FixedTheme();
-        core.setPosition(1);
         core.setReviewPoint(0);
         core.setTitle("Java Core");
         core.setCriticalWeight(8);
         themeService.addTheme(core);
 
         FixedTheme multithreading = new FixedTheme();
-        multithreading.setPosition(2);
         multithreading.setReviewPoint(4);
         multithreading.setTitle("Многопоточность");
         multithreading.setCriticalWeight(8);
         themeService.addTheme(multithreading);
 
         FixedTheme sql = new FixedTheme();
-        sql.setPosition(3);
         sql.setReviewPoint(4);
         sql.setTitle("SQL");
         sql.setCriticalWeight(8);
         themeService.addTheme(sql);
 
         FixedTheme hibernate = new FixedTheme();
-        hibernate.setPosition(4);
         hibernate.setReviewPoint(4);
         hibernate.setTitle("Hibernate");
         hibernate.setCriticalWeight(8);
         themeService.addTheme(hibernate);
 
         FixedTheme spring = new FixedTheme();
-        spring.setPosition(5);
         spring.setReviewPoint(4);
         spring.setTitle("Spring");
         spring.setCriticalWeight(8);
         themeService.addTheme(spring);
 
         FixedTheme patterns = new FixedTheme();
-        patterns.setPosition(6);
         patterns.setReviewPoint(4);
         patterns.setTitle("Паттерны");
         patterns.setCriticalWeight(8);
         themeService.addTheme(patterns);
 
         FixedTheme algorithm = new FixedTheme();
-        algorithm.setPosition(7);
         algorithm.setReviewPoint(4);
         algorithm.setTitle("Алгоритмы");
         algorithm.setCriticalWeight(8);
         themeService.addTheme(algorithm);
 
         FixedTheme finalReview = new FixedTheme();
-        finalReview.setPosition(8);
         finalReview.setReviewPoint(4);
         finalReview.setTitle("Финальное ревью");
         finalReview.setCriticalWeight(8);
@@ -401,7 +397,6 @@ public class TestDataInit {
 
         // add free themes
         FreeTheme freeTheme1 = new FreeTheme();
-        freeTheme1.setPosition(9);
         freeTheme1.setReviewPoint(4);
         freeTheme1.setTitle("Свободная тема 1");
         freeTheme1.setCriticalWeight(8);
@@ -409,7 +404,6 @@ public class TestDataInit {
         themeService.addTheme(freeTheme1);
 
         FreeTheme freeTheme2 = new FreeTheme();
-        freeTheme2.setPosition(10);
         freeTheme2.setReviewPoint(4);
         freeTheme2.setTitle("Свободная тема 2");
         freeTheme2.setCriticalWeight(8);
@@ -417,7 +411,6 @@ public class TestDataInit {
         themeService.addTheme(freeTheme2);
 
         FreeTheme freeTheme3 = new FreeTheme();
-        freeTheme3.setPosition(11);
         freeTheme3.setReviewPoint(4);
         freeTheme3.setTitle("Свободная тема 3");
         freeTheme3.setCriticalWeight(8);
@@ -550,20 +543,44 @@ public class TestDataInit {
 
         // add Feedbacks
         Feedback feedback1 = new Feedback();
-        feedback1.setStudentReview(studentReview4);
+        feedback1.setStudentReview(hibStudentReview);
         feedback1.setComment("comment_(feedback1)");
         feedback1.setRatingReview(1);
-        feedback1.setRatingReviewer(1);
-        feedback1.setUser(roman);
+        feedback1.setRatingReviewer(2);
+        feedback1.setUser(martyn);
         feedbackService.addFeedback(feedback1);
 
         Feedback feedback2 = new Feedback();
-        feedback2.setStudentReview(studentReview5);
+        feedback2.setStudentReview(hibStudentReview2);
         feedback2.setComment("comment_(feedback2)");
-        feedback2.setRatingReview(2);
-        feedback2.setRatingReviewer(2);
-        feedback2.setUser(anton);
+        feedback2.setRatingReview(3);
+        feedback2.setRatingReviewer(4);
+        feedback2.setUser(ludwig);
         feedbackService.addFeedback(feedback2);
+
+        Feedback feedback3 = new Feedback();
+        feedback3.setStudentReview(studentReview);
+        feedback3.setComment("comment_(feedback3)");
+        feedback3.setRatingReview(5);
+        feedback3.setRatingReviewer(6);
+        feedback3.setUser(sergey);
+        feedbackService.addFeedback(feedback3);
+
+        Feedback feedback4 = new Feedback();
+        feedback4.setStudentReview(studentReview4);
+        feedback4.setComment("comment_(feedback4)");
+        feedback4.setRatingReview(7);
+        feedback4.setRatingReviewer(8);
+        feedback4.setUser(roman);
+        feedbackService.addFeedback(feedback4);
+
+        Feedback feedback5 = new Feedback();
+        feedback5.setStudentReview(studentReview5);
+        feedback5.setComment("comment_(feedback5)");
+        feedback5.setRatingReview(9);
+        feedback5.setRatingReviewer(10);
+        feedback5.setUser(anton);
+        feedbackService.addFeedback(feedback5);
 
         // add Questions
         Question question1 = new Question();

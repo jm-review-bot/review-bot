@@ -2,11 +2,13 @@ $('.add-new-theme').click(function () {
         let title = $('#newThemeNameInput').val();
         let criticalWeight = $('#criticalWeightNewThemeInput').val();
         let reviewPoint = $('#reviewPointNewThemeInput').val();
+        let type = $('#typeThemeNewThemeInput option:selected').val();
         let json = {
             title:title,
             criticalWeight:criticalWeight,
-            reviewPoint:reviewPoint
-        }
+            reviewPoint:reviewPoint,
+            type : type
+        };
         $.ajax({
             url: "/api/admin/theme",
             type: "POST",
@@ -21,4 +23,4 @@ $('.add-new-theme').click(function () {
             }
         });
     }
-)
+);

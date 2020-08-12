@@ -6,35 +6,23 @@ import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
 
 @Getter
 @Setter
-public class FixedThemeDto {
-
-    @Null(groups = CreateGroup.class)
-    @NotNull(groups = UpdateGroup.class)
-    private Long id;
+public class FixedThemeDto  extends ThemeDto {
 
     @NotBlank
-    private String title;
-
-    private Integer criticalWeight;
-
-    @Null(groups = {CreateGroup.class, UpdateGroup.class})
-    private Integer position;
-
-    private Integer reviewPoint;
+    private final String type = "fixed";
 
     public FixedThemeDto() {
+        super();
     }
 
     public FixedThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
-        this.id = id;
-        this.title = title;
-        this.criticalWeight = criticalWeight;
-        this.position = position;
-        this.reviewPoint = reviewPoint;
+        super(id, title, criticalWeight, position, reviewPoint);
+    }
+
+    public String getType() {
+        return type;
     }
 }
