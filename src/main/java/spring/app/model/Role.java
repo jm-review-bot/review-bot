@@ -1,5 +1,7 @@
 package spring.app.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -7,6 +9,8 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "role")
+@Getter
+@Setter
 public class Role implements GrantedAuthority {
 
     @Id
@@ -20,24 +24,8 @@ public class Role implements GrantedAuthority {
     public Role() {
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String role) {
-        this.name = role;
-    }
-
     public boolean isAdmin() {
-        return this.getName().equals("ADMIN");
+        return this.name.equals("ADMIN");
     }
 
     @Override

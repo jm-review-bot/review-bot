@@ -5,11 +5,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.app.dao.abstraction.ReviewDao;
-import spring.app.dao.abstraction.StudentReviewAnswerDao;
-import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.dao.abstraction.UserDao;
+import spring.app.dto.ReviewerDto;
+import spring.app.model.FreeTheme;
 import spring.app.model.User;
+import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
@@ -20,17 +20,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
-    private final StudentReviewAnswerDao studentReviewAnswerDao;
-    private final StudentReviewDao studentReviewDao;
-    private final ReviewDao reviewDao;
-
+    private final ThemeService themeService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, StudentReviewAnswerDao studentReviewAnswerDao, StudentReviewDao studentReviewDao, ReviewDao reviewDao) {
+    public UserServiceImpl(UserDao userDao, ThemeService themeService) {
         this.userDao = userDao;
-        this.studentReviewAnswerDao = studentReviewAnswerDao;
-        this.studentReviewDao = studentReviewDao;
-        this.reviewDao = reviewDao;
+        this.themeService = themeService;
     }
 
     @Transactional
@@ -91,6 +86,40 @@ public class UserServiceImpl implements UserService {
     public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return userDao.getStudentsByReviewPeriod(periodStart, periodEnd);
     }
+
+    @Override
+    public boolean isUserExaminer(Long userId) {
+        return userDao.isUserExaminer(userId);
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
+        return userDao.getExaminersInThisTheme(themeId);
+    }
+
+    @Override
+    public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
+        return userDao.getExaminersInNotThisTheme(themeId);
+    }
+
+    @Override
+    @Transactional
+    public User addNewReviewer(long themeId , long userId) {
+        List<User> users = userDao.getExaminersByFreeThemeId(themeId);
+        users.add(userDao.getById(userId));
+        FreeTheme freeTheme = themeService.getFreeThemeById(themeId);
+        freeTheme.setExaminers(users);
+        themeService.updateTheme(freeTheme);
+        return userDao.getById(userId);
+    }
+
+    @Override
+    @Transactional
+    public void deleteReviewerFromTheme(long themeId, long reviewerId) {
+        userDao.deleteReviewerFromTheme(themeId , reviewerId);
+    }
+
+
 
     // Метод нужен для реализации UserDetailService.В рамках проекта username - это VkId пользователя
     @Override

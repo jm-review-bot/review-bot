@@ -46,7 +46,7 @@ public class UserStartReviewRules extends Step {
             Review review = reviewService.getReviewById(reviewId);
             // не даем начать ревью раньше его официального начала (вдруг кто-то присоединится в последний момент)
             if (LocalDateTime.now().isAfter(review.getDate())) {
-                review.setOpen(false);
+                review.setIsOpen(false);
                 reviewService.updateReview(review);
                 sendUserToNextStep(context, USER_START_REVIEW_CORE);
             } else {

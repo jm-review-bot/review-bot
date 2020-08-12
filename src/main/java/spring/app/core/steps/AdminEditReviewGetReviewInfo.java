@@ -60,7 +60,7 @@ public class AdminEditReviewGetReviewInfo extends Step {
                             .append(". ")
                             .append(sra.getQuestion().getQuestion())
                             .append(" ")
-                            .append(sra.getRight() ? "+" : "-")
+                            .append(sra.getIsRight() ? "+" : "-")
                             .append("\n");
                 });
 
@@ -79,7 +79,7 @@ public class AdminEditReviewGetReviewInfo extends Step {
         } else if (wordInput.equals("изменить")) {
             String sStudentReviewToChange = storageService.getUserStorage(vkId, StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST).get(0);
             StudentReview studentReview = studentReviewService.getStudentReviewById(Long.parseLong(sStudentReviewToChange));
-            if (studentReview.getPassed() == null) {
+            if (studentReview.getIsPassed() == null) {
                 throw new ProcessInputException("Это ревью еще не было проведено. Его нельзя изменить");
             }
             sendUserToNextStep(context, ADMIN_EDIT_REVIEW_CHANGE_REVIEW);

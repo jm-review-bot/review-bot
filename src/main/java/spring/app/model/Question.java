@@ -1,6 +1,8 @@
 package spring.app.model;
 
 
+import lombok.Getter;
+import lombok.Setter;
 import spring.app.listener.QuestionListener;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.Objects;
 @Entity
 @EntityListeners(QuestionListener.class)
 @Table(name = "question")
+@Getter
+@Setter
 public class Question {
 
     @Id
@@ -29,58 +33,10 @@ public class Question {
     private Integer weight;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theme_id", nullable = false)
-    private Theme theme;
+    @JoinColumn(name = "fixed_theme_id", nullable = false)
+    private FixedTheme fixedTheme;
 
     public Question() {
-    }
-
-    public void setWeight(Integer weight) {
-        this.weight = weight;
-    }
-
-    public Integer getWeight() {
-        return weight;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(String question) {
-        this.question = question;
-    }
-
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = answer;
-    }
-
-    public Integer getPosition() {
-        return position;
-    }
-
-    public void setPosition(Integer position) {
-        this.position = position;
-    }
-
-    public Theme getTheme() {
-        return theme;
-    }
-
-    public void setTheme(Theme theme) {
-        this.theme = theme;
     }
 
     @Override
