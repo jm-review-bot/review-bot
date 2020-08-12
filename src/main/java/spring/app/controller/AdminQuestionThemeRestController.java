@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/api/admin/theme")
 public class AdminQuestionThemeRestController {
 
-    private final static Logger log = LoggerFactory.getLogger(AdminQuestionThemeRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(AdminQuestionThemeRestController.class);
 
     private QuestionService questionService;
     private QuestionMapper questionMapper;
@@ -55,7 +55,7 @@ public class AdminQuestionThemeRestController {
         Question question = questionMapper.questionDtoToQuestionEntity(questionDto);
         question.setFixedTheme((FixedTheme) theme);
         questionService.addQuestion(question);
-        log.info(
+        logger.info(
                 "Админ (vkId={}) добавил вопрос(ID={} , Title={}) в тему (ID={} , Title={})",
                 user.getVkId() , question.getId() , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
@@ -80,7 +80,7 @@ public class AdminQuestionThemeRestController {
         Question updatedQuestion = questionMapper.questionDtoToQuestionEntity(questionDto);
         updatedQuestion.setFixedTheme(question.getFixedTheme());
         questionService.updateQuestion(updatedQuestion);
-        log.info(
+        logger.info(
                 "Админ (vkId={}) изменил вопрос (ID={} , Title={}) в теме (ID={} , Title={})",
                 user.getVkId() ,  questionId , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -93,7 +93,7 @@ public class AdminQuestionThemeRestController {
         Question question = questionService.getQuestionById(questionId);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         questionService.deleteQuestionById(questionId);
-        log.info(
+        logger.info(
                 "Админ (vkId={}) удалил вопрос (ID={} , Title={}) из темы (ID={} , Title={})" ,
                 user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -106,7 +106,7 @@ public class AdminQuestionThemeRestController {
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
-            log.info(
+            logger.info(
                     "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию выше в теме (ID={} , Title={})" ,
                     user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle()
             );
@@ -121,7 +121,7 @@ public class AdminQuestionThemeRestController {
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (isChanged) {
-            log.info(
+            logger.info(
                     "Админ (vkId={}) переместил вопрос(ID={} , Title={}) на позицию ниже в теме (ID={} , Title={})" ,
                     user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle()
             );

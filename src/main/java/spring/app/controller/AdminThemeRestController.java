@@ -26,7 +26,7 @@ import java.util.List;
 @RequestMapping("/api/admin/theme")
 public class AdminThemeRestController {
 
-    private final static Logger log = LoggerFactory.getLogger(AdminThemeRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
     private ThemeService themeService;
     private ThemeMapper themeMapper;
@@ -65,7 +65,7 @@ public class AdminThemeRestController {
             themeService.addTheme(theme);
             addedThemeDto = themeMapper.freeThemeEntityToFreeThemeDto(theme);
         }
-        log.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
+        logger.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
                 user.getVkId() , addedThemeDto.getId() , themeDto.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedThemeDto);
     }
@@ -75,7 +75,7 @@ public class AdminThemeRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme = themeService.getThemeById(themeId);
         themeService.deleteThemeById(themeId);
-        log.info(
+        logger.info(
                 "Админ (vkId={}) удалил тему (ID={} , Title={})" ,
                 user.getVkId() , themeId ,  theme.getTitle() );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -92,7 +92,7 @@ public class AdminThemeRestController {
         FixedTheme updatedFixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
         updatedFixedTheme.setPosition(themeById.getPosition());
         themeService.updateTheme(updatedFixedTheme);
-        log.info(
+        logger.info(
                 "Админ (vkId={}) изменил тему (ID={} , Title={})" ,
                 user.getVkId(), themeId, updatedFixedTheme.getTitle()
         );
@@ -110,7 +110,7 @@ public class AdminThemeRestController {
             Theme theme = themeService.getThemeById(Long.parseLong(themeId));
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             themeService.shiftThemePosition(Long.parseLong(themeId), -1);
-            log.info(
+            logger.info(
                     "Админ (vkId={}) переместил тему (ID={} , Title={}) на одну позицию вверх" ,
                     user.getVkId(), themeId, theme.getTitle()
             );
@@ -131,7 +131,7 @@ public class AdminThemeRestController {
             Theme theme = themeService.getThemeById(Long.parseLong(themeId));
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             themeService.shiftThemePosition(Long.parseLong(themeId), 1);
-            log.info(
+            logger.info(
                     "Админ (vkId={}) переместил тему (ID={} , Title={}) на одну позицию вниз" ,
                     user.getVkId() , themeId, theme.getTitle()
             );

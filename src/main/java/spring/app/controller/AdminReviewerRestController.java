@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/api/admin/theme")
 public class AdminReviewerRestController {
 
-    private final static Logger log = LoggerFactory.getLogger(AdminReviewerRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(AdminReviewerRestController.class);
 
     private UserService userService;
     private ThemeService themeService;
@@ -52,7 +52,7 @@ public class AdminReviewerRestController {
         User reviewer = userService.getUserById(reviewerDto.getId());
         userService.addNewReviewer(themeId , reviewerDto.getId());
         Theme theme = themeService.getThemeById(themeId);
-        log.info("Админ (vkId={}) добавил ревьювера (ID={} , Reviewer={}) в тему (ID={} , Title={})" ,
+        logger.info("Админ (vkId={}) добавил ревьювера (ID={} , Reviewer={}) в тему (ID={} , Title={})" ,
                 user.getVkId() , reviewer.getId()  , reviewer.getFirstName() + " " + reviewer.getLastName() ,  themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewerDto);
     }
@@ -63,7 +63,7 @@ public class AdminReviewerRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User reviewer = userService.getUserById(reviewerId);
         Theme theme = themeService.getThemeById(themeId);
-        log.info(
+        logger.info(
                 "Админ (vkId={}) удалил ревьювера (ID={} , Reviewer={}) из темы(ID={} , Title={})",
                 user.getVkId() , reviewerId , reviewer.getFirstName() + " " + reviewer.getLastName() ,  themeId , theme.getTitle());
         return ResponseEntity.noContent().build();
