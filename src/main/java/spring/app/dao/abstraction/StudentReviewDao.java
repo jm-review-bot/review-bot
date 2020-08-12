@@ -29,4 +29,6 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
     List<StudentReview> getStudentReviewsByStudentId(Long studentId);
 
     StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
+
+    Boolean isThemePassedByStudent(Long studentId, Long themeId);
 }

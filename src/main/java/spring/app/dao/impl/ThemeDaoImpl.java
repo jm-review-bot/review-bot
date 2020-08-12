@@ -44,6 +44,20 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
+    public List<Theme> getNonPassedThemesByUser(Integer vkId) {
+        return entityManager.createQuery("SELECT t FROM Theme t JOIN Review r ON t.id = r.theme.id JOIN StudentReview sr on r.id = sr.review.id JOIN User u ON sr.user.id = u.id WHERE u.vkId = :vk_id AND r.isOpen = false AND (sr.isPassed = false OR sr.isPassed IS NULL)", Theme.class)
+                .setParameter("vk_id", vkId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Theme> getAllThemesUpToPosition(Integer position) {
+        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.position <= :position ORDER BY t.position", Theme.class)
+                .setParameter("position", position)
+                .getResultList();
+    }
+
+    @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return entityManager.createQuery("SELECT t FROM Review r JOIN r.theme t WHERE r.id =:id", Theme.class)
                 .setParameter("id", reviewId)

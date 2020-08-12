@@ -38,4 +38,8 @@ public interface StudentReviewService {
     List<StudentReview> getStudentReviewsByStudentId(Long studentId);
 
     StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
+
+    Boolean isThemePassedByStudent(Long studentId, Long themeId);
+
+    boolean setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId);
 }

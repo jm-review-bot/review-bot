@@ -110,12 +110,17 @@ public class TestDataInit {
     @Autowired
     private Step adminChangeAddedUserFullname;
 
+    @Autowired
+    private Step adminSetPassedReview;
 
     @Autowired
     private Step adminSetPassedReviewGetThemesStatus;
 
     @Autowired
     private Step adminSetPassedReviewGetUsersList;
+
+    @Autowired
+    private Step adminSetPassedReviewResult;
 
     @Autowired
     private Step adminSetThemeAddedUser;
@@ -378,6 +383,8 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW, adminEditReviewChangeReview);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+        steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW, adminSetPassedReview);
+        steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_RESULT, adminSetPassedReviewResult);
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS, adminSetPassedReviewGetThemesStatus);
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_USERS_LIST, adminSetPassedReviewGetUsersList);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);

@@ -459,4 +459,20 @@ public class Keyboards {
                     "        },\n" +
                     "        \"color\": \"default\"\n" +
                     "      }\n";
+
+    public final static String REVIEW_SET_PASSED = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Сделать пройденной\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "       ],[" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n";
 }
