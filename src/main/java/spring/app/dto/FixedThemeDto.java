@@ -2,8 +2,6 @@ package spring.app.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import spring.app.groups.CreateGroup;
-import spring.app.groups.UpdateGroup;
 
 import javax.validation.constraints.NotBlank;
 
