@@ -99,16 +99,16 @@ public class TestDataInit {
     private Step adminConfirmSearch;
 
     @Autowired
-    private Step adminChooseActionForUser;
-
-    @Autowired
-    private Step adminChooseActionForReview;
-
-    @Autowired
     private Step adminProposalChangeFullnameAddedUser;
 
     @Autowired
     private Step adminChangeAddedUserFullname;
+
+    @Autowired
+    private Step adminChooseActionForUser;
+
+    @Autowired
+    private Step adminChooseActionForReview;
 
     @Autowired
     private Step adminSetPassedReview;
@@ -374,8 +374,6 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_REMOVE_USER, adminRemoveUser);
         steps.put(StepSelector.ADMIN_SEARCH, adminSearch);
         steps.put(StepSelector.ADMIN_CONFIRM_SEARCH, adminConfirmSearch);
-        steps.put(StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER, adminChooseActionForUser);
-        steps.put(StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW, adminChooseActionForReview);
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_USER_LIST, adminEditReviewGetUserList);
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_THEME_LIST, adminEditReviewGetThemeList);
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST, adminEditReviewGetReviewList);
@@ -383,6 +381,8 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW, adminEditReviewChangeReview);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+        steps.put(StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER, adminChooseActionForUser);
+        steps.put(StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW, adminChooseActionForReview);
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW, adminSetPassedReview);
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_RESULT, adminSetPassedReviewResult);
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS, adminSetPassedReviewGetThemesStatus);

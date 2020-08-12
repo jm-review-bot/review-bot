@@ -42,6 +42,7 @@ public class AdminSetPassedReviewResult extends Step {
             case "Назад":
                 storageService.clearUsersOfStorage(context.getVkId());
                 sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
+                break;
             default:
                 throw new ProcessInputException("Введена неверная команда...");
         }

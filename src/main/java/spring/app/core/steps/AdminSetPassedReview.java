@@ -66,9 +66,11 @@ public class AdminSetPassedReview extends Step {
                 }
                 studentReviewService.setPassedThisAndPreviousThemesForStudent(studentId, themeId);
                 sendUserToNextStep(context, ADMIN_SET_PASSED_REVIEW_RESULT);
+                break;
             case "Назад":
                 storageService.removeUserStorage(context.getVkId(), ADMIN_SET_PASSED_REVIEW);
                 sendUserToNextStep(context, ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS);
+                break;
             default:
                 throw new ProcessInputException("Введена неверная команда...");
         }
