@@ -5,7 +5,6 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;

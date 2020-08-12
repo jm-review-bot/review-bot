@@ -1,8 +1,8 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -24,6 +24,8 @@ public class AdminSetPassedReview extends Step {
     ThemeService themeService;
     ReviewService reviewService;
     StudentReviewService studentReviewService;
+
+    private final static Logger logger = LoggerFactory.getLogger(AdminSetPassedReview.class);
 
     public AdminSetPassedReview(StorageService storageService,
                                 UserService userService,
@@ -65,6 +67,9 @@ public class AdminSetPassedReview extends Step {
                     throw new ProcessInputException("Тема уже имеет статус \"Пройдено\"");
                 }
                 studentReviewService.setPassedThisAndPreviousThemesForStudent(studentId, themeId);
+                logger.info(
+                        "Админ (vkId={}) изменил статус тем (включительно до темы (ID={} , Title=\"{}\")) студента (vkId={}, Student={} {}) на \"Пройдено\"",
+                        context.getVkId(), themeId, theme.getTitle(), studentId, student.getFirstName(), student.getLastName());
                 sendUserToNextStep(context, ADMIN_SET_PASSED_REVIEW_RESULT);
                 break;
             case "Назад":

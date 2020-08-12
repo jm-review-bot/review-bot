@@ -2,7 +2,6 @@ package spring.app.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.dao.abstraction.StudentReviewDao;
@@ -143,7 +142,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     * соответствующая логическая переменная */
     @Transactional
     @Override
-    public boolean setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId) {
+    public void setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId) {
         User student = userDao.getById(studentId);
         List<Theme> themesUpToPosition = themeDao.getAllThemesUpToPosition(themeDao.getById(themeId).getPosition());
         List<Theme> passedThemeByStudent = themeDao.getPassedThemesByUser(student.getVkId());
@@ -165,9 +164,6 @@ public class StudentReviewServiceImpl implements StudentReviewService {
                 passedStudentReviewToDefaultUser.setIsPassed(true);
                 studentReviewDao.save(passedStudentReviewToDefaultUser);
             }
-            return true;
-        } else {
-            return false;
         }
     }
 }

@@ -19,7 +19,7 @@ public class AdminChooseActionForUser extends Step {
     private StorageService storageService;
 
     public AdminChooseActionForUser(StorageService storageService) {
-        super("Какое действие Вы собираетесь выполнить с пользователем?", ACTIONS_FOR_USER);
+        super("Выберите действие над пользователем", ACTIONS_FOR_USER);
         this.storageService = storageService;
     }
 

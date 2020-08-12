@@ -16,7 +16,7 @@ public class AdminChooseActionForReview extends Step {
     StorageService storageService;
 
     public AdminChooseActionForReview(StorageService storageService) {
-        super("Выберите действие", ACTIONS_FOR_REVIEW);
+        super("Выберите действие над ревью", ACTIONS_FOR_REVIEW);
         this.storageService = storageService;
     }
 

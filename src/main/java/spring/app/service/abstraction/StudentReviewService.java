@@ -41,5 +41,5 @@ public interface StudentReviewService {
 
     Boolean isThemePassedByStudent(Long studentId, Long themeId);
 
-    boolean setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId);
+    void setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId);
 }

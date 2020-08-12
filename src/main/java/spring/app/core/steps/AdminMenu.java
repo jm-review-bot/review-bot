@@ -5,8 +5,6 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.service.abstraction.StorageService;
 
-import java.util.Arrays;
-
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 
