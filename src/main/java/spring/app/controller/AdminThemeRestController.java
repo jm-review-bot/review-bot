@@ -66,7 +66,7 @@ public class AdminThemeRestController {
             addedThemeDto = themeMapper.freeThemeEntityToFreeThemeDto(theme);
         }
         log.info("Админ (vkId={}) добавил тему (ID={} , Title={})" ,
-                user.getVkId() , fixedTheme.getId() , fixedTheme.getTitle());
+                user.getVkId() , addedThemeDto.getId() , themeDto.getTitle());
         return ResponseEntity.status(HttpStatus.CREATED).body(addedThemeDto);
     }
 
@@ -83,7 +83,7 @@ public class AdminThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
-    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody @Valid FixedThemeDto fixedThemeDto) {
+    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody ThemeDto fixedThemeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme themeById = themeService.getThemeById(themeId);
         if (themeById == null) {
