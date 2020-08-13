@@ -92,7 +92,7 @@ public class AdminSetPassedReviewGetThemesStatus extends Step {
                     .append(theme.getTitle())
                     .append(" (Статус: ")
                     .append(studentReviewService.isThemePassedByStudent(studentId, theme.getId()) ? "пройдено" : "не пройдено")
-                    .append(")");
+                    .append(")\n");
             idList.add(theme.getId().toString());
         }
         storageService.updateUserStorage(context.getVkId(), ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS, idList);

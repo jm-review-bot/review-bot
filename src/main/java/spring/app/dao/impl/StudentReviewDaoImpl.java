@@ -129,10 +129,10 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
 
     @Override
     public Boolean isThemePassedByStudent(Long studentId, Long themeId) {
-        Integer studentReviewsCount = entityManager.createQuery("SELECT COUNT (sr) FROM StudentReview sr WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id AND sr.isPassed = true", Integer.class)
+        Long studentReviewsCount = entityManager.createQuery("SELECT COUNT(sr) FROM StudentReview sr WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id AND sr.isPassed = true", Long.class)
                 .setParameter("student_id", studentId)
                 .setParameter("theme_id", themeId)
                 .getSingleResult();
-        return studentReviewsCount != null;
+        return studentReviewsCount > 0;
     }
 }
