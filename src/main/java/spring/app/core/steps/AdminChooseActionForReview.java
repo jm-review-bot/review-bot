@@ -5,7 +5,6 @@ import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.service.abstraction.StorageService;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
@@ -13,11 +12,8 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminChooseActionForReview extends Step {
 
-    StorageService storageService;
-
-    public AdminChooseActionForReview(StorageService storageService) {
+    public AdminChooseActionForReview() {
         super("Выберите действие над ревью", ACTIONS_FOR_REVIEW);
-        this.storageService = storageService;
     }
 
     @Override

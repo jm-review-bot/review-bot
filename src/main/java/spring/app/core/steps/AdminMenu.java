@@ -3,7 +3,6 @@ package spring.app.core.steps;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.service.abstraction.StorageService;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
@@ -11,11 +10,8 @@ import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 @Component
 public class AdminMenu extends Step {
 
-    private final StorageService storageService;
-
-    public AdminMenu(StorageService storageService) {
+    public AdminMenu() {
         super("", DEF_ADMIN_MENU_KB);
-        this.storageService = storageService;
     }
 
     @Override

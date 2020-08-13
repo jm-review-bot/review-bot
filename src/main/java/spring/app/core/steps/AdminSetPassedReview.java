@@ -19,24 +19,21 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminSetPassedReview extends Step {
 
-    StorageService storageService;
-    UserService userService;
-    ThemeService themeService;
-    ReviewService reviewService;
-    StudentReviewService studentReviewService;
+    private final StorageService storageService;
+    private final UserService userService;
+    private final ThemeService themeService;
+    private final StudentReviewService studentReviewService;
 
     private final static Logger logger = LoggerFactory.getLogger(AdminSetPassedReview.class);
 
     public AdminSetPassedReview(StorageService storageService,
                                 UserService userService,
                                 ThemeService themeService,
-                                ReviewService reviewService,
                                 StudentReviewService studentReviewService) {
         super("", "");
         this.storageService = storageService;
         this.userService = userService;
         this.themeService = themeService;
-        this.reviewService = reviewService;
         this.studentReviewService = studentReviewService;
     }
 
@@ -94,18 +91,18 @@ public class AdminSetPassedReview extends Step {
             storageService.updateUserStorage(context.getVkId(), ADMIN_SET_PASSED_REVIEW, Arrays.asList("true"));
             return "Выбранные пользователь и/или тема были удалены из БД. Вернитесь назад и попробуйте еще раз.";
         }
-        StringBuilder infoMessage = new StringBuilder(String.format(
+        String infoMessage = String.format(
                 "Тема \"%s\", студент %s %s. Статус: %s.\n",
                 theme.getTitle(),
                 student. getFirstName(),
                 student.getLastName(),
                 (isPassedThemeByStudent ? "пройдено" : "не пройдено")
-        ));
+        );
         if (!isPassedThemeByStudent) {
-            infoMessage.append("Сделать тему пройденной? Вместе с этой темой также пройденными станут все предыдущие темы.");
+            infoMessage.concat("Сделать тему пройденной? Вместе с этой темой также пройденными станут все предыдущие темы.");
         }
         storageService.updateUserStorage(context.getVkId(), ADMIN_SET_PASSED_REVIEW, Arrays.asList(isPassedThemeByStudent.toString()));
-        return infoMessage.toString();
+        return infoMessage;
     }
 
     @Override

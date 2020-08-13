@@ -27,8 +27,8 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminEditReviewGetUserList extends Step {
 
-    private UserService userService;
-    private StorageService storageService;
+    private final UserService userService;
+    private final StorageService storageService;
 
     @Autowired
     public AdminEditReviewGetUserList(UserService userService, StorageService storageService) {

@@ -20,8 +20,8 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminSetPassedReviewGetUsersList extends Step {
 
-    StorageService storageService;
-    UserService userService;
+    private final StorageService storageService;
+    private final UserService userService;
 
     public AdminSetPassedReviewGetUsersList(StorageService storageService,
                                             UserService userService) {

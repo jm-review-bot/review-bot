@@ -16,7 +16,7 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminChooseActionForUser extends Step {
 
-    private StorageService storageService;
+    private final StorageService storageService;
 
     public AdminChooseActionForUser(StorageService storageService) {
         super("Выберите действие над пользователем", ACTIONS_FOR_USER);

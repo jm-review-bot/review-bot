@@ -23,10 +23,10 @@ import static spring.app.util.Keyboards.*;
 @Component
 public class AdminSetPassedReviewGetThemesStatus extends Step {
 
-    StorageService storageService;
-    ThemeService themeService;
-    UserService userService;
-    StudentReviewService studentReviewService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
+    private final UserService userService;
+    private final StudentReviewService studentReviewService;
 
     public AdminSetPassedReviewGetThemesStatus(StorageService storageService,
                                                ThemeService themeService,
