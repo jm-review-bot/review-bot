@@ -70,12 +70,14 @@ public class AdminSetPassedReviewGetUsersList extends Step {
         List<String> idList = new ArrayList<>();
         for (int i = 0; i < allUsers.size(); i++) {
             User user = allUsers.get(i);
-            infoMessage.append(String.format(
-                    "[%s] %s %s\n",
-                    i + 1,
-                    user.getFirstName(),
-                    user.getLastName()
-            ));
+            infoMessage
+                    .append("[")
+                    .append(i + 1)
+                    .append("] ")
+                    .append(user.getFirstName())
+                    .append(" ")
+                    .append(user.getLastName())
+                    .append("\n");
             idList.add(user.getId().toString());
         }
         storageService.updateUserStorage(context.getVkId(), ADMIN_SET_PASSED_REVIEW_GET_USERS_LIST, idList);

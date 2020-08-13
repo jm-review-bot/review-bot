@@ -136,10 +136,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     * Пользователь По-Умолчанию и к нему привязываются все новосозданные ревью.
     *
     * @param studentId - ID выбранного студента
-    * @param themeId - ID выбранной темы
-    *
-    * @return - в зависимости от того, было ли изменено состояние БД (были ли добавлены новые ревью), возвращается
-    * соответствующая логическая переменная */
+    * @param themeId - ID выбранной темы */
     @Transactional
     @Override
     public void setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId) {
@@ -148,8 +145,8 @@ public class StudentReviewServiceImpl implements StudentReviewService {
         List<Theme> passedThemeByStudent = themeDao.getPassedThemesByUser(student.getVkId());
         themesUpToPosition.removeAll(passedThemeByStudent);
 
+        User defaultUser = userDao.getByVkId(0);
         if (themesUpToPosition.size() > 0) {
-            User defaultUser = userDao.getByVkId(0);
             for (int i = 0; i < themesUpToPosition.size(); i++) {
                 Review passedReviewToDefaultUser = new Review();
                 passedReviewToDefaultUser.setUser(defaultUser);
