@@ -2,9 +2,10 @@ package spring.app.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.userdetails.UserDetails;
 import spring.app.core.StepSelector;
-import spring.app.listener.UserListener;
 
 import javax.persistence.*;
 import java.util.Arrays;
@@ -12,10 +13,11 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
-@EntityListeners(UserListener.class)
 @Table(name = "users")
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
+@Where(clause = "is_deleted = false")
 public class User implements UserDetails {
 
     @Id
@@ -69,7 +71,8 @@ public class User implements UserDetails {
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
-
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
 
     public User() {
     }
