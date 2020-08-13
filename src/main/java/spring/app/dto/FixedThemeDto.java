@@ -1,11 +1,17 @@
 package spring.app.dto;
 
+import spring.app.groups.CreateGroup;
+import spring.app.groups.UpdateGroup;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 
 public class FixedThemeDto  extends ThemeDto {
 
-    @NotBlank
-    private final String type = "fixed";
+    @Null(groups=UpdateGroup.class)
+    @NotNull(groups= CreateGroup.class)
+    private String type;
 
     public FixedThemeDto() {
         super();
