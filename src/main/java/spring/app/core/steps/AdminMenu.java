@@ -28,7 +28,7 @@ public class AdminMenu extends Step {
                         sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
                         break;
                     default:
-                        sendUserToNextStep(context, USER_MENU);
+                        sendUserToNextStep(context, START);
                         break;
                 }
                 break;
@@ -41,7 +41,7 @@ public class AdminMenu extends Step {
                         sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
                         break;
                     default:
-                        sendUserToNextStep(context, USER_MENU);
+                        sendUserToNextStep(context, START);
                         break;
                 }
                 break;
