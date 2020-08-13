@@ -46,7 +46,7 @@ public class AdminSetPassedReview extends Step {
     * - не удален ли выбранный студент к текущему моменту из БД;
     * - не удалена ли выбранная тема к текущему моменту из БД;
     * - какой текущий статус выбранной темы был отображен пользователю.
-    * Только после всех этих проверок */
+    * Только после всех этих проверок производится установка статуса темам */
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
