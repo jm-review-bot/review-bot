@@ -18,4 +18,6 @@ public interface RoleService {
 	void deleteRoleById(Long id);
 
 	Role getRoleByName(String roleName);
+
+	List<Role> rolesSearch(String searchString);
 }

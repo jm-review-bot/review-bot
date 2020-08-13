@@ -146,4 +146,9 @@ public class QuestionServiceImpl implements QuestionService {
         questionDao.update(currentQuestion);
         return true;
     }
+
+    @Override
+    public List<Question> questionsSearch(String searchString) {
+        return questionDao.questionsSearch(searchString);
+    }
 }

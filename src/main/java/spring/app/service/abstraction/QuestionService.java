@@ -30,4 +30,6 @@ public interface QuestionService {
     List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
 
     QuestionDto getQuestionDtoById(Long id);
+
+    List<Question> questionsSearch(String searchString);
 }

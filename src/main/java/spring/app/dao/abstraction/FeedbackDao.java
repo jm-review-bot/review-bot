@@ -16,4 +16,6 @@ public interface FeedbackDao extends GenericDao<Long, Feedback> {
     List<Feedback> getFeedbackByStudentReviewId(Long studentReviewId);
 
     List<Feedback> getFeedbacksByStudentId(Long studentId);
+
+    List<Feedback> feedbacksSearch(String searchString);
 }

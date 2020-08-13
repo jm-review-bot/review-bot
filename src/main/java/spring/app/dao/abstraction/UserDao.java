@@ -37,4 +37,6 @@ public interface UserDao extends GenericDao<Long, User> {
     void deleteReviewerFromTheme (long themeId , long reviewerId);
 
     List<User> getExaminersByFreeThemeId(Long freeThemeId) ;
+
+    List<User> usersSearch(String searchString);
 }

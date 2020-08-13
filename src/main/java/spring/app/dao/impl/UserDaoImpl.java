@@ -122,4 +122,10 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .getResultList();
     }
 
+    @Override
+    public List<User> usersSearch(String searchString) {
+        return entityManager.createQuery("SELECT u FROM User u WHERE u.firstName LIKE CONCAT('%', :search, '%') OR u.lastName LIKE CONCAT('%', :search, '%')", User.class)
+                .setParameter("search", searchString)
+                .getResultList();
+    }
 }

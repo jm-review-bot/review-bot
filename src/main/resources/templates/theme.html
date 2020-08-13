@@ -89,13 +89,12 @@
                     </div>
                 </div>
             </form>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control col-md-2 offset-md-10" placeholder="Поиск" aria-label="Поиск"
-                       aria-describedby="button-addon2">
+            <form class="input-group mb-3" id="search-form">
+                <input type="search" name="search" class="form-control col-md-2 offset-md-10 border border-primary" placeholder="Поиск..." required>
                 <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" id="button-addon2">Поиск</button>
+                    <button class="btn btn-primary input-group-append" type="submit">Поиск</button>
                 </div>
-            </div>
+            </form>
         </nav>
         <h1>Список всех доступных тем</h1>
 
@@ -268,6 +267,7 @@
 <script type="text/javascript" src="/js/reviewerPageService.js"></script>
 <script type="text/javascript" src="/js/deleteReviewerService.js"></script>
 <script type="text/javascript" src="/js/addReviewerService.js"></script>
+<script type="text/javascript" src="/js/searchService.js"></script>
 
 </body>
 </html>

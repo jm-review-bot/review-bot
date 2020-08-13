@@ -59,4 +59,9 @@ public class FeedbackServiceImpl implements FeedbackService {
     public List<Feedback> getFeedbacksByStudentId(Long studentId) {
         return feedbackDao.getFeedbackByStudentReviewId(studentId);
     }
+
+    @Override
+    public List<Feedback> feedbacksSearch(String searchString) {
+        return feedbackDao.feedbacksSearch(searchString);
+    }
 }

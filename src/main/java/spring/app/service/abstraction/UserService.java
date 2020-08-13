@@ -40,4 +40,6 @@ public interface UserService extends UserDetailsService {
     User addNewReviewer (long themeId , long userId);
 
     void deleteReviewerFromTheme (long themeId , long reviewerId);
+
+    List<User> usersSearch(String searchString);
 }

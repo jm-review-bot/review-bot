@@ -119,7 +119,10 @@ public class UserServiceImpl implements UserService {
         userDao.deleteReviewerFromTheme(themeId , reviewerId);
     }
 
-
+    @Override
+    public List<User> usersSearch(String searchString) {
+        return userDao.usersSearch(searchString);
+    }
 
     // Метод нужен для реализации UserDetailService.В рамках проекта username - это VkId пользователя
     @Override

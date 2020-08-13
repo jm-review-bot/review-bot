@@ -44,4 +44,6 @@ public interface ThemeService {
     List<User> getExaminersByFreeThemeId(Long freeThemeId);
 
     boolean isFreeTheme(Long themeId);
+
+    List<Theme> themesSearch(String searchString);
 }

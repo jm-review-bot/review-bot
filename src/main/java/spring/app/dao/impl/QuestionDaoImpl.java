@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.QuestionDao;
 import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
+import spring.app.model.User;
 
 import java.util.List;
 
@@ -83,5 +84,12 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
                 .setParameter("id", id)
                 .getResultList();
         return list.size() > 0 ? list.get(0) : null;
+    }
+
+    @Override
+    public List<Question> questionsSearch(String searchString) {
+        return entityManager.createQuery("SELECT q FROM Question q WHERE q.question LIKE CONCAT('%', :search, '%') OR q.answer LIKE CONCAT('%', :search, '%')", Question.class)
+                .setParameter("search", searchString)
+                .getResultList();
     }
 }

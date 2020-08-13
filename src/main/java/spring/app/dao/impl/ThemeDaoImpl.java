@@ -116,4 +116,11 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .getResultList();
         return themeList.size() > 0;
     }
+
+    @Override
+    public List<Theme> themesSearch(String searchString) {
+        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.title LIKE CONCAT('%', :search, '%')", Theme.class)
+                .setParameter("search", searchString)
+                .getResultList();
+    }
 }
