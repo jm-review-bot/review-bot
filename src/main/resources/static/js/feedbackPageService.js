@@ -26,7 +26,7 @@ function getStudentCommentByFeedbackId(feedbackId) {
         type: 'get',
         async: false,
         success: (data) => {
-            studentComment = data
+            studentComment = data.studentComment
         }
     });
     return studentComment;

@@ -27,7 +27,7 @@ public class AdminFeedbackRestController {
     }
 
     @GetMapping("/{feedbackId}/comment")
-    public ResponseEntity<String> getStudentCommentByFeedbackId(@PathVariable Long feedbackId) {
-        return ResponseEntity.ok(feedbackService.getStudentCommentByFeedbackId(feedbackId));
+    public ResponseEntity<FeedbackDto> getStudentCommentByFeedbackId(@PathVariable Long feedbackId) {
+        return ResponseEntity.ok(feedbackService.getFeedbackDtoById(feedbackId));
     }
 }
