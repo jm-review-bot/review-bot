@@ -247,7 +247,143 @@
     </div>
 </div>
 
+<!-- Модальное окно для оторажения результатов поиска -->
+<div class="modal fade" id="search-modal-window" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Результаты поиска
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="accordion" id="search-accordion">
+                    <div class="card">
+                        <!-- Резальтат поиска по пользователям -->
+                        <div class="card-header" id="users-search-card-header" role="button" data-toggle="collapse" data-target="#users-search-results">
+                            <!-- Заполняется с помощью JS -->
+                        </div>
+                        <div class="collapse" id="users-search-results" data-toggle="collapse">
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Имя</th>
+                                            <th>Фамилия</th>
+                                            <th>VK ID</th>
+                                            <th>Роль</th>
+                                            <th>Review Points</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="users-search-tbody">
+                                        <!-- Заполняется с помощью JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- Резальтат поиска по темам -->
+                    <div class="card-header" id="themes-search-card-header" role="button" data-toggle="collapse" data-target="#themes-search-results">
+                        <!-- Заполняется с помощью JS -->
+                    </div>
+                    <div class="collapse" id="themes-search-results" data-toggle="collapse">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Наименование</th>
+                                    <th>Сritical Weight</th>
+                                    <th>Позиция</th>
+                                    <th>Review Point</th>
+                                    <th>Тип</th>
+                                </tr>
+                                </thead>
+                                <tbody id="themes-search-tbody">
+                                    <!-- Заполняется с помощью JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Резальтат поиска по вопросам -->
+                    <div class="card-header" id="questions-search-card-header" role="button" data-toggle="collapse" data-target="#questions-search-results">
+                        <!-- Заполняется с помощью JS -->
+                    </div>
+                    <div class="collapse" id="questions-search-results" data-toggle="collapse">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Вопрос</th>
+                                    <th>Ответ</th>
+                                    <th>Вес</th>
+                                </tr>
+                                </thead>
+                                <tbody id="questions-search-tbody">
+                                <!-- Заполняется с помощью JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Резальтат поиска по отзывам к ревью -->
+                    <div class="card-header" id="feedbacks-search-card-header" role="button" data-toggle="collapse" data-target="#feedbacks-search-results">
+                        <!-- Заполняется с помощью JS -->
+                    </div>
+                    <div class="collapse" id="feedbacks-search-results" data-toggle="collapse">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Сдуент</th>
+                                    <th>Ревьюер</th>
+                                    <th>Оценка ревью</th>
+                                    <th>Оценка ревьюера</th>
+                                    <th>Комментарий</th>
+                                </tr>
+                                </thead>
+                                <tbody id="feedbacks-search-tbody">
+                                <!-- Заполняется с помощью JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Резальтат поиска по ролям -->
+                    <div class="card-header" id="roles-search-card-header" role="button" data-toggle="collapse" data-target="#roles-search-results">
+                        <!-- Заполняется с помощью JS -->
+                    </div>
+                    <div class="collapse" id="roles-search-results" data-toggle="collapse">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Наименование</th>
+                                </tr>
+                                </thead>
+                                <tbody id="roles-search-tbody">
+                                <!-- Заполняется с помощью JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
