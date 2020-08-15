@@ -1,10 +1,8 @@
 package spring.app.controller;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import spring.app.dto.*;
 import spring.app.service.abstraction.*;
 
@@ -25,8 +23,8 @@ public class AdminSearchRestController {
         this.questionService = questionService;
     }
 
-    @PostMapping
-    public ResponseEntity<?> search(@RequestBody String searchString) {
+    @GetMapping
+    public ResponseEntity<?> search(@RequestParam("search") String searchString) {
         Map<String, List<?>> searchResults = new HashMap<>();
 
         List<ThemeDto> themesSearch = themeService.themesSearch(searchString);

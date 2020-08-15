@@ -4,14 +4,23 @@ $('#search-form').on('submit', function (event) {
 
     $.ajax({
         url: "/api/admin/search",
-        type: "POST",
+        type: "GET",
+        data: {
+            'search' : searchString
+        },
         contentType: "application/json",
-        data: searchString,
         success: function (data) {
-
+            showSearchResults(data)
         },
         error: function () {
             alert("При выполнении поиска возникла непредвиденная ошибка");
         }
     })
 })
+
+function showSearchResults(results) {
+    let themesResults = results.themes
+    let questionsResults = results.questions
+
+    buildThemesAccordion(themesResults)
+}
