@@ -45,7 +45,7 @@ function buildSearchResultsAccordion(searchResults) {
         }
         $('#users-search-tbody').html(htmlContent)
     } else {
-        $('#users-search-tbody').html("Ничего не найдено")
+        $('#users-search-tbody').html('<tr><td colspan="6" align="center">Ничего не найдено</td></tr>')
     }
     $('#users-search-card-header').html(`Пользователи (найдено: ${usersSize})`)
 
@@ -68,7 +68,7 @@ function buildSearchResultsAccordion(searchResults) {
         }
         $('#themes-search-tbody').html(htmlContent)
     } else {
-        $('#themes-search-tbody').html("Ничего не найдено")
+        $('#themes-search-tbody').html('<tr><td colspan="6" align="center">Ничего не найдено</td></tr>')
     }
     $('#themes-search-card-header').html(`Темы (найдено: ${themesSize})`)
 
@@ -89,7 +89,7 @@ function buildSearchResultsAccordion(searchResults) {
         }
         $('#questions-search-tbody').html(htmlContent)
     } else {
-        $('#questions-search-tbody').html("Ничего не найдено")
+        $('#questions-search-tbody').html('<tr><td colspan="4" align="center">Ничего не найдено</td></tr>')
     }
     $('#questions-search-card-header').html(`Вопросы (найдено: ${questionsSize})`)
 
@@ -112,7 +112,7 @@ function buildSearchResultsAccordion(searchResults) {
         }
         $('#feedbacks-search-tbody').html(htmlContent)
     } else {
-        $('#feedbacks-search-tbody').html("Ничего не найдено")
+        $('#feedbacks-search-tbody').html('<tr><td colspan="6" align="center">Ничего не найдено</td></tr>')
     }
     $('#feedbacks-search-card-header').html(`Отзывы к ревью (найдено: ${feedbacksSize})`)
 
@@ -131,7 +131,7 @@ function buildSearchResultsAccordion(searchResults) {
         }
         $('#roles-search-tbody').html(htmlContent)
     } else {
-        $('#roles-search-tbody').html("Ничего не найдено")
+        $('#roles-search-tbody').html('<tr><td colspan="2" align="center">Ничего не найдено</td></tr>')
     }
     $('#roles-search-card-header').html(`Роли (найдено: ${rolesSize})`)
 }
