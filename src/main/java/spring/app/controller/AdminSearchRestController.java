@@ -1,16 +1,11 @@
 package spring.app.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import org.springframework.data.repository.init.ResourceReader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.app.dto.*;
-import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
 import java.util.HashMap;

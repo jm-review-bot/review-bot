@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
-import spring.app.model.Role;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;

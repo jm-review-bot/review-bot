@@ -1,6 +1,5 @@
 package spring.app.dao.impl;
 
-import org.hibernate.Criteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
