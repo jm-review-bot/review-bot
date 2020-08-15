@@ -48,11 +48,4 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
                 .setParameter("student_id", studentId)
                 .getResultList();
     }
-
-    @Override
-    public List<FeedbackDto> feedbacksSearch(String searchString) {
-        return entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.user.firstName, f.user.lastName, f.studentReview.user.firstName, f.studentReview.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE LOWER(f.comment) LIKE LOWER(:search)", FeedbackDto.class)
-                .setParameter("search", "%" + searchString + "%")
-                .getResultList();
-    }
 }

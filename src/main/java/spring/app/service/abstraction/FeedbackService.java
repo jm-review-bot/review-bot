@@ -20,6 +20,4 @@ public interface FeedbackService {
     void removeAll(List<Feedback> feedbacks);
 
     List<Feedback> getFeedbacksByStudentId(Long studentId);
-
-    List<FeedbackDto> feedbacksSearch(String searchString);
 }
