@@ -24,8 +24,8 @@ public class RoleDaoImpl extends AbstractDao<Long, Role> implements RoleDao {
 
     @Override
     public List<RoleDto> rolesSearch(String searchString) {
-        return entityManager.createQuery("SELECT new spring.app.dto.RoleDto(r.id, r.name) FROM Role r WHERE r.name LIKE CONCAT('%', :search, '%')", RoleDto.class)
-                .setParameter("search", searchString)
+        return entityManager.createQuery("SELECT new spring.app.dto.RoleDto(r.id, r.name) FROM Role r WHERE LOWER(r.name) LIKE LOWER(:search)", RoleDto.class)
+                .setParameter("search", "%" + searchString + "%")
                 .getResultList();
     }
 }

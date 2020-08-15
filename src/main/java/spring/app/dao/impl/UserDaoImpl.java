@@ -126,8 +126,8 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<UserDto> usersSearch(String searchString) {
-        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.firstName, u.lastName, u.vkId, u.reviewPoint, u.role.name, u.isAccountNonExpired, u.isAccountNonExpired, u.isCredentialsNonExpired, u.isEnabled) FROM User u WHERE u.firstName LIKE CONCAT('%', :search, '%') OR u.lastName LIKE CONCAT('%', :search, '%')", UserDto.class)
-                .setParameter("search", searchString)
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.firstName, u.lastName, u.vkId, u.reviewPoint, u.role.name, u.isAccountNonExpired, u.isAccountNonExpired, u.isCredentialsNonExpired, u.isEnabled) FROM User u WHERE LOWER(u.firstName) LIKE LOWER(:search) OR LOWER(u.lastName) LIKE LOWER(:search)", UserDto.class)
+                .setParameter("search", "%" + searchString + "%")
                 .getResultList();
     }
 }

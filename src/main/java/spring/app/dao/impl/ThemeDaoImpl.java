@@ -118,8 +118,8 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public List<ThemeDto> themesSearch(String searchString) {
-        return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t WHERE t.title LIKE CONCAT('%', :search, '%')", ThemeDto.class)
-                .setParameter("search", searchString)
+        return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t WHERE LOWER(t.title) LIKE LOWER(:search)", ThemeDto.class)
+                .setParameter("search", "%" + searchString + "%")
                 .getResultList();
     }
 }
