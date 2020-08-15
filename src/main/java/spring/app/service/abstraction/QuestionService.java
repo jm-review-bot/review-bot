@@ -31,5 +31,5 @@ public interface QuestionService {
 
     QuestionDto getQuestionDtoById(Long id);
 
-    List<Question> questionsSearch(String searchString);
+    List<QuestionDto> questionsSearch(String searchString);
 }

@@ -2,6 +2,7 @@ package spring.app.dao.impl;
 
 import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.RoleDao;
+import spring.app.dto.RoleDto;
 import spring.app.model.Role;
 
 import javax.persistence.TypedQuery;
@@ -22,8 +23,8 @@ public class RoleDaoImpl extends AbstractDao<Long, Role> implements RoleDao {
     }
 
     @Override
-    public List<Role> rolesSearch(String searchString) {
-        return entityManager.createQuery("SELECT r FROM Role r WHERE r.name LIKE CONCAT('%', :search, '%')", Role.class)
+    public List<RoleDto> rolesSearch(String searchString) {
+        return entityManager.createQuery("SELECT new spring.app.dto.RoleDto(r.id, r.name) FROM Role r WHERE r.name LIKE CONCAT('%', :search, '%')", RoleDto.class)
                 .setParameter("search", searchString)
                 .getResultList();
     }

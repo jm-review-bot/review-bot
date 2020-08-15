@@ -1,5 +1,6 @@
 package spring.app.service.abstraction;
 
+import spring.app.dto.RoleDto;
 import spring.app.model.Role;
 
 import java.util.List;
@@ -19,5 +20,5 @@ public interface RoleService {
 
 	Role getRoleByName(String roleName);
 
-	List<Role> rolesSearch(String searchString);
+	List<RoleDto> rolesSearch(String searchString);
 }

@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
@@ -123,8 +124,8 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
-    public List<User> usersSearch(String searchString) {
-        return entityManager.createQuery("SELECT u FROM User u WHERE u.firstName LIKE CONCAT('%', :search, '%') OR u.lastName LIKE CONCAT('%', :search, '%')", User.class)
+    public List<UserDto> usersSearch(String searchString) {
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.firstName, u.lastName, u.vkId, u.reviewPoint, u.role.name, u.isAccountNonExpired, u.isAccountNonExpired, u.isCredentialsNonExpired, u.isEnabled) FROM User u WHERE u.firstName LIKE CONCAT('%', :search, '%') OR u.lastName LIKE CONCAT('%', :search, '%')", UserDto.class)
                 .setParameter("search", searchString)
                 .getResultList();
     }

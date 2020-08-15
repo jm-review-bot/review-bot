@@ -154,7 +154,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public List<Theme> themesSearch(String searchString) {
+    public List<ThemeDto> themesSearch(String searchString) {
         return themeDao.themesSearch(searchString);
     }
 }

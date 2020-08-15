@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
 import spring.app.model.FreeTheme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
@@ -120,7 +121,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> usersSearch(String searchString) {
+    public List<UserDto> usersSearch(String searchString) {
         return userDao.usersSearch(searchString);
     }
 

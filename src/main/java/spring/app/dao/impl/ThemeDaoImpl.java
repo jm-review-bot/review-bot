@@ -5,7 +5,6 @@ import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
-import spring.app.dto.FreeThemeDto;
 import spring.app.model.Theme;
 import spring.app.model.User;
 
@@ -118,8 +117,8 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public List<Theme> themesSearch(String searchString) {
-        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.title LIKE CONCAT('%', :search, '%')", Theme.class)
+    public List<ThemeDto> themesSearch(String searchString) {
+        return entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t WHERE t.title LIKE CONCAT('%', :search, '%')", ThemeDto.class)
                 .setParameter("search", searchString)
                 .getResultList();
     }

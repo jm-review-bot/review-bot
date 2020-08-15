@@ -45,5 +45,5 @@ public interface ThemeService {
 
     boolean isFreeTheme(Long themeId);
 
-    List<Theme> themesSearch(String searchString);
+    List<ThemeDto> themesSearch(String searchString);
 }

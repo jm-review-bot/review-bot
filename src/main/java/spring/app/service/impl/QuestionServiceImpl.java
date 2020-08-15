@@ -148,7 +148,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> questionsSearch(String searchString) {
+    public List<QuestionDto> questionsSearch(String searchString) {
         return questionDao.questionsSearch(searchString);
     }
 }

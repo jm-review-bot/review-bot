@@ -28,5 +28,5 @@ public interface QuestionDao extends GenericDao<Long, Question> {
 
     QuestionDto getQuestionDtoById(Long id);
 
-    List<Question> questionsSearch(String searchString);
+    List<QuestionDto> questionsSearch(String searchString);
 }

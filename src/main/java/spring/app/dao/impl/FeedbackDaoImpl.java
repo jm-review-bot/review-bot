@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.FeedbackDao;
 import spring.app.dto.FeedbackDto;
 import spring.app.model.Feedback;
-import spring.app.model.User;
 
 import java.util.List;
 
@@ -51,8 +50,8 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
     }
 
     @Override
-    public List<Feedback> feedbacksSearch(String searchString) {
-        return entityManager.createQuery("SELECT f FROM Feedback f WHERE f.comment LIKE CONCAT('%', :search, '%')", Feedback.class)
+    public List<FeedbackDto> feedbacksSearch(String searchString) {
+        return entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.user.firstName, f.user.lastName, f.studentReview.user.firstName, f.studentReview.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.comment LIKE CONCAT('%', :search, '%')", FeedbackDto.class)
                 .setParameter("search", searchString)
                 .getResultList();
     }

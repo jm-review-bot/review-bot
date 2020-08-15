@@ -2,6 +2,7 @@ package spring.app.service.abstraction;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
 import spring.app.model.User;
 
 import java.time.LocalDateTime;
@@ -41,5 +42,5 @@ public interface UserService extends UserDetailsService {
 
     void deleteReviewerFromTheme (long themeId , long reviewerId);
 
-    List<User> usersSearch(String searchString);
+    List<UserDto> usersSearch(String searchString);
 }

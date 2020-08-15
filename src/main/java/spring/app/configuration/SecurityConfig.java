@@ -55,27 +55,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-//                .authorizeRequests()
-//                .antMatchers("api/admin/**")
-//                .hasAnyAuthority("ADMIN")
-//                    .and()
-//                .authorizeRequests()
-//                .antMatchers("/admin/**")
-//                .hasAnyAuthority("ADMIN")
-//                    .and()
-//                .authorizeRequests()
-//                .antMatchers("/user/**")
-//                .hasAnyAuthority("USER")
-//                    .and()
-//                .authorizeRequests()
-//                .anyRequest()
-//                .authenticated()
-//                    .and()
-//                .formLogin()
-//                .successHandler(authenticationSuccessHandler())
-//                    .and()
-//                .logout();
+        http
+                .authorizeRequests()
+                .antMatchers("api/admin/**")
+                .hasAnyAuthority("ADMIN")
+                    .and()
+                .authorizeRequests()
+                .antMatchers("/admin/**")
+                .hasAnyAuthority("ADMIN")
+                    .and()
+                .authorizeRequests()
+                .antMatchers("/user/**")
+                .hasAnyAuthority("USER")
+                    .and()
+                .authorizeRequests()
+                .anyRequest()
+                .authenticated()
+                    .and()
+                .formLogin()
+                .successHandler(authenticationSuccessHandler())
+                    .and()
+                .logout();
     }
 
     @Override

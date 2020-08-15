@@ -37,5 +37,5 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     boolean isFreeTheme(Long themeId);
 
-    List<Theme> themesSearch(String searchString);
+    List<ThemeDto> themesSearch(String searchString);
 }

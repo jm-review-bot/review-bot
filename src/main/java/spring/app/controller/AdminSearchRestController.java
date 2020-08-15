@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import spring.app.dto.*;
 import spring.app.model.*;
 import spring.app.service.abstraction.*;
 
@@ -42,11 +43,11 @@ public class AdminSearchRestController {
     public ResponseEntity<?> search(@RequestBody String searchString) {
         Map<String, List<?>> searchResults = new HashMap<>();
 
-        List<User> userSearch = userService.usersSearch(searchString);
-        List<Theme> themesSearch = themeService.themesSearch(searchString);
-        List<Question> questionsSearch = questionService.questionsSearch(searchString);
-        List<Feedback> feedbacksSearch = feedbackService.feedbacksSearch(searchString);
-        List<Role> rolesSearch = roleService.rolesSearch(searchString);
+        List<UserDto> userSearch = userService.usersSearch(searchString);
+        List<ThemeDto> themesSearch = themeService.themesSearch(searchString);
+        List<QuestionDto> questionsSearch = questionService.questionsSearch(searchString);
+        List<FeedbackDto> feedbacksSearch = feedbackService.feedbacksSearch(searchString);
+        List<RoleDto> rolesSearch = roleService.rolesSearch(searchString);
 
         searchResults.put("users", userSearch);
         searchResults.put("themes", themesSearch);
