@@ -4,35 +4,43 @@ $('#search-form').on('submit', function (event) {
     if (searchString == '') { // Если строка поиска пустая, то просто обновляется список тем
         buildThemesAccordion(getAllThemesDto())
     } else {
-        $.ajax({
-            url: "/api/admin/search",
-            type: "GET",
-            data: {
-                'search': searchString
-            },
-            contentType: "application/json",
-            success: function (data) {
-                showSearchResults(data, searchString)
-            },
-            error: function () {
-                alert("При выполнении поиска возникла непредвиденная ошибка");
-            }
-        })
+        let searchThemes = searchRequest('theme', searchString)
+        let searchQuestions = searchRequest('question', searchString)
+        showSearchResultsForThemesAndQuestions(searchThemes, searchQuestions)
     }
 })
+
+function searchRequest(entity, searchString) {
+    let searchResults
+    $.ajax({
+        url: "/api/admin/search",
+        type: "GET",
+        data: {
+            'entity' : entity,
+            'searchString': searchString
+        },
+        contentType: "application/json",
+        async: false,
+        success: function (data) {
+            searchResults = data
+        },
+        error: function () {
+            alert("При выполнении поиска возникла непредвиденная ошибка");
+        }
+    })
+    return searchResults
+}
 
 /* Если совпадения найдены по названиям темы, то пользователю отображаются только те темы, которые соответствует поисковому запросу.
 * Если совпадения найдены и по названию темы, и по названию вопроса, то пользователю отображаются только те темы, которые соответствует
 * поисковому запросу, и открываются все темы, в которых найдено совпадение по вопросам. Найденные вопросы подсвечиваются зелёным цветом */
-function showSearchResults(results, searchString) {
-    let themesResults = results.themes
-    let questionsResults = results.questions
-    buildThemesAccordion(themesResults)
-    for (let i = 0; i < themesResults.length; i++) {
-        buildListQuestionsByThemeId(themesResults[i].id)
+function showSearchResultsForThemesAndQuestions(foundThemes, foundQuestions) {
+    buildThemesAccordion(foundThemes)
+    for (let i = 0; i < foundThemes.length; i++) {
+        buildListQuestionsByThemeId(foundThemes[i].id)
     }
-    for (let i = 0; i < questionsResults.length; i++) {
-        $(`[data-idquestion='${questionsResults[i].id}']`).closest('.card').attr({'class' : 'card bg-success'})
-        $(`[data-idquestion='${questionsResults[i].id}']`).closest('.collapse').attr({'class': 'collapse show'})
+    for (let i = 0; i < foundQuestions.length; i++) {
+        $(`[data-idquestion='${foundQuestions[i].id}']`).closest('.card').attr({'class' : 'card bg-success'})
+        $(`[data-idquestion='${foundQuestions[i].id}']`).closest('.collapse').attr({'class': 'collapse show'})
     }
 }

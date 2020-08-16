@@ -2,12 +2,9 @@ package spring.app.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import spring.app.dto.*;
 import spring.app.service.abstraction.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/search")
@@ -22,15 +19,16 @@ public class AdminSearchRestController {
         this.questionService = questionService;
     }
 
-    /* Результаты поиска по бэкенду отправляются на фронт в виде Map<String, List<?>>, в котором String описывается сущность,
-    * а List<?> содержит в себе все сущности, удовлетворяющие поисковому запросу */
     @GetMapping
-    public ResponseEntity<?> search(@RequestParam("search") String searchString) {
-        Map<String, List<?>> searchResults = new HashMap<>();
-        List<ThemeDto> themesSearch = themeService.themesSearch(searchString);
-        List<QuestionDto> questionsSearch = questionService.questionsSearch(searchString);
-        searchResults.put("themes", themesSearch);
-        searchResults.put("questions", questionsSearch);
-        return ResponseEntity.ok(searchResults);
+    public ResponseEntity<List<?>> searchThemes(@RequestParam("searchString") String searchString,
+                                                @RequestParam("entity") String entity) {
+        switch (entity) {
+            case "theme":
+                return ResponseEntity.ok(themeService.themesSearch(searchString));
+            case "question":
+                return ResponseEntity.ok(questionService.questionsSearch(searchString));
+            default:
+                return ResponseEntity.badRequest().build();
+        }
     }
 }
