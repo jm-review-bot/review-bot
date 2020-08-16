@@ -84,11 +84,4 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
                 .getResultList();
         return list.size() > 0 ? list.get(0) : null;
     }
-
-    @Override
-    public List<QuestionDto> questionsSearch(String searchString) {
-        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id, q.question, q.answer, q.position, q.weight) FROM Question q WHERE LOWER(q.question) LIKE LOWER(:search) OR LOWER(q.answer) LIKE LOWER(:search)", QuestionDto.class)
-                .setParameter("search", "%" + searchString + "%")
-                .getResultList();
-    }
 }
