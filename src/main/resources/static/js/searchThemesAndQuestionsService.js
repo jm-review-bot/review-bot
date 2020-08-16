@@ -1,6 +1,7 @@
 $('#search-form').on('submit', function (event) {
     event.preventDefault()
-    if (this.search.value == '') { // Если строка поиска пустая, то просто обновляется список тем
+    let searchString = this.search.value
+    if (searchString == '') { // Если строка поиска пустая, то просто обновляется список тем
         buildThemesAccordion(getAllThemesDto())
     } else {
         showSearchResultsForThemesAndQuestions(
