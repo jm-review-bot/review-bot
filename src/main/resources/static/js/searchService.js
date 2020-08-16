@@ -26,14 +26,12 @@ function showSearchResults(results, searchString) {
     let themesResults = results.themes
     let questionsResults = results.questions
     buildThemesAccordion(themesResults)
-    // $('.collapse').attr({'class': 'collapse show'})
+    $('.collapse').attr({'class': 'collapse show'})
     for (let i = 0; i < themesResults.length; i++) {
         buildListQuestionsByThemeId(themesResults[i].id)
     }
 
     for (let i = 0; i < questionsResults.length; i++) {
-        $(`*[data-id="${questionsResults[i].id}"]`).attr({'class' : 'card bg-success'})
+        $(`*[data-id='${questionsResults[i].id}']`).attr({'class' : 'card bg-success'})
     }
-
-    $('.collapse').find('card bg-success').attr({'class': 'collapse show'})
 }
