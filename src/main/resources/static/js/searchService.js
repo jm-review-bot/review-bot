@@ -32,7 +32,7 @@ function showSearchResults(results, searchString) {
         buildListQuestionsByThemeId(themesResults[i].id)
     }
     for (let i = 0; i < questionsResults.length; i++) {
-        $(`[data-id='${questionsResults[i].id}']`).attr({'class' : 'card bg-success'})
-        $(`[data-id='${questionsResults[i].id}']`).closest('.collapse').attr({'class': 'collapse show'})
+        $(`[data-idquestion='${questionsResults[i].id}']`).closest('.card').attr({'class' : 'card bg-success'})
+        $(`[data-idquestion='${questionsResults[i].id}']`).closest('.collapse').attr({'class': 'collapse show'})
     }
 }

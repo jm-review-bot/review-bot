@@ -22,16 +22,15 @@ public class AdminSearchRestController {
         this.questionService = questionService;
     }
 
+    /* Результаты поиска по бэкенду отправляются на фронт в виде Map<String, List<?>>, в котором String описывается сущность,
+    * а List<?> содержит в себе все сущности, удовлетворяющие поисковому запросу */
     @GetMapping
     public ResponseEntity<?> search(@RequestParam("search") String searchString) {
         Map<String, List<?>> searchResults = new HashMap<>();
-
         List<ThemeDto> themesSearch = themeService.themesSearch(searchString);
         List<QuestionDto> questionsSearch = questionService.questionsSearch(searchString);
-
         searchResults.put("themes", themesSearch);
         searchResults.put("questions", questionsSearch);
-
         return ResponseEntity.ok(searchResults);
     }
 }

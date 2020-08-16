@@ -24,7 +24,7 @@ function buildListQuestionsByThemeId(themeId) {
             return listQuestions[index].position == i
         })[0]
         let htmlQuestion = `<br>
-            <div class="card bg-light" data-id="${question.id}" data-idtheme="${themeId}"">
+            <div class="card bg-light">
                 <div class="row">
                     <div class="col-10">
                         <h5>${getThemeDtoById(themeId).position}.${question.position}. ${question.question}</h5><br/>
