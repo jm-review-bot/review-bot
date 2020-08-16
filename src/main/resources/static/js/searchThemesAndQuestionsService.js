@@ -4,9 +4,10 @@ $('#search-form').on('submit', function (event) {
     if (searchString == '') { // Если строка поиска пустая, то просто обновляется список тем
         buildThemesAccordion(getAllThemesDto())
     } else {
-        let searchThemes = searchRequest('theme', searchString)
-        let searchQuestions = searchRequest('question', searchString)
-        showSearchResultsForThemesAndQuestions(searchThemes, searchQuestions)
+        showSearchResultsForThemesAndQuestions(
+            searchRequest('theme', searchString),
+            searchRequest('question', searchString)
+        )
     }
 })
 
@@ -40,7 +41,8 @@ function showSearchResultsForThemesAndQuestions(foundThemes, foundQuestions) {
         buildListQuestionsByThemeId(foundThemes[i].id)
     }
     for (let i = 0; i < foundQuestions.length; i++) {
-        $(`[data-idquestion='${foundQuestions[i].id}']`).closest('.card').attr({'class' : 'card bg-success'})
-        $(`[data-idquestion='${foundQuestions[i].id}']`).closest('.collapse').attr({'class': 'collapse show'})
+        $(`[data-idquestion='${foundQuestions[i].id}']`)
+            .closest('.card').attr({'class' : 'card bg-success'}) // Подкрашивается вопрос
+            .closest('.collapse').attr({'class': 'collapse show'}) // Разворачивается список вопросов темы
     }
 }
