@@ -1,7 +1,6 @@
 $('#search-form').on('submit', function (event) {
     event.preventDefault()
-    let searchString = this.search.value
-    if (searchString == '') { // Если строка поиска пустая, то просто обновляется список тем
+    if (this.search.value == '') { // Если строка поиска пустая, то просто обновляется список тем
         buildThemesAccordion(getAllThemesDto())
     } else {
         showSearchResultsForThemesAndQuestions(
@@ -26,7 +25,7 @@ function searchRequest(entity, searchString) {
             searchResults = data
         },
         error: function () {
-            alert("При выполнении поиска возникла непредвиденная ошибка");
+            alert("При выполнении поиска возникла непредвиденная ошибка")
         }
     })
     return searchResults
