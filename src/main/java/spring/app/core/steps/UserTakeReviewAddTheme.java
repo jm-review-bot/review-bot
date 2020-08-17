@@ -10,6 +10,7 @@ import spring.app.service.abstraction.ThemeService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
@@ -33,7 +34,7 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n" +
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
-        List<Theme> themes = themeService.getAllThemes();
+        List<Theme> themes = themeService.getAllThemes().stream().filter(s->s.getThemeType().equals("fixed")).collect(Collectors.toList());
         for (Theme theme : themes) {
             themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
         }
@@ -54,15 +55,21 @@ public class UserTakeReviewAddTheme extends Step {
         if (themePositionsList.contains(userInput)) {
             // вытаскиваем тему по позиции, позиция соответствует пользовательскому вводу
             Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
-            // проверяем, что сдали ревью по теме, которую хотим принять
-            List<Theme> passedThemesIds = themeService.getPassedThemesByUser(vkId);
-            if (passedThemesIds.contains(selectedTheme)) {
-                // складываем в хранилище для использования в следующих шагах
-                storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(selectedTheme.getId().toString()));
-                sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_DATE);
+            // проверяем тип выбранной темы. Если это тема со свободной защитой - отображаем пользователю
+            // сообщение “Произошла внутренняя ошибка. Нельзя выбрать ревью по теме со свободной защитой”. Если это тема с фиксированной защитой - всё ок, двигаем дальше
+            if(selectedTheme.getThemeType().equals("free")) {
+                throw new ProcessInputException("Произошла внутренняя ошибка. Нельзя выбрать ревью по теме со свободной защитой.");
             } else {
-                throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
-                        "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
+                // проверяем, что сдали ревью по теме, которую хотим принять
+                List<Theme> passedThemesIds = themeService.getPassedThemesByUser(vkId);
+                if (passedThemesIds.contains(selectedTheme)) {
+                    // складываем в хранилище для использования в следующих шагах
+                    storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(selectedTheme.getId().toString()));
+                    sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_DATE);
+                } else {
+                    throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
+                            "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
+                }
             }
         } else if (userInput.equalsIgnoreCase("назад")) {
             // очищаем данные с этого шага и со следующего, если они есть
