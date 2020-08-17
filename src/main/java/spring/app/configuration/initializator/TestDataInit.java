@@ -368,6 +368,19 @@ public class TestDataInit {
         slyab.setEnabled(true);
         userService.addUser(slyab);
 
+        User frodo = new User();
+        frodo.setFirstName("Федор");
+        frodo.setLastName("Сумкин");
+        frodo.setReviewPoint(50);
+        frodo.setVkId(586558628);
+        frodo.setRole(roleAdmin);
+        frodo.setChatStep(StepSelector.START);
+        frodo.setAccountNonExpired(true);
+        frodo.setAccountNonLocked(true);
+        frodo.setCredentialsNonExpired(true);
+        frodo.setEnabled(true);
+        userService.addUser(frodo);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);

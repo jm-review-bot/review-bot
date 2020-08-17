@@ -81,7 +81,7 @@ public class UserPassReviewGetListReview extends Step {
         //сохраняю в коллекцию id ревью и присваиваю им порядковые номера, при этом формирую список ревью для вывода
         Map<Integer, Long> indexMap = new HashMap<>();
         for (int i = 0; i < reviewsAll.size(); i++) {
-            indexMap.put(i, reviewsAll.get(i).getId());
+            indexMap.put(i+1, reviewsAll.get(i).getId());
         }
         reviewsIndex.put(vkId, indexMap);
     }
