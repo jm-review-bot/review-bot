@@ -126,24 +126,8 @@ public class Keyboards {
     public final static String DEF_ADMIN_MENU_KB = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Добавить пользователя\"\n" +
-            "        },\n" +
-            "        \"color\": \"primary\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Изменить пользователя\"\n" +
-            "        },\n" +
-            "        \"color\": \"primary\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Удалить пользователя\"\n" +
+            "          \"label\": \"Пользователи\"\n" +
             "        },\n" +
             "        \"color\": \"primary\"\n" +
             "      },\n" +
@@ -420,5 +404,75 @@ public class Keyboards {
             "          \"label\": \"Добавить новое\"\n" +
             "        },\n" +
             "        \"color\": \"primary\"\n" +
+            "      }\n";
+
+    public final static String ACTIONS_FOR_USER = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Удалить пользователя\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Добавить пользователя\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "       ],[" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Редактировать пользователя\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n" +
+            "       ],[" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
+            "      }\n";
+
+    public final static String ACTIONS_FOR_REVIEW = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Редактировать ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Сделать пройденным\"\n" +
+            "        },\n" +
+            "        \"color\": \"primary\"\n" +
+            "      }\n" +
+            "       ],[" +
+            "      {\n" +
+                    "        \"action\": {\n" +
+                    "          \"type\": \"text\",\n" +
+                    "          \"label\": \"Назад\"\n" +
+                    "        },\n" +
+                    "        \"color\": \"default\"\n" +
+                    "      }\n";
+
+    public final static String REVIEW_SET_PASSED = "{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Сделать пройденной\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "       ],[" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
             "      }\n";
 }
