@@ -300,6 +300,15 @@ public class TestDataInit {
         ludwig.setChatStep(StepSelector.START);
         userService.addUser(ludwig);
 
+        User ulvi = new User();
+        ulvi.setFirstName("Ulvi");
+        ulvi.setLastName("Rustamzade");
+        ulvi.setReviewPoint(10);
+        ulvi.setVkId(603905976);
+        ulvi.setRole(roleAdmin);
+        ulvi.setChatStep(StepSelector.START);
+        userService.addUser(ulvi);
+
         User mikhail = new User();
         mikhail.setFirstName("Михаил");
         mikhail.setLastName("Кузиванов");
