@@ -22,7 +22,7 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
 
     @Override
     public FeedbackDto getFeedbackDtoById(Long id) {
-        List<FeedbackDto> feedbackDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.user.firstName, f.user.lastName, f.studentReview.user.firstName, f.studentReview.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.id =:id", FeedbackDto.class)
+        List<FeedbackDto> feedbackDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.studentReview.review.user.firstName, f.studentReview.review.user.lastName, f.user.firstName, f.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.id =:id", FeedbackDto.class)
                 .setParameter("id", id)
                 .getResultList();
         return feedbackDtoByIdList.size() > 0 ? feedbackDtoByIdList.get(0) : null;
@@ -30,7 +30,7 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
 
     @Override
     public List<FeedbackDto> getAllFeedbacksDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.user.firstName, f.user.lastName, f.studentReview.user.firstName, f.studentReview.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f ORDER BY f.id", FeedbackDto.class)
+        return entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.studentReview.review.user.firstName, f.studentReview.review.user.lastName, f.user.firstName, f.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f ORDER BY f.id", FeedbackDto.class)
                 .getResultList();
     }
 
