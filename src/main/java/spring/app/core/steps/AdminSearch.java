@@ -1,11 +1,15 @@
 package spring.app.core.steps;
 
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
@@ -22,11 +26,13 @@ public class AdminSearch extends Step {
     //TODO:шаг AdminAddUser - такой же алгоритм, надо бы оптимизировать.
     private final UserService userService;
     private final StorageService storageService;
+    private final VkService vkService;
 
-    public AdminSearch(UserService userService, StorageService storageService) {
+    public AdminSearch(UserService userService, StorageService storageService, VkService vkService) {
         super("Введи ссылку на страницу пользователя.\n", DEF_BACK_KB);
         this.userService = userService;
         this.storageService = storageService;
+        this.vkService = vkService;
     }
 
     @Override
@@ -37,7 +43,6 @@ public class AdminSearch extends Step {
     public void processInput(BotContext context) throws ProcessInputException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
-
         String parsedInput = StringParser.toVkId(currentInput);
         // также он  может прислать команду отмены
         String wordInput = StringParser.toWordsArray(currentInput)[0];
@@ -46,15 +51,23 @@ public class AdminSearch extends Step {
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else if (parsedInput != null) {
             // мы ожидаем от него ссылки на профиль юзера
-            if (userService.isExistByVkId(Integer.parseInt(parsedInput))) {
-                User findingUser = userService.getByVkId(Integer.parseInt(parsedInput));
-                storageService.updateUserStorage(vkId, ADMIN_SEARCH, Arrays.asList(Long.toString(findingUser.getId())));
-                sendUserToNextStep(context, ADMIN_CONFIRM_SEARCH);
-            } else {
-                throw new ProcessInputException("Пользователь не найден в базе.\n");
+            try {
+                // получем юзера на основе запроса в VK
+                User searchedUser = vkService.newUserFromVk(parsedInput);
+                Integer searchedUserVkId = searchedUser.getVkId();
+                if (userService.isExistByVkId(searchedUser.getVkId())) {
+                    // получем юзера на основе запроса в БД
+                    User findingUser = userService.getByVkId(searchedUserVkId);
+                    storageService.updateUserStorage(vkId, ADMIN_SEARCH, Arrays.asList(Long.toString(findingUser.getId())));
+                    sendUserToNextStep(context, ADMIN_CONFIRM_SEARCH);
+                } else {
+                    throw new ProcessInputException("Пользователь не найден в базе.\n");
+                }
+            } catch (ClientException | ApiException | IncorrectVkIdsException e) {
+                throw new ProcessInputException("Некорректная ссылка.\n");
             }
         } else {
-            throw new ProcessInputException("Некорректная ссылка.\n");
+            throw new ProcessInputException("Введены некорректные данные.\n");
         }
     }
 
