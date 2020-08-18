@@ -15,8 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static spring.app.core.StepSelector.ADMIN_ADD_USER;
-import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
+import static spring.app.core.StepSelector.*;
 
 @Component
 public class AdminSetThemeAddedUser extends Step {
@@ -100,7 +99,7 @@ public class AdminSetThemeAddedUser extends Step {
                 addedUser.setReviewPoint(reviewCost);
                 userService.updateUser(addedUser);
             }
-            sendUserToNextStep(context, ADMIN_ADD_USER);
+            sendUserToNextStep(context, ADMIN_MENU);
         } else {
             throw new ProcessInputException("Введена неверная команда...\n\n Введите цифру, соответствующую теме рьвью.");
         }
