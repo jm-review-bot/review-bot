@@ -122,11 +122,12 @@ public class ExaminerAddNewStudentReview extends Step {
             Date currentDate = new Date();
             // Бот предлагает выбрать статус нового ревью
             return String.format(
-                    "Ревью по теме \"%s\". Студент %s %s. " + "Дата проведения " + dateFormat.format(currentDate) + "\n" +
+                    "Ревью по теме \"%s\". Студент %s %s. Дата проведения %s\n" +
                             "Выберите статус ревью",
                     freeTheme.getTitle(),
                     student.getFirstName(),
-                    student.getLastName()
+                    student.getLastName(),
+                    dateFormat.format(currentDate)
             );
         }
     }
