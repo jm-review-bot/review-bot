@@ -25,6 +25,10 @@ public interface ThemeService {
 
     List<Theme> getPassedThemesByUser(Integer vkId);
 
+    List<Theme> getNonPassedThemesByUser(Integer vkId);
+
+    List<Theme> getAllThemesUpToPosition(Integer position);
+
     Theme getThemeByReviewId(Long reviewId);
 
     Integer getThemeMaxPositionValue();

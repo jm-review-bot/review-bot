@@ -3,21 +3,36 @@ package spring.app.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.app.dao.abstraction.ReviewDao;
 import spring.app.dao.abstraction.StudentReviewDao;
+import spring.app.dao.abstraction.ThemeDao;
+import spring.app.dao.abstraction.UserDao;
+import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
+import spring.app.model.User;
 import spring.app.service.abstraction.StudentReviewService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 public class StudentReviewServiceImpl implements StudentReviewService {
 
     private StudentReviewDao studentReviewDao;
+    private ReviewDao reviewDao;
+    private UserDao userDao;
+    private ThemeDao themeDao;
 
     @Autowired
-    public StudentReviewServiceImpl(StudentReviewDao studentReviewDao) {
+    public StudentReviewServiceImpl(StudentReviewDao studentReviewDao,
+                                    ReviewDao reviewDao,
+                                    UserDao userDao,
+                                    ThemeDao themeDao) {
         this.studentReviewDao = studentReviewDao;
+        this.reviewDao = reviewDao;
+        this.userDao = userDao;
+        this.themeDao = themeDao;
     }
 
     @Transactional
@@ -110,5 +125,42 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     @Override
     public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
         return studentReviewDao.getLastStudentReviewByStudentIdAndThemeId(studentId, themeId);
+    }
+
+    @Override
+    public Boolean isThemePassedByStudent(Long studentId, Long themeId) {
+        return studentReviewDao.isThemePassedByStudent(studentId, themeId);
+    }
+
+    /* Метод устанавливает статус "Пройдено" выбранной теме и всем предыдущим для выбранного студента. Для этого используется
+    * Пользователь По-Умолчанию и к нему привязываются все новосозданные ревью.
+    *
+    * @param studentId - ID выбранного студента
+    * @param themeId - ID выбранной темы */
+    @Transactional
+    @Override
+    public void setPassedThisAndPreviousThemesForStudent(Long studentId, Long themeId) {
+        User student = userDao.getById(studentId);
+        List<Theme> themesUpToPosition = themeDao.getAllThemesUpToPosition(themeDao.getById(themeId).getPosition());
+        List<Theme> passedThemeByStudent = themeDao.getPassedThemesByUser(student.getVkId());
+        themesUpToPosition.removeAll(passedThemeByStudent);
+
+        User defaultUser = userDao.getByVkId(0);
+        if (themesUpToPosition.size() > 0) {
+            for (int i = 0; i < themesUpToPosition.size(); i++) {
+                Review passedReviewToDefaultUser = new Review();
+                passedReviewToDefaultUser.setUser(defaultUser);
+                passedReviewToDefaultUser.setIsOpen(false);
+                passedReviewToDefaultUser.setTheme(themesUpToPosition.get(i));
+                passedReviewToDefaultUser.setDate(LocalDateTime.now());
+                reviewDao.save(passedReviewToDefaultUser);
+
+                StudentReview passedStudentReviewToDefaultUser = new StudentReview();
+                passedStudentReviewToDefaultUser.setUser(userDao.getById(studentId));
+                passedStudentReviewToDefaultUser.setReview(passedReviewToDefaultUser);
+                passedStudentReviewToDefaultUser.setIsPassed(true);
+                studentReviewDao.save(passedStudentReviewToDefaultUser);
+            }
+        }
     }
 }
