@@ -26,10 +26,10 @@ function getStudentCommentByFeedbackId(feedbackId) {
         type: 'get',
         async: false,
         success: (data) => {
-            studentComment = data.studentComment
+            studentComment = data
         }
     });
-    return studentComment;
+    return studentComment.comment;
 }
 
 function getTheTextOfTheComment(feedbackId) {

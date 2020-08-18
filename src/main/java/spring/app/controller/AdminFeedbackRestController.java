@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 import spring.app.dto.FeedbackDto;
 import spring.app.service.abstraction.FeedbackService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Validated
 @RestController
@@ -27,7 +29,9 @@ public class AdminFeedbackRestController {
     }
 
     @GetMapping("/{feedbackId}/comment")
-    public ResponseEntity<FeedbackDto> getStudentCommentByFeedbackId(@PathVariable Long feedbackId) {
-        return ResponseEntity.ok(feedbackService.getFeedbackDtoById(feedbackId));
+    public ResponseEntity<Map<String,String>> getStudentCommentByFeedbackId(@PathVariable Long feedbackId) {
+        Map<String, String> map = new HashMap<>();
+        map.put("comment",feedbackService.getStudentCommentByFeedbackId(feedbackId));
+        return ResponseEntity.ok(map);
     }
 }
