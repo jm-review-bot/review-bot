@@ -37,7 +37,7 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themePositions = new StringBuilder();
         List<Theme> themes = themeService.getAllThemesByThemeType("fixed");
         for (Theme theme : themes) {
-            themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
+            themeList.append("[").append(theme.getPosition()).append("] ").append(theme.getTitle()).append("\n");
             themePositions.append(theme.getPosition().toString());
             themePositions.append("_");
         }
