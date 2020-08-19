@@ -18,15 +18,8 @@ function getAllThemesDto() {
 
 function buildThemesAccordion(allThemesDto) {
     let htmlContent = ''
-    /*
-    * Для того, чтобы темы отображались в порядке возрастания номера позиции,
-    * запускается цикл по количеству тем и из всего массива выбирается лишь та,
-    * у которой номер позиции совпадает с текущей итерацией цикла
-    * */
-    for (let i = 1; i <= allThemesDto.length; i++) {
-        let theme = $(allThemesDto).filter(index => {
-            return allThemesDto[index].position == i
-        })[0]
+    for (let i = 0; i < allThemesDto.length; i++) {
+        let theme = allThemesDto[i]
         let themeHtmlAccordion = `
             <div class="card mb-4">
                 <div class="card-header">

@@ -162,4 +162,9 @@ public class ThemeServiceImpl implements ThemeService {
     public boolean isFreeTheme(Long themeId) {
         return themeDao.isFreeTheme(themeId);
     }
+
+    @Override
+    public List<ThemeDto> themesSearch(String searchString) {
+        return themeDao.themesSearch(searchString);
+    }
 }

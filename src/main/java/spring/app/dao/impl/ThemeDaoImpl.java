@@ -5,7 +5,6 @@ import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
-import spring.app.dto.FreeThemeDto;
 import spring.app.model.Theme;
 import spring.app.model.User;
 
@@ -129,5 +128,12 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("theme_id", themeId)
                 .getResultList();
         return themeList.size() > 0;
+    }
+
+    @Override
+    public List<ThemeDto> themesSearch(String searchString) {
+        return entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t JOIN Question q ON q.fixedTheme.id = t.id WHERE LOWER(t.title) LIKE LOWER(:search) OR LOWER(q.question) LIKE LOWER(:search) ORDER BY t.position", ThemeDto.class)
+                .setParameter("search", "%" + searchString + "%")
+                .getResultList();
     }
 }
