@@ -36,8 +36,7 @@ public class UserTakeReviewAddTheme extends Step {
         List<Theme> themes = themeService.getAllThemesByThemeType("fixed");
         for (Theme theme : themes) {
             themeList.append("[").append(theme.getPosition()).append("] ").append(theme.getTitle()).append("\n");
-            themePositions.append(theme.getPosition().toString());
-            themePositions.append("_");
+            themePositions.append(theme.getPosition().toString()).append("_");
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());
