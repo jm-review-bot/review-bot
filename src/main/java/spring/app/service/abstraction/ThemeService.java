@@ -11,6 +11,8 @@ import java.util.List;
 
 public interface ThemeService {
 
+    List<Theme> getAllThemesByThemeType(String themeType);
+
     void addTheme(Theme theme);
 
     Theme getThemeById(Long id);

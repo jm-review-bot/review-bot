@@ -95,6 +95,17 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
+    public List<Theme> getAllThemesByThemeType(String themeType) {
+        if(themeType.equals("fixed")) {
+            return entityManager.createQuery("SELECT t FROM FixedTheme t", Theme.class)
+                    .getResultList();
+        } else if(themeType.equals("free")) {
+            return entityManager.createQuery("SELECT t FROM FreeTheme t", Theme.class)
+                    .getResultList();
+        } else return null;
+    }
+
+    @Override
     public FreeTheme getFreeThemeById(long id) {
         List<FreeTheme> freeThemes = entityManager.createQuery("select ft from FreeTheme ft where ft.id =:id")
                 .setParameter("id" , id)

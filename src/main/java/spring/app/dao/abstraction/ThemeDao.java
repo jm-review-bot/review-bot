@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface ThemeDao extends GenericDao<Long, Theme> {
 
+    List<Theme> getAllThemesByThemeType(String themeType);
+
     Theme getByPosition(Integer position);
 
     List<Theme> getPassedThemesByUser(Integer vkId);

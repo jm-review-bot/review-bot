@@ -34,24 +34,25 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n" +
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
-        List<Theme> themes = themeService.getAllThemes().stream().filter(s->s.getThemeType().equals("fixed")).collect(Collectors.toList());
+        StringBuilder themePositions = new StringBuilder();
+        List<Theme> themes = themeService.getAllThemesByThemeType("fixed");
         for (Theme theme : themes) {
             themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
+            themePositions.append(theme.getPosition().toString());
+            themePositions.append("_");
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());
+        listTheme.add(themePositions.toString());
         storageService.updateUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME, listTheme);
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String userInput = context.getInput();
-        List<Theme> themes = themeService.getAllThemes();
         Integer vkId = context.getVkId();
-        List<String> themePositionsList = themes.stream()
-                .map(Theme::getPosition)
-                .map(Object::toString)
-                .collect(toList());
+        String themePositionsRegister = storageService.getUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME).get(1);
+        List<String> themePositionsList = Arrays.asList(themePositionsRegister.split("_"));
         if (themePositionsList.contains(userInput)) {
             // вытаскиваем тему по позиции, позиция соответствует пользовательскому вводу
             Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
