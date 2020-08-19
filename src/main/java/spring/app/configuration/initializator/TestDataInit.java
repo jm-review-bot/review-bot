@@ -488,7 +488,7 @@ public class TestDataInit {
         freeTheme1.setReviewPoint(4);
         freeTheme1.setTitle("Свободная тема 1");
         freeTheme1.setCriticalWeight(8);
-        freeTheme1.setExaminers(Arrays.asList(defaultUser,mikhail, nikolay));
+        freeTheme1.setExaminers(Arrays.asList(defaultUser, mikhail, nikolay, slyab));
         themeService.addTheme(freeTheme1);
 
         FreeTheme freeTheme2 = new FreeTheme();
