@@ -11,8 +11,11 @@ import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static spring.app.core.StepSelector.*;
@@ -115,14 +118,16 @@ public class ExaminerAddNewStudentReview extends Step {
             );
 
         } else { // Был совершен переход на текущий шаг для создания нового ревью
-
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+            Date currentDate = new Date();
             // Бот предлагает выбрать статус нового ревью
             return String.format(
-                    "Ревью по теме \"%s\". Студент %s %s.\n" +
+                    "Ревью по теме \"%s\". Студент %s %s. Дата проведения %s\n" +
                             "Выберите статус ревью",
                     freeTheme.getTitle(),
                     student.getFirstName(),
-                    student.getLastName()
+                    student.getLastName(),
+                    dateFormat.format(currentDate)
             );
         }
     }

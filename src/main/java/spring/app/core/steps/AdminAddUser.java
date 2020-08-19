@@ -56,7 +56,7 @@ public class AdminAddUser extends Step {
         if (wordInput.equals("назад")
                 || wordInput.equals("/admin")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);//т.к. мы на любом последующем шаге все равно придем в этот шаг, то очистку проводим тут.
-            sendUserToNextStep(context, ADMIN_MENU);
+            sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
         } else if (wordInput.equals("/start")) {
             storageService.removeUserStorage(vkId, ADMIN_ADD_USER);
             sendUserToNextStep(context, START);

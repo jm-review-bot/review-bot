@@ -105,6 +105,24 @@ public class TestDataInit {
     private Step adminChangeAddedUserFullname;
 
     @Autowired
+    private Step adminChooseActionForUser;
+
+    @Autowired
+    private Step adminChooseActionForReview;
+
+    @Autowired
+    private Step adminSetPassedReview;
+
+    @Autowired
+    private Step adminSetPassedReviewGetThemesStatus;
+
+    @Autowired
+    private Step adminSetPassedReviewGetUsersList;
+
+    @Autowired
+    private Step adminSetPassedReviewResult;
+
+    @Autowired
     private Step adminSetThemeAddedUser;
 
     @Autowired
@@ -190,6 +208,20 @@ public class TestDataInit {
         roleService.addRole(roleUser);
 
         // add users
+
+        User defaultUser = new User();// Пользователь по-умолчанию (сдал все темы сам себе)
+        defaultUser.setFirstName("Пользователь");
+        defaultUser.setLastName("По-умолчанию");
+        defaultUser.setVkId(0);
+        defaultUser.setRole(roleAdmin);
+        defaultUser.setReviewPoint(1000);
+        defaultUser.setChatStep(StepSelector.START);
+        defaultUser.setAccountNonExpired(true);
+        defaultUser.setAccountNonLocked(true);
+        defaultUser.setCredentialsNonExpired(true);
+        defaultUser.setEnabled(true);
+        userService.addUser(defaultUser);
+
         User testUser = new User();
         testUser.setFirstName("Петр");
         testUser.setLastName("Петров");
@@ -300,10 +332,19 @@ public class TestDataInit {
         ludwig.setChatStep(StepSelector.START);
         userService.addUser(ludwig);
 
+        User ulvi = new User();
+        ulvi.setFirstName("Ulvi");
+        ulvi.setLastName("Rustamzade");
+        ulvi.setReviewPoint(10);
+        ulvi.setVkId(603905976);
+        ulvi.setRole(roleAdmin);
+        ulvi.setChatStep(StepSelector.START);
+        userService.addUser(ulvi);
+
         User mikhail = new User();
         mikhail.setFirstName("Михаил");
         mikhail.setLastName("Кузиванов");
-        mikhail.setReviewPoint(4);
+        mikhail.setReviewPoint(50);
         mikhail.setVkId(27939840);
         mikhail.setRole(roleAdmin);
         mikhail.setChatStep(StepSelector.START);
@@ -327,6 +368,19 @@ public class TestDataInit {
         slyab.setEnabled(true);
         userService.addUser(slyab);
 
+        User frodo = new User();
+        frodo.setFirstName("Федор");
+        frodo.setLastName("Сумкин");
+        frodo.setReviewPoint(50);
+        frodo.setVkId(586558628);
+        frodo.setRole(roleAdmin);
+        frodo.setChatStep(StepSelector.START);
+        frodo.setAccountNonExpired(true);
+        frodo.setAccountNonLocked(true);
+        frodo.setCredentialsNonExpired(true);
+        frodo.setEnabled(true);
+        userService.addUser(frodo);
+
         // add steps
         Map<StepSelector, Step> steps = stepHolder.getSteps();
         steps.put(StepSelector.START, start);
@@ -349,6 +403,12 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW, adminEditReviewChangeReview);
         steps.put(StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER, adminProposalChangeFullnameAddedUser);
         steps.put(StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME, adminChangeAddedUserFullname);
+        steps.put(StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER, adminChooseActionForUser);
+        steps.put(StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW, adminChooseActionForReview);
+        steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW, adminSetPassedReview);
+        steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_RESULT, adminSetPassedReviewResult);
+        steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS, adminSetPassedReviewGetThemesStatus);
+        steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_USERS_LIST, adminSetPassedReviewGetUsersList);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
         steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW, examinerAddNewStudentReview);
         steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
@@ -428,21 +488,21 @@ public class TestDataInit {
         freeTheme1.setReviewPoint(4);
         freeTheme1.setTitle("Свободная тема 1");
         freeTheme1.setCriticalWeight(8);
-        freeTheme1.setExaminers(Arrays.asList(mikhail, nikolay));
+        freeTheme1.setExaminers(Arrays.asList(defaultUser, mikhail, nikolay, slyab));
         themeService.addTheme(freeTheme1);
 
         FreeTheme freeTheme2 = new FreeTheme();
         freeTheme2.setReviewPoint(4);
         freeTheme2.setTitle("Свободная тема 2");
         freeTheme2.setCriticalWeight(8);
-        freeTheme2.setExaminers(Arrays.asList(nikolay));
+        freeTheme2.setExaminers(Arrays.asList(defaultUser, nikolay));
         themeService.addTheme(freeTheme2);
 
         FreeTheme freeTheme3 = new FreeTheme();
         freeTheme3.setReviewPoint(4);
         freeTheme3.setTitle("Свободная тема 3");
         freeTheme3.setCriticalWeight(8);
-        freeTheme3.setExaminers(Arrays.asList(mikhail));
+        freeTheme3.setExaminers(Arrays.asList(defaultUser, mikhail));
         themeService.addTheme(freeTheme3);
 
         // add reviews
@@ -523,6 +583,83 @@ public class TestDataInit {
         springReviewPassed7.setUser(dima);
         reviewService.addReview(springReviewPassed7);
 
+        Review reviewForDefaultUser1 = new Review();
+        reviewForDefaultUser1.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser1.setTheme(core);
+        reviewForDefaultUser1.setIsOpen(false);
+        reviewForDefaultUser1.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser1);
+
+        Review reviewForDefaultUser2 = new Review();
+        reviewForDefaultUser2.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser2.setTheme(multithreading);
+        reviewForDefaultUser2.setIsOpen(false);
+        reviewForDefaultUser2.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser2);
+
+        Review reviewForDefaultUser3 = new Review();
+        reviewForDefaultUser3.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser3.setTheme(sql);
+        reviewForDefaultUser3.setIsOpen(false);
+        reviewForDefaultUser3.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser3);
+
+        Review reviewForDefaultUser4 = new Review();
+        reviewForDefaultUser4.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser4.setTheme(hibernate);
+        reviewForDefaultUser4.setIsOpen(false);
+        reviewForDefaultUser4.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser4);
+
+        Review reviewForDefaultUser5 = new Review();
+        reviewForDefaultUser5.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser5.setTheme(spring);
+        reviewForDefaultUser5.setIsOpen(false);
+        reviewForDefaultUser5.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser5);
+
+        Review reviewForDefaultUser6 = new Review();
+        reviewForDefaultUser6.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser6.setTheme(patterns);
+        reviewForDefaultUser6.setIsOpen(false);
+        reviewForDefaultUser6.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser6);
+
+        Review reviewForDefaultUser7 = new Review();
+        reviewForDefaultUser7.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser7.setTheme(algorithm);
+        reviewForDefaultUser7.setIsOpen(false);
+        reviewForDefaultUser7.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser7);
+
+        Review reviewForDefaultUser8 = new Review();
+        reviewForDefaultUser8.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser8.setTheme(finalReview);
+        reviewForDefaultUser8.setIsOpen(false);
+        reviewForDefaultUser8.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser8);
+
+        Review reviewForDefaultUser9 = new Review();
+        reviewForDefaultUser9.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser9.setTheme(freeTheme1);
+        reviewForDefaultUser9.setIsOpen(false);
+        reviewForDefaultUser9.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser9);
+
+        Review reviewForDefaultUser10 = new Review();
+        reviewForDefaultUser10.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser10.setTheme(freeTheme2);
+        reviewForDefaultUser10.setIsOpen(false);
+        reviewForDefaultUser10.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser10);
+
+        Review reviewForDefaultUser11 = new Review();
+        reviewForDefaultUser11.setDate(LocalDateTime.of(1970, 1, 1, 1, 0));
+        reviewForDefaultUser11.setTheme(freeTheme3);
+        reviewForDefaultUser11.setIsOpen(false);
+        reviewForDefaultUser11.setUser(defaultUser);
+        reviewService.addReview(reviewForDefaultUser11);
+
         // add student reviews
         StudentReview sr = new StudentReview();
         sr.setUser(nikolay);
@@ -568,6 +705,72 @@ public class TestDataInit {
         studentReview5.setIsPassed(false);
         studentReview5.setReview(springReviewPassed5);
         studentReviewService.addStudentReview(studentReview5);
+
+        StudentReview studentReviewForDefaultUser1 = new StudentReview();
+        studentReviewForDefaultUser1.setIsPassed(true);
+        studentReviewForDefaultUser1.setReview(reviewForDefaultUser1);
+        studentReviewForDefaultUser1.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser1);
+
+        StudentReview studentReviewForDefaultUser2 = new StudentReview();
+        studentReviewForDefaultUser2.setIsPassed(true);
+        studentReviewForDefaultUser2.setReview(reviewForDefaultUser2);
+        studentReviewForDefaultUser2.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser2);
+
+        StudentReview studentReviewForDefaultUser3 = new StudentReview();
+        studentReviewForDefaultUser3.setIsPassed(true);
+        studentReviewForDefaultUser3.setReview(reviewForDefaultUser3);
+        studentReviewForDefaultUser3.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser3);
+
+        StudentReview studentReviewForDefaultUser4 = new StudentReview();
+        studentReviewForDefaultUser4.setIsPassed(true);
+        studentReviewForDefaultUser4.setReview(reviewForDefaultUser4);
+        studentReviewForDefaultUser4.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser4);
+
+        StudentReview studentReviewForDefaultUser5 = new StudentReview();
+        studentReviewForDefaultUser5.setIsPassed(true);
+        studentReviewForDefaultUser5.setReview(reviewForDefaultUser5);
+        studentReviewForDefaultUser5.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser5);
+
+        StudentReview studentReviewForDefaultUser6 = new StudentReview();
+        studentReviewForDefaultUser6.setIsPassed(true);
+        studentReviewForDefaultUser6.setReview(reviewForDefaultUser6);
+        studentReviewForDefaultUser6.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser6);
+
+        StudentReview studentReviewForDefaultUser7 = new StudentReview();
+        studentReviewForDefaultUser7.setIsPassed(true);
+        studentReviewForDefaultUser7.setReview(reviewForDefaultUser7);
+        studentReviewForDefaultUser7.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser7);
+
+        StudentReview studentReviewForDefaultUser8 = new StudentReview();
+        studentReviewForDefaultUser8.setIsPassed(true);
+        studentReviewForDefaultUser8.setReview(reviewForDefaultUser8);
+        studentReviewForDefaultUser8.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser8);
+
+        StudentReview studentReviewForDefaultUser9 = new StudentReview();
+        studentReviewForDefaultUser9.setIsPassed(true);
+        studentReviewForDefaultUser9.setReview(reviewForDefaultUser9);
+        studentReviewForDefaultUser9.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser9);
+
+        StudentReview studentReviewForDefaultUser10 = new StudentReview();
+        studentReviewForDefaultUser10.setIsPassed(true);
+        studentReviewForDefaultUser10.setReview(reviewForDefaultUser10);
+        studentReviewForDefaultUser10.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser10);
+
+        StudentReview studentReviewForDefaultUser11 = new StudentReview();
+        studentReviewForDefaultUser11.setIsPassed(true);
+        studentReviewForDefaultUser11.setReview(reviewForDefaultUser11);
+        studentReviewForDefaultUser11.setUser(defaultUser);
+        studentReviewService.addStudentReview(studentReviewForDefaultUser11);
 
         // add Feedbacks
         Feedback feedback1 = new Feedback();
@@ -951,12 +1154,6 @@ public class TestDataInit {
         studentReview15.setIsPassed(null);
         studentReview15.setReview(review11);
         studentReviewService.addStudentReview(studentReview15);
-
-        StudentReview studentReview16 = new StudentReview();
-        studentReview16.setUser(mikhail);
-        studentReview16.setIsPassed(true);
-        studentReview16.setReview(springReviewPassed);
-        studentReviewService.addStudentReview(studentReview16);
 //
     }
 }

@@ -5,7 +5,6 @@ import spring.app.dao.abstraction.ThemeDao;
 import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
-import spring.app.dto.FreeThemeDto;
 import spring.app.model.Theme;
 import spring.app.model.User;
 
@@ -40,6 +39,20 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 "join review r on t.id = r.theme_id join student_review sr on r.id = sr.review_id join users u on sr.student_id = u.id " +
                 "where u.vk_id = :vk_id AND r.is_open = false AND sr.is_passed = true", Theme.class)
                 .setParameter("vk_id", vkId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Theme> getNonPassedThemesByUser(Integer vkId) {
+        return entityManager.createQuery("SELECT t FROM Theme t JOIN Review r ON t.id = r.theme.id JOIN StudentReview sr on r.id = sr.review.id JOIN User u ON sr.user.id = u.id WHERE u.vkId = :vk_id AND r.isOpen = false AND (sr.isPassed = false OR sr.isPassed IS NULL)", Theme.class)
+                .setParameter("vk_id", vkId)
+                .getResultList();
+    }
+
+    @Override
+    public List<Theme> getAllThemesUpToPosition(Integer position) {
+        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.position <= :position ORDER BY t.position", Theme.class)
+                .setParameter("position", position)
                 .getResultList();
     }
 
@@ -126,5 +139,12 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
                 .setParameter("theme_id", themeId)
                 .getResultList();
         return themeList.size() > 0;
+    }
+
+    @Override
+    public List<ThemeDto> themesSearch(String searchString) {
+        return entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t LEFT JOIN Question q ON q.fixedTheme.id = t.id WHERE LOWER(t.title) LIKE LOWER(:search) OR LOWER(q.question) LIKE LOWER(:search) ORDER BY t.position", ThemeDto.class)
+                .setParameter("search", "%" + searchString + "%")
+                .getResultList();
     }
 }

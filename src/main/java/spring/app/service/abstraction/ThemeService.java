@@ -27,6 +27,10 @@ public interface ThemeService {
 
     List<Theme> getPassedThemesByUser(Integer vkId);
 
+    List<Theme> getNonPassedThemesByUser(Integer vkId);
+
+    List<Theme> getAllThemesUpToPosition(Integer position);
+
     Theme getThemeByReviewId(Long reviewId);
 
     Integer getThemeMaxPositionValue();
@@ -46,4 +50,6 @@ public interface ThemeService {
     List<User> getExaminersByFreeThemeId(Long freeThemeId);
 
     boolean isFreeTheme(Long themeId);
+
+    List<ThemeDto> themesSearch(String searchString);
 }

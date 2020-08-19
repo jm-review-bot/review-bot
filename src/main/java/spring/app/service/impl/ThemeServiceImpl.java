@@ -81,6 +81,16 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public List<Theme> getNonPassedThemesByUser(Integer vkId) {
+        return themeDao.getNonPassedThemesByUser(vkId);
+    }
+
+    @Override
+    public List<Theme> getAllThemesUpToPosition(Integer position) {
+        return themeDao.getAllThemesUpToPosition(position);
+    }
+
+    @Override
     public Theme getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
     }
@@ -156,5 +166,10 @@ public class ThemeServiceImpl implements ThemeService {
     @Override
     public boolean isFreeTheme(Long themeId) {
         return themeDao.isFreeTheme(themeId);
+    }
+
+    @Override
+    public List<ThemeDto> themesSearch(String searchString) {
+        return themeDao.themesSearch(searchString);
     }
 }
