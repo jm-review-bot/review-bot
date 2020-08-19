@@ -29,7 +29,7 @@ function getStudentCommentByFeedbackId(feedbackId) {
             studentComment = data
         }
     });
-    return studentComment;
+    return studentComment.comment;
 }
 
 function getTheTextOfTheComment(feedbackId) {
