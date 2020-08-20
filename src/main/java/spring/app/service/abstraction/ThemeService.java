@@ -37,8 +37,6 @@ public interface ThemeService {
 
     List<ThemeDto> getAllThemesDto();
 
-    FixedThemeDto getFixedThemeDtoById(Long themeId);
-
     void shiftThemePosition(Long themeId, int shift) throws ProcessInputException;
 
     List<Theme> getFreeThemesByExaminerId(Long examinerId);
@@ -50,4 +48,6 @@ public interface ThemeService {
     boolean isFreeTheme(Long themeId);
 
     List<ThemeDto> themesSearch(String searchString);
+
+    ThemeDto getThemeDtoById(Long themeId);
 }

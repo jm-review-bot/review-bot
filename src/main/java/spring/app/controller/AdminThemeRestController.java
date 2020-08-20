@@ -42,12 +42,12 @@ public class AdminThemeRestController {
     }
 
     @GetMapping("/{themeId}")
-    public ResponseEntity<FixedThemeDto> getThemeById(@PathVariable Long themeId) {
-        FixedThemeDto fixedThemeDtoById = themeService.getFixedThemeDtoById(themeId);
-        if (fixedThemeDtoById == null) {
+    public ResponseEntity<ThemeDto> getThemeById(@PathVariable Long themeId) {
+        ThemeDto themeDtoById = themeService.getThemeDtoById(themeId);
+        if (themeDtoById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(fixedThemeDtoById);
+        return ResponseEntity.ok(themeDtoById);
     }
 
     @Validated(CreateGroup.class)

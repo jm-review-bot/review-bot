@@ -84,14 +84,6 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public FixedThemeDto getFixedThemeDtoById(Long themeId) {
-        List<FixedThemeDto> fixedThemeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FixedThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM FixedTheme t WHERE t.id =:theme_id", FixedThemeDto.class)
-                .setParameter("theme_id", themeId)
-                .getResultList();
-        return fixedThemeDtoByIdList.size() > 0 ? fixedThemeDtoByIdList.get(0) : null;
-    }
-
-    @Override
     public void shiftThemePosition(Integer positionLow, Integer positionHigh, Integer positionShift) {
         entityManager.createQuery("UPDATE Theme t SET t.position = t.position + (:position_shift) WHERE t.position BETWEEN :position_low AND :position_high")
                 .setParameter("position_shift", positionShift)
@@ -135,5 +127,13 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
         return entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t LEFT JOIN Question q ON q.fixedTheme.id = t.id WHERE LOWER(t.title) LIKE LOWER(:search) OR LOWER(q.question) LIKE LOWER(:search) ORDER BY t.position", ThemeDto.class)
                 .setParameter("search", "%" + searchString + "%")
                 .getResultList();
+    }
+
+    @Override
+    public ThemeDto getThemeDtoById(Long themeId) {
+        List<ThemeDto> themeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
+                .setParameter("theme_id", themeId)
+                .getResultList();
+        return themeDtoByIdList.size() > 0 ? themeDtoByIdList.get(0) : null;
     }
 }

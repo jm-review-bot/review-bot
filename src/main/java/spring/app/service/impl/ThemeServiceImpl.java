@@ -106,8 +106,8 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public FixedThemeDto getFixedThemeDtoById(Long themeId) {
-        return themeDao.getFixedThemeDtoById(themeId);
+    public ThemeDto getThemeDtoById(Long themeId) {
+        return themeDao.getThemeDtoById(themeId);
     }
 
     @Transactional
