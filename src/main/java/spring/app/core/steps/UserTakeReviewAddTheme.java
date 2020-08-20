@@ -32,15 +32,17 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n" +
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
-        StringBuilder themePositions = new StringBuilder();
         List<Theme> themes = themeService.getAllThemesByThemeType("fixed");
+        List<String> themePositions = new ArrayList<>();
         for (Theme theme : themes) {
             themeList.append("[").append(theme.getPosition()).append("] ").append(theme.getTitle()).append("\n");
-            themePositions.append(theme.getPosition().toString()).append("_");
+            themePositions.add(theme.getPosition().toString());
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());
-        listTheme.add(themePositions.toString());
+        for(String themePosition : themePositions) {
+            listTheme.add(themePosition);
+        }
         storageService.updateUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME, listTheme);
     }
 
@@ -48,8 +50,11 @@ public class UserTakeReviewAddTheme extends Step {
     public void processInput(BotContext context) throws ProcessInputException {
         String userInput = context.getInput();
         Integer vkId = context.getVkId();
-        String themePositionsRegister = storageService.getUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME).get(1);
-        List<String> themePositionsList = Arrays.asList(themePositionsRegister.split("_"));
+        List<String> storageList = storageService.getUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME);
+        List<String> themePositionsList = new ArrayList<>();
+        for(int i = 1; i < storageList.size(); i++) {
+            themePositionsList.add(storageList.get(i));
+        }
         if (themePositionsList.contains(userInput)) {
             // вытаскиваем тему по позиции, позиция соответствует пользовательскому вводу
             Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
