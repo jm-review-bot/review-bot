@@ -366,6 +366,7 @@ public class TestDataInit {
         slyab.setAccountNonLocked(true);
         slyab.setCredentialsNonExpired(true);
         slyab.setEnabled(true);
+        slyab.setPassword(passwordEncoder.encode("qweASD123"));
         userService.addUser(slyab);
 
         User frodo = new User();
