@@ -31,6 +31,4 @@ public class ApplicationContextConfig implements WebMvcConfigurer {
                     CLASSPATH_RESOURCE_LOCATIONS);
         }
     }
-
-
 }
