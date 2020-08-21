@@ -258,8 +258,10 @@ public class TestDataInit {
         steps.put(StepSelector.REVIEWER_DELETE_REVIEW, reviewerDeleteReview);
         steps.put(StepSelector.SELECTING_REVIEW_TO_DELETE, selectingReviewToDelete);
 
-        // Выполняется проверка режима c БД. Тестовые данные создаются только в режиме "create-drop"
-        if (environment.getProperty("spring.jpa.hibernate.ddl-auto").equalsIgnoreCase("create-drop")) {
+        // Выполняется проверка режима работы c БД. Тестовые данные создаются только в режимах "create" или "create-drop"
+        String propertyDB = environment.getProperty("spring.jpa.hibernate.ddl-auto");
+        if (propertyDB.equalsIgnoreCase("create") ||
+                propertyDB.equalsIgnoreCase("create-drop")) {
 
             /* Тестовые данные отличаются для приложения, запускаемым на ПК разработчика/тестировщика от тех, которые запускаются на рабочем сервере.
             * Общие для них данные создаются до проверки условия, с каким конфигурационным файлом запущено приложение */
