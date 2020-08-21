@@ -37,6 +37,11 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public List<Theme> getAllThemesByThemeType(String themeType) {
+        return themeDao.getAllThemesByThemeType(themeType);
+    }
+
+    @Override
     public List<Theme> getAllThemes() {
         return themeDao.getAll();
     }
