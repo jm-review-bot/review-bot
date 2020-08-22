@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
@@ -33,36 +32,47 @@ public class UserTakeReviewAddTheme extends Step {
         StringBuilder themeList = new StringBuilder("Выбери тему, которую хочешь принять, в качестве ответа пришли цифру (номер темы):\n" +
                 "Ты можешь принимать ревью только по тем темам, которые успешно сдал.\n\n");
         List<String> listTheme = new ArrayList<>();
-        List<Theme> themes = themeService.getAllThemes();
+        List<Theme> themes = themeService.getAllThemesByThemeType("fixed");
+        List<String> themePositions = new ArrayList<>();
         for (Theme theme : themes) {
-            themeList.append(String.format("[%d] %s\n", theme.getPosition(), theme.getTitle()));
+            themeList.append("[").append(theme.getPosition()).append("] ").append(theme.getTitle()).append("\n");
+            themePositions.add(theme.getPosition().toString());
         }
         themeList.append("\nИли нажмите на кнопку \"Назад\" для возврата к предыдущему меню.");
         listTheme.add(themeList.toString());
+        for(String themePosition : themePositions) {
+            listTheme.add(themePosition);
+        }
         storageService.updateUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME, listTheme);
     }
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
         String userInput = context.getInput();
-        List<Theme> themes = themeService.getAllThemes();
         Integer vkId = context.getVkId();
-        List<String> themePositionsList = themes.stream()
-                .map(Theme::getPosition)
-                .map(Object::toString)
-                .collect(toList());
+        List<String> storageList = storageService.getUserStorage(context.getVkId(), USER_TAKE_REVIEW_ADD_THEME);
+        List<String> themePositionsList = new ArrayList<>();
+        for(int i = 1; i < storageList.size(); i++) {
+            themePositionsList.add(storageList.get(i));
+        }
         if (themePositionsList.contains(userInput)) {
             // вытаскиваем тему по позиции, позиция соответствует пользовательскому вводу
             Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
-            // проверяем, что сдали ревью по теме, которую хотим принять
-            List<Theme> passedThemesIds = themeService.getPassedThemesByUser(vkId);
-            if (passedThemesIds.contains(selectedTheme)) {
-                // складываем в хранилище для использования в следующих шагах
-                storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(selectedTheme.getId().toString()));
-                sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_DATE);
+            // проверяем тип выбранной темы. Если это тема со свободной защитой - отображаем пользователю
+            // сообщение “Произошла внутренняя ошибка. Нельзя выбрать ревью по теме со свободной защитой”. Если это тема с фиксированной защитой - всё ок, двигаем дальше
+            if(selectedTheme.getThemeType().equals("free")) {
+                throw new ProcessInputException("Произошла внутренняя ошибка. Нельзя выбрать ревью по теме со свободной защитой.");
             } else {
-                throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
-                        "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
+                // проверяем, что сдали ревью по теме, которую хотим принять
+                List<Theme> passedThemesIds = themeService.getPassedThemesByUser(vkId);
+                if (passedThemesIds.contains(selectedTheme)) {
+                    // складываем в хранилище для использования в следующих шагах
+                    storageService.updateUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME, Arrays.asList(selectedTheme.getId().toString()));
+                    sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_DATE);
+                } else {
+                    throw new ProcessInputException("Ты пока не можешь принять эту тему, потому что не сдал по ней ревью.\n\n" +
+                            "Выбери другую тему ревью или нажми на кнопку \"Назад\" для возврата в главное меню.");
+                }
             }
         } else if (userInput.equalsIgnoreCase("назад")) {
             // очищаем данные с этого шага и со следующего, если они есть
