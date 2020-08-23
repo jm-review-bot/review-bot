@@ -83,18 +83,25 @@ public class AdminThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
-    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody ThemeDto fixedThemeDto) {
+    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody ThemeDto themeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme themeById = themeService.getThemeById(themeId);
+        Theme updatedTheme=null;
         if (themeById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        FixedTheme updatedFixedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(fixedThemeDto);
-        updatedFixedTheme.setPosition(themeById.getPosition());
-        themeService.updateTheme(updatedFixedTheme);
+
+        if(themeDto.getType().equals("fixed")){
+            updatedTheme = themeMapper.fixedThemeDtoToFixedThemeEntity(themeDto);
+        } else if(themeDto.getType().equals("free")){
+            updatedTheme = themeMapper.freeThemeDtoToFreeThemeEntity(themeDto);
+        }
+
+        updatedTheme.setPosition(themeById.getPosition());
+        themeService.updateTheme(updatedTheme);
         logger.info(
                 "Админ (vkId={}) изменил тему (ID={} , Title={})" ,
-                user.getVkId(), themeId, updatedFixedTheme.getTitle()
+                user.getVkId(), themeId, updatedTheme.getTitle()
         );
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

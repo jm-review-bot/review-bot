@@ -142,7 +142,7 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public ThemeDto getThemeDtoById(Long themeId) {
-        List<ThemeDto> themeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
+        List<ThemeDto> themeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
                 .setParameter("theme_id", themeId)
                 .getResultList();
         return themeDtoByIdList.size() > 0 ? themeDtoByIdList.get(0) : null;

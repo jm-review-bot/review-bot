@@ -7,6 +7,7 @@ $(document).on('click' , '.edit-theme' , function () {
     $('#edit-theme-form :input[name~="title"]').val(themeDto.title)
     $('#edit-theme-form :input[name~="criticalWeight"]').val(themeDto.criticalWeight)
     $('#edit-theme-form :input[name~="reviewPoint"]').val(themeDto.reviewPoint)
+    $('#edit-theme-form :input[name~="themeType"]').val(themeDto.type)
     $('#edit-theme-form').attr({'data-id' : themeId})
 
     $('#changeThemeModal').modal('show');
@@ -63,7 +64,8 @@ $('#edit-theme-form').on('submit', function (event) {
         id : themeId,
         title : this.title.value,
         criticalWeight : this.criticalWeight.value,
-        reviewPoint : this.reviewPoint.value
+        reviewPoint : this.reviewPoint.value,
+        type : this.themeType.value
     }
 
     $.ajax({
