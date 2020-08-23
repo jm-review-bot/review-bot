@@ -2,7 +2,6 @@ package spring.app.dao.abstraction;
 
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
