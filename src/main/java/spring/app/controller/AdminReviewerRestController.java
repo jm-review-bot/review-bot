@@ -63,6 +63,7 @@ public class AdminReviewerRestController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User reviewer = userService.getUserById(reviewerId);
         Theme theme = themeService.getThemeById(themeId);
+        userService.deleteReviewerFromTheme(themeId,reviewerId);
         logger.info(
                 "Админ (vkId={}) удалил ревьювера (ID={} , Reviewer={}) из темы(ID={} , Title={})",
                 user.getVkId() , reviewerId , reviewer.getFirstName() + " " + reviewer.getLastName() ,  themeId , theme.getTitle());
