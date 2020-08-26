@@ -1,11 +1,11 @@
 package spring.app.core.steps;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.model.ReviewStatistic;
 import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
@@ -22,27 +22,34 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
+
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
+    @Value("${review.max_open_reviews}")
+    private int maxOpenReviews;
+    @Value("${review.max_reviews_per_day}")
+    private int maxReviewsPerDay;
+    @Value("${review.max_reviews_without_students_in_row}")
+    private int maxReviewsWithoutStudentsInRow;
+    @Value(("${review.error_code_farm_rp}"))
+    private String errorCodeForFarmRP;
+    private final StorageService storageService;
+    private final ReviewService reviewService;
+    private final UserService userService;
+    private final StudentReviewService studentReviewService;
+    private final ReviewStatisticService reviewStatisticService;
 
-    @Autowired
-    private StorageService storageService;
-    @Autowired
-    private ReviewService reviewService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private StudentReviewService studentReviewService;
-    @Autowired
-    private ThemeService themeService;
-
-    public UserMenu(String text, String keyboard) {
-        super(text, keyboard);
-    }
-
-    public UserMenu() {
-        //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
+    public UserMenu(StorageService storageService,
+                    ReviewService reviewService,
+                    UserService userService,
+                    StudentReviewService studentReviewService,
+                    ReviewStatisticService reviewStatisticService) {
         super("", DEF_USER_MENU_KB);
+        this.storageService = storageService;
+        this.reviewService = reviewService;
+        this.userService = userService;
+        this.studentReviewService = studentReviewService;
+        this.reviewStatisticService = reviewStatisticService;
     }
 
     @Override
@@ -78,6 +85,9 @@ public class UserMenu extends Step {
                     if (!students.isEmpty()) {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
                         storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
+                        // Для мониторинга за фармом RP обнуляется значение счетчика количества ревью без записавшихся студентов
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(context.getUser().getId());
+                        reviewStatistic.setCountReviewsWithoutStudentsInRow(0);
                         //теперь мы просто сохраняем юзеру его значения
                         sendUserToNextStep(context, USER_START_REVIEW_HANGOUTS_LINK);
                     } else {
@@ -87,6 +97,9 @@ public class UserMenu extends Step {
                         User user = userService.getByVkId(vkId);
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                         userService.updateUser(user);
+                        // Для мониторинга за фармом RP увеличивается значение счетчика количества ревью без записавшихся студентов
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(user.getId());
+                        reviewStatistic.setCountReviewsWithoutStudentsInRow(reviewStatistic.getCountReviewsWithoutStudentsInRow() + 1);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
                     }
                 } else {
@@ -116,6 +129,50 @@ public class UserMenu extends Step {
             sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
+            // Выполняется проверка на фарм RP пользователем
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(context.getUser().getId());
+            if (reviewStatistic != null) { // Актуализируются текущие данные
+                boolean needToBlock = false;
+                if (maxOpenReviews > 0 && reviewStatistic.getCountOpenReviews() > maxOpenReviews) {
+                    needToBlock = true;
+                    reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
+                            String.format("%d. Превышено максимальное количество открытых ревью.\n",
+                                    reviewStatistic.getCountBlocks())
+                    );
+                } else if (maxReviewsPerDay > 0 && reviewStatistic.getCountReviewsPerDay() > maxReviewsPerDay) {
+                    needToBlock = true;
+                    reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
+                            String.format("%d. Превышено максимальное количество проводимых ревью в сутки.\n",
+                                    reviewStatistic.getCountBlocks())
+                    );
+                } else if (maxReviewsWithoutStudentsInRow > 0 && reviewStatistic.getCountReviewsWithoutStudentsInRow() > maxReviewsWithoutStudentsInRow) {
+                    needToBlock = true;
+                    reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
+                            String.format("%d. Превышено максимальное количество ревью без студентов подряд.\n",
+                                    reviewStatistic.getCountBlocks())
+                    );
+                }
+                if (needToBlock && !reviewStatistic.isReviewBlocked()) { // Актуализировав данные, выполняется проверка текущего статуса блокировки и изменяется при необходимости
+                    reviewStatistic.setReviewBlocked(true);
+                    reviewStatistic.setCountBlocks(reviewStatistic.getCountBlocks() + 1);
+                } else if (!needToBlock && reviewStatistic.isReviewBlocked()) {
+                    reviewStatistic.setReviewBlocked(false);
+                }
+            } else { // Если вдруг по каким-то причинам отсутсвует статистика ревью по пользователю, то необходимо ее начать
+                reviewStatistic.setUser(context.getUser());
+                reviewStatistic.setCountBlocks(0);
+                reviewStatistic.setCountOpenReviews(0);
+                reviewStatistic.setCountReviewsPerDay(0);
+                reviewStatistic.setCountReviewsWithoutStudentsInRow(0);
+                reviewStatisticService.addReviewStatistic(reviewStatistic);
+            }
+            if (reviewStatistic.isReviewBlocked()) {
+                throw new ProcessInputException(
+                        String.format("Произошла внутренняя ошибка (код ошибки: %s). Обратитесь к Герману Севостьянову или Станиславу Сорокину и сообщите код ошибки.",
+                                errorCodeForFarmRP)
+                );
+            }
+            if (reviewStatistic != null && !reviewStatistic.isReviewBlocked())
             sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")) {
