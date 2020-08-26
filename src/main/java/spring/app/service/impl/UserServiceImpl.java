@@ -38,14 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addUser(User user) {
         userDao.save(user);
-        ReviewStatistic reviewStatistic = new ReviewStatistic();
-        reviewStatistic.setUser(user);
-        reviewStatistic.setCountBlocks(0);
-        reviewStatistic.setCountOpenReviews(0);
-        reviewStatistic.setCountReviewsPerDay(0);
-        reviewStatistic.setCountReviewsWithoutStudentsInRow(0);
-        reviewStatistic.setBlockReason("");
-        reviewStatisticDao.save(reviewStatistic);
     }
 
     @Override

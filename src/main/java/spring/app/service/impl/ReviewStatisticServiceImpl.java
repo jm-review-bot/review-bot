@@ -1,6 +1,7 @@
 package spring.app.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.ReviewStatisticDao;
 import spring.app.model.ReviewStatistic;
 import spring.app.service.abstraction.ReviewStatisticService;
@@ -14,6 +15,7 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         this.reviewStatisticDao = reviewStatisticDao;
     }
 
+    @Transactional
     @Override
     public void addReviewStatistic(ReviewStatistic reviewStatistic) {
         reviewStatisticDao.save(reviewStatistic);
@@ -24,8 +26,4 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         return reviewStatisticDao.getReviewStatisticByUserId(userId);
     }
 
-    @Override
-    public void updateReviewStatistic(ReviewStatistic reviewStatistic) {
-        reviewStatisticDao.update(reviewStatistic);
-    }
 }

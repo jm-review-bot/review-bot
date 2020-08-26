@@ -37,15 +37,15 @@ public class ReviewStatistic {
 
     @NotNull
     @Column(name = "reviews_without_students_in_row")
-    private int countReviewsWithoutStudentsInRow;
+    private Long countReviewsWithoutStudentsInRow;
 
     @NotNull
     @Column(name = "open_reviews")
-    private int countOpenReviews;
+    private Long countOpenReviews;
 
     @NotNull
     @Column(name = "reviews_per_day")
-    private int countReviewsPerDay;
+    private Long countReviewsPerDay;
 
     public ReviewStatistic() {
     }
