@@ -273,6 +273,15 @@ public class Keyboards {
             "        \"color\": \"positive\"\n" +
             "      }\n";
 
+    public final static String CANCEL_BLOCK_FOR_TAKE_REVIEW ="{\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Снять блок с ревью\"\n" +
+            "        },\n" +
+            "        \"color\": \"negative\"\n" +
+            "      }\n";
+
     public final static String YES_OR_CANCEL = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +

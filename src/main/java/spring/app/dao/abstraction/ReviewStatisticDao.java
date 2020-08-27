@@ -4,5 +4,7 @@ import spring.app.model.ReviewStatistic;
 
 public interface ReviewStatisticDao extends GenericDao<Long, ReviewStatistic> {
 
+    ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId);
+
     ReviewStatistic getReviewStatisticByUserId(Long userId);
 }

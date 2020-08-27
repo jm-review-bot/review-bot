@@ -87,7 +87,7 @@ public class UserMenu extends Step {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
                         storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
                         // Для мониторинга за фармом RP обнуляется значение счетчика количества ревью без записавшихся студентов
-                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(context.getUser().getId());
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
                         reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
                         reviewStatisticService.updateReviewStatistic(reviewStatistic);
                         //теперь мы просто сохраняем юзеру его значения
@@ -100,7 +100,7 @@ public class UserMenu extends Step {
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                         userService.updateUser(user);
                         // Для мониторинга за фармом RP увеличивается значение счетчика количества ревью без записавшихся студентов
-                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(user.getId());
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
                         reviewStatistic.setCountReviewsWithoutStudentsInRow(reviewStatistic.getCountReviewsWithoutStudentsInRow() + 1);
                         reviewStatisticService.updateReviewStatistic(reviewStatistic);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
@@ -133,7 +133,7 @@ public class UserMenu extends Step {
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
             // Выполняется актуализация статистики по создаваемым ревью пользователем
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(context.getUser().getId());
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
             Long countOpenReviews = reviewService.getCountOpenReviewsByReviewerVkId(vkId);
             Long countCreatedReviewForLastDay = reviewService.getCountCreatedReviewsByReviewerVkIdFromDate(vkId, LocalDateTime.now().minusDays(1));
             if (reviewStatistic != null) { // Если статистика по пользователю уже ведется
@@ -160,7 +160,7 @@ public class UserMenu extends Step {
                     if (maxOpenReviews > 0 && reviewStatistic.getCountOpenReviews() >= maxOpenReviews) {
                         needToBlock = true;
                         reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество открытых ревью.\n",
+                                String.format("Блокировка %d: Достигнуто максимальное количество одновременно открытых ревью.\n",
                                         reviewStatistic.getCountBlocks() + 1)
                         );
                     } else if (maxReviewsPerDay > 0 && reviewStatistic.getCountReviewsPerDay() > maxReviewsPerDay) {
@@ -172,7 +172,7 @@ public class UserMenu extends Step {
                     } else if (maxReviewsWithoutStudentsInRow > 0 && reviewStatistic.getCountReviewsWithoutStudentsInRow() >= maxReviewsWithoutStudentsInRow) {
                         needToBlock = true;
                         reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество закрытых ревью без студентов, идущих подряд.\n",
+                                String.format("Блокировка %d: Достигнуто максимальное количество идущих подряд закрытых ревью без студентов.\n",
                                         reviewStatistic.getCountBlocks() + 1)
                         );
                     }

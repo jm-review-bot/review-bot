@@ -129,6 +129,9 @@ public class TestDataInit {
     private Step adminSetThemeAddedUser;
 
     @Autowired
+    private Step adminUnblockUserTakeReview;
+
+    @Autowired
     private Step examinerAddNewStudentReview;
 
     @Autowired
@@ -234,6 +237,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS, adminSetPassedReviewGetThemesStatus);
         steps.put(StepSelector.ADMIN_SET_PASSED_REVIEW_GET_USERS_LIST, adminSetPassedReviewGetUsersList);
         steps.put(StepSelector.ADMIN_SET_THEME_ADDED_USER, adminSetThemeAddedUser);
+        steps.put(StepSelector.ADMIN_UNBLOCK_USER_TAKE_REVIEW, adminUnblockUserTakeReview);
         steps.put(StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW, examinerAddNewStudentReview);
         steps.put(StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT, examinerChooseMethodToAddStudent);
         steps.put(StepSelector.EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT, examinerChooseOldStudentReviewToEdit);

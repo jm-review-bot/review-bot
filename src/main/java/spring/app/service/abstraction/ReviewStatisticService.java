@@ -11,6 +11,8 @@ public interface ReviewStatisticService {
     @Transactional
     void updateReviewStatistic(ReviewStatistic reviewStatistic);
 
+    ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId);
+
     ReviewStatistic getReviewStatisticByUserId(Long userId);
 
 }
