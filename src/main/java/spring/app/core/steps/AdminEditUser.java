@@ -77,7 +77,7 @@ public class AdminEditUser extends Step {
         List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
         String keyboard = (savedInput != null ? CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK : DEF_BACK_KB);
         ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(savedInput.get(0)));
-        if (reviewStatistic !=null && reviewStatistic.isReviewBlocked()) {
+        if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
             keyboard += getRowDelimiterString() + CANCEL_BLOCK_FOR_TAKE_REVIEW;
         }
         return keyboard;
