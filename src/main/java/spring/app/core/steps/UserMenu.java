@@ -124,8 +124,8 @@ public class UserMenu extends Step {
             sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
-            // Если создание ревью для пользователя заблокировано, ему необходится к админу, для выяснения причин
-            ReviewStatistic reviewStatistic = reviewStatisticService.updateStatisticForUser(vkId);
+            // Если создание ревью для пользователя заблокировано, ему необходится к админу для разблокировки
+            ReviewStatistic reviewStatistic = reviewStatisticService.getUpdatedStatisticForUser(vkId);
             if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
                 throw new ProcessInputException(String.format(
                         "На Вашем аккаунте заблокирована возможность создавать ревью у других студентов.\nПричина: %s\nОбратитесь к администрации проекта для разблокировки.",

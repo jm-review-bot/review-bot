@@ -36,24 +36,17 @@ public class AdminUnblockUserTakeReview extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
-        String input = context.getInput();
+        String currentInput = context.getInput();
         Integer vkId = context.getVkId();
-        switch (input) {
-            case "Да":
-                Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
-                ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(studentId);
-                reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
-                reviewStatistic.setReviewBlocked(false);
-                reviewStatisticService.updateReviewStatistic(reviewStatistic);
-                storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
-                sendUserToNextStep(context, ADMIN_MENU);
-                break;
-            case "Нет":
-                storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
-                sendUserToNextStep(context, ADMIN_MENU);
-                break;
-            default:
-                throw new ProcessInputException("Введена неверная команда...");
+        if (currentInput.equalsIgnoreCase("да")) {
+            reviewStatisticService.unblockTakingReviewForUser(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
+            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+            sendUserToNextStep(context, ADMIN_MENU);
+        } else if (currentInput.equalsIgnoreCase("нет")) {
+            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+            sendUserToNextStep(context, ADMIN_MENU);
+        } else {
+            throw new ProcessInputException("Введена неверная команда...");
         }
     }
 

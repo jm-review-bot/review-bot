@@ -52,10 +52,10 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
     /* Метод обновляет существующую статистику по ревью выбранного пользователя на основании текущих данных.
     * Если таковой на момент проверки еще не было заведено, то она будет создана.
     *
-    * @return ReviewStatistic - метод возвращает актуализированную статистику по пользователю*/
+    * @return ReviewStatistic - метод возвращает актуализированную статистику по пользователю */
     @Transactional
     @Override
-    public ReviewStatistic updateStatisticForUser(Integer userVkId) {
+    public ReviewStatistic getUpdatedStatisticForUser(Integer userVkId) {
         ReviewStatistic reviewStatistic = reviewStatisticDao.getReviewStatisticByUserVkId(userVkId);
         Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
         Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
@@ -99,7 +99,7 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
             }
             /* Актуализировав данные, выполняется проверка текущего статуса блокировки и изменяется при необходимости.
              * Здесь не происходит автоматическая разблокировка пользователя (например, если пользователь удалит созданные ревью),
-             * поскольку факт блокировки должен быть зафиксирован админом, и только он может производить разблокировку пользователя*/
+             * поскольку факт блокировки должен быть зафиксирован админом, и только он может производить разблокировку пользователя */
             if (needToBlock && !reviewStatistic.isReviewBlocked()) {
                 reviewStatistic.setReviewBlocked(true);
                 reviewStatistic.setCountBlocks(reviewStatistic.getCountBlocks() + 1);
@@ -107,5 +107,13 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
             }
         }
         return reviewStatistic;
+    }
+
+    @Override
+    public void unblockTakingReviewForUser(Long userId) {
+        ReviewStatistic reviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);
+        reviewStatistic.setCountReviewsWithoutStudentsInRow((long) 0);
+        reviewStatistic.setReviewBlocked(false);
+        reviewStatisticDao.update(reviewStatistic);
     }
 }
