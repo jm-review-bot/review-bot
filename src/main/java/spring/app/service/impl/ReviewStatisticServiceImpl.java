@@ -22,6 +22,11 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
     }
 
     @Override
+    public void updateReviewStatistic(ReviewStatistic reviewStatistic) {
+        reviewStatisticDao.update(reviewStatistic);
+    }
+
+    @Override
     public ReviewStatistic getReviewStatisticByUserId(Long userId) {
         return reviewStatisticDao.getReviewStatisticByUserId(userId);
     }

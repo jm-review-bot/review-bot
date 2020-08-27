@@ -8,6 +8,9 @@ public interface ReviewStatisticService {
     @Transactional
     void addReviewStatistic(ReviewStatistic reviewStatistic);
 
+    @Transactional
+    void updateReviewStatistic(ReviewStatistic reviewStatistic);
+
     ReviewStatistic getReviewStatisticByUserId(Long userId);
 
 }

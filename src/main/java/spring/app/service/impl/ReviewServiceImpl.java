@@ -101,11 +101,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Long getCountClosedReviewsWithoutStudentsByReviewerVkId(Integer reviewerVkId) {
-        return reviewDao.getCountClosedReviewsWithoutStudentsByReviewerVkId(reviewerVkId);
-    }
-
-    @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId);
     }
