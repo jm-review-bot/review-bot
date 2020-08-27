@@ -12,6 +12,7 @@ import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -157,23 +158,26 @@ public class UserMenu extends Step {
             if (!reviewStatistic.isReviewBlocked()) {
                 boolean needToBlock = false;
                 if (!reviewStatistic.isReviewBlocked()) {
-                    if (maxOpenReviews > 0 && reviewStatistic.getCountOpenReviews() >= maxOpenReviews) {
+                    if (maxReviewsWithoutStudentsInRow > 0 && reviewStatistic.getCountReviewsWithoutStudentsInRow() >= maxReviewsWithoutStudentsInRow) {
                         needToBlock = true;
                         reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество одновременно открытых ревью.\n",
-                                        reviewStatistic.getCountBlocks() + 1)
+                                String.format("Блокировка %d: Достигнуто максимальное количество идущих подряд закрытых ревью без студентов. Дата/время: %s\n",
+                                        reviewStatistic.getCountBlocks() + 1,
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
                         );
-                    } else if (maxReviewsPerDay > 0 && reviewStatistic.getCountReviewsPerDay() > maxReviewsPerDay) {
+                    } else if (maxOpenReviews > 0 && reviewStatistic.getCountOpenReviews() >= maxOpenReviews) {
                         needToBlock = true;
                         reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество проводимых ревью в сутки.\n",
-                                        reviewStatistic.getCountBlocks() + 1)
+                                String.format("Блокировка %d: Достигнуто максимальное количество одновременно открытых ревью. Дата/время: %s\n",
+                                        reviewStatistic.getCountBlocks() + 1,
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
                         );
-                    } else if (maxReviewsWithoutStudentsInRow > 0 && reviewStatistic.getCountReviewsWithoutStudentsInRow() >= maxReviewsWithoutStudentsInRow) {
+                    } else if (maxReviewsPerDay > 0 && reviewStatistic.getCountReviewsPerDay() >= maxReviewsPerDay) {
                         needToBlock = true;
                         reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество идущих подряд закрытых ревью без студентов.\n",
-                                        reviewStatistic.getCountBlocks() + 1)
+                                String.format("Блокировка %d: Достигнуто максимальное количество проводимых ревью в сутки. Дата/время: %s\n",
+                                        reviewStatistic.getCountBlocks() + 1,
+                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
                         );
                     }
                 }

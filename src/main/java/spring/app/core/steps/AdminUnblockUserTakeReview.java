@@ -45,9 +45,11 @@ public class AdminUnblockUserTakeReview extends Step {
                 reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
                 reviewStatistic.setReviewBlocked(false);
                 reviewStatisticService.updateReviewStatistic(reviewStatistic);
+                storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
                 sendUserToNextStep(context, ADMIN_MENU);
                 break;
             case "Нет":
+                storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
                 sendUserToNextStep(context, ADMIN_MENU);
                 break;
             default:
@@ -61,8 +63,7 @@ public class AdminUnblockUserTakeReview extends Step {
         Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
         User student = userService.getUserById(studentId);
         ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(studentId);
-        return String.format("Вы уверены, что хотите снять блок с возможности принятия ревью для пользователя %s %s?\n" +
-                "Количество блокировок пользователя: %d. Причины:\n%s",
+        return String.format("Вы уверены, что хотите снять блок с возможности принятия ревью для пользователя %s %s?\nКоличество блокировок пользователя: %d.\nПричины:\n\n%s",
                 student.getFirstName(),
                 student.getLastName(),
                 reviewStatistic.getCountBlocks(),
