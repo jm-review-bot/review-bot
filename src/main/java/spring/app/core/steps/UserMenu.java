@@ -12,7 +12,6 @@ import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -32,14 +31,6 @@ public class UserMenu extends Step {
 
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
-    @Value("${review.max_open_reviews}")
-    private int maxOpenReviews;
-    @Value("${review.max_reviews_per_day}")
-    private int maxReviewsPerDay;
-    @Value("${review.max_reviews_without_students_in_row}")
-    private int maxReviewsWithoutStudentsInRow;
-    @Value(("${review.error_code_farm_rp}"))
-    private String errorCodeForFarmRP;
 
     public UserMenu(StorageService storageService,
                     ReviewService reviewService,
@@ -133,71 +124,14 @@ public class UserMenu extends Step {
             sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
-            // Выполняется актуализация статистики по создаваемым ревью пользователем
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
-            Long countOpenReviews = reviewService.getCountOpenReviewsByReviewerVkId(vkId);
-            Long countCreatedReviewForLastDay = reviewService.getCountCreatedReviewsByReviewerVkIdFromDate(vkId, LocalDateTime.now().minusDays(1));
-            if (reviewStatistic != null) { // Если статистика по пользователю уже ведется
-                if (!reviewStatistic.isReviewBlocked()) { // И если пользователю доступ к принятию ревью не заблокирован
-                    reviewStatistic.setCountOpenReviews(countOpenReviews);
-                    reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
-                    reviewStatisticService.updateReviewStatistic(reviewStatistic);
-                }
-            } else { // Если статистика по пользователю еще не велась, необходимо начать ее
-                reviewStatistic = new ReviewStatistic();
-                reviewStatistic.setUser(context.getUser());
-                reviewStatistic.setCountBlocks(0);
-                reviewStatistic.setCountOpenReviews(countOpenReviews);
-                reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
-                reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
-                reviewStatistic.setBlockReason("");
-                reviewStatisticService.addReviewStatistic(reviewStatistic);
+            // Если создание ревью для пользователя заблокировано, ему необходится к админу, для выяснения причин
+            ReviewStatistic reviewStatistic = reviewStatisticService.updateStatisticForUser(vkId);
+            if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
+                throw new ProcessInputException(String.format(
+                        "На Вашем аккаунте заблокирована возможность создавать ревью у других студентов.\nПричина: %s\nОбратитесь к администрации проекта для разблокировки.",
+                        reviewStatistic.getLastBlockReason()
+                ));
             }
-            /* Если пользователю доступ к принятию ревью не заблокирован, то после актулизации статистики по нему необходимо
-            * проверить все заданные ограничения для создания нового ревью во избежания фарма RP пользователем */
-            if (!reviewStatistic.isReviewBlocked()) {
-                boolean needToBlock = false;
-                if (!reviewStatistic.isReviewBlocked()) {
-                    if (maxReviewsWithoutStudentsInRow > 0 && reviewStatistic.getCountReviewsWithoutStudentsInRow() >= maxReviewsWithoutStudentsInRow) {
-                        needToBlock = true;
-                        reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество идущих подряд закрытых ревью без студентов. Дата/время: %s\n",
-                                        reviewStatistic.getCountBlocks() + 1,
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
-                        );
-                    } else if (maxOpenReviews > 0 && reviewStatistic.getCountOpenReviews() >= maxOpenReviews) {
-                        needToBlock = true;
-                        reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество одновременно открытых ревью. Дата/время: %s\n",
-                                        reviewStatistic.getCountBlocks() + 1,
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
-                        );
-                    } else if (maxReviewsPerDay > 0 && reviewStatistic.getCountReviewsPerDay() >= maxReviewsPerDay) {
-                        needToBlock = true;
-                        reviewStatistic.setBlockReason(reviewStatistic.getBlockReason() +
-                                String.format("Блокировка %d: Достигнуто максимальное количество проводимых ревью в сутки. Дата/время: %s\n",
-                                        reviewStatistic.getCountBlocks() + 1,
-                                        LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
-                        );
-                    }
-                }
-                /* Актуализировав данные, выполняется проверка текущего статуса блокировки и изменяется при необходимости.
-                 * Здесь не происходит автоматическая разблокировка пользователя (например, если пользователь удалит созданные рвеью),
-                 * посколько факт блокировки должен быть зафиксирован админом, и только он может производить разблокировку пользователя*/
-                if (needToBlock && !reviewStatistic.isReviewBlocked()) {
-                    reviewStatistic.setReviewBlocked(true);
-                    reviewStatistic.setCountBlocks(reviewStatistic.getCountBlocks() + 1);
-                    reviewStatisticService.updateReviewStatistic(reviewStatistic);
-                }
-            }
-            // Если создание ревью для пользователя заблокировано, ему необходится к админу, для выяснения причин и разблокировки
-            if (reviewStatistic.isReviewBlocked()) {
-                throw new ProcessInputException(
-                        String.format("Произошла внутренняя ошибка (код ошибки: %s). Обратитесь к Герману Севостьянову или Станиславу Сорокину и сообщите код ошибки.",
-                                errorCodeForFarmRP)
-                );
-            }
-
             sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")) {

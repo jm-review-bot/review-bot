@@ -24,7 +24,7 @@ public interface ReviewService {
 
     Long getCountOpenReviewsByReviewerVkId(Integer reviewerVkId);
 
-    Long getCountCreatedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime);
+    Long getCountCompletedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime);
 
     void updateAllExpiredReviewsByDate(LocalDateTime localDateTime);
 

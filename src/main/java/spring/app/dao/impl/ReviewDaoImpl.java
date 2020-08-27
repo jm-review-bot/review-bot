@@ -60,8 +60,8 @@ public class ReviewDaoImpl extends AbstractDao<Long, Review> implements ReviewDa
     }
 
     @Override
-    public Long getCountCreatedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime) {
-        return entityManager.createQuery("SELECT COUNT(r) FROM Review r WHERE r.user.vkId = :reviewer_vkId AND r.date > :start_date_time AND r.date < :current_date_time", Long.class)
+    public Long getCountCompletedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime) {
+        return entityManager.createQuery("SELECT COUNT(r) FROM Review r WHERE r.user.vkId = :reviewer_vkId AND r.date > :start_date_time AND r.date < :current_date_time AND r.isOpen = FALSE", Long.class)
                 .setParameter("reviewer_vkId", reviewerVkId)
                 .setParameter("start_date_time", startDateTime)
                 .setParameter("current_date_time", LocalDateTime.now())

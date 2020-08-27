@@ -15,4 +15,7 @@ public interface ReviewStatisticService {
 
     ReviewStatistic getReviewStatisticByUserId(Long userId);
 
+    @Transactional
+    ReviewStatistic updateStatisticForUser(Integer userVkId);
+
 }

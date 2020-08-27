@@ -27,7 +27,9 @@ public class AdminEditUser extends Step {
     private final ReviewStatisticService reviewStatisticService;
 
 
-    public AdminEditUser(StorageService storageService, UserService userService, ReviewStatisticService reviewStatisticService) {
+    public AdminEditUser(StorageService storageService,
+                         UserService userService,
+                         ReviewStatisticService reviewStatisticService) {
         super("", "");
         this.storageService = storageService;
         this.userService = userService;
@@ -42,7 +44,6 @@ public class AdminEditUser extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String inputText = context.getInput();
-        Integer vkId = context.getVkId();
         if ("изменить имя".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
         } else if ("изменить вкИд".equals(inputText)) {

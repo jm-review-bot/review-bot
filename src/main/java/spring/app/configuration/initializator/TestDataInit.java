@@ -1184,6 +1184,12 @@ public class TestDataInit {
                 studentReview15.setIsPassed(null);
                 studentReview15.setReview(review11);
                 studentReviewService.addStudentReview(studentReview15);
+
+                StudentReview studentReview16 = new StudentReview();
+                studentReview16.setUser(mikhail);
+                studentReview16.setIsPassed(true);
+                studentReview16.setReview(akiraCorePassed);
+                studentReviewService.addStudentReview(studentReview16);
 //
             }
         }

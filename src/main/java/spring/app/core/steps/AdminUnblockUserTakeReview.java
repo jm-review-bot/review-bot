@@ -63,11 +63,11 @@ public class AdminUnblockUserTakeReview extends Step {
         Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
         User student = userService.getUserById(studentId);
         ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(studentId);
-        return String.format("Вы уверены, что хотите снять блок с возможности принятия ревью для пользователя %s %s?\nКоличество блокировок пользователя: %d.\nПричины:\n\n%s",
+        return String.format("Вы уверены, что хотите снять блок с возможности создания ревью для пользователя %s %s?\nКоличество блокировок пользователя: %d.\nПоследняя причина блокировки:\n\n%s",
                 student.getFirstName(),
                 student.getLastName(),
                 reviewStatistic.getCountBlocks(),
-                reviewStatistic.getBlockReason());
+                reviewStatistic.getLastBlockReason());
     }
 
     @Override
