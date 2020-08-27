@@ -5,11 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import spring.app.dao.abstraction.ReviewStatisticDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
 import spring.app.model.FreeTheme;
-import spring.app.model.ReviewStatistic;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
@@ -23,15 +21,11 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
     private final ThemeService themeService;
-    private final ReviewStatisticDao reviewStatisticDao;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao,
-                           ThemeService themeService,
-                           ReviewStatisticDao reviewStatisticDao) {
+    public UserServiceImpl(UserDao userDao, ThemeService themeService) {
         this.userDao = userDao;
         this.themeService = themeService;
-        this.reviewStatisticDao = reviewStatisticDao;
     }
 
     @Transactional

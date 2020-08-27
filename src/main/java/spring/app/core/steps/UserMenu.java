@@ -134,25 +134,25 @@ public class UserMenu extends Step {
         } else if (command.equals("принять")) { // (Принять ревью)
             // Выполняется актуализация статистики по создаваемым ревью пользователем
             ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(context.getUser().getId());
-            Long countOpenReview = reviewService.getCountOpenReviewsByReviewerVkId(vkId);
-            Long countCreatedReviewForLastDat = reviewService.getCountCreatedReviewsByReviewerVkIdFromDate(vkId, LocalDateTime.now().minusDays(1));
+            Long countOpenReviews = reviewService.getCountOpenReviewsByReviewerVkId(vkId);
+            Long countCreatedReviewForLastDay = reviewService.getCountCreatedReviewsByReviewerVkIdFromDate(vkId, LocalDateTime.now().minusDays(1));
             if (reviewStatistic != null) { // Если статистика по пользователю уже ведется
                 if (!reviewStatistic.isReviewBlocked()) { // И если пользователю доступ к принятию ревью не заблокирован
-                    reviewStatistic.setCountOpenReviews(countOpenReview);
-                    reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDat);
+                    reviewStatistic.setCountOpenReviews(countOpenReviews);
+                    reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
                     reviewStatisticService.updateReviewStatistic(reviewStatistic);
                 }
             } else { // Если статистика по пользователю еще не велась, необходимо начать ее
                 reviewStatistic = new ReviewStatistic();
                 reviewStatistic.setUser(context.getUser());
                 reviewStatistic.setCountBlocks(0);
-                reviewStatistic.setCountOpenReviews(countOpenReview);
-                reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDat);
+                reviewStatistic.setCountOpenReviews(countOpenReviews);
+                reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
                 reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
                 reviewStatistic.setBlockReason("");
                 reviewStatisticService.addReviewStatistic(reviewStatistic);
             }
-            /* Если пользователю доступ к принятию ревью не заблокирован, то после актализации статистики по нему необходимо
+            /* Если пользователю доступ к принятию ревью не заблокирован, то после актулизации статистики по нему необходимо
             * проверить все заданные ограничения для создания нового ревью во избежания фарма RP пользователем */
             if (!reviewStatistic.isReviewBlocked()) {
                 boolean needToBlock = false;
@@ -186,7 +186,7 @@ public class UserMenu extends Step {
                     reviewStatisticService.updateReviewStatistic(reviewStatistic);
                 }
             }
-            // Если создание ревью для пользователя заблокировано, ему необходится к руководителю проекта, для выяснения причин
+            // Если создание ревью для пользователя заблокировано, ему необходится к админу, для выяснения причин и разблокировки
             if (reviewStatistic.isReviewBlocked()) {
                 throw new ProcessInputException(
                         String.format("Произошла внутренняя ошибка (код ошибки: %s). Обратитесь к Герману Севостьянову или Станиславу Сорокину и сообщите код ошибки.",
