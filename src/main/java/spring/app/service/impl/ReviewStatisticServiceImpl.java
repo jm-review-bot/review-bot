@@ -34,12 +34,6 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         this.userDao = userDao;
     }
 
-    @Transactional
-    @Override
-    public void addReviewStatistic(ReviewStatistic reviewStatistic) {
-        reviewStatisticDao.save(reviewStatistic);
-    }
-
     @Override
     public void updateReviewStatistic(ReviewStatistic reviewStatistic) {
         reviewStatisticDao.update(reviewStatistic);

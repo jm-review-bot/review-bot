@@ -91,16 +91,6 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Long getCountOpenReviewsByReviewerVkId(Integer reviewerVkId) {
-        return reviewDao.getCountOpenReviewsByReviewerVkId(reviewerVkId);
-    }
-
-    @Override
-    public Long getCountCompletedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime) {
-        return reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(reviewerVkId, startDateTime);
-    }
-
-    @Override
     public List<Review> getOpenReviewsByReviewerVkId(Integer vkId) {
         return reviewDao.getOpenReviewsByReviewerVkId(vkId);
     }

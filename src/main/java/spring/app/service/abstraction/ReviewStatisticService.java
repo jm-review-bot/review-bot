@@ -6,9 +6,6 @@ import spring.app.model.ReviewStatistic;
 public interface ReviewStatisticService {
 
     @Transactional
-    void addReviewStatistic(ReviewStatistic reviewStatistic);
-
-    @Transactional
     void updateReviewStatistic(ReviewStatistic reviewStatistic);
 
     ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId);

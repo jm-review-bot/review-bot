@@ -22,10 +22,6 @@ public interface ReviewService {
 
     List<Review> getOpenReviewsByStudentVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
-    Long getCountOpenReviewsByReviewerVkId(Integer reviewerVkId);
-
-    Long getCountCompletedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime);
-
     void updateAllExpiredReviewsByDate(LocalDateTime localDateTime);
 
     List<Review> getMyReview(Integer vkId, LocalDateTime localDateTime);
