@@ -1,6 +1,9 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import spring.app.controller.AdminThemeRestController;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -20,6 +23,8 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminEditUserGetRolesList extends Step {
+
+    private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
     private final StorageService storageService;
     private final RoleService roleService;
@@ -56,6 +61,8 @@ public class AdminEditUserGetRolesList extends Step {
             } else {
                 student.setRole(roleService.getRoleById(selectedRoleId));
                 userService.updateUser(student);
+                logger.info("Админ (vkId={}) изменил роль пользователю (vkId={})",
+                        vkId, student.getVkId());
             }
         } else if (currentInput.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, ADMIN_EDIT_USER);
