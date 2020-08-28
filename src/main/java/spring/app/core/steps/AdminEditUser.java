@@ -50,6 +50,8 @@ public class AdminEditUser extends Step {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
+        } else if ("Назад".equals(inputText)) {
+            sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
@@ -66,10 +68,11 @@ public class AdminEditUser extends Step {
             User selectedUser = userService.getUserById(userId);
             ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId);
             text = String.format(
-                    "Вы выбрали %s %s (%s).\nСтатус ревью: %s.\nВыберите действие",
+                    "Вы выбрали %s %s (%s).\nСтатус ревью: %s.Роль пользователя: %s.\nВыберите действие",
                     selectedUser.getFirstName(),
                     selectedUser.getLastName(),
                     selectedUser.getVkId(),
+                    selectedUser.getRole().getName(),
                     reviewStatistic != null && reviewStatistic.isReviewBlocked() ? "заблокировано" : "доступно"
             );
         } else {
@@ -80,13 +83,19 @@ public class AdminEditUser extends Step {
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
+        String keyboard = "";
         Integer vkId = context.getVkId();
         List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
-        String keyboard = (savedInput != null ? CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK : DEF_BACK_KB);
+
+        // Кнопка для разблокировки пользователю возможности создания ревью
         ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(savedInput.get(0)));
         if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
-            keyboard += getRowDelimiterString() + CANCEL_BLOCK_FOR_TAKE_REVIEW;
+            keyboard += CANCEL_BLOCK_FOR_TAKE_REVIEW + getRowDelimiterString();
         }
+
+        // Набор кнопок для редактирования пользователя
+        keyboard += EDITING_USER_OR_BACK;
+
         return keyboard;
     }
 }

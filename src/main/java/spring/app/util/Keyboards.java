@@ -256,7 +256,7 @@ public class Keyboards {
             "        \"color\": \"negative\"\n" +
             "      }\n";
 
-    public final static String CHANGE_FULLNAME_VKID_EDITING_USER_OR_BACK = "{\n" +
+    public final static String EDITING_USER_OR_BACK = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +
             "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
@@ -271,6 +271,22 @@ public class Keyboards {
             "          \"label\": \"изменить вкИд\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
+            "      }\n" +
+            "      ],[" +
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
+            "          \"label\": \"Изменить роль\"\n" +
+            "        },\n" +
+            "        \"color\": \"positive\"\n" +
+            "      },\n"+
+            "      {\n" +
+            "        \"action\": {\n" +
+            "          \"type\": \"text\",\n" +
+            "          \"label\": \"Назад\"\n" +
+            "        },\n" +
+            "        \"color\": \"default\"\n" +
             "      }\n";
 
     public final static String CANCEL_BLOCK_FOR_TAKE_REVIEW ="{\n" +
