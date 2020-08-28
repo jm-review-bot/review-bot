@@ -66,6 +66,9 @@ public class TestDataInit {
     private Step adminEditUser;
 
     @Autowired
+    private Step adminEditUserGetRolesList;
+
+    @Autowired
     private Step adminInputNewFullnameEditedUser;
 
     @Autowired
@@ -216,6 +219,7 @@ public class TestDataInit {
         steps.put(StepSelector.ADMIN_ADD_USER, adminAddUser);
         steps.put(StepSelector.ADMIN_USERS_LIST, adminUserList);
         steps.put(StepSelector.ADMIN_EDIT_USER, adminEditUser);
+        steps.put(StepSelector.ADMIN_EDIT_USER_GET_ROLES_LIST, adminEditUserGetRolesList);
         steps.put(StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER, adminInputNewFullnameEditedUser);
         steps.put(StepSelector.ADMIN_CONFIRM_CHANGE_EDITED_USER_FULLNAME, adminConfirmChangeEditedUserFullname);
         steps.put(StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER, adminInputNewVkIdEditedUser);

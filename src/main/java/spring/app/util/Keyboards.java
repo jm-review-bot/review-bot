@@ -280,7 +280,8 @@ public class Keyboards {
             "          \"label\": \"Изменить роль\"\n" +
             "        },\n" +
             "        \"color\": \"positive\"\n" +
-            "      },\n"+
+            "      }\n" +
+            "      ],[" +
             "      {\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +

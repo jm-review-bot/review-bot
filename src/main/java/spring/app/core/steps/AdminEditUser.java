@@ -1,6 +1,5 @@
 package spring.app.core.steps;
 
-import org.apache.commons.lang3.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -57,6 +56,8 @@ public class AdminEditUser extends Step {
                 throw new ProcessInputException("Пользователь имеет возможность создавать ревью");
             }
             sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
+        } else if ("Изменить роль".equals(inputText)) {
+            sendUserToNextStep(context, ADMIN_EDIT_USER_GET_ROLES_LIST);
         } else if ("Назад".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else {
@@ -75,12 +76,12 @@ public class AdminEditUser extends Step {
             User selectedUser = userService.getUserById(userId);
             ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId);
             text = String.format(
-                    "Вы выбрали %s %s (%s).\nСтатус ревью: %s.Роль пользователя: %s.\nВыберите действие",
+                    "Вы выбрали %s %s (%s).\nСтатус ревью: %s.\nРоль пользователя: %s.\nВыберите действие",
                     selectedUser.getFirstName(),
                     selectedUser.getLastName(),
                     selectedUser.getVkId(),
-                    selectedUser.getRole().getName(),
-                    reviewStatistic != null && reviewStatistic.isReviewBlocked() ? "заблокировано" : "доступно"
+                    reviewStatistic != null && reviewStatistic.isReviewBlocked() ? "заблокировано" : "доступно",
+                    selectedUser.getRole().getName()
             );
         } else {
             text = "Изменение параметров выбранного пользователя невозможно. Нажмите 'Назад' чтобы вернуться к списку пользователей";
