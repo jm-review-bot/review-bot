@@ -64,7 +64,14 @@ public class AdminEditUser extends Step {
         if (savedInput != null) {
             Long userId = Long.parseLong(savedInput.get(0));
             User selectedUser = userService.getUserById(userId);
-            text = String.format("Вы выбрали %s %s (%s). Выберите действие", selectedUser.getFirstName(), selectedUser.getLastName(), selectedUser.getVkId());
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId);
+            text = String.format(
+                    "Вы выбрали %s %s (%s).\nСтатус ревью: %s.\nВыберите действие",
+                    selectedUser.getFirstName(),
+                    selectedUser.getLastName(),
+                    selectedUser.getVkId(),
+                    reviewStatistic != null && reviewStatistic.isReviewBlocked() ? "заблокировано" : "доступно"
+            );
         } else {
             text = "Изменение параметров выбранного пользователя невозможно. Нажмите 'Назад' чтобы вернуться к списку пользователей";
         }
