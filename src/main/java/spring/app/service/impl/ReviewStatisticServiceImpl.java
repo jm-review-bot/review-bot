@@ -1,8 +1,11 @@
 package spring.app.service.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.app.controller.AdminThemeRestController;
 import spring.app.dao.abstraction.ReviewDao;
 import spring.app.dao.abstraction.ReviewStatisticDao;
 import spring.app.dao.abstraction.UserDao;
@@ -14,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 
 @Service
 public class ReviewStatisticServiceImpl implements ReviewStatisticService {
+
+    private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
     private final ReviewStatisticDao reviewStatisticDao;
     private final ReviewDao reviewDao;
@@ -104,6 +109,8 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
                 reviewStatistic.setReviewBlocked(true);
                 reviewStatistic.setCountBlocks(reviewStatistic.getCountBlocks() + 1);
                 reviewStatisticDao.update(reviewStatistic);
+                logger.info("Пользователю (ID={}) установлен блок на возможность создания ревью в связи с подозрением на фарм RP",
+                        reviewStatistic.getUser().getId());
             }
         }
         return reviewStatistic;

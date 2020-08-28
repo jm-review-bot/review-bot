@@ -1,6 +1,9 @@
 package spring.app.core.steps;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import spring.app.controller.AdminThemeRestController;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -16,6 +19,8 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class AdminUnblockUserTakeReview extends Step {
+
+    private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
     private final StorageService storageService;
     private final UserService userService;
@@ -39,8 +44,11 @@ public class AdminUnblockUserTakeReview extends Step {
         String currentInput = context.getInput();
         Integer vkId = context.getVkId();
         if (currentInput.equalsIgnoreCase("да")) {
-            reviewStatisticService.unblockTakingReviewForUser(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
+            Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
+            reviewStatisticService.unblockTakingReviewForUser(studentId);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+            logger.info("Админ (vkId={}) снял блок с вожможности создавать ревью для пользователя (ID={})",
+                    vkId, studentId);
             sendUserToNextStep(context, ADMIN_MENU);
         } else if (currentInput.equalsIgnoreCase("нет")) {
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
