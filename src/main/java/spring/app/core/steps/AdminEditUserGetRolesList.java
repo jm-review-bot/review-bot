@@ -64,10 +64,11 @@ public class AdminEditUserGetRolesList extends Step {
                 logger.info("Админ (vkId={}) изменил роль пользователю (vkId={})",
                         vkId, student.getVkId());
                 storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
-                sendUserToNextStep(context, ADMIN_MENU);
+                sendUserToNextStep(context, ADMIN_EDIT_USER);
             }
         } else if (currentInput.equalsIgnoreCase("назад")) {
             storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
+            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             sendUserToNextStep(context, ADMIN_EDIT_USER);
         } else {
             throw new ProcessInputException("Введена неверная команда...");

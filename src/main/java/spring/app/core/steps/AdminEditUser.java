@@ -44,12 +44,13 @@ public class AdminEditUser extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String inputText = context.getInput();
+        Integer vkId = context.getVkId();
         if ("изменить имя".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
         } else if ("изменить вкИд".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(context.getVkId(), ADMIN_USERS_LIST).get(0)));
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
             if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
                 sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
             } else {
@@ -59,6 +60,7 @@ public class AdminEditUser extends Step {
         } else if ("Изменить роль".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_EDIT_USER_GET_ROLES_LIST);
         } else if ("Назад".equals(inputText)) {
+            storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             sendUserToNextStep(context, ADMIN_USERS_LIST);
         } else {
             throw new ProcessInputException("Введена неверная команда...");
