@@ -63,6 +63,8 @@ public class AdminEditUserGetRolesList extends Step {
                 userService.updateUser(student);
                 logger.info("Админ (vkId={}) изменил роль пользователю (vkId={})",
                         vkId, student.getVkId());
+                storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
+                sendUserToNextStep(context, ADMIN_EDIT_USER);
             }
         } else if (currentInput.equalsIgnoreCase("назад")) {
             sendUserToNextStep(context, ADMIN_EDIT_USER);
