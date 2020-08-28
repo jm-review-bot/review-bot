@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.apache.commons.lang3.AnnotationUtils;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -49,6 +50,12 @@ public class AdminEditUser extends Step {
         } else if ("изменить вкИд".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(context.getVkId(), ADMIN_USERS_LIST).get(0)));
+            if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
+                sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
+            } else {
+                throw new ProcessInputException("Пользователь имеет возможность создавать ревью");
+            }
             sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
         } else if ("Назад".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_USERS_LIST);
