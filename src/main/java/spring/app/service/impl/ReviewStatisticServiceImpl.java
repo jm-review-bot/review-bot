@@ -109,8 +109,8 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
                 reviewStatistic.setReviewBlocked(true);
                 reviewStatistic.setCountBlocks(reviewStatistic.getCountBlocks() + 1);
                 reviewStatisticDao.update(reviewStatistic);
-                logger.info("Пользователю (ID={}) установлен блок на возможность создания ревью в связи с подозрением на фарм RP",
-                        reviewStatistic.getUser().getId());
+                logger.info("Пользователю (vkId={}) установлен блок на возможность создания ревью в связи с подозрением на фарм RP",
+                        userVkId);
             }
         }
         return reviewStatistic;
