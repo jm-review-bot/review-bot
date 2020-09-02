@@ -45,10 +45,11 @@ public class AdminUnblockUserTakeReview extends Step {
         Integer vkId = context.getVkId();
         if (currentInput.equalsIgnoreCase("да")) {
             Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
+            User student = userService.getUserById(studentId);
             reviewStatisticService.unblockTakingReviewForUser(studentId);
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
-            logger.info("Админ (vkId={}) снял блок с вожможности создавать ревью для пользователя (ID={})",
-                    vkId, studentId);
+            logger.info("Админ (vkId={}) снял блок с вожможности создавать ревью для пользователя (vkId={})",
+                    vkId, student.getVkId());
             sendUserToNextStep(context, ADMIN_MENU);
         } else if (currentInput.equalsIgnoreCase("нет")) {
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
