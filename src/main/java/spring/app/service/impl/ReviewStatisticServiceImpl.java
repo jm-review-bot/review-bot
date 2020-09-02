@@ -10,6 +10,7 @@ import spring.app.dao.abstraction.ReviewDao;
 import spring.app.dao.abstraction.ReviewStatisticDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.model.ReviewStatistic;
+import spring.app.model.User;
 import spring.app.service.abstraction.ReviewStatisticService;
 
 import java.time.LocalDateTime;
@@ -39,49 +40,17 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         this.userDao = userDao;
     }
 
-    @Override
-    public void updateReviewStatistic(ReviewStatistic reviewStatistic) {
-        reviewStatisticDao.update(reviewStatistic);
-    }
-
-    @Override
-    public ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId) {
-        return reviewStatisticDao.getReviewStatisticByUserVkId(userVkId);
-    }
-
-    @Override
-    public ReviewStatistic getReviewStatisticByUserId(Long userId) {
-        return reviewStatisticDao.getReviewStatisticByUserId(userId);
-    }
-
-    /* Метод обновляет существующую статистику по ревью выбранного пользователя на основании текущих данных.
-    * Если таковой на момент проверки еще не было заведено, то она будет создана.
-    *
-    * @return ReviewStatistic - метод возвращает актуализированную статистику по пользователю */
     @Transactional
     @Override
-    public ReviewStatistic getUpdatedStatisticForUser(Integer userVkId) {
-        ReviewStatistic reviewStatistic = reviewStatisticDao.getReviewStatisticByUserVkId(userVkId);
-        Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
-        Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
-        if (reviewStatistic != null) { // Если статистика по пользователю уже ведется
-            if (!reviewStatistic.isReviewBlocked()) { // И если пользователю доступ к принятию ревью не заблокирован
-                reviewStatistic.setCountOpenReviews(countOpenReviews);
-                reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
-                reviewStatisticDao.update(reviewStatistic);
-            }
-        } else { // Если статистика по пользователю еще не велась, необходимо начать ее
-            reviewStatistic = new ReviewStatistic();
-            reviewStatistic.setUser(userDao.getByVkId(userVkId));
-            reviewStatistic.setCountBlocks(0);
+    public void updateReviewStatistic(ReviewStatistic reviewStatistic) {
+        if (reviewStatistic != null && !reviewStatistic.isReviewBlocked()) { // Если доступ к созданию ревью уже заблокирован, то обновлять его нет необходимости
+            // Актуализируются данные
+            Integer userVkId = reviewStatistic.getUser().getVkId();
+            Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
+            Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
             reviewStatistic.setCountOpenReviews(countOpenReviews);
             reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
-            reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
-            reviewStatisticDao.save(reviewStatistic);
-        }
-        /* Если пользователю доступ к принятию ревью не заблокирован, то после актулизации статистики по нему необходимо
-         * проверить все заданные ограничения для создания нового ревью во избежания фарма RP пользователем */
-        if (!reviewStatistic.isReviewBlocked()) {
+            // Выполняется проверка, необходимо ли пользователю установить блок на создание ревью
             boolean needToBlock = false;
             if (maxReviewsWithoutStudentsInRow > 0 && reviewStatistic.getCountReviewsWithoutStudentsInRow() >= maxReviewsWithoutStudentsInRow) {
                 needToBlock = true;
@@ -98,24 +67,46 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
             } else if (maxReviewsPerDay > 0 && reviewStatistic.getCountReviewsPerDay() >= maxReviewsPerDay) {
                 needToBlock = true;
                 reviewStatistic.setLastBlockReason(
-                        String.format("Достигнуто максимальное количество проводимых ревью в сутки.\nДата и время блокировки: %s.",
+                        String.format("Достигнуто максимальное количество проведенных ревью в сутки.\nДата и время блокировки: %s.",
                                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")))
                 );
             }
-            /* Актуализировав данные, выполняется проверка текущего статуса блокировки и изменяется при необходимости.
-             * Здесь не происходит автоматическая разблокировка пользователя (например, если пользователь удалит созданные ревью),
-             * поскольку факт блокировки должен быть зафиксирован админом, и только он может производить разблокировку пользователя */
-            if (needToBlock && !reviewStatistic.isReviewBlocked()) {
+            if (needToBlock) {
                 reviewStatistic.setReviewBlocked(true);
                 reviewStatistic.setCountBlocks(reviewStatistic.getCountBlocks() + 1);
-                reviewStatisticDao.update(reviewStatistic);
                 logger.info("Пользователю (vkId={}) установлен блок на возможность создания ревью в связи с подозрением на фарм RP",
                         userVkId);
             }
+            reviewStatisticDao.update(reviewStatistic);
         }
-        return reviewStatistic;
+
     }
 
+    @Transactional
+    @Override
+    public void startReviewStatisticForUser(Integer userVkId) {
+        Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
+        Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
+        ReviewStatistic reviewStatistic = new ReviewStatistic();
+        reviewStatistic.setUser(userDao.getByVkId(userVkId));
+        reviewStatistic.setCountBlocks(0);
+        reviewStatistic.setCountOpenReviews(countOpenReviews);
+        reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
+        reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
+        reviewStatisticDao.save(reviewStatistic);
+    }
+
+    @Override
+    public ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId) {
+        return reviewStatisticDao.getReviewStatisticByUserVkId(userVkId);
+    }
+
+    @Override
+    public ReviewStatistic getReviewStatisticByUserId(Long userId) {
+        return reviewStatisticDao.getReviewStatisticByUserId(userId);
+    }
+
+    @Transactional
     @Override
     public void unblockTakingReviewForUser(Long userId) {
         ReviewStatistic reviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);

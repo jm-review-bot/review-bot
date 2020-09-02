@@ -125,10 +125,16 @@ public class UserMenu extends Step {
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
             // Если создание ревью для пользователя заблокировано, ему необходимо обратиться к админу для разблокировки
-            ReviewStatistic reviewStatistic = reviewStatisticService.getUpdatedStatisticForUser(vkId);
-            if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+            if (reviewStatistic == null) { // Если статистика по пользователю еще не велась, необходимо начать ее
+                reviewStatisticService.startReviewStatisticForUser(vkId);
+                reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+            } else { // Если статистика уже велась, достаточно ее актуализировать
+                reviewStatisticService.updateReviewStatistic(reviewStatistic);
+            }
+            if (reviewStatistic.isReviewBlocked()) {
                 throw new ProcessInputException(String.format(
-                        "На Вашем аккаунте заблокирована возможность создавать ревью у других студентов.\nПричина: %s\nОбратитесь к администрации проекта для разблокировки.",
+                        "На Вашем аккаунте заблокирована возможность создавать ревью.\nПричина: %s\nОбратитесь к администрации проекта для разблокировки.",
                         reviewStatistic.getLastBlockReason()
                 ));
             }
