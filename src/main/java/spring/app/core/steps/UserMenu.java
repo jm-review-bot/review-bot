@@ -1,11 +1,11 @@
 package spring.app.core.steps;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
+import spring.app.model.ReviewStatistic;
 import spring.app.model.StudentReview;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
@@ -22,27 +22,27 @@ import static spring.app.util.Keyboards.*;
 
 @Component
 public class UserMenu extends Step {
+
+    private final StorageService storageService;
+    private final ReviewService reviewService;
+    private final UserService userService;
+    private final StudentReviewService studentReviewService;
+    private final ReviewStatisticService reviewStatisticService;
+
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
-    @Autowired
-    private StorageService storageService;
-    @Autowired
-    private ReviewService reviewService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private StudentReviewService studentReviewService;
-    @Autowired
-    private ThemeService themeService;
-
-    public UserMenu(String text, String keyboard) {
-        super(text, keyboard);
-    }
-
-    public UserMenu() {
-        //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
+    public UserMenu(StorageService storageService,
+                    ReviewService reviewService,
+                    UserService userService,
+                    StudentReviewService studentReviewService,
+                    ReviewStatisticService reviewStatisticService) {
         super("", DEF_USER_MENU_KB);
+        this.storageService = storageService;
+        this.reviewService = reviewService;
+        this.userService = userService;
+        this.studentReviewService = studentReviewService;
+        this.reviewStatisticService = reviewStatisticService;
     }
 
     @Override
@@ -78,6 +78,10 @@ public class UserMenu extends Step {
                     if (!students.isEmpty()) {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
                         storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
+                        // Для мониторинга за фармом RP обнуляется значение счетчика количества ревью без записавшихся студентов
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+                        reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
+                        reviewStatisticService.updateReviewStatistic(reviewStatistic);
                         //теперь мы просто сохраняем юзеру его значения
                         sendUserToNextStep(context, USER_START_REVIEW_HANGOUTS_LINK);
                     } else {
@@ -87,6 +91,10 @@ public class UserMenu extends Step {
                         User user = userService.getByVkId(vkId);
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                         userService.updateUser(user);
+                        // Для мониторинга за фармом RP увеличивается значение счетчика количества ревью без записавшихся студентов
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+                        reviewStatistic.setCountReviewsWithoutStudentsInRow(reviewStatistic.getCountReviewsWithoutStudentsInRow() + 1);
+                        reviewStatisticService.updateReviewStatistic(reviewStatistic);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
                     }
                 } else {
@@ -116,6 +124,20 @@ public class UserMenu extends Step {
             sendUserToNextStep(context, USER_PASS_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
+            // Если создание ревью для пользователя заблокировано, ему необходимо обратиться к админу для разблокировки
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+            if (reviewStatistic == null) { // Если статистика по пользователю еще не велась, необходимо начать ее
+                reviewStatisticService.startReviewStatisticForUser(vkId);
+                reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+            } else { // Если статистика уже велась, достаточно ее актуализировать
+                reviewStatisticService.updateReviewStatistic(reviewStatistic);
+            }
+            if (reviewStatistic.isReviewBlocked()) {
+                throw new ProcessInputException(String.format(
+                        "На Вашем аккаунте заблокирована возможность создавать ревью.\nПричина: %s\nОбратитесь к администрации проекта для разблокировки.",
+                        reviewStatistic.getLastBlockReason()
+                ));
+            }
             sendUserToNextStep(context, USER_TAKE_REVIEW_ADD_THEME);
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("/admin")) {
