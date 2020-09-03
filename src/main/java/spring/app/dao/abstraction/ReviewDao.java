@@ -12,6 +12,10 @@ public interface ReviewDao extends GenericDao<Long, Review> {
 
     List<Review> getOpenReviewsByReviewerVkId(Integer vkId, LocalDateTime periodStart, int reviewDuration);
 
+    Long getCountOpenReviewsByReviewerVkId(Integer reviewerVkId);
+
+    Long getCountCompletedReviewsByReviewerVkIdFromDate(Integer reviewerVkId, LocalDateTime startDateTime);
+
     @Transactional(propagation = Propagation.MANDATORY)
     void updateAllExpiredReviewsByDate(LocalDateTime localDateTime);
 
