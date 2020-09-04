@@ -2,6 +2,7 @@ package spring.app.service.abstraction;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
 import spring.app.model.User;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,8 @@ public interface UserService extends UserDetailsService {
     User getUserById(Long id);
 
     List<User> getAllUsers();
+
+    List<UserDto> getAllUsersDto();
 
     void updateUser(User user);
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/sidebar.css"/>
+    <link rel="stylesheet" href="/css/font-glyphicons.css">
+    <link rel="stylesheet" type="text/css" href="/css/reviewBot.css"/>
+
+    <!-- CSRF-protection -->
+    <meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+    <meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <title>Пользователи</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="sidenav">
+        <div>
+            <form action="/logout">
+                <button class="btn-block btn-outline-danger">
+                    LOGOUT
+                </button>
+            </form>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action"
+               href="/admin/feedback">Обратная связь</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action" href="/admin/theme">Темы</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action" href="/admin/users">Юзеры</a>
+        </div>
+
+        <div class="list-group list-group-flush">
+            <a class="active list-group-item list-group-item-action"
+               href="#">Вопросы</a>
+        </div>
+    </div>
+    <div class="main">
+        <nav class="navbar navbar-light bg-light">
+            <a class="navbar-brand"></a>
+                <a href="#add-user-modal" class="btn btn-primary" data-toggle="modal">Добавить пользователя</a>
+            <form class="input-group mb-3" id="search-form">
+                <input type="search" name="search" class="form-control col-md-2 offset-md-10 border border-primary" placeholder="Поиск...">
+                <div class="input-group-append">
+                    <button class="btn btn-primary input-group-append" type="submit">Поиск</button>
+                </div>
+            </form>
+        </nav>
+        <h1>Список всех пользователей</h1>
+        <!-- Контейнер для пользователей (таблица) -->
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>VK ID</th>
+                <th>Роль</th>
+                <th><!-- Кнопки для редактирования пользователя --></th>
+                <th><!-- Кнопки для удаления пользователя --></th>
+            </tr>
+            </thead>
+            <tbody id="users-table-body">
+                <!-- Список пользователей заполняется с помощью JS -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления пользователя -->
+<div id="add-user-modal" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавление пользователя</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-user-form">
+                    <div class="form-group">
+                        VK ID:
+                        <input class="col" type="text" name="vk-id" placeholder="Введите VK ID" required autocomplete="off">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/webjars/popper.js/1.16.0/umd/popper.min.js"></script>
+<script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+<!-- Custom JavaScript -->
+<script type="text/javascript" src="/js/userPageService.js"></script>
+
+</body>
+</html>
