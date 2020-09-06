@@ -16,18 +16,23 @@ public class UserDto {
     @NotNull(groups = UpdateGroup.class)
     private Long id;
 
-    @NotNull
+    @Null
     private Integer vkId;
 
     @NotNull
-    private String firstName;
+    private String stringVkId;
 
-    @NotNull
-    private String lastName;
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = UpdateGroup.class)
+    private String name;
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
     private String role;
+
+    @Null(groups = UpdateGroup.class)
+    @NotNull(groups = CreateGroup.class)
+    Integer startThemePosition;
 
     public UserDto() {
     }
@@ -39,8 +44,7 @@ public class UserDto {
                    String role) {
         this.id = id;
         this.vkId = vkId;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.name = firstName + " " + lastName;
         this.role = role;
     }
 }

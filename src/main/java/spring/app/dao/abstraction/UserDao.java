@@ -40,4 +40,6 @@ public interface UserDao extends GenericDao<Long, User> {
     List<User> getExaminersByFreeThemeId(Long freeThemeId) ;
 
     List<UserDto> getAllUsersDto();
+
+    UserDto getUserDtoById(Long userId);
 }

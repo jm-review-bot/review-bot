@@ -128,4 +128,12 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
         return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u ORDER BY u.lastName", UserDto.class)
                 .getResultList();
     }
+
+    @Override
+    public UserDto getUserDtoById(Long userId) {
+        List<UserDto> userDtoList = entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
+                .setParameter("user_id", userId)
+                .getResultList();
+        return userDtoList.size() > 0 ? userDtoList.get(0) : null;
+    }
 }

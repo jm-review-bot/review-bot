@@ -1,6 +1,5 @@
 $(function () {
-    let allUsersDto = getAllUsersDto()
-    buildUsersTable(allUsersDto)
+    buildUsersTable()
 })
 
 function getAllUsersDto() {
@@ -19,15 +18,33 @@ function getAllUsersDto() {
     return allUsersDto
 }
 
-function buildUsersTable(allUsersDto) {
+function getUserDtoById(userId) {
+    let userDto
+    $.ajax({
+        url: `/api/admin/user/${userId}`,
+        type: 'get',
+        async: false,
+        success: (data) => {
+            userDto = data
+        },
+        error: function () {
+            alert("При получении данных возникла непредвиденная ошибка...")
+        }
+    })
+    return userDto
+}
+
+function buildUsersTable() {
+
+    let allUsersDto = getAllUsersDto()
+
     let htmlContent = ''
     for (let i = 0; i < allUsersDto.length; i++) {
         let user = allUsersDto[i]
         let usersHtmlTable = `
             <tr>
                 <th>${user.id}</th>
-                <td>${user.firstName}</td>
-                <td>${user.lastName}</td>
+                <td>${user.name}</td>
                 <td>${user.vkId}</td>
                 <td>${user.role}</td>
                 <td>

@@ -50,7 +50,7 @@
     <div class="main">
         <nav class="navbar navbar-light bg-light">
             <a class="navbar-brand"></a>
-                <a href="#add-user-modal" class="btn btn-primary" data-toggle="modal">Добавить пользователя</a>
+            <button class="btn btn-primary" id="add-user-btn">Добавить пользователя</button>
             <form class="input-group mb-3" id="search-form">
                 <input type="search" name="search" class="form-control col-md-2 offset-md-10 border border-primary" placeholder="Поиск...">
                 <div class="input-group-append">
@@ -64,8 +64,7 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Имя</th>
-                <th>Фамилия</th>
+                <th>Имя и фамилия</th>
                 <th>VK ID</th>
                 <th>Роль</th>
                 <th><!-- Кнопки для редактирования пользователя --></th>
@@ -80,11 +79,11 @@
 </div>
 
 <!-- Модальное окно для добавления пользователя -->
-<div id="add-user-modal" class="modal fade">
+<div id="add-user-modal-window" class="modal fade">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Добавление пользователя</h5>
+                <h5 class="modal-title">Редактирование пользователя</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -93,7 +92,11 @@
                 <form id="add-user-form">
                     <div class="form-group">
                         VK ID:
-                        <input class="col" type="text" name="vk-id" placeholder="Введите VK ID" required autocomplete="off">
+                        <input class="col" type="text" name="vkId" placeholder="Введите VK ID" required autocomplete="off">
+                        Тема, с которой пользователь начнет сдавать ревью:
+                        <select class="form-control col">
+                            <!-- Список тем заполняется с помощью JS -->
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
@@ -105,6 +108,37 @@
     </div>
 </div>
 
+<!-- Модальное окно для редактирования пользователя -->
+<div id="edit-user-modal-window" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Добавление пользователя</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-user-form">
+                    <div class="form-group">
+                        Имя и фамилия (через "пробел"):
+                        <input class="col" type="text" name="name" placeholder="Введите имя и фамилию" required autocomplete="off">
+                        VK ID:
+                        <input class="col" type="text" name="vkId" placeholder="Введите VK ID" required autocomplete="off">
+                        Роль:
+                        <select class="form-control col">
+                            <!-- Список ролей заполняется с помощью JS -->
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script type="text/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
@@ -112,7 +146,13 @@
 <script type="text/javascript" src="/webjars/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
 <!-- Custom JavaScript -->
+<script type="text/javascript" src="/js/ajaxConfig.js"></script>
 <script type="text/javascript" src="/js/userPageService.js"></script>
+<script type="text/javascript" src="/js/rolePageService.js"></script>
+<script type="text/javascript" src="/js/themePageService.js"></script>
+<script type="text/javascript" src="/js/addUserService.js"></script>
+<script type="text/javascript" src="/js/deleteUserService.js"></script>
+<script type="text/javascript" src="/js/editUserService.js"></script>
 
 </body>
 </html>
