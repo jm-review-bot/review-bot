@@ -1,5 +1,8 @@
 package spring.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
+@Api(value = "Reviewer controller")
 public class AdminReviewerRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminReviewerRestController.class);
@@ -33,21 +37,24 @@ public class AdminReviewerRestController {
     }
 
     @GetMapping("/{themeId}/reviewer")
-    public ResponseEntity<List<ReviewerDto>> getAllReviewers (@PathVariable long themeId) {
+    @ApiOperation(value = "View list of all reviewer in the theme")
+    public ResponseEntity<List<ReviewerDto>> getAllReviewers (@ApiParam(value = "Theme Id", required = true)  @PathVariable long themeId) {
         List<ReviewerDto> examiners = userService.getExaminersInThisTheme(themeId);
         return ResponseEntity.ok(examiners);
     }
 
     @GetMapping("/{themeId}/reviewer/notInThisTheme")
-    public ResponseEntity<List<ReviewerDto>> getAllReviewersNotInThisTheme (@PathVariable long themeId) {
+    @ApiOperation(value = "View list of all 'free' reviewer")
+    public ResponseEntity<List<ReviewerDto>> getAllReviewersNotInThisTheme (@ApiParam(value = "Theme Id", required = true) @PathVariable long themeId) {
         List<ReviewerDto> examiners = userService.getExaminersInNotThisTheme(themeId);
         return ResponseEntity.ok(examiners);
     }
 
     @Validated(UpdateGroup.class)
     @PostMapping("/{themeId}/reviewer")
-    public ResponseEntity<ReviewerDto> create (@PathVariable long themeId ,
-                                               @RequestBody @Valid ReviewerDto reviewerDto) {
+    @ApiOperation(value = "Add a new reviewer in free theme")
+    public ResponseEntity<ReviewerDto> create (@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId ,
+                                               @ApiParam(value = "Reviewer model in DTO", required = true) @RequestBody @Valid ReviewerDto reviewerDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User reviewer = userService.getUserById(reviewerDto.getId());
         userService.addNewReviewer(themeId , reviewerDto.getId());
@@ -58,8 +65,9 @@ public class AdminReviewerRestController {
     }
 
     @DeleteMapping("/{themeId}/reviewer/{reviewerId}")
-    public ResponseEntity deleteReviewer(@PathVariable long themeId ,
-                                         @PathVariable long reviewerId) {
+    @ApiOperation(value = "Remove the reviewer from free theme")
+    public ResponseEntity deleteReviewer(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId ,
+                                         @ApiParam(value = "Reviewer ID", required = true) @PathVariable long reviewerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User reviewer = userService.getUserById(reviewerId);
         Theme theme = themeService.getThemeById(themeId);
