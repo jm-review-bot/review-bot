@@ -11,6 +11,7 @@ import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -77,10 +78,10 @@ public class AdminSetThemeAddedUser extends Step {
                 .collect(toList());
 
         if (themePositionsList.contains(userInput)) {
+            Integer vkId = context.getVkId();
             // Если выбрана не первая тема, то создаем фейковые ревью
             if (!userInput.equals("1")) {
                 // Получение пользователей
-                int vkId = context.getVkId();
                 long addedUserId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0));
                 int themePosition = Integer.parseInt(userInput);
                 User addedUser = userService.getUserById(addedUserId);
@@ -99,6 +100,15 @@ public class AdminSetThemeAddedUser extends Step {
                 addedUser.setReviewPoint(reviewCost);
                 userService.updateUser(addedUser);
             }
+            User addedUser = userService.getUserById(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0)));
+            Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
+            String infoMessage = String.format(
+                    "Пользователь %s %s был успешно добавлен в базу и начнет сдавать ревью с темы \"%s\".",
+                    addedUser.getFirstName(),
+                    addedUser.getLastName(),
+                    selectedTheme.getTitle()
+            );
+            storageService.updateUserStorage(vkId, ADMIN_MENU, Arrays.asList(infoMessage));
             sendUserToNextStep(context, ADMIN_MENU);
         } else {
             throw new ProcessInputException("Введена неверная команда...\n\n Введите цифру, соответствующую теме рьвью.");
