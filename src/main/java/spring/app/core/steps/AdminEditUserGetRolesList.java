@@ -56,15 +56,24 @@ public class AdminEditUserGetRolesList extends Step {
             Long selectedRoleId = Long.parseLong(roleIds.get(rolePosition - 1));
             Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
             User student = userService.getUserById(studentId);
-            if (student.getRole().getId() == selectedRoleId) {
+            if (student.getRole().getId().equals(selectedRoleId)) {
                 throw new ProcessInputException("Пользователь уже имеет выбранную роль");
             } else {
-                student.setRole(roleService.getRoleById(selectedRoleId));
-                userService.updateUser(student);
+                User user = context.getUser();
+                if (user.getId().equals(studentId)) { // Если админ изменяет роль самому себе
+                    user.setRole(roleService.getRoleById(selectedRoleId));
+                    userService.updateUser(user);
+                    storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
+                    storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
+                    sendUserToNextStep(context, START);
+                } else {
+                    student.setRole(roleService.getRoleById(selectedRoleId));
+                    userService.updateUser(student);
+                    storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
+                    sendUserToNextStep(context, ADMIN_EDIT_USER);
+                }
                 logger.info("Админ (vkId={}) изменил роль пользователю (vkId={})",
                         vkId, student.getVkId());
-                storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
-                sendUserToNextStep(context, ADMIN_EDIT_USER);
             }
         } else if (currentInput.equalsIgnoreCase("назад")) {
             storageService.removeUserStorage(vkId, ADMIN_EDIT_USER_GET_ROLES_LIST);
