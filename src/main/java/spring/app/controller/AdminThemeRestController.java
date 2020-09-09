@@ -92,7 +92,8 @@ public class AdminThemeRestController {
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
     @ApiOperation(value = "Update the theme")
-    public ResponseEntity updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId, @ApiParam(value = "Theme model in DTO", required = true) @RequestBody ThemeDto themeDto) {
+    public ResponseEntity updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId,
+                                      @ApiParam(value = "Theme model in DTO", required = true) @RequestBody ThemeDto themeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme themeById = themeService.getThemeById(themeId);
         Theme updatedTheme=null;
