@@ -69,7 +69,8 @@ public class AdminQuestionThemeRestController {
 
     @ApiOperation(value = "Get the question in the theme")
     @GetMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity<QuestionDto> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
+    public ResponseEntity<QuestionDto> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId,
+                                                      @ApiParam(value = "Theme ID", required = true) @PathVariable long themeId) {
         return ResponseEntity.ok(questionService.getQuestionDtoById(questionId));
     }
 
@@ -109,7 +110,8 @@ public class AdminQuestionThemeRestController {
     }
     @ApiOperation(value = "Move the question up in the theme")
     @PatchMapping("/{themeId}/question/{questionId}/position/up")
-    public ResponseEntity<?> moveThemeQuestionPositionUp(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId, @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
+    public ResponseEntity<?> moveThemeQuestionPositionUp(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+                                                         @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         Theme theme = themeService.getThemeById(themeId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
@@ -125,7 +127,8 @@ public class AdminQuestionThemeRestController {
 
     @ApiOperation(value = "Move the question up in the theme")
     @PatchMapping("/{themeId}/question/{questionId}/position/down")
-    public ResponseEntity<?> moveThemeQuestionPositionDown(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId, @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
+    public ResponseEntity<?> moveThemeQuestionPositionDown(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+                                                           @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         Theme theme = themeService.getThemeById(themeId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
