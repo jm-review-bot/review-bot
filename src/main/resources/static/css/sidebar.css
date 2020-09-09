@@ -1,3 +1,11 @@
+.top{
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    padding: 0px;
+}
+
 .sidenav {
     height: 100%;
     width: 160px;
@@ -7,8 +15,11 @@
     left: 0;
     background-color: #ffffff;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding-top: 8px;
+    margin-top: 54px;
+    /*margin-left: 15px;*/
 }
+
 
 .sidenav a {
     padding: 6px 8px 6px 16px;
@@ -23,6 +34,7 @@
 }
 
 .main {
+    margin-top: 54px;
     margin-left: 160px;
     padding: 0px 10px;
 }
