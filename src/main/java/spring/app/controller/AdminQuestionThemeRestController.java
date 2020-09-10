@@ -69,8 +69,7 @@ public class AdminQuestionThemeRestController {
 
     @ApiOperation(value = "Get the question in the theme")
     @GetMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity<QuestionDto> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId,
-                                                      @ApiParam(value = "Theme ID", required = true) @PathVariable long themeId) {
+    public ResponseEntity<QuestionDto> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         return ResponseEntity.ok(questionService.getQuestionDtoById(questionId));
     }
 
