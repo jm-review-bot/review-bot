@@ -1,6 +1,8 @@
 package spring.app.dto;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 
@@ -13,17 +15,25 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@ApiModel(description = "All details about the Question in DTO")
 public class QuestionDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
+    @ApiModelProperty(notes = "Question id")
     private Long id;
 
     @NotBlank
+    @ApiModelProperty(notes = "Question")
     private String question;
 
+    @ApiModelProperty(notes = "Answer")
     private String answer;
+
+    @ApiModelProperty(notes = "Question position")
     private Integer position;
+
+    @ApiModelProperty(notes = "Question weight")
     private Integer weight;
 
     public QuestionDto() {

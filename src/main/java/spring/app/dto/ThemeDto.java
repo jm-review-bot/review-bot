@@ -1,5 +1,7 @@
 package spring.app.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 
@@ -13,27 +15,34 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@ApiModel(description = "All details about the theme in DTO")
 public class ThemeDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
+    @ApiModelProperty(notes = "Theme id")
     private Long id;
 
     @NotBlank
+    @ApiModelProperty(notes = "Theme title")
     private String title;
 
     @NotNull
+    @ApiModelProperty(notes = "Theme critical weight")
     private Integer criticalWeight;
 
     @Null(groups = CreateGroup.class)
     @Positive(groups = UpdateGroup.class)
+    @ApiModelProperty(notes = "Theme position")
     private Integer position;
 
     @NotNull
+    @ApiModelProperty(notes = "Review point")
     private Integer reviewPoint;
 
     @Null(groups=UpdateGroup.class)
     @NotNull(groups=CreateGroup.class)
+    @ApiModelProperty(notes = "Theme type")
     private String type;
 
     public ThemeDto() {
