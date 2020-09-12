@@ -1,5 +1,8 @@
 package spring.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import spring.app.service.abstraction.*;
@@ -8,6 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/search")
+@Api(value = "Search controller")
 public class AdminSearchRestController {
 
     private final ThemeService themeService;
@@ -20,8 +24,9 @@ public class AdminSearchRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<?>> searchThemes(@RequestParam("searchString") String searchString,
-                                                @RequestParam("entity") String entity) {
+    @ApiOperation(value = "Search themes")
+    public ResponseEntity<List<?>> searchThemes(@ApiParam(value = "Search string", required = false) @RequestParam("searchString") String searchString,
+                                                @ApiParam(value = "Entity", required = false) @RequestParam("entity") String entity) {
         switch (entity) {
             case "theme":
                 return ResponseEntity.ok(themeService.themesSearch(searchString));

@@ -1,5 +1,8 @@
 package spring.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
+@Api(value = "Theme controller")
 public class AdminThemeRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
@@ -37,12 +41,14 @@ public class AdminThemeRestController {
     }
 
     @GetMapping
+    @ApiOperation(value = "View a list of all themes")
     public ResponseEntity<List<ThemeDto>> getAllThemes() {
         return ResponseEntity.ok(themeService.getAllThemesDto());
     }
 
     @GetMapping("/{themeId}")
-    public ResponseEntity<ThemeDto> getThemeById(@PathVariable Long themeId) {
+    @ApiOperation(value = "Get the theme")
+    public ResponseEntity<ThemeDto> getThemeById(@ApiParam(value = "Theme Id", required = true) @PathVariable Long themeId) {
         ThemeDto themeDtoById = themeService.getThemeDtoById(themeId);
         if (themeDtoById == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -52,7 +58,8 @@ public class AdminThemeRestController {
 
     @Validated(CreateGroup.class)
     @PostMapping
-    public ResponseEntity<ThemeDto> createTheme(@RequestBody @Valid ThemeDto themeDto) {
+    @ApiOperation(value = "Create a new theme")
+    public ResponseEntity<ThemeDto> createTheme(@ApiParam(value = "Theme model in DTO", required = true) @RequestBody @Valid ThemeDto themeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme;
         ThemeDto addedThemeDto = null;
@@ -71,7 +78,8 @@ public class AdminThemeRestController {
     }
 
     @DeleteMapping("/{themeId}")
-    public ResponseEntity deleteTheme(@PathVariable Long themeId) {
+    @ApiOperation(value = "Delete the theme")
+    public ResponseEntity deleteTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme = themeService.getThemeById(themeId);
         themeService.deleteThemeById(themeId);
@@ -83,7 +91,9 @@ public class AdminThemeRestController {
 
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
-    public ResponseEntity updateTheme(@PathVariable Long themeId, @RequestBody ThemeDto themeDto) {
+    @ApiOperation(value = "Update the theme")
+    public ResponseEntity updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId,
+                                      @ApiParam(value = "Theme model in DTO", required = true) @RequestBody ThemeDto themeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme themeById = themeService.getThemeById(themeId);
         Theme updatedTheme=null;
@@ -112,7 +122,8 @@ public class AdminThemeRestController {
      * @param themeId - ID перемещаемой темы
      * */
     @PatchMapping("/{themeId}/position/up")
-    public ResponseEntity<String> moveThemePositionUp (@PathVariable String themeId) {
+    @ApiOperation(value = "Move the theme top")
+    public ResponseEntity<String> moveThemePositionUp (@ApiParam(value = "Theme id", required = true) @PathVariable String themeId) {
         try {
             Theme theme = themeService.getThemeById(Long.parseLong(themeId));
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -133,7 +144,8 @@ public class AdminThemeRestController {
      * @param themeId - ID перемещаемой темы
      * */
     @PatchMapping("/{themeId}/position/down")
-    public ResponseEntity<String> moveThemePositionDown(@PathVariable String themeId) {
+    @ApiOperation(value = "Move the theme down")
+    public ResponseEntity<String> moveThemePositionDown(@ApiParam(value = "Theme id", required = true) @PathVariable String themeId) {
         try {
             Theme theme = themeService.getThemeById(Long.parseLong(themeId));
             User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
