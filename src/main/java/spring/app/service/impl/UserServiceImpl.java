@@ -12,7 +12,6 @@ import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
 import spring.app.dto.UserDto;
 import spring.app.exceptions.IncorrectVkIdsException;
-import spring.app.exceptions.ProcessInputException;
 import spring.app.model.FreeTheme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
@@ -21,11 +20,7 @@ import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-
-import static spring.app.core.StepSelector.ADMIN_ADD_USER;
-import static spring.app.core.StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER;
 
 @Service
 public class UserServiceImpl implements UserService {

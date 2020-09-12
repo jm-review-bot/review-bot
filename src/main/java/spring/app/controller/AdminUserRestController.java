@@ -5,8 +5,11 @@ import com.vk.api.sdk.exceptions.ClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.UserDto;
@@ -25,6 +28,8 @@ import java.util.List;
 @RequestMapping("/api/admin/user")
 @Api(value = "Users controller")
 public class AdminUserRestController {
+
+    private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
     private final UserService userService;
     private final StudentReviewService studentReviewService;
@@ -68,6 +73,12 @@ public class AdminUserRestController {
             if (startThemePosition > 1) {
                 studentReviewService.setPassedThisAndPreviousThemesForStudent(user.getId(), themeService.getByPosition(startThemePosition - 1).getId());
             }
+
+            // Логирование
+            User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            logger.info("Админ (vkId={}) добавил пользователя (ID={})" ,
+                    loggedInUser.getVkId(), user.getVkId());
+
             return ResponseEntity.noContent().build();
         } catch (ClientException | ApiException | IncorrectVkIdsException e) {
             return ResponseEntity.notFound().build();
@@ -76,16 +87,22 @@ public class AdminUserRestController {
 
     @ApiOperation(value = "Delete user by ID")
     @DeleteMapping("/{userId}")
-    public ResponseEntity<UserDto> deleteUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
-        UserDto userDto = userService.getUserDtoById(userId);
+    public ResponseEntity<?> deleteUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
+        User user = userService.getUserById(userId);
         userService.deleteUserById(userId);
-        return ResponseEntity.ok(userDto);
+
+        // Логирование
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("Админ (vkId={}) удалил пользователя (ID={})" ,
+                loggedInUser.getVkId(), user.getVkId());
+
+        return ResponseEntity.ok().build();
     }
 
     @ApiOperation(value = "Edit user")
     @Validated(UpdateGroup.class)
     @PostMapping("/{userId}")
-    public ResponseEntity<UserDto> editUser(@ApiParam(value = "User DTO", required = true) @RequestBody @Valid UserDto userDto,
+    public ResponseEntity<?> editUser(@ApiParam(value = "User DTO", required = true) @RequestBody @Valid UserDto userDto,
                                          @ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
 
         String stringVkId = userDto.getStringVkId();
@@ -99,7 +116,7 @@ public class AdminUserRestController {
             userDto.setVkId(Integer.parseInt(stringVkId));
         }
 
-        String[] name = StringParser.toWordsArray(userDto.getName());
+        String[] name = userDto.getName().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
         if (name.length != 2) { // Имя и фамилия должны быть разделены пробелом
             return ResponseEntity.badRequest().build();
         }
@@ -111,6 +128,11 @@ public class AdminUserRestController {
         user.setRole(roleService.getRoleByName(userDto.getRole()));
         userService.updateUser(user);
 
-        return ResponseEntity.ok(userDto);
+        // Логирование
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("Админ (vkId={}) изменил пользователя (ID={})" ,
+                loggedInUser.getVkId(), user.getVkId());
+
+        return ResponseEntity.ok().build();
     }
 }
