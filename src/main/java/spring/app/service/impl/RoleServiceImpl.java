@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.RoleDao;
+import spring.app.dto.RoleDto;
 import spring.app.model.Role;
 import spring.app.service.abstraction.RoleService;
 
@@ -50,5 +51,10 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role getRoleByName(String roleName) {
         return roleDao.getRoleByName(roleName);
+    }
+
+    @Override
+    public List<RoleDto> getAllRolesDto() {
+        return roleDao.getAllRolesDto();
     }
 }

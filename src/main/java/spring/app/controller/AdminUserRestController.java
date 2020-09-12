@@ -2,6 +2,9 @@ package spring.app.controller;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.validation.annotation.Validated;
@@ -20,6 +23,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/user")
+@Api(value = "Users controller")
 public class AdminUserRestController {
 
     private final UserService userService;
@@ -40,19 +44,22 @@ public class AdminUserRestController {
         this.vkService = vkService;
     }
 
+    @ApiOperation(value = "Get all users list")
     @GetMapping
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsersDto());
     }
 
+    @ApiOperation(value = "Get user by ID")
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long userId) {
+    public ResponseEntity<UserDto> getUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserDtoById(userId));
     }
 
+    @ApiOperation(value = "Add new user")
     @Validated(CreateGroup.class)
     @PutMapping
-    public ResponseEntity<User> addNewUser(@RequestBody @Valid UserDto newUserDto) {
+    public ResponseEntity<?> addNewUser(@ApiParam(value = "User DTO", required = true) @RequestBody @Valid UserDto newUserDto) {
         String vkId = newUserDto.getStringVkId();
         try {
             User user = userService.addUserByVkId(vkId);
@@ -67,16 +74,19 @@ public class AdminUserRestController {
         }
     }
 
+    @ApiOperation(value = "Delete user by ID")
     @DeleteMapping("/{userId}")
-    public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<UserDto> deleteUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
+        UserDto userDto = userService.getUserDtoById(userId);
         userService.deleteUserById(userId);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(userDto);
     }
 
+    @ApiOperation(value = "Edit user")
     @Validated(UpdateGroup.class)
     @PostMapping("/{userId}")
-    public ResponseEntity<User> editUser(@RequestBody @Valid UserDto userDto,
-                                         @PathVariable Long userId) {
+    public ResponseEntity<UserDto> editUser(@ApiParam(value = "User DTO", required = true) @RequestBody @Valid UserDto userDto,
+                                         @ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
 
         String stringVkId = userDto.getStringVkId();
         if (!StringParser.isNumeric(stringVkId)) { // Если VK ID строковый, его необходимо преобразовать в числовой
@@ -101,6 +111,6 @@ public class AdminUserRestController {
         user.setRole(roleService.getRoleByName(userDto.getRole()));
         userService.updateUser(user);
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(userDto);
     }
 }
