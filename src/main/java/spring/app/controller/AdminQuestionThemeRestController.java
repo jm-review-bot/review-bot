@@ -1,5 +1,8 @@
 package spring.app.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import java.util.List;
 @Validated
 @RestController
 @RequestMapping("/api/admin/theme")
+@Api(value = "Themes question controller")
 public class AdminQuestionThemeRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminQuestionThemeRestController.class);
@@ -38,15 +42,17 @@ public class AdminQuestionThemeRestController {
         this.themeService = themeService;
     }
 
+    @ApiOperation(value = "View a list of all question in theme")
     @GetMapping("/{themeId}/question")
-    public ResponseEntity<List<QuestionDto>> getAllQuestionDto(@PathVariable Long themeId) {
+    public ResponseEntity<List<QuestionDto>> getAllQuestionDto(@ApiParam(value = "Theme Id", required = true) @PathVariable Long themeId) {
         return ResponseEntity.ok(questionService.getAllQuestionDtoByTheme(themeId));
     }
 
+    @ApiOperation(value = "Add new question for theme")
     @Validated(CreateGroup.class)
     @PostMapping("/{themeId}/question")
-    public ResponseEntity<QuestionDto> createQuestion(@PathVariable long themeId,
-                                                      @RequestBody @Valid QuestionDto questionDto) {
+    public ResponseEntity<QuestionDto> createQuestion(@ApiParam(value = "Theme Id", required = true) @PathVariable long themeId,
+                                                      @ApiParam(value = "Question object in DTO", required = true) @RequestBody @Valid QuestionDto questionDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme = themeService.getThemeById(themeId);
         if (!(theme instanceof FixedTheme)) {
@@ -61,16 +67,18 @@ public class AdminQuestionThemeRestController {
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.questionEntityToQuestionDto(question));
     }
 
+    @ApiOperation(value = "Get the question in the theme")
     @GetMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity<QuestionDto> getQuestionDto(@PathVariable Long questionId) {
+    public ResponseEntity<QuestionDto> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         return ResponseEntity.ok(questionService.getQuestionDtoById(questionId));
     }
 
+    @ApiOperation(value = "Update the question")
     @Validated(UpdateGroup.class)
     @PostMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity updateQuestion(@PathVariable long themeId,
-                                         @PathVariable Long questionId,
-                                         @RequestBody @Valid QuestionDto questionDto) {
+    public ResponseEntity updateQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId,
+                                         @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId,
+                                         @ApiParam(value = "Question object in DTO", required = true) @RequestBody @Valid QuestionDto questionDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Question question = questionService.getQuestionById(questionId);
         Theme theme = themeService.getThemeById(themeId);
@@ -86,9 +94,10 @@ public class AdminQuestionThemeRestController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @ApiOperation(value = "Delete exist question")
     @DeleteMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity deleteQuestion(@PathVariable Long themeId,
-                                         @PathVariable Long questionId) {
+    public ResponseEntity deleteQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+                                         @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Theme theme = themeService.getThemeById(themeId);
         Question question = questionService.getQuestionById(questionId);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -98,9 +107,10 @@ public class AdminQuestionThemeRestController {
                 user.getVkId() , questionId , question.getQuestion() , themeId , theme.getTitle());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
+    @ApiOperation(value = "Move the question up in the theme")
     @PatchMapping("/{themeId}/question/{questionId}/position/up")
-    public ResponseEntity<?> moveThemeQuestionPositionUp(@PathVariable Long themeId, @PathVariable Long questionId) {
+    public ResponseEntity<?> moveThemeQuestionPositionUp(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+                                                         @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         Theme theme = themeService.getThemeById(themeId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, -1);
@@ -114,8 +124,10 @@ public class AdminQuestionThemeRestController {
         return isChanged ? ResponseEntity.ok("Вопрос перемещён на позицию выше") : ResponseEntity.badRequest().build();
     }
 
+    @ApiOperation(value = "Move the question up in the theme")
     @PatchMapping("/{themeId}/question/{questionId}/position/down")
-    public ResponseEntity<?> moveThemeQuestionPositionDown(@PathVariable Long themeId, @PathVariable Long questionId) {
+    public ResponseEntity<?> moveThemeQuestionPositionDown(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+                                                           @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Question question = questionService.getQuestionById(questionId);
         Theme theme = themeService.getThemeById(themeId);
         boolean isChanged = questionService.changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(themeId, questionId, 1);
