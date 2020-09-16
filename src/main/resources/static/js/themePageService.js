@@ -21,7 +21,7 @@ function buildThemesAccordion(allThemesDto) {
     for (let i = 0; i < allThemesDto.length; i++) {
         let theme = allThemesDto[i]
         let themeHtmlAccordion = `
-            <div class="card mb-4 border-bottom">
+            <div class="card mb-4">
                 <div class="card-header border-bottom bg-secondary">
                     <h4 class="mb-0">
                         <div class="row">
