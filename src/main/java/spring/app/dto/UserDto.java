@@ -43,9 +43,6 @@ public class UserDto {
     @ApiModelProperty(notes = "Start theme position for new user.")
     Integer startThemePosition;
 
-    public UserDto() {
-    }
-
     public UserDto(Long id,
                    Integer vkId,
                    String firstName,
