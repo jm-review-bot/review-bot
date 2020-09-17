@@ -68,6 +68,9 @@ public class AdminUserRestController {
         String vkId = newUserDto.getStringVkId();
         try {
             User user = userService.addUserByVkId(vkId);
+            if (user == null) { // Пользователь уже есть в базе и еще раз добавлен не был
+                return ResponseEntity.badRequest().build();
+            }
             // Новому пользователю устанавливается тема, с которой он может начинать сдавать ревью
             Integer startThemePosition = newUserDto.getStartThemePosition();
             if (startThemePosition > 1) {

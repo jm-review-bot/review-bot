@@ -23,23 +23,33 @@ $(document).on('click', '#add-user-btn', function () {
 $(document).on('submit', '#add-user-form', function (event) {
     event.preventDefault()
 
-    let newUserDto = {
-        stringVkId : this.vkId.value,
-        startThemePosition : $('#add-user-form select :selected')[0].value
-    }
+    let startThemePosition = $('#add-user-form select :selected')[0].value
+    if (startThemePosition == 0) {
+        alert('Не выбрана тема...')
+    } else {
 
-    $.ajax({
-        url: `/api/admin/user`,
-        type: 'put',
-        contentType: 'application/json',
-        data:  JSON.stringify(newUserDto),
-        success: function() {
-            $('#add-user-modal-window').modal('hide')
-            buildUsersTable()
-            $('#add-user-form')[0].reset()
-        },
-        error: function () {
-            alert('Возникла ошибка при добавлении нового пользователя')
+        let newUserDto = {
+            stringVkId: this.vkId.value,
+            startThemePosition: startThemePosition
         }
-    })
+
+        $.ajax({
+            url: `/api/admin/user`,
+            type: 'put',
+            contentType: 'application/json',
+            data: JSON.stringify(newUserDto),
+            success: function () {
+                $('#add-user-modal-window').modal('hide')
+                buildUsersTable()
+                $('#add-user-form')[0].reset()
+            },
+            error: function (data) {
+                if (data.status == 400) {
+                    alert('Пользователь уже есть в базе')
+                } else {
+                    alert('Возникла ошибка при добавлении нового пользователя')
+                }
+            }
+        })
+    }
 })

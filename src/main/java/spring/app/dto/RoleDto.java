@@ -24,6 +24,9 @@ public class RoleDto {
     @ApiModelProperty(notes = "Role name")
     private String name;
 
+    public RoleDto() {
+    }
+
     public RoleDto(@Null(groups = CreateGroup.class) @NotNull(groups = UpdateGroup.class) Long id, @NotNull String name) {
         this.id = id;
         this.name = name;

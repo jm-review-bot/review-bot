@@ -163,6 +163,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User addUserByVkId(String stringVkId) throws ClientException, ApiException, IncorrectVkIdsException {
         User newUser = vkService.newUserFromVk(stringVkId);
+        boolean test = !userDao.isExistByVkId(newUser.getVkId());
         if (!userDao.isExistByVkId(newUser.getVkId())) { // Проверка на тот факт, что пользователя еще нет в БД
             newUser.setRole(roleDao.getRoleByName("USER"));
             userDao.save(newUser);
