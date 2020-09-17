@@ -42,7 +42,7 @@ function buildThemesAccordion(allThemesDto) {
                         </div>
                     </h4>
                 </div>
-                <div id="theme-${theme.id}" class="collapse" aria-labelledby="card-header-theme-${theme.id}">
+                <div id="theme-${theme.id}" class="collapse" aria-labelledby="card-header-theme-${theme.id}" data-id="${theme.id}">
                     <div class="card-body">
                         <div id="card-theme-${theme.id}" class="card border-white">
                         <!--Здесь располагаются вопросы темы или список проверяющих-->
@@ -54,31 +54,49 @@ function buildThemesAccordion(allThemesDto) {
         htmlContent += themeHtmlAccordion;
     }
     $('#theme-accordion').html(htmlContent)
-    $('.move-down-theme').click(function () {
-            let themeId = this.dataset.id;
-            let url = "/api/admin/theme/"+themeId+"/position/down";
-            $.ajax({
-                type : 'PATCH',
-                url: url,
-                success: function() {
-                    buildThemesAccordion(getAllThemesDto());
-                }
-            });
-        }
-    );
-    $('.move-up-theme').click(function () {
-            let themeId = this.dataset.id;
-            let url = "/api/admin/theme/"+themeId+"/position/up";
-            $.ajax({
-                type : 'PATCH',
-                url: url,
-                success: function() {
-                    buildThemesAccordion(getAllThemesDto());
-                }
-            });
-        }
-    );
 }
+
+$(document).on('click', '.move-down-theme', function () {
+
+    // При изменении позиции темы необходимо запоминать темы, которые раскрыты пользователем
+    let expandedThemes = $('#theme-accordion .collapse.show')
+
+    let themeId = this.dataset.id;
+    let url = `/api/admin/theme/${themeId}/position/down`;
+    $.ajax({
+        type : 'PATCH',
+        url: url,
+        success: function() {
+            buildThemesAccordion(getAllThemesDto());
+            if (expandedThemes.length > 0) { // Необходимо развернуть темы, которые были развернуты до смещения позиции
+                for (let i = 0; i < expandedThemes.length; i++) {
+                    $(`div .theme-expand[data-id=${expandedThemes[i].dataset.id}]`).click()
+                }
+            }
+        }
+    });
+});
+
+$(document).on('click', '.move-up-theme', function () {
+
+    // При изменении позиции темы необходимо запоминать темы, которые раскрыты пользователем
+    let expandedThemes = $('#theme-accordion .collapse.show')
+
+    let themeId = this.dataset.id;
+    let url = `/api/admin/theme/${themeId}/position/up`;
+    $.ajax({
+        type : 'PATCH',
+        url: url,
+        success: function() {
+            buildThemesAccordion(getAllThemesDto());
+            if (expandedThemes.length > 0) { // Необходимо развернуть темы, которые были развернуты до смещения позиции
+                for (let i = 0; i < expandedThemes.length; i++) {
+                    $(`div .theme-expand[data-id=${expandedThemes[i].dataset.id}]`).click()
+                }
+            }
+        }
+    });
+});
 
 $(document).on('click', '.theme-expand', function () {
     let themeId = this.dataset.id
