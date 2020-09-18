@@ -5,8 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractDao<PK extends Serializable, T> {
@@ -54,5 +56,14 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         for (T entity : entities) {
             entityManager.remove(entity);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByIds(List<Long> ids) {
+        String genericClassName = persistentClass.toGenericString();
+        genericClassName = genericClassName.substring(genericClassName.lastIndexOf('.') + 1);
+        Query query = entityManager.createQuery("FROM " + genericClassName + " e WHERE e.id IN :ids");
+        query.setParameter("ids", ids);
+        return query.getResultList();
     }
 }
