@@ -5,10 +5,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractDao<PK extends Serializable, T> {
@@ -23,7 +21,7 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         this.persistentClass = persistentClass;
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void save(T entity) {
         entityManager.persist(entity);
     }
@@ -32,12 +30,12 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return entityManager.find(persistentClass, id);
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void update(T entity) {
         entityManager.merge(entity);
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void deleteById(PK id) {
         T entity = entityManager.find(persistentClass, id);
         entityManager.remove(entity);
@@ -62,8 +60,9 @@ public abstract class AbstractDao<PK extends Serializable, T> {
     public List<T> getAllByIds(List<Long> ids) {
         String genericClassName = persistentClass.toGenericString();
         genericClassName = genericClassName.substring(genericClassName.lastIndexOf('.') + 1);
-        Query query = entityManager.createQuery("FROM " + genericClassName + " e WHERE e.id IN :ids");
-        query.setParameter("ids", ids);
-        return query.getResultList();
+        return entityManager.createQuery("FROM " + genericClassName + " e WHERE e.id IN :ids")
+                .setParameter("ids", ids)
+                .getResultList();
     }
+
 }
