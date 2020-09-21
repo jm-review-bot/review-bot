@@ -15,10 +15,14 @@ public abstract class AbstractDao<PK extends Serializable, T> {
     EntityManager entityManager;
 
     private final Class<T> persistentClass;
+    private String genericClassName;
+
 
     @SuppressWarnings("unchecked")
     AbstractDao(Class<T> persistentClass) {
         this.persistentClass = persistentClass;
+        this.genericClassName = persistentClass.toGenericString();
+        genericClassName = genericClassName.substring(genericClassName.lastIndexOf('.') + 1);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
@@ -58,8 +62,6 @@ public abstract class AbstractDao<PK extends Serializable, T> {
 
     @SuppressWarnings("unchecked")
     public List<T> getAllByIds(List<Long> ids) {
-        String genericClassName = persistentClass.toGenericString();
-        genericClassName = genericClassName.substring(genericClassName.lastIndexOf('.') + 1);
         return entityManager.createQuery("FROM " + genericClassName + " e WHERE e.id IN :ids")
                 .setParameter("ids", ids)
                 .getResultList();
