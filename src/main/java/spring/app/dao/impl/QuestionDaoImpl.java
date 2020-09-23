@@ -4,11 +4,16 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.QuestionDao;
 import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
+import spring.app.util.SingleResultHelper;
 
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class QuestionDaoImpl extends AbstractDao<Long, Question> implements QuestionDao {
+
+    private final SingleResultHelper<Question> singleResultHelper = new SingleResultHelper<>();
 
     public QuestionDaoImpl() {
         super(Question.class);
@@ -22,10 +27,10 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
     }
 
     @Override
-    public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
-        return entityManager.createQuery("select q FROM Question q JOIN StudentReviewAnswer sra ON sra.question.id = q.id WHERE sra.id = :student_review_answer_id", Question.class)
-                .setParameter("student_review_answer_id", studentReviewAnswerId)
-                .getSingleResult();
+    public Optional<Question> getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
+        Query query = entityManager.createQuery("select q FROM Question q JOIN StudentReviewAnswer sra ON sra.question.id = q.id WHERE sra.id = :student_review_answer_id", Question.class)
+                .setParameter("student_review_answer_id", studentReviewAnswerId);
+        return singleResultHelper.singleResult(query);
     }
 
     @Override

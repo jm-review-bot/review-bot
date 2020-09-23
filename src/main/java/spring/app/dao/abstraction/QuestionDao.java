@@ -6,12 +6,13 @@ import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionDao extends GenericDao<Long, Question> {
 
     List<Question> getQuestionsByReviewId(Long reviewId);
 
-    Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
+    Optional<Question> getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
 
     List<Question> getQuestionsByThemeId(Long themeId);
 

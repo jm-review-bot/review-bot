@@ -9,6 +9,7 @@ import spring.app.model.Question;
 import spring.app.service.abstraction.QuestionService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -80,7 +81,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
+    public Optional<Question> getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
         return questionDao.getQuestionByStudentReviewAnswerId(studentReviewAnswerId);
     }
 
