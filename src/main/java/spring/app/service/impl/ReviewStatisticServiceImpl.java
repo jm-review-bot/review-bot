@@ -15,6 +15,7 @@ import spring.app.service.abstraction.ReviewStatisticService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class ReviewStatisticServiceImpl implements ReviewStatisticService {
@@ -97,19 +98,20 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
     }
 
     @Override
-    public ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId) {
+    public Optional<ReviewStatistic> getReviewStatisticByUserVkId(Integer userVkId) {
         return reviewStatisticDao.getReviewStatisticByUserVkId(userVkId);
     }
 
     @Override
-    public ReviewStatistic getReviewStatisticByUserId(Long userId) {
+    public Optional<ReviewStatistic> getReviewStatisticByUserId(Long userId) {
         return reviewStatisticDao.getReviewStatisticByUserId(userId);
     }
 
     @Transactional
     @Override
     public void unblockTakingReviewForUser(Long userId) {
-        ReviewStatistic reviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);
+        Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);
+        ReviewStatistic reviewStatistic = optionalReviewStatistic.orElseGet(ReviewStatistic::new);
         reviewStatistic.setCountReviewsWithoutStudentsInRow((long) 0);
         reviewStatistic.setReviewBlocked(false);
         reviewStatisticDao.update(reviewStatistic);
