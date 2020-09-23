@@ -3,6 +3,7 @@ package spring.app.service.abstraction;
 import spring.app.model.Role;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface RoleService {
@@ -17,5 +18,5 @@ public interface RoleService {
 
 	void deleteRoleById(Long id);
 
-	Role getRoleByName(String roleName);
+	Optional<Role> getRoleByName(String roleName);
 }
