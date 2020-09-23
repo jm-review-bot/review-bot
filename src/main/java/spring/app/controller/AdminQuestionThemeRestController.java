@@ -23,6 +23,7 @@ import spring.app.service.abstraction.ThemeService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -69,7 +70,7 @@ public class AdminQuestionThemeRestController {
 
     @ApiOperation(value = "Get the question in the theme")
     @GetMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity<QuestionDto> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
+    public ResponseEntity<Optional<QuestionDto>> getQuestionDto(@ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         return ResponseEntity.ok(questionService.getQuestionDtoById(questionId));
     }
 

@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.QuestionDao;
 import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
+import spring.app.model.ReviewStatistic;
 import spring.app.service.abstraction.QuestionService;
 
 import java.util.List;
@@ -64,10 +65,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     /*
-    * Здесь используется метод deleteQuestionById(Long id), а не
-    * removeAll(List<Question> questions), потому что все вопросы
-    * имеют позиции и это необходимо учитывать при их удалении
-    * */
+     * Здесь используется метод deleteQuestionById(Long id), а не
+     * removeAll(List<Question> questions), потому что все вопросы
+     * имеют позиции и это необходимо учитывать при их удалении
+     * */
     @Override
     public void removeAll(List<Question> questions) {
         for (Question question : questions) {
@@ -96,30 +97,31 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public QuestionDto getQuestionDtoById(Long id) {
+    public Optional<QuestionDto> getQuestionDtoById(Long id) {
         return questionDao.getQuestionDtoById(id);
     }
 
     /*
-    * Возвращает успешность проведения изменения позиции в сущности Question
-    * */
+     * Возвращает успешность проведения изменения позиции в сущности Question
+     * */
     @Transactional
     @Override
     public boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
-        Question currentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
-        if (currentQuestion == null) {
+        Optional<Question> optionalCurrentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
+        Question currentQuestion = optionalCurrentQuestion.orElseGet(Question::new);
+        if (!optionalCurrentQuestion.isPresent()) {
             return false;
         }
-
         Integer currentPosition = currentQuestion.getPosition();
 
-        Integer nextPositionValue;
+
+        int nextPositionValue;
         int positionLow;
         int positionHigh;
         int positionShift;
         if (positionChange > 0) {
             Integer maxPositionValue = questionDao.getQuestionMaxPositionByThemeId(themeId);
-            if (currentPosition == maxPositionValue) {
+            if (currentPosition.equals(maxPositionValue)) {
                 return false;
             }
 
@@ -130,7 +132,7 @@ public class QuestionServiceImpl implements QuestionService {
             positionShift = -1;
         } else {
             Integer minPositionValue = questionDao.getQuestionMinPositionByThemeId(themeId);
-            if (currentPosition == minPositionValue) {
+            if (currentPosition.equals(minPositionValue)) {
                 return false;
             }
 

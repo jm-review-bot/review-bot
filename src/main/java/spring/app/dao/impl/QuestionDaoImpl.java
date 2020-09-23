@@ -6,7 +6,6 @@ import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 import spring.app.util.SingleResultHelper;
 
-import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +13,7 @@ import java.util.Optional;
 public class QuestionDaoImpl extends AbstractDao<Long, Question> implements QuestionDao {
 
     private final SingleResultHelper<Question> singleResultHelper = new SingleResultHelper<>();
+    private final SingleResultHelper<QuestionDto> dtoSingleResultHelper = new SingleResultHelper<>();
 
     public QuestionDaoImpl() {
         super(Question.class);
@@ -28,9 +28,8 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public Optional<Question> getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId) {
-        Query query = entityManager.createQuery("select q FROM Question q JOIN StudentReviewAnswer sra ON sra.question.id = q.id WHERE sra.id = :student_review_answer_id", Question.class)
-                .setParameter("student_review_answer_id", studentReviewAnswerId);
-        return singleResultHelper.singleResult(query);
+        return singleResultHelper.singleResult(entityManager.createQuery("select q FROM Question q JOIN StudentReviewAnswer sra ON sra.question.id = q.id WHERE sra.id = :student_review_answer_id", Question.class)
+                .setParameter("student_review_answer_id", studentReviewAnswerId));
     }
 
     @Override
@@ -41,12 +40,13 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
     }
 
     @Override
-    public Question getQuestionByThemeIdAndId(Long themeId, Long questionId) {
+    public Optional<Question> getQuestionByThemeIdAndId(Long themeId, Long questionId) {
         List<Question> resultList = entityManager.createQuery("SELECT q FROM Question q WHERE q.fixedTheme.id = :theme_id AND q.id = :question_id", Question.class)
                 .setParameter("theme_id", themeId)
                 .setParameter("question_id", questionId)
                 .getResultList();
-        return resultList.size() != 0 ? resultList.get(0) : null;
+//        return resultList.size() != 0 ? resultList.get(0) : null;
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT q FROM Question q WHERE q.fixedTheme.id = :theme_id AND q.id = :question_id", Question.class).setParameter("theme_id", themeId));
     }
 
     @Override
@@ -83,11 +83,8 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
     }
 
     @Override
-    public QuestionDto getQuestionDtoById(Long id) {
-        List<QuestionDto> list = entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.answer,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class)
-                .setParameter("id", id)
-                .getResultList();
-        return list.size() > 0 ? list.get(0) : null;
+    public Optional<QuestionDto> getQuestionDtoById(Long id) {
+        return dtoSingleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.answer,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class).setParameter("id", id));
     }
 
     @Override
