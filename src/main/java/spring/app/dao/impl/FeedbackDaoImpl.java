@@ -4,12 +4,18 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.FeedbackDao;
 import spring.app.dto.FeedbackDto;
 import spring.app.model.Feedback;
+import spring.app.util.SingleResultHelper;
 
+import javax.persistence.Query;
 import java.util.List;
+import java.util.Optional;
 
 
 @Repository
 public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements FeedbackDao {
+
+    private final SingleResultHelper<FeedbackDto> singleResultHelper = new SingleResultHelper<>();
+
     FeedbackDaoImpl() {
         super(Feedback.class);
     }
@@ -21,11 +27,10 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
     }
 
     @Override
-    public FeedbackDto getFeedbackDtoById(Long id) {
-        List<FeedbackDto> feedbackDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.studentReview.review.user.firstName, f.studentReview.review.user.lastName, f.user.firstName, f.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.id =:id", FeedbackDto.class)
-                .setParameter("id", id)
-                .getResultList();
-        return feedbackDtoByIdList.size() > 0 ? feedbackDtoByIdList.get(0) : null;
+    public Optional<FeedbackDto> getFeedbackDtoById(Long id) {
+        Query query = entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.studentReview.review.user.firstName, f.studentReview.review.user.lastName, f.user.firstName, f.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.id =:id", FeedbackDto.class)
+                .setParameter("id", id);
+        return singleResultHelper.singleResult(query);
     }
 
     @Override
