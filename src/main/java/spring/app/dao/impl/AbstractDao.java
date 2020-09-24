@@ -15,13 +15,17 @@ public abstract class AbstractDao<PK extends Serializable, T> {
     EntityManager entityManager;
 
     private final Class<T> persistentClass;
+    private String genericClassName;
+
 
     @SuppressWarnings("unchecked")
     AbstractDao(Class<T> persistentClass) {
         this.persistentClass = persistentClass;
+        this.genericClassName = persistentClass.toGenericString();
+        genericClassName = genericClassName.substring(genericClassName.lastIndexOf('.') + 1);
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void save(T entity) {
         entityManager.persist(entity);
     }
@@ -30,12 +34,12 @@ public abstract class AbstractDao<PK extends Serializable, T> {
         return entityManager.find(persistentClass, id);
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void update(T entity) {
         entityManager.merge(entity);
     }
 
-    @Transactional(propagation= Propagation.MANDATORY)
+    @Transactional(propagation = Propagation.MANDATORY)
     public void deleteById(PK id) {
         T entity = entityManager.find(persistentClass, id);
         entityManager.remove(entity);
@@ -55,4 +59,12 @@ public abstract class AbstractDao<PK extends Serializable, T> {
             entityManager.remove(entity);
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public List<T> getAllByIds(List<Long> ids) {
+        return entityManager.createQuery("FROM " + genericClassName + " e WHERE e.id IN :ids")
+                .setParameter("ids", ids)
+                .getResultList();
+    }
+
 }
