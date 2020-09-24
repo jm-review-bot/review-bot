@@ -30,8 +30,13 @@ public class UserDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
-    @ApiModelProperty(notes = "User's first and last names.")
-    private String name;
+    @ApiModelProperty(notes = "User's first name.")
+    private String firstName;
+
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = UpdateGroup.class)
+    @ApiModelProperty(notes = "User's last name.")
+    private String lastName;
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
@@ -41,7 +46,7 @@ public class UserDto {
     @Null(groups = UpdateGroup.class)
     @NotNull(groups = CreateGroup.class)
     @ApiModelProperty(notes = "Start theme position for new user.")
-    Integer startThemePosition;
+    private Long startThemeId;
 
     public UserDto() {
     }
@@ -53,7 +58,8 @@ public class UserDto {
                    String role) {
         this.id = id;
         this.vkId = vkId;
-        this.name = firstName + " " + lastName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.role = role;
     }
 }

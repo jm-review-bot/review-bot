@@ -44,7 +44,7 @@ function buildUsersTable() {
         let usersHtmlTable = `
             <tr>
                 <th>${user.id}</th>
-                <td>${user.name}</td>
+                <td>${user.firstName} ${user.lastName}</td>
                 <td>${user.vkId}</td>
                 <td>${user.role}</td>
                 <td>

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin/theme")
 public class AdminController {
 
-    @GetMapping(value = "")
+    @GetMapping
     public String index() {
         return "theme";
     }

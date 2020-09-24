@@ -9,7 +9,7 @@ $(document).on('click', '#add-user-btn', function () {
     for (let i = 0; i < allThemesDto.length; i++) {
         let themeDto = allThemesDto[i]
         let htmlTheme = `
-            <option value="${themeDto.position}">
+            <option value="${themeDto.id}">
                 ${themeDto.position}. ${themeDto.title}
             </option>
         `
@@ -23,14 +23,14 @@ $(document).on('click', '#add-user-btn', function () {
 $(document).on('submit', '#add-user-form', function (event) {
     event.preventDefault()
 
-    let startThemePosition = $('#add-user-form select :selected')[0].value
-    if (startThemePosition == 0) {
+    let startThemeId = $('#add-user-form select :selected')[0].value
+    if (startThemeId == 0) {
         alert('Не выбрана тема...')
     } else {
 
         let newUserDto = {
             stringVkId: this.vkId.value,
-            startThemePosition: startThemePosition
+            startThemeId: startThemeId
         }
 
         $.ajax({

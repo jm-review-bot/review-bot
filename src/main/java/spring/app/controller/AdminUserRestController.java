@@ -72,7 +72,7 @@ public class AdminUserRestController {
                 return ResponseEntity.badRequest().build();
             }
             // Новому пользователю устанавливается тема, с которой он может начинать сдавать ревью
-            Integer startThemePosition = newUserDto.getStartThemePosition();
+            Integer startThemePosition = themeService.getThemeById(newUserDto.getStartThemeId()).getPosition();
             if (startThemePosition > 1) {
                 studentReviewService.setPassedThisAndPreviousThemesForStudent(user.getId(), themeService.getByPosition(startThemePosition - 1).getId());
             }
@@ -119,14 +119,9 @@ public class AdminUserRestController {
             userDto.setVkId(Integer.parseInt(stringVkId));
         }
 
-        String[] name = userDto.getName().split("[^a-яА-ЯйЙёЁa-zA-Z0-9/]+");
-        if (name.length != 2) { // Имя и фамилия должны быть разделены пробелом
-            return ResponseEntity.badRequest().build();
-        }
-
         User user = userService.getUserById(userId);
-        user.setFirstName(name[0]);
-        user.setLastName(name[1]);
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
         user.setVkId(userDto.getVkId());
         user.setRole(roleService.getRoleByName(userDto.getRole()));
         userService.updateUser(user);

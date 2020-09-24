@@ -17,6 +17,6 @@ function deleteUser(userId) {
 }
 
 function askToDeleteUser(userDto) {
-    let title = `Вы действительно хотите удалить пользователя ${userDto.name}?`
+    let title = `Вы действительно хотите удалить пользователя ${userDto.firstName} ${userDto.lastName}?`
     return confirm(title)
 }
