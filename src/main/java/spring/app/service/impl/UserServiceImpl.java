@@ -1,16 +1,22 @@
 package spring.app.service.impl;
 
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import spring.app.dao.abstraction.RoleDao;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
+import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.model.FreeTheme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.VkService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -21,12 +27,19 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
+    private final RoleDao roleDao;
     private final ThemeService themeService;
+    private final VkService vkService;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, ThemeService themeService) {
+    public UserServiceImpl(UserDao userDao,
+                           RoleDao roleDao,
+                           ThemeService themeService,
+                           VkService vkService) {
         this.userDao = userDao;
+        this.roleDao = roleDao;
         this.themeService = themeService;
+        this.vkService = vkService;
     }
 
     @Transactional
@@ -43,6 +56,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUsers() {
         return userDao.getAll();
+    }
+
+    @Override
+    public List<UserDto> getAllUsersDto() {
+        return userDao.getAllUsersDto();
+    }
+
+    @Override
+    public UserDto getUserDtoById(Long userId) {
+        return userDao.getUserDtoById(userId);
     }
 
     @Transactional
@@ -135,6 +158,19 @@ public class UserServiceImpl implements UserService {
             }
         } else {
             throw new UsernameNotFoundException("Логин не похож на VkId");
+        }
+    }
+
+    @Transactional
+    @Override
+    public User addUserByVkId(String stringVkId) throws ClientException, ApiException, IncorrectVkIdsException {
+        User newUser = vkService.newUserFromVk(stringVkId);
+        if (!userDao.isExistByVkId(newUser.getVkId())) { // Проверка на тот факт, что пользователя еще нет в БД
+            newUser.setRole(roleDao.getRoleByName("USER"));
+            userDao.save(newUser);
+            return newUser;
+        } else {
+            return null;
         }
     }
 }

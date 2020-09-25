@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
 import spring.app.model.User;
 import spring.app.util.SingleResultHelper;
 
@@ -123,4 +124,16 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
                 .getResultList();
     }
 
+    @Override
+    public List<UserDto> getAllUsersDto() {
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u ORDER BY u.lastName", UserDto.class)
+                .getResultList();
+    }
+
+    @Override
+    public UserDto getUserDtoById(Long userId) {
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
+                .setParameter("user_id", userId)
+                .getSingleResult();
+    }
 }

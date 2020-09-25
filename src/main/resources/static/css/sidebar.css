@@ -7,7 +7,8 @@
     left: 0;
     background-color: #ffffff;
     overflow-x: hidden;
-    padding-top: 20px;
+    padding-top: 8px;
+    margin-top: 54px;
 }
 
 .sidenav a {
@@ -23,6 +24,7 @@
 }
 
 .main {
+    margin-top: 54px;
     margin-left: 160px;
     padding: 0px 10px;
 }

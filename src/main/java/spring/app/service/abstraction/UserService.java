@@ -1,7 +1,11 @@
 package spring.app.service.abstraction;
 
+import com.vk.api.sdk.exceptions.ApiException;
+import com.vk.api.sdk.exceptions.ClientException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
+import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.model.User;
 
 import java.time.LocalDateTime;
@@ -15,6 +19,10 @@ public interface UserService extends UserDetailsService {
     User getUserById(Long id);
 
     List<User> getAllUsers();
+
+    List<UserDto> getAllUsersDto();
+
+    UserDto getUserDtoById(Long userId);
 
     void updateUser(User user);
 
@@ -41,4 +49,6 @@ public interface UserService extends UserDetailsService {
     User addNewReviewer (long themeId , long userId);
 
     void deleteReviewerFromTheme (long themeId , long reviewerId);
+
+    User addUserByVkId(String stringVkId) throws ClientException, ApiException, IncorrectVkIdsException;
 }

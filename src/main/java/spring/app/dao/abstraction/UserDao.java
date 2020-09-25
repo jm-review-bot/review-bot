@@ -3,6 +3,7 @@ package spring.app.dao.abstraction;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.ReviewerDto;
+import spring.app.dto.UserDto;
 import spring.app.model.User;
 
 import javax.persistence.NoResultException;
@@ -38,4 +39,8 @@ public interface UserDao extends GenericDao<Long, User> {
     void deleteReviewerFromTheme (long themeId , long reviewerId);
 
     List<User> getExaminersByFreeThemeId(Long freeThemeId) ;
+
+    List<UserDto> getAllUsersDto();
+
+    UserDto getUserDtoById(Long userId);
 }
