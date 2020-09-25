@@ -6,7 +6,6 @@ import spring.app.dto.FeedbackDto;
 import spring.app.model.Feedback;
 import spring.app.util.SingleResultHelper;
 
-import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,9 +27,8 @@ public class FeedbackDaoImpl extends AbstractDao<Long, Feedback> implements Feed
 
     @Override
     public Optional<FeedbackDto> getFeedbackDtoById(Long id) {
-        Query query = entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.studentReview.review.user.firstName, f.studentReview.review.user.lastName, f.user.firstName, f.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.id =:id", FeedbackDto.class)
-                .setParameter("id", id);
-        return singleResultHelper.singleResult(query);
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.FeedbackDto(f.id, f.studentReview.review.user.firstName, f.studentReview.review.user.lastName, f.user.firstName, f.user.lastName, f.comment, f.ratingReviewer, f.ratingReview) FROM Feedback f WHERE f.id =:id", FeedbackDto.class)
+                .setParameter("id", id));
     }
 
     @Override

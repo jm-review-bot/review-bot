@@ -41,11 +41,6 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public Optional<Question> getQuestionByThemeIdAndId(Long themeId, Long questionId) {
-        List<Question> resultList = entityManager.createQuery("SELECT q FROM Question q WHERE q.fixedTheme.id = :theme_id AND q.id = :question_id", Question.class)
-                .setParameter("theme_id", themeId)
-                .setParameter("question_id", questionId)
-                .getResultList();
-//        return resultList.size() != 0 ? resultList.get(0) : null;
         return singleResultHelper.singleResult(entityManager.createQuery("SELECT q FROM Question q WHERE q.fixedTheme.id = :theme_id AND q.id = :question_id", Question.class).setParameter("theme_id", themeId));
     }
 
