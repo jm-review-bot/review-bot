@@ -57,7 +57,7 @@ public class AdminSearch extends Step {
                 Integer searchedUserVkId = searchedUser.getVkId();
                 if (userService.isExistByVkId(searchedUser.getVkId())) {
                     // получем юзера на основе запроса в БД
-                    User findingUser = userService.getByVkId(searchedUserVkId);
+                    User findingUser = userService.getByVkId(searchedUserVkId).orElseGet(User::new);
                     storageService.updateUserStorage(vkId, ADMIN_SEARCH, Arrays.asList(Long.toString(findingUser.getId())));
                     sendUserToNextStep(context, ADMIN_CONFIRM_SEARCH);
                 } else {

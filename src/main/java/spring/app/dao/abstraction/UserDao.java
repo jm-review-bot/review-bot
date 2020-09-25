@@ -8,10 +8,11 @@ import spring.app.model.User;
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserDao extends GenericDao<Long, User> {
 
-    User getByVkId(Integer vkId) throws NoResultException;
+    Optional<User> getByVkId(Integer vkId) throws NoResultException;
 
     boolean isExistByVkId(Integer vkId);
 

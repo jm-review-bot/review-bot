@@ -6,6 +6,7 @@ import spring.app.model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService extends UserDetailsService {
 
@@ -19,7 +20,7 @@ public interface UserService extends UserDetailsService {
 
     void deleteUserById(Long id);
 
-    User getByVkId(Integer vkId);
+    Optional<User> getByVkId(Integer vkId);
 
     boolean isExistByVkId(Integer vkId);
 

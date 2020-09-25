@@ -146,7 +146,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
         List<Theme> passedThemeByStudent = themeDao.getPassedThemesByUser(student.getVkId());
         themesUpToPosition.removeAll(passedThemeByStudent);
 
-        User defaultUser = userDao.getByVkId(0);
+        User defaultUser = userDao.getByVkId(0).orElseGet(User::new);
         if (themesUpToPosition.size() > 0) {
             for (int i = 0; i < themesUpToPosition.size(); i++) {
                 Review passedReviewToDefaultUser = new Review();

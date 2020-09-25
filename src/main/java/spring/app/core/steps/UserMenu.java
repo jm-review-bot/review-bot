@@ -89,7 +89,7 @@ public class UserMenu extends Step {
                         // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
                         nearestReview.setIsOpen(false);
                         reviewService.updateReview(nearestReview);
-                        User user = userService.getByVkId(vkId);
+                        User user = userService.getByVkId(vkId).orElseGet(User::new);
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                         userService.updateUser(user);
                         // Для мониторинга за фармом RP увеличивается значение счетчика количества ревью без записавшихся студентов

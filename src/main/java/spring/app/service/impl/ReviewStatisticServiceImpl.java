@@ -89,7 +89,7 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
         Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
         ReviewStatistic reviewStatistic = new ReviewStatistic();
-        reviewStatistic.setUser(userDao.getByVkId(userVkId));
+        reviewStatistic.setUser(userDao.getByVkId(userVkId).orElseGet(User::new));
         reviewStatistic.setCountBlocks(0);
         reviewStatistic.setCountOpenReviews(countOpenReviews);
         reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);

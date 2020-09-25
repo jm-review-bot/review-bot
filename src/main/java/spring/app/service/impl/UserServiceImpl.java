@@ -15,6 +15,7 @@ import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -57,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByVkId(Integer vkId) {
+    public Optional<User> getByVkId(Integer vkId) {
         return userDao.getByVkId(vkId);
     }
 
@@ -125,8 +126,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StringParser.isNumeric(username)) {
-            User user = userDao.getByVkId(Integer.parseInt(username));
-            if (user != null) {
+            Optional<User> optionalUser = userDao.getByVkId(Integer.parseInt(username));
+            User user = optionalUser.orElseGet(User::new);
+            if (optionalUser.isPresent()) {
                 return user;
             } else {
                 throw new UsernameNotFoundException("Пользователя нет в БД");
