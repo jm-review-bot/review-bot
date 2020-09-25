@@ -22,7 +22,7 @@ public interface UserService extends UserDetailsService {
 
     List<UserDto> getAllUsersDto();
 
-    UserDto getUserDtoById(Long userId);
+    Optional<UserDto> getUserDtoById(Long userId);
 
     void updateUser(User user);
 

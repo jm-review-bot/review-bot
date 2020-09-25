@@ -42,5 +42,5 @@ public interface UserDao extends GenericDao<Long, User> {
 
     List<UserDto> getAllUsersDto();
 
-    UserDto getUserDtoById(Long userId);
+    Optional<UserDto> getUserDtoById(Long userId);
 }

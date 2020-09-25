@@ -23,6 +23,7 @@ import spring.app.util.StringParser;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -58,7 +59,7 @@ public class AdminUserRestController {
 
     @ApiOperation(value = "Get user by ID")
     @GetMapping("/{userId}")
-    public ResponseEntity<UserDto> getUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
+    public ResponseEntity<Optional<UserDto>> getUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
         return ResponseEntity.ok(userService.getUserDtoById(userId));
     }
 

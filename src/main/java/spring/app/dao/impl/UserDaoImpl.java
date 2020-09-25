@@ -20,6 +20,7 @@ import java.util.Optional;
 public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
     private final SingleResultHelper<User> userSingleResultHelper = new SingleResultHelper<>();
+    private final SingleResultHelper<UserDto> userDtoSingleResultHelper = new SingleResultHelper<>();
 
     public UserDaoImpl() {
         super(User.class);
@@ -131,9 +132,8 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
-    public UserDto getUserDtoById(Long userId) {
-        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
-                .setParameter("user_id", userId)
-                .getSingleResult();
+    public Optional<UserDto> getUserDtoById(Long userId) {
+        return userDtoSingleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
+                .setParameter("user_id", userId));
     }
 }
