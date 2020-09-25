@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
     public User addNewReviewer(long themeId , long userId) {
         List<User> users = userDao.getExaminersByFreeThemeId(themeId);
         users.add(userDao.getById(userId));
-        FreeTheme freeTheme = themeService.getFreeThemeById(themeId);
+        FreeTheme freeTheme = themeService.getFreeThemeById(themeId).orElseGet(FreeTheme::new);
         freeTheme.setExaminers(users);
         themeService.updateTheme(freeTheme);
         return userDao.getById(userId);

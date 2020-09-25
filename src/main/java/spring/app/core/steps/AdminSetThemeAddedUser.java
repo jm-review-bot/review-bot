@@ -10,10 +10,7 @@ import spring.app.model.User;
 import spring.app.service.abstraction.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
 import static spring.app.core.StepSelector.*;
@@ -88,20 +85,19 @@ public class AdminSetThemeAddedUser extends Step {
                 User admin = context.getUser();
                 // Создание всех ревью, которые прошел пользователь
                 for (int i = 1; i < themePosition; i++) {
-                    Theme currentTheme = themeService.getByPosition(i);
-
+                    Theme currentTheme = themeService.getByPosition(i).get();
                     Review fakeReview = new Review(admin, currentTheme, false, LocalDateTime.now());
                     reviewService.addReview(fakeReview);
                     StudentReview studentReview = new StudentReview(addedUser, fakeReview, true);
                     studentReviewService.addStudentReview(studentReview);
                 }
                 // Начисление ревью поинтов
-                int reviewCost = themeService.getByPosition(themePosition).getReviewPoint();
+                int reviewCost = themeService.getByPosition(themePosition).get().getReviewPoint();
                 addedUser.setReviewPoint(reviewCost);
                 userService.updateUser(addedUser);
             }
             User addedUser = userService.getUserById(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_ADD_USER).get(0)));
-            Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
+            Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput)).get();
             String infoMessage = String.format(
                     "Пользователь %s %s был успешно добавлен в базу и начнет сдавать ревью с темы \"%s\".",
                     addedUser.getFirstName(),

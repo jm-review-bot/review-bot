@@ -130,7 +130,7 @@ public class UserStartReviewCore extends Step {
             // подведение итогов ревью для студентов, рассылка сообщений студентам с результатами ревью, списание очков
             for (User student : students) {//TODO:разбить и вынести на 2 метода - расчет итогов(сдал/не сдал) и рассылку AR
                 // списываем очки за пройденное ревью
-                Theme theme = themeService.getThemeByReviewId(reviewId);
+                Theme theme = themeService.getThemeByReviewId(reviewId).get();
                 student.setReviewPoint(student.getReviewPoint() - theme.getReviewPoint());
                 userService.updateUser(student);
                 // проверяем ответы по карте. Если проблемные вопросы есть - значит(до правок по весу) он не сдал.

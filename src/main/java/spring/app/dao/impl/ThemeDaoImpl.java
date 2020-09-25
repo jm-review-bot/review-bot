@@ -6,11 +6,19 @@ import spring.app.dto.ThemeDto;
 import spring.app.model.FreeTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
+import spring.app.util.SingleResultHelper;
 
+import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
+
+    private final SingleResultHelper<Theme> themeSingleResultHelper = new SingleResultHelper<>();
+    private final SingleResultHelper<FreeTheme> freeThemeSingleResultHelper = new SingleResultHelper<>();
+    private final SingleResultHelper<ThemeDto> themeDtoSingleResultHelper = new SingleResultHelper<>();
+
 
     public ThemeDaoImpl() {
         super(Theme.class);
@@ -26,10 +34,10 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
      *
      * @param position
      */
-    public Theme getByPosition(Integer position) {
-        return entityManager.createQuery("SELECT t FROM Theme t WHERE t.position = :position", Theme.class)
-                .setParameter("position", position)
-                .getSingleResult();
+    @Override
+    public Optional<Theme> getByPosition(Integer position) {
+        return themeSingleResultHelper.singleResult(entityManager.createQuery("SELECT t FROM Theme t WHERE t.position = :position", Theme.class)
+                .setParameter("position", position));
     }
 
     @Override
@@ -56,10 +64,9 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public Theme getThemeByReviewId(Long reviewId) {
-        return entityManager.createQuery("SELECT t FROM Review r JOIN r.theme t WHERE r.id =:id", Theme.class)
-                .setParameter("id", reviewId)
-                .getSingleResult();
+    public Optional<Theme> getThemeByReviewId(Long reviewId) {
+        return themeSingleResultHelper.singleResult(entityManager.createQuery("SELECT t FROM Review r JOIN r.theme t WHERE r.id =:id", Theme.class)
+                .setParameter("id", reviewId));
     }
 
     @Override
@@ -100,21 +107,19 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
 
     @Override
     public List<Theme> getAllThemesByThemeType(String themeType) {
-        if(themeType.equals("fixed")) {
+        if (themeType.equals("fixed")) {
             return entityManager.createQuery("SELECT t FROM FixedTheme t", Theme.class)
                     .getResultList();
-        } else if(themeType.equals("free")) {
+        } else if (themeType.equals("free")) {
             return entityManager.createQuery("SELECT t FROM FreeTheme t", Theme.class)
                     .getResultList();
         } else return null;
     }
 
     @Override
-    public FreeTheme getFreeThemeById(long id) {
-        List<FreeTheme> freeThemes = entityManager.createQuery("select ft from FreeTheme ft where ft.id =:id")
-                .setParameter("id" , id)
-                .getResultList();
-        return freeThemes.size() > 0 ? freeThemes.get(0) : null;
+    public Optional<FreeTheme> getFreeThemeById(long id) {
+        return freeThemeSingleResultHelper.singleResult(entityManager.createQuery("select ft from FreeTheme ft where ft.id =:id")
+                .setParameter("id", id));
     }
 
     @Override
@@ -140,10 +145,8 @@ public class ThemeDaoImpl extends AbstractDao<Long, Theme> implements ThemeDao {
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
-        List<ThemeDto> themeDtoByIdList = entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
-                .setParameter("theme_id", themeId)
-                .getResultList();
-        return themeDtoByIdList.size() > 0 ? themeDtoByIdList.get(0) : null;
+    public Optional<ThemeDto> getThemeDtoById(Long themeId) {
+        return themeDtoSingleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.ThemeDto(t.id, t.title, t.criticalWeight, t.position, t.reviewPoint, t.themeType) FROM Theme t WHERE t.id =:theme_id", ThemeDto.class)
+                .setParameter("theme_id", themeId));
     }
 }

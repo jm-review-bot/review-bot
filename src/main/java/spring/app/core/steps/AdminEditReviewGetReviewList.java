@@ -15,6 +15,7 @@ import spring.app.util.StringParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
@@ -47,8 +48,7 @@ public class AdminEditReviewGetReviewList extends Step {
         String selectedUserIds = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_USER_LIST).get(0);
         Long selectedUserId = Long.parseLong(selectedUserIds);
         String selectedThemePosition = storageService.getUserStorage(vkId, ADMIN_EDIT_REVIEW_GET_THEME_LIST).get(0);
-        Theme selectedTheme = themeService.getByPosition(Integer.parseInt(selectedThemePosition));
-
+        Theme selectedTheme = themeService.getByPosition(Integer.parseInt(selectedThemePosition)).get();
         List<String> reviewToChange = new ArrayList<>();
         studentReviewService.getAllStudentReviewsByStudentIdAndTheme(selectedUserId, selectedTheme).stream()
                 .forEach(sreview ->
