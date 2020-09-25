@@ -16,6 +16,7 @@ import spring.app.dto.UserDto;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
+import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.*;
 import spring.app.util.StringParser;
@@ -74,7 +75,7 @@ public class AdminUserRestController {
             // Новому пользователю устанавливается тема, с которой он может начинать сдавать ревью
             Integer startThemePosition = themeService.getThemeById(newUserDto.getStartThemeId()).getPosition();
             if (startThemePosition > 1) {
-                studentReviewService.setPassedThisAndPreviousThemesForStudent(user.getId(), themeService.getByPosition(startThemePosition - 1).getId());
+                studentReviewService.setPassedThisAndPreviousThemesForStudent(user.getId(), themeService.getByPosition(startThemePosition - 1).get().getId());
             }
 
             // Логирование
@@ -123,7 +124,7 @@ public class AdminUserRestController {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setVkId(userDto.getVkId());
-        user.setRole(roleService.getRoleByName(userDto.getRole()));
+        user.setRole(roleService.getRoleByName(userDto.getRole()).orElseGet(Role::new));
         userService.updateUser(user);
 
         // Логирование

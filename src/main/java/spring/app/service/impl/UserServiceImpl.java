@@ -13,6 +13,7 @@ import spring.app.dto.ReviewerDto;
 import spring.app.dto.UserDto;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.model.FreeTheme;
+import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
@@ -166,7 +167,7 @@ public class UserServiceImpl implements UserService {
     public User addUserByVkId(String stringVkId) throws ClientException, ApiException, IncorrectVkIdsException {
         User newUser = vkService.newUserFromVk(stringVkId);
         if (!userDao.isExistByVkId(newUser.getVkId())) { // Проверка на тот факт, что пользователя еще нет в БД
-            newUser.setRole(roleDao.getRoleByName("USER"));
+            newUser.setRole(roleDao.getRoleByName("USER").orElseGet(Role::new));
             userDao.save(newUser);
             return newUser;
         } else {
