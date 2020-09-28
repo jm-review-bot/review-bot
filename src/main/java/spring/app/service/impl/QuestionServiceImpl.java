@@ -108,10 +108,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange) {
         Optional<Question> optionalCurrentQuestion = questionDao.getQuestionByThemeIdAndId(themeId, questionId);
-        Question currentQuestion = optionalCurrentQuestion.orElseGet(Question::new);
         if (!optionalCurrentQuestion.isPresent()) {
             return false;
         }
+        Question currentQuestion = optionalCurrentQuestion.get();
         Integer currentPosition = currentQuestion.getPosition();
 
 

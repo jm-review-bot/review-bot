@@ -97,7 +97,7 @@ public class AdminEditReviewGetReviewList extends Step {
         final int[] reviewCounter = {1}; //обход финальности для лямбды
         reviewToChange.stream().forEach(sreviewId -> {
             StudentReview sreview =
-                    studentReviewService.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long.parseLong(sreviewId)).orElseGet(StudentReview::new);
+                    studentReviewService.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long.parseLong(sreviewId)).get();
             stringBuilder.append("[").append(reviewCounter[0]++).append("] ")
                     .append(StringParser.localDateTimeToString(sreview.getReview().getDate()))
                     .append(" (");

@@ -52,8 +52,7 @@ public class AdminEditUser extends Step {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
             Optional<ReviewStatistic> optionalReviewStatistic =reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
-            ReviewStatistic reviewStatistic = optionalReviewStatistic.orElseGet(ReviewStatistic::new);
-            if (optionalReviewStatistic.isPresent() && reviewStatistic.isReviewBlocked()) {
+            if (optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked()) {
                 sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
             } else {
                 throw new ProcessInputException("Пользователь имеет возможность создавать ревью");
@@ -78,7 +77,7 @@ public class AdminEditUser extends Step {
         if (savedInput != null) {
             Long userId = Long.parseLong(savedInput.get(0));
             User selectedUser = userService.getUserById(userId);
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId).orElseGet(ReviewStatistic::new);
+            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId).get();
             text = String.format(
                     "Вы выбрали %s %s (%s).\nСтатус ревью: %s.\nРоль пользователя: %s.\nВыберите действие",
                     selectedUser.getFirstName(),
@@ -101,8 +100,7 @@ public class AdminEditUser extends Step {
 
         // Кнопка для разблокировки пользователю возможности создания ревью
         Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(savedInput.get(0)));
-        ReviewStatistic reviewStatistic = optionalReviewStatistic.orElseGet(ReviewStatistic::new);
-        if (optionalReviewStatistic.isPresent() && reviewStatistic.isReviewBlocked()) {
+        if (optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked()) {
             keyboard += CANCEL_BLOCK_FOR_TAKE_REVIEW + getRowDelimiterString();
         }
 

@@ -73,13 +73,12 @@ public class VkBot implements ChatBot {
                 input = message.getBody();
             }
             // проверяем есть ли юзер у нас в БД, если нет, получаем исключение и отправляем Юзеру сообщение и выходим из цикла
-            Optional<User> optionalUser=userService.getByVkId(userVkId);
-            User user = optionalUser.orElseGet(User::new);
-            if(!optionalUser.isPresent())
-            {
+            Optional<User> optionalUser = userService.getByVkId(userVkId);
+            if (!optionalUser.isPresent()) {
                 sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
                 return;
             }
+            User user = optionalUser.get();
             Role role = user.getRole();
             context = new BotContext(user, userVkId, input, role, stepHolder);
             // выясняем степ в котором находится User

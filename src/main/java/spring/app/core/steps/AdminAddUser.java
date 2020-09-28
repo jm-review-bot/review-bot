@@ -45,7 +45,7 @@ public class AdminAddUser extends Step {
 
     @Override
     public void processInput(BotContext context) throws ProcessInputException {
-        Role userRole = roleService.getRoleByName("USER").orElseGet(Role::new);
+        Role userRole = roleService.getRoleByName("USER").get();
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
 

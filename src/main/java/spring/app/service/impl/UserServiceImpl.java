@@ -132,7 +132,7 @@ public class UserServiceImpl implements UserService {
     public User addNewReviewer(long themeId , long userId) {
         List<User> users = userDao.getExaminersByFreeThemeId(themeId);
         users.add(userDao.getById(userId));
-        FreeTheme freeTheme = themeService.getFreeThemeById(themeId).orElseGet(FreeTheme::new);
+        FreeTheme freeTheme = themeService.getFreeThemeById(themeId).get();
         freeTheme.setExaminers(users);
         themeService.updateTheme(freeTheme);
         return userDao.getById(userId);
@@ -151,9 +151,8 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StringParser.isNumeric(username)) {
             Optional<User> optionalUser = userDao.getByVkId(Integer.parseInt(username));
-            User user = optionalUser.orElseGet(User::new);
             if (optionalUser.isPresent()) {
-                return user;
+                return optionalUser.get();
             } else {
                 throw new UsernameNotFoundException("Пользователя нет в БД");
             }
@@ -167,7 +166,7 @@ public class UserServiceImpl implements UserService {
     public User addUserByVkId(String stringVkId) throws ClientException, ApiException, IncorrectVkIdsException {
         User newUser = vkService.newUserFromVk(stringVkId);
         if (!userDao.isExistByVkId(newUser.getVkId())) { // Проверка на тот факт, что пользователя еще нет в БД
-            newUser.setRole(roleDao.getRoleByName("USER").orElseGet(Role::new));
+            newUser.setRole(roleDao.getRoleByName("USER").get());
             userDao.save(newUser);
             return newUser;
         } else {

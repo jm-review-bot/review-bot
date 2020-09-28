@@ -93,7 +93,7 @@ public class UserTakeReviewAddDate extends Step {
                     throw new ProcessInputException(conflictExceptionMessage.toString());
                 } else {
                     //все хорошо с валидацией, создаем ревью.
-                    User user = userService.getByVkId(vkId).orElseGet(User::new);
+                    User user = userService.getByVkId(vkId).get();
                     Long themeId = (Long.parseLong(storageService.getUserStorage(vkId, USER_TAKE_REVIEW_ADD_THEME).get(0)));
                     Theme theme = themeService.getThemeById(themeId);
                     reviewService.addReview(new Review(user, theme, true, plannedStartReviewTime));

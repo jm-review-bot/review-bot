@@ -69,7 +69,7 @@ public class ExaminerGetInfoLastReview extends Step{
         User student = userService.getUserById(studentId);
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
-        StudentReview lastStudentReview = studentReviewService.getLastStudentReviewByStudentIdAndThemeId(studentId, freeThemeId).orElseGet(StudentReview::new);
+        StudentReview lastStudentReview = studentReviewService.getLastStudentReviewByStudentIdAndThemeId(studentId, freeThemeId).get();
 
         // Бот выводит сообщение со статусом поледнего ревью студента по выбранной теме
         if (studentReviewService.getLastStudentReviewByStudentIdAndThemeId(studentId, freeThemeId).isPresent()) {

@@ -125,7 +125,7 @@ public class AdminUserRestController {
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setVkId(userDto.getVkId());
-        user.setRole(roleService.getRoleByName(userDto.getRole()).orElseGet(Role::new));
+        user.setRole(roleService.getRoleByName(userDto.getRole()).get());
         userService.updateUser(user);
 
         // Логирование

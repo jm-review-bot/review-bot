@@ -55,7 +55,7 @@ public class ExaminerAddNewStudent extends Step {
                 } else {
                     // В хранилище шага EXAMINER_USERS_LIST_FROM_DB сохраняется ID студента - хранилище именно этого шага предназначено для хранения студенческого ID
                     sendUserToNextStep(context, EXAMINER_GET_INFO_LAST_REVIEW);
-                    Long studentId = userService.getByVkId(studentVkId).orElseGet(User::new).getId();
+                    Long studentId = userService.getByVkId(studentVkId).get().getId();
                     storageService.updateUserStorage(context.getVkId(), EXAMINER_USERS_LIST_FROM_DB, Arrays.asList(studentId.toString()));
                 }
             } catch (ClientException | ApiException | IncorrectVkIdsException e) {

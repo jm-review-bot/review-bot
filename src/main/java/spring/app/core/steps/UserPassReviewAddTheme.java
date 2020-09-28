@@ -95,8 +95,8 @@ public class UserPassReviewAddTheme extends Step {
     @Override
     public String getDynamicText(BotContext context) {
         Optional<StudentReview> studentReviewOptional = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-        StudentReview studentReview = studentReviewOptional.orElseGet(StudentReview::new);
         if (studentReviewOptional.isPresent()) {
+            StudentReview studentReview = studentReviewOptional.get();
             return String.format("Вы уже записаны на ревью:\n" +
                             "Тема: %s\n" +
                             "Дата: %s\n" +

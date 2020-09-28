@@ -45,9 +45,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return (httpServletRequest, httpServletResponse, authentication) -> {
             User loggedInUser = (User) authentication.getPrincipal();
             Collection<Role> roles = loggedInUser.getAuthorities();
-            if (roles.contains(roleService.getRoleByName("ADMIN").orElseGet(Role::new))) {
+            if (roles.contains(roleService.getRoleByName("ADMIN").get())) {
                 httpServletResponse.sendRedirect("/admin/theme");
-            } else if (roles.contains(roleService.getRoleByName("USER").orElseGet(Role::new))) {
+            } else if (roles.contains(roleService.getRoleByName("USER").get())) {
                 // В текущем состоянии кода нет страницы для пользователя с ролью USER
             }
         };

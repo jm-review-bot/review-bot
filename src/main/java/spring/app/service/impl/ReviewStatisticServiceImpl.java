@@ -89,7 +89,7 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
         Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
         ReviewStatistic reviewStatistic = new ReviewStatistic();
-        reviewStatistic.setUser(userDao.getByVkId(userVkId).orElseGet(User::new));
+        reviewStatistic.setUser(userDao.getByVkId(userVkId).get());
         reviewStatistic.setCountBlocks(0);
         reviewStatistic.setCountOpenReviews(countOpenReviews);
         reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
@@ -111,7 +111,7 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
     @Override
     public void unblockTakingReviewForUser(Long userId) {
         Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);
-        ReviewStatistic reviewStatistic = optionalReviewStatistic.orElseGet(ReviewStatistic::new);
+        ReviewStatistic reviewStatistic = optionalReviewStatistic.get();
         reviewStatistic.setCountReviewsWithoutStudentsInRow((long) 0);
         reviewStatistic.setReviewBlocked(false);
         reviewStatisticDao.update(reviewStatistic);
