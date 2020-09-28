@@ -22,7 +22,7 @@ function buildThemesAccordion(allThemesDto) {
         let theme = allThemesDto[i]
         let themeHtmlAccordion = `
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header border-bottom bg-secondary">
                     <h4 class="mb-0">
                         <div class="row">
                             <div class="col-10 theme-expand" role="button" data-toggle="collapse" data-target="#theme-${theme.id}" aria-expanded="true" aria-controls="theme-${theme.id}" data-id="${theme.id}" data-type="${theme.type}">
@@ -42,9 +42,9 @@ function buildThemesAccordion(allThemesDto) {
                         </div>
                     </h4>
                 </div>
-                <div id="theme-${theme.id}" class="collapse" aria-labelledby="card-header-theme-${theme.id}" data-id="${theme.id}">
+                <div id="theme-${theme.id}" class="collapse border-bottom bg-light" aria-labelledby="card-header-theme-${theme.id} data-id="${theme.id}">
                     <div class="card-body">
-                        <div id="card-theme-${theme.id}" class="card border-white">
+                        <div id="card-theme-${theme.id}" class="card border-light bg-light">
                         <!--Здесь располагаются вопросы темы или список проверяющих-->
                         </div>
                     </div>
