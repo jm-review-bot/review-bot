@@ -11,6 +11,7 @@ import spring.app.service.abstraction.ReviewStatisticService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,13 +78,13 @@ public class AdminEditUser extends Step {
         if (savedInput != null) {
             Long userId = Long.parseLong(savedInput.get(0));
             User selectedUser = userService.getUserById(userId);
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId).get();
+            Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId);
             text = String.format(
                     "Вы выбрали %s %s (%s).\nСтатус ревью: %s.\nРоль пользователя: %s.\nВыберите действие",
                     selectedUser.getFirstName(),
                     selectedUser.getLastName(),
                     selectedUser.getVkId(),
-                    reviewStatistic.isReviewBlocked() ? "заблокировано" : "доступно",
+                    optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked() ? "заблокировано" : "доступно",
                     selectedUser.getRole().getName()
             );
         } else {
