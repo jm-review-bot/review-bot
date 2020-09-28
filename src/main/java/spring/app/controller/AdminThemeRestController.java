@@ -20,7 +20,6 @@ import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import javax.validation.Valid;
-import java.nio.file.CopyOption;
 import java.util.List;
 import java.util.Optional;
 
