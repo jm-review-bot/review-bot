@@ -24,4 +24,6 @@ public interface GenericDao<PK extends Serializable, T> {
 
     @Transactional(propagation = Propagation.MANDATORY)
     void removeAll(List<T> entities);
+
+    List<T> getAllByIds(List<Long> ids);
 }

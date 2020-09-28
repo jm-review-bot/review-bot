@@ -8,3 +8,6 @@ access_token=(токен доступа для вашего сообщества
 -Dspring.profiles.general=local-app (для запуска на ПК разработчика/тестировщика)
 или
 -Dspring.profiles.general=devops-app (для запуска на рабочем сервере)
+
+Досутп к Swagger осуществляется по ссылке:
+http://localhost:8080/swagger-ui.html
