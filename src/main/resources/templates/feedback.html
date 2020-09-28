@@ -15,6 +15,14 @@
     <title>feedback</title>
 </head>
 <body>
+<nav class="navbar bg-dark fixed-top">
+    <a class="navbar-brand"></a>
+    <form action="/logout" class="form-inline">
+        <button class="btn btn-outline-danger">
+            LOGOUT
+        </button>
+    </form>
+</nav>
 <div class="container-fluid">
     <div class="sidenav">
         <div class="list-group list-group-flush">
@@ -25,7 +33,6 @@
         <div class="list-group list-group-flush">
             <a class="active list-group-item list-group-item-action" href="/admin/theme">Темы</a>
         </div>
-
         <div class="list-group list-group-flush">
             <a class="active list-group-item list-group-item-action" href="/admin/users">Юзеры</a>
         </div>

@@ -19,16 +19,16 @@
     <title>theme</title>
 </head>
 <body>
+<nav class="navbar bg-dark fixed-top">
+    <a class="navbar-brand"></a>
+    <form action="/logout" class="form-inline">
+        <button class="btn btn-outline-danger">
+            LOGOUT
+        </button>
+    </form>
+</nav>
 <div class="container-fluid">
     <div class="sidenav">
-        <div>
-            <form action="/logout">
-                <button class="btn-block btn-outline-danger">
-                    LOGOUT
-                </button>
-            </form>
-        </div>
-
         <div class="list-group list-group-flush">
             <a class="active list-group-item list-group-item-action"
                href="/admin/feedback">Обратная связь</a>
@@ -37,7 +37,6 @@
         <div class="list-group list-group-flush">
             <a class="active list-group-item list-group-item-action" href="/admin/theme">Темы</a>
         </div>
-
         <div class="list-group list-group-flush">
             <a class="active list-group-item list-group-item-action" href="/admin/users">Юзеры</a>
         </div>
@@ -65,17 +64,24 @@
                             <div class="modal-body">
                                 <div>
                                     <label for="idInputForNameOfTheNewTheme">Название новой темы</label>
-                                    <input class="inputContainerForAddingTheme" id="idInputForNameOfTheNewTheme" type="text"
+                                    <input class="inputContainerForAddingTheme" id="idInputForNameOfTheNewTheme"
+                                           type="text"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
-                                    <label for="idInputForCriticalWeightOfTheNewTheme">Критический вес новой темы</label>
-                                    <input class="inputContainerForAddingTheme" id="idInputForCriticalWeightOfTheNewTheme" type="number"  min="0" max="9007199254740991"
+                                    <label for="idInputForCriticalWeightOfTheNewTheme">Критический вес новой
+                                        темы</label>
+                                    <input class="inputContainerForAddingTheme"
+                                           id="idInputForCriticalWeightOfTheNewTheme"
+                                           type="number" min="0" max="9007199254740991"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
-                                    <label for="idInputForReviewPointOfTheNewTheme">Количество очков за сдачу новой темы</label>
-                                    <input class="inputContainerForAddingTheme" id="idInputForReviewPointOfTheNewTheme" type="number"  min="0" max="9007199254740991"
+                                    <label for="idInputForReviewPointOfTheNewTheme">Количество очков за сдачу новой
+                                        темы</label>
+                                    <input class="inputContainerForAddingTheme"
+                                           id="idInputForReviewPointOfTheNewTheme"
+                                           type="number" min="0" max="9007199254740991"
                                            aria-describedby="button-for-add-theme">
                                 </div>
                                 <div>
@@ -86,7 +92,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отменить
+                                </button>
                                 <button type="button" class="btn btn-primary add-new-theme">Сохранить</button>
                             </div>
                         </div>
@@ -94,7 +101,8 @@
                 </div>
             </form>
             <form class="input-group mb-3" id="search-form">
-                <input type="search" name="search" class="form-control col-md-2 offset-md-10 border border-primary" placeholder="Поиск...">
+                <input type="search" name="search" class="form-control col-md-2 offset-md-10 border border-primary"
+                       placeholder="Поиск...">
                 <div class="input-group-append">
                     <button class="btn btn-primary input-group-append" type="submit">Поиск</button>
                 </div>
@@ -121,15 +129,18 @@
                         <form id="edit-theme-form">
                             <div class="form-group">
                                 Название темы:
-                                <input class="col" type="text" name="title" placeholder="Введите название темы" required autocomplete="off">
+                                <input class="col" type="text" name="title" placeholder="Введите название темы" required
+                                       autocomplete="off">
                             </div>
                             <div class="form-group">
                                 Критический вес:
-                                <input class="col" type="number" min="0" name="criticalWeight" placeholder="Введите критический вес темы" required autocomplete="off">
+                                <input class="col" type="number" min="0" name="criticalWeight"
+                                       placeholder="Введите критический вес темы" required autocomplete="off">
                             </div>
                             <div class="form-group">
                                 Ревью поинты:
-                                <input class="col" type="number" min="0" name="reviewPoint" placeholder="Введите вес вопроса" required autocomplete="off">
+                                <input class="col" type="number" min="0" name="reviewPoint"
+                                       placeholder="Введите вес вопроса" required autocomplete="off">
                             </div>
                             <div class="form-group">
                                 <input class="col" type="hidden" name="themeType">
@@ -137,7 +148,9 @@
                             <div class="modal-footer">
                                 <div class="dropdown">
                                     <!-- выпадающие элементы -->
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                            data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
                                         Дополнительно
                                     </button>
                                     <div class="dropdown-menu">
@@ -171,15 +184,18 @@
                 <form id="add-question-form">
                     <div class="form-group">
                         Текст вопроса:
-                        <textarea rows="10" input class="col" type="text" name="question" placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
+                        <textarea rows="10" input class="col" type="text" name="question"
+                                  placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
                     </div>
                     <div class="form-group">
                         Ответ на вопрос:
-                        <textarea rows="10" input class="col" type="text" name="answer" placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
+                        <textarea rows="10" input class="col" type="text" name="answer"
+                                  placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
                     </div>
                     <div class="form-group">
                         Вес вопроса:
-                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required autocomplete="off">
+                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required
+                               autocomplete="off">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
@@ -207,15 +223,18 @@
                 <form id="edit-question-form">
                     <div class="form-group">
                         Текст вопроса:
-                        <textarea rows="10" input class="col" type="text" name="question" placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
+                        <textarea rows="10" input class="col" type="text" name="question"
+                                  placeholder="Введите текст вопроса" required autocomplete="off"></textarea>
                     </div>
                     <div class="form-group">
                         Ответ на вопрос:
-                        <textarea rows="10" input class="col" type="text" name="answer" placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
+                        <textarea rows="10" input class="col" type="text" name="answer"
+                                  placeholder="Введите ответ на вопрос" required autocomplete="off"></textarea>
                     </div>
                     <div class="form-group">
                         Вес вопроса:
-                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required autocomplete="off">
+                        <input class="col" type="number" name="weight" placeholder="Введите вес вопроса" required
+                               autocomplete="off">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
