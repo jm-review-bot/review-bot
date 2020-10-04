@@ -59,7 +59,7 @@ function deleteTheme(themeId) {
 $('#edit-theme-form').on('submit', function (event) {
     event.preventDefault()
 
-    let themeId = this.dataset.idtheme
+    let themeId = this.dataset.id
     let themeDto = getThemeDtoById(themeId)
     themeDto.title = this.title.value
     themeDto.criticalWeight = this.criticalWeight.value
