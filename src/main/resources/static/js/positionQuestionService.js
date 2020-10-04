@@ -12,16 +12,22 @@
 $(document).on('click', '.move-down-question', function () {
     let themeId = this.dataset.idtheme
     let questionId = this.dataset.idquestion
-    $.ajax({
-        url: `/api/admin/theme/${themeId}/question/${questionId}/position/down`,
-        type: 'patch',
-        success: function() {
-            buildListQuestionsByThemeId(themeId)
-        },
-        error: function () {
-            alert('При изменении позиции вопроса возникла непредвиденная ошибка')
-        }
-    })
+    let questionVersion = this.dataset.version
+    let question = getQuestionDtoByThemeIdAndQuestionId(themeId, questionId)
+    if (question.version != questionVersion) {
+        alert("Вопрос был изменен другим пользователем. Пожалуйста, перезагрузите страницу и повторите попытку")
+    } else {
+        $.ajax({
+            url: `/api/admin/theme/${themeId}/question/${questionId}/position/down`,
+            type: 'patch',
+            success: function () {
+                buildListQuestionsByThemeId(themeId)
+            },
+            error: function () {
+                alert('При изменении позиции вопроса возникла непредвиденная ошибка')
+            }
+        })
+    }
 })
 
 /*
@@ -38,14 +44,20 @@ $(document).on('click', '.move-down-question', function () {
 $(document).on('click', '.move-up-question', function () {
     let themeId = this.dataset.idtheme
     let questionId = this.dataset.idquestion
-    $.ajax({
-        url: `/api/admin/theme/${themeId}/question/${questionId}/position/up`,
-        type: 'patch',
-        success: function() {
-            buildListQuestionsByThemeId(themeId)
-        },
-        error: function () {
-            alert('При изменении позиции вопроса возникла непредвиденная ошибка')
-        }
-    })
+    let questionVersion = this.dataset.version
+    let question = getQuestionDtoByThemeIdAndQuestionId(themeId, questionId)
+    if (question.version != questionVersion) {
+        alert("Вопрос был изменен другим пользователем. Пожалуйста, перезагрузите страницу и повторите попытку")
+    } else {
+        $.ajax({
+            url: `/api/admin/theme/${themeId}/question/${questionId}/position/up`,
+            type: 'patch',
+            success: function () {
+                buildListQuestionsByThemeId(themeId)
+            },
+            error: function () {
+                alert('При изменении позиции вопроса возникла непредвиденная ошибка')
+            }
+        })
+    }
 })

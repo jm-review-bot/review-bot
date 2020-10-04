@@ -15,6 +15,9 @@ import java.util.Objects;
 @Setter
 public class Question {
 
+    @Version
+    Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")

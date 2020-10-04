@@ -20,6 +20,11 @@ public class QuestionDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
+    @ApiModelProperty(notes = "Theme version")
+    private Long version;
+
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = UpdateGroup.class)
     @ApiModelProperty(notes = "Question id")
     private Long id;
 
@@ -39,7 +44,8 @@ public class QuestionDto {
     public QuestionDto() {
     }
 
-    public QuestionDto(Long id, String question, String answer, Integer position, Integer weight) {
+    public QuestionDto(Long version, Long id, String question, String answer, Integer position, Integer weight) {
+        this.version = version;
         this.id = id;
         this.question = question;
         this.answer = answer;

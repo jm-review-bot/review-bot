@@ -60,13 +60,10 @@ $('#edit-theme-form').on('submit', function (event) {
     event.preventDefault()
 
     let themeId = this.dataset.id
-    let themeDto = {
-        id : themeId,
-        title : this.title.value,
-        criticalWeight : this.criticalWeight.value,
-        reviewPoint : this.reviewPoint.value,
-        type : this.themeType.value
-    }
+    let themeDto = getThemeDtoById(themeId)
+    themeDto.title = this.title.value
+    themeDto.criticalWeight = this.criticalWeight.value
+    themeDto.reviewPoint = this.reviewPoint.value
 
     $.ajax({
         url: `/api/admin/theme/${themeId}`,

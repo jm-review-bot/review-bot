@@ -72,14 +72,14 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public List<QuestionDto> getAllQuestionDtoByTheme(Long themeId) {
-        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id, q.question, q.answer, q.position, q.weight) FROM Question q WHERE q.fixedTheme.id = :theme_id", QuestionDto.class)
+        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.version, q.id, q.question, q.answer, q.position, q.weight) FROM Question q WHERE q.fixedTheme.id = :theme_id", QuestionDto.class)
                 .setParameter("theme_id", themeId)
                 .getResultList();
     }
 
     @Override
     public QuestionDto getQuestionDtoById(Long id) {
-        List<QuestionDto> list = entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id,q.question,q.answer,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class)
+        List<QuestionDto> list = entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.version, q.id,q.question,q.answer,q.position,q.weight) FROM Question q WHERE q.id = :id", QuestionDto.class)
                 .setParameter("id", id)
                 .getResultList();
         return list.size() > 0 ? list.get(0) : null;
@@ -87,7 +87,7 @@ public class QuestionDaoImpl extends AbstractDao<Long, Question> implements Ques
 
     @Override
     public List<QuestionDto> questionsSearch(String searchString) {
-        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.id, q.question, q.answer, q.position, q.weight) FROM Question q WHERE LOWER(q.question) LIKE LOWER(:search)", QuestionDto.class)
+        return entityManager.createQuery("SELECT new spring.app.dto.QuestionDto(q.version, q.id, q.question, q.answer, q.position, q.weight) FROM Question q WHERE LOWER(q.question) LIKE LOWER(:search)", QuestionDto.class)
                 .setParameter("search", "%" + searchString + "%")
                 .getResultList();
     }

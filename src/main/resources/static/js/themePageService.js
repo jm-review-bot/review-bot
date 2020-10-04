@@ -29,10 +29,10 @@ function buildThemesAccordion(allThemesDto) {
                                 ${theme.title}
                             </div>
                             <div class="col-2 text-right">
-                                <button class="move-down-theme btn btn-link" type="button" data-id="${theme.id}">
+                                <button class="move-down-theme btn btn-link" type="button" data-id="${theme.id}" data-version="${theme.version}">
                                     <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                                 </button>
-                                <button class="move-up-theme btn btn-link" type="button" data-id="${theme.id}">
+                                <button class="move-up-theme btn btn-link" type="button" data-id="${theme.id}" data-version="${theme.version}">
                                     <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
                                 </button>
                                 <button class="edit-theme btn btn-link" type="button" data-id="${theme.id}">
@@ -58,45 +58,57 @@ function buildThemesAccordion(allThemesDto) {
 
 $(document).on('click', '.move-down-theme', function () {
 
-    // При изменении позиции темы необходимо запоминать темы, которые раскрыты пользователем
-    let expandedThemes = $('#theme-accordion .collapse.show')
+    let themeId = this.dataset.id
+    let themeVersion = this.dataset.version
+    let theme = getThemeDtoById(themeId)
+    if (theme.version != themeVersion) {
+        alert("Тема была изменена другим пользователем. Пожалуйста, перезагрузите страницу и повторите попытку")
+    } else {
+        // При изменении позиции темы необходимо запоминать темы, которые раскрыты пользователем
+        let expandedThemes = $('#theme-accordion .collapse.show')
 
-    let themeId = this.dataset.id;
-    let url = `/api/admin/theme/${themeId}/position/down`;
-    $.ajax({
-        type : 'PATCH',
-        url: url,
-        success: function() {
-            buildThemesAccordion(getAllThemesDto());
-            if (expandedThemes.length > 0) { // Необходимо развернуть темы, которые были развернуты до смещения позиции
-                for (let i = 0; i < expandedThemes.length; i++) {
-                    $(`div .theme-expand[data-id=${expandedThemes[i].dataset.id}]`).click()
+        let url = `/api/admin/theme/${themeId}/position/down`;
+        $.ajax({
+            type: 'PATCH',
+            url: url,
+            success: function () {
+                buildThemesAccordion(getAllThemesDto());
+                if (expandedThemes.length > 0) { // Необходимо развернуть темы, которые были развернуты до смещения позиции
+                    for (let i = 0; i < expandedThemes.length; i++) {
+                        $(`div .theme-expand[data-id=${expandedThemes[i].dataset.id}]`).click()
+                    }
                 }
             }
-        }
-    });
-});
+        });
+    }
+})
 
 $(document).on('click', '.move-up-theme', function () {
 
-    // При изменении позиции темы необходимо запоминать темы, которые раскрыты пользователем
-    let expandedThemes = $('#theme-accordion .collapse.show')
+    let themeId = this.dataset.id
+    let themeVersion = this.dataset.version
+    let theme = getThemeDtoById(themeId)
+    if (theme.version != themeVersion) {
+        alert("Тема была изменена другим пользователем. Пожалуйста, перезагрузите страницу и повторите попытку")
+    } else {
+        // При изменении позиции темы необходимо запоминать темы, которые раскрыты пользователем
+        let expandedThemes = $('#theme-accordion .collapse.show')
 
-    let themeId = this.dataset.id;
-    let url = `/api/admin/theme/${themeId}/position/up`;
-    $.ajax({
-        type : 'PATCH',
-        url: url,
-        success: function() {
-            buildThemesAccordion(getAllThemesDto());
-            if (expandedThemes.length > 0) { // Необходимо развернуть темы, которые были развернуты до смещения позиции
-                for (let i = 0; i < expandedThemes.length; i++) {
-                    $(`div .theme-expand[data-id=${expandedThemes[i].dataset.id}]`).click()
+        let url = `/api/admin/theme/${themeId}/position/up`;
+        $.ajax({
+            type: 'PATCH',
+            url: url,
+            success: function () {
+                buildThemesAccordion(getAllThemesDto());
+                if (expandedThemes.length > 0) { // Необходимо развернуть темы, которые были развернуты до смещения позиции
+                    for (let i = 0; i < expandedThemes.length; i++) {
+                        $(`div .theme-expand[data-id=${expandedThemes[i].dataset.id}]`).click()
+                    }
                 }
             }
-        }
-    });
-});
+        });
+    }
+})
 
 $(document).on('click', '.theme-expand', function () {
     let themeId = this.dataset.id
