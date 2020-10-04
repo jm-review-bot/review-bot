@@ -20,6 +20,11 @@ public class ThemeDto {
 
     @Null(groups = CreateGroup.class)
     @NotNull(groups = UpdateGroup.class)
+    @ApiModelProperty(notes = "Theme version")
+    private Long version;
+
+    @Null(groups = CreateGroup.class)
+    @NotNull(groups = UpdateGroup.class)
     @ApiModelProperty(notes = "Theme id")
     private Long id;
 
@@ -48,7 +53,13 @@ public class ThemeDto {
     public ThemeDto() {
     }
 
-    public ThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
+    public ThemeDto(Long version,
+                    Long id,
+                    String title,
+                    Integer criticalWeight,
+                    Integer position,
+                    Integer reviewPoint) {
+        this.version = version;
         this.id = id;
         this.title = title;
         this.criticalWeight = criticalWeight;
@@ -56,8 +67,14 @@ public class ThemeDto {
         this.reviewPoint = reviewPoint;
     }
 
-    public ThemeDto(Long id,
-                    String title, Integer criticalWeight, Integer position, Integer reviewPoint, String type) {
+    public ThemeDto(Long version,
+                    Long id,
+                    String title,
+                    Integer criticalWeight,
+                    Integer position,
+                    Integer reviewPoint,
+                    String type) {
+        this.version = version;
         this.id = id;
         this.title = title;
         this.criticalWeight = criticalWeight;

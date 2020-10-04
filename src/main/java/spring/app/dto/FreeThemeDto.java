@@ -7,8 +7,8 @@ public class FreeThemeDto extends ThemeDto {
         super();
     }
 
-    public FreeThemeDto(Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
-        super(id, title, criticalWeight, position, reviewPoint);
+    public FreeThemeDto(Long version, Long id, String title, Integer criticalWeight, Integer position, Integer reviewPoint) {
+        super(version, id, title, criticalWeight, position, reviewPoint);
     }
 
 }

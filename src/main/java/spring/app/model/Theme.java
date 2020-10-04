@@ -16,6 +16,9 @@ import java.util.Objects;
 @Setter
 public abstract class Theme {
 
+    @Version
+    Long version;
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id")

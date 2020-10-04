@@ -30,10 +30,10 @@ function buildListQuestionsByThemeId(themeId) {
                         <h5>${getThemeDtoById(themeId).position}.${question.position}. ${question.question}</h5><br/>
                     </div>
                     <div class="col-2 text-right">
-                        <button class="move-down-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
+                        <button class="move-down-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}" data-version="${question.version}">
                             <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>
                         </button>
-                        <button class="move-up-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
+                        <button class="move-up-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}" data-version="${question.version}">
                             <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>
                         </button>
                         <button class="edit-question btn btn-link" type="button" data-idquestion="${question.id}" data-idtheme="${themeId}">
