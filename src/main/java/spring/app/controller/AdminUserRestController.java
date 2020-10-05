@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import spring.app.dto.UserDto;
@@ -36,17 +37,19 @@ public class AdminUserRestController {
     private final ThemeService themeService;
     private final RoleService roleService;
     private final VkService vkService;
+    private final PasswordEncoder passwordEncoder;
 
     public AdminUserRestController(UserService userService,
                                    StudentReviewService studentReviewService,
                                    ThemeService themeService,
                                    RoleService roleService,
-                                   VkService vkService) {
+                                   VkService vkService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.studentReviewService = studentReviewService;
         this.themeService = themeService;
         this.roleService = roleService;
         this.vkService = vkService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ApiOperation(value = "Get all users list")
@@ -79,7 +82,7 @@ public class AdminUserRestController {
 
             // Логирование
             User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            logger.info("Админ (vkId={}) добавил пользователя (ID={})" ,
+            logger.info("Админ (vkId={}) добавил пользователя (ID={})",
                     loggedInUser.getVkId(), user.getVkId());
 
             return ResponseEntity.noContent().build();
@@ -96,7 +99,7 @@ public class AdminUserRestController {
 
         // Логирование
         User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        logger.info("Админ (vkId={}) удалил пользователя (ID={})" ,
+        logger.info("Админ (vkId={}) удалил пользователя (ID={})",
                 loggedInUser.getVkId(), user.getVkId());
 
         return ResponseEntity.ok().build();
@@ -106,7 +109,7 @@ public class AdminUserRestController {
     @Validated(UpdateGroup.class)
     @PostMapping("/{userId}")
     public ResponseEntity<?> editUser(@ApiParam(value = "User DTO", required = true) @RequestBody @Valid UserDto userDto,
-                                         @ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
+                                      @ApiParam(value = "User ID", required = true) @PathVariable Long userId) {
 
         String stringVkId = userDto.getStringVkId();
         if (!StringParser.isNumeric(stringVkId)) { // Если VK ID строковый, его необходимо преобразовать в числовой
@@ -128,9 +131,22 @@ public class AdminUserRestController {
 
         // Логирование
         User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        logger.info("Админ (vkId={}) изменил пользователя (ID={})" ,
+        logger.info("Админ (vkId={}) изменил пользователя (ID={})",
                 loggedInUser.getVkId(), user.getVkId());
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/passwd/{userId}")
+    public ResponseEntity<?> updatePassword(@RequestParam @Valid String newPassword, @PathVariable Long userId) {
+        User user = userService.getUserById(userId);
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userService.updateUser(user);
+
+        // Логирование
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("Админ (vkId={}) изменил пользователя (ID={})",
+                loggedInUser.getVkId(), user.getVkId());
         return ResponseEntity.ok().build();
     }
 }
