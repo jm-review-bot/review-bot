@@ -15,6 +15,7 @@ import spring.app.util.StringParser;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
@@ -54,9 +55,9 @@ public class UserPassReviewAddTheme extends Step {
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException {
         Integer vkId = context.getVkId();
         String currentInput = context.getInput();
-        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        Optional<StudentReview> studentReviewOptional = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
         //если записи на ревью нету, значит ожидаем номер темы
-        if (studentReview == null && StringParser.isNumeric(currentInput)) {
+        if (!studentReviewOptional.isPresent() && StringParser.isNumeric(currentInput)) {
             Integer command = StringParser.toNumbersSet(currentInput).iterator().next();
             Theme selectedTheme = themeService.getAllThemes().stream().filter(theme -> theme.getPosition().equals(command)).findFirst().orElse(null);
             //проверяем или номер темы не выходит за рамки
@@ -79,7 +80,7 @@ public class UserPassReviewAddTheme extends Step {
         } else {
             //определяем нажатую кнопку или сообщаем о неверной команде
             String command = StringParser.toWordsArray(currentInput)[0];
-            if ("отмена".equals(command) && studentReview != null) {
+            if ("отмена".equals(command) && studentReviewOptional.isPresent()) {
                 sendUserToNextStep(context, USER_CANCEL_REVIEW);
             } else if ("/start".equals(command)) {
                 sendUserToNextStep(context, START);
@@ -93,8 +94,9 @@ public class UserPassReviewAddTheme extends Step {
 
     @Override
     public String getDynamicText(BotContext context) {
-        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-        if (studentReview != null) {
+        Optional<StudentReview> studentReviewOptional = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        if (studentReviewOptional.isPresent()) {
+            StudentReview studentReview = studentReviewOptional.get();
             return String.format("Вы уже записаны на ревью:\n" +
                             "Тема: %s\n" +
                             "Дата: %s\n" +
@@ -107,8 +109,8 @@ public class UserPassReviewAddTheme extends Step {
 
     @Override
     public String getDynamicKeyboard(BotContext context) {
-        StudentReview studentReview = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
-        if (studentReview != null) {
+        Optional<StudentReview> studentReviewOptional = studentReviewService.getStudentReviewIfAvailableAndOpen(context.getUser().getId());
+        if (studentReviewOptional.isPresent()) {
             StringBuilder keys = new StringBuilder();
             keys
                     .append(this.getRowDelimiterString())

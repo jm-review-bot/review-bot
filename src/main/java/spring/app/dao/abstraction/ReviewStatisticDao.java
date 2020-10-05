@@ -2,9 +2,11 @@ package spring.app.dao.abstraction;
 
 import spring.app.model.ReviewStatistic;
 
+import java.util.Optional;
+
 public interface ReviewStatisticDao extends GenericDao<Long, ReviewStatistic> {
 
-    ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId);
+    Optional<ReviewStatistic> getReviewStatisticByUserVkId(Integer userVkId);
 
-    ReviewStatistic getReviewStatisticByUserId(Long userId);
+    Optional<ReviewStatistic> getReviewStatisticByUserId(Long userId);
 }

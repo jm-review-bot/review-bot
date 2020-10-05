@@ -13,6 +13,7 @@ import spring.app.dto.ReviewerDto;
 import spring.app.dto.UserDto;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.model.FreeTheme;
+import spring.app.model.Role;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
@@ -21,6 +22,7 @@ import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getUserDtoById(Long userId) {
+    public Optional<UserDto> getUserDtoById(Long userId) {
         return userDao.getUserDtoById(userId);
     }
 
@@ -80,7 +82,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getByVkId(Integer vkId) {
+    public Optional<User> getByVkId(Integer vkId) {
         return userDao.getByVkId(vkId);
     }
 
@@ -130,7 +132,7 @@ public class UserServiceImpl implements UserService {
     public User addNewReviewer(long themeId , long userId) {
         List<User> users = userDao.getExaminersByFreeThemeId(themeId);
         users.add(userDao.getById(userId));
-        FreeTheme freeTheme = themeService.getFreeThemeById(themeId);
+        FreeTheme freeTheme = themeService.getFreeThemeById(themeId).get();
         freeTheme.setExaminers(users);
         themeService.updateTheme(freeTheme);
         return userDao.getById(userId);
@@ -148,9 +150,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         if (StringParser.isNumeric(username)) {
-            User user = userDao.getByVkId(Integer.parseInt(username));
-            if (user != null) {
-                return user;
+            Optional<User> optionalUser = userDao.getByVkId(Integer.parseInt(username));
+            if (optionalUser.isPresent()) {
+                return optionalUser.get();
             } else {
                 throw new UsernameNotFoundException("Пользователя нет в БД");
             }
@@ -164,7 +166,7 @@ public class UserServiceImpl implements UserService {
     public User addUserByVkId(String stringVkId) throws ClientException, ApiException, IncorrectVkIdsException {
         User newUser = vkService.newUserFromVk(stringVkId);
         if (!userDao.isExistByVkId(newUser.getVkId())) { // Проверка на тот факт, что пользователя еще нет в БД
-            newUser.setRole(roleDao.getRoleByName("USER"));
+            newUser.setRole(roleDao.getRoleByName("USER").get());
             userDao.save(newUser);
             return newUser;
         } else {

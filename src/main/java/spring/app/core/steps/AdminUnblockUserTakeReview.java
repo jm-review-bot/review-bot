@@ -64,7 +64,7 @@ public class AdminUnblockUserTakeReview extends Step {
         Integer vkId = context.getVkId();
         Long studentId = Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0));
         User student = userService.getUserById(studentId);
-        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(studentId);
+        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(studentId).get();
         return String.format("Вы уверены, что хотите снять блок с возможности создания ревью для пользователя %s %s?\nКоличество блокировок пользователя: %d.\nПоследняя причина блокировки:\n\n%s",
                 student.getFirstName(),
                 student.getLastName(),

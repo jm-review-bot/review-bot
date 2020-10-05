@@ -5,12 +5,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.FeedbackDao;
 import spring.app.dto.FeedbackDto;
-import spring.app.dao.abstraction.ReviewDao;
-import spring.app.dto.FeedbackDto;
 import spring.app.model.Feedback;
 import spring.app.service.abstraction.FeedbackService;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -35,7 +34,7 @@ public class FeedbackServiceImpl implements FeedbackService {
     }
 
     @Override
-    public FeedbackDto getFeedbackDtoById(Long id) {
+    public Optional<FeedbackDto> getFeedbackDtoById(Long id) {
         return feedbackDao.getFeedbackDtoById(id);
     }
 

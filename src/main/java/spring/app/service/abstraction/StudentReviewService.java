@@ -4,6 +4,7 @@ import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentReviewService {
 
@@ -19,17 +20,17 @@ public interface StudentReviewService {
 
     void deleteStudentReviewById(Long id);
 
-    StudentReview getStudentReviewIfAvailableAndOpen(Long idUser);
+    Optional<StudentReview> getStudentReviewIfAvailableAndOpen(Long idUser);
 
     Long getNumberStudentReviewByIdReview(Long idReview);
 
-    StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
+    Optional<StudentReview> getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
 
     void deleteStudentReviewByVkId(Integer vkId);
 
     List<StudentReview> getOpenReviewByStudentVkId(Integer vkId);
 
-    StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
+    Optional<StudentReview> getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
 
     List<StudentReview> getAllStudentReviewsByReviewId(Long reviewId);
 
@@ -37,7 +38,7 @@ public interface StudentReviewService {
 
     List<StudentReview> getStudentReviewsByStudentId(Long studentId);
 
-    StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
+    Optional<StudentReview> getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
 
     Boolean isThemePassedByStudent(Long studentId, Long themeId);
 

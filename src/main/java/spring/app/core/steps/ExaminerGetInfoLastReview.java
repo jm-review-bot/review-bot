@@ -13,6 +13,8 @@ import spring.app.service.abstraction.StudentReviewService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
+import java.util.Optional;
+
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
 
@@ -69,10 +71,11 @@ public class ExaminerGetInfoLastReview extends Step{
         User student = userService.getUserById(studentId);
         Long freeThemeId = Long.parseLong(storageService.getUserStorage(examinerVkId, EXAMINER_FREE_THEMES_LIST).get(0));
         Theme freeTheme = themeService.getThemeById(freeThemeId);
-        StudentReview lastStudentReview = studentReviewService.getLastStudentReviewByStudentIdAndThemeId(studentId, freeThemeId);
+        Optional<StudentReview> optionalStudentReview = studentReviewService.getLastStudentReviewByStudentIdAndThemeId(studentId, freeThemeId);
 
         // Бот выводит сообщение со статусом поледнего ревью студента по выбранной теме
-        if (lastStudentReview != null) {
+        if (optionalStudentReview.isPresent()) {
+            StudentReview lastStudentReview = optionalStudentReview.get();
             return String.format(
                     "Ревью по теме %s. Студент %s %s.\n" +
                             "Статус последнего ревью: %s.\n" +

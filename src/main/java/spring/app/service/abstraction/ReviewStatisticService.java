@@ -2,15 +2,17 @@ package spring.app.service.abstraction;
 
 import spring.app.model.ReviewStatistic;
 
+import java.util.Optional;
+
 public interface ReviewStatisticService {
 
     void updateReviewStatistic(ReviewStatistic reviewStatistic);
 
     void startReviewStatisticForUser(Integer userVkId);
 
-    ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId);
+    Optional<ReviewStatistic> getReviewStatisticByUserVkId(Integer userVkId);
 
-    ReviewStatistic getReviewStatisticByUserId(Long userId);
+    Optional<ReviewStatistic> getReviewStatisticByUserId(Long userId);
 
     void unblockTakingReviewForUser(Long userId);
 

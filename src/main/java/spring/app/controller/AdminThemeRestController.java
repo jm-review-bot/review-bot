@@ -10,19 +10,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import spring.app.dto.FixedThemeDto;
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
 import spring.app.mapper.ThemeMapper;
-import spring.app.model.FixedTheme;
 import spring.app.model.Theme;
 import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -48,12 +47,12 @@ public class AdminThemeRestController {
 
     @GetMapping("/{themeId}")
     @ApiOperation(value = "Get the theme")
-    public ResponseEntity<ThemeDto> getThemeById(@ApiParam(value = "Theme Id", required = true) @PathVariable Long themeId) {
-        ThemeDto themeDtoById = themeService.getThemeDtoById(themeId);
-        if (themeDtoById == null) {
+    public ResponseEntity<Optional<ThemeDto>> getThemeById(@ApiParam(value = "Theme Id", required = true) @PathVariable Long themeId) {
+        Optional<ThemeDto> optionalThemeDto = themeService.getThemeDtoById(themeId);
+        if (!optionalThemeDto.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(themeDtoById);
+        return ResponseEntity.ok(optionalThemeDto);
     }
 
     @Validated(CreateGroup.class)

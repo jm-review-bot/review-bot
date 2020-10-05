@@ -15,6 +15,7 @@ import spring.app.service.abstraction.StudentReviewService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StudentReviewServiceImpl implements StudentReviewService {
@@ -76,7 +77,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser) {
+    public Optional<StudentReview> getStudentReviewIfAvailableAndOpen(Long idUser) {
         return studentReviewDao.getStudentReviewIfAvailableAndOpen(idUser);
     }
 
@@ -92,7 +93,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
+    public Optional<StudentReview> getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
         return studentReviewDao.getStudentReviewByReviewIdAndStudentId(reviewId, studentId);
     }
 
@@ -102,7 +103,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
+    public Optional<StudentReview> getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
         return studentReviewDao.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(id);
     }
 
@@ -123,7 +124,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
     }
 
     @Override
-    public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+    public Optional<StudentReview> getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
         return studentReviewDao.getLastStudentReviewByStudentIdAndThemeId(studentId, themeId);
     }
 
@@ -145,7 +146,7 @@ public class StudentReviewServiceImpl implements StudentReviewService {
         List<Theme> passedThemeByStudent = themeDao.getPassedThemesByUser(student.getVkId());
         themesUpToPosition.removeAll(passedThemeByStudent);
 
-        User defaultUser = userDao.getByVkId(0);
+        User defaultUser = userDao.getByVkId(0).get();
         if (themesUpToPosition.size() > 0) {
             for (int i = 0; i < themesUpToPosition.size(); i++) {
                 Review passedReviewToDefaultUser = new Review();

@@ -97,7 +97,7 @@ public class UserStartReviewCore extends Step {
                     }
                     int studentNumber = Integer.parseInt(luckyStudentPosition);
                     User student = students.get(studentNumber);
-                    StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
+                    StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId()).get();
                     studentReviewAnswerService.addStudentReviewAnswer(new StudentReviewAnswer(studentReview, question, true));
                 }
                 //Обработаем неучей. Мы можем вообще не зайти сюда, если первый же студент ответил верно
@@ -106,7 +106,7 @@ public class UserStartReviewCore extends Step {
                     for (String answer : studentAnswers) {
                         int studentNumber = Integer.parseInt(answer);
                         User student = students.get(studentNumber);
-                        StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
+                        StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId()).get();
                         studentReviewAnswerService.addStudentReviewAnswer(new StudentReviewAnswer(studentReview, question, false));
                         //добавим вопрос в список проблемных для этого студента.
                         problemQuestions.putIfAbsent(student, new ArrayList<>());
@@ -130,12 +130,12 @@ public class UserStartReviewCore extends Step {
             // подведение итогов ревью для студентов, рассылка сообщений студентам с результатами ревью, списание очков
             for (User student : students) {//TODO:разбить и вынести на 2 метода - расчет итогов(сдал/не сдал) и рассылку AR
                 // списываем очки за пройденное ревью
-                Theme theme = themeService.getThemeByReviewId(reviewId);
+                Theme theme = themeService.getThemeByReviewId(reviewId).get();
                 student.setReviewPoint(student.getReviewPoint() - theme.getReviewPoint());
                 userService.updateUser(student);
                 // проверяем ответы по карте. Если проблемные вопросы есть - значит(до правок по весу) он не сдал.
                 // Не быть хотя бы одного ответа у него не может т.к. это возможно только если вопросов на ревью было меньше чем студентов
-                StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId());
+                StudentReview studentReview = studentReviewService.getStudentReviewByReviewIdAndStudentId(reviewId, student.getId()).get();
                 if (studentWrongWeight.get(student) != null && studentWrongWeight.get(student) >= theme.getCriticalWeight()) {
                     studentReview.setIsPassed(false);
                 } else {

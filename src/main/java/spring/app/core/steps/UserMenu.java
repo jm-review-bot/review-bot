@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static spring.app.core.StepSelector.*;
@@ -79,7 +80,7 @@ public class UserMenu extends Step {
                         // если кто-то записан на ревью, то сохраняем reviewId в STORAGE
                         storageService.updateUserStorage(vkId, USER_MENU, Arrays.asList(reviewId.toString()));
                         // Для мониторинга за фармом RP обнуляется значение счетчика количества ревью без записавшихся студентов
-                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId).get();
                         reviewStatistic.setCountReviewsWithoutStudentsInRow((long)0);
                         reviewStatisticService.updateReviewStatistic(reviewStatistic);
                         //теперь мы просто сохраняем юзеру его значения
@@ -88,11 +89,11 @@ public class UserMenu extends Step {
                         // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
                         nearestReview.setIsOpen(false);
                         reviewService.updateReview(nearestReview);
-                        User user = userService.getByVkId(vkId);
+                        User user = userService.getByVkId(vkId).get();
                         user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                         userService.updateUser(user);
                         // Для мониторинга за фармом RP увеличивается значение счетчика количества ревью без записавшихся студентов
-                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+                        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId).get();
                         reviewStatistic.setCountReviewsWithoutStudentsInRow(reviewStatistic.getCountReviewsWithoutStudentsInRow() + 1);
                         reviewStatisticService.updateReviewStatistic(reviewStatistic);
                         throw new ProcessInputException(String.format("На твое ревью никто не записался, ты получаешь 1 RP.\nТвой баланс: %d RP", user.getReviewPoint()));
@@ -125,11 +126,13 @@ public class UserMenu extends Step {
             storageService.removeUserStorage(vkId, USER_MENU);
         } else if (command.equals("принять")) { // (Принять ревью)
             // Если создание ревью для пользователя заблокировано, ему необходимо обратиться к админу для разблокировки
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
-            if (reviewStatistic == null) { // Если статистика по пользователю еще не велась, необходимо начать ее
+            Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+            ReviewStatistic reviewStatistic;
+            if (!optionalReviewStatistic.isPresent()) { // Если статистика по пользователю еще не велась, необходимо начать ее
                 reviewStatisticService.startReviewStatisticForUser(vkId);
-                reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId);
+                reviewStatistic = reviewStatisticService.getReviewStatisticByUserVkId(vkId).get();
             } else { // Если статистика уже велась, достаточно ее актуализировать
+                reviewStatistic = optionalReviewStatistic.get();
                 reviewStatisticService.updateReviewStatistic(reviewStatistic);
             }
             if (reviewStatistic.isReviewBlocked()) {

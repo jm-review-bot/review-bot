@@ -4,6 +4,7 @@ import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionService {
 
@@ -21,7 +22,7 @@ public interface QuestionService {
 
     List<Question> getQuestionsByReviewId(Long reviewId);
 
-    Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
+    Optional<Question> getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
 
     boolean changeQuestionPositionByThemeIdAndQuestionIdAndPositionShift(Long themeId, Long questionId, Integer positionChange);
 
@@ -29,7 +30,7 @@ public interface QuestionService {
 
     List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
 
-    QuestionDto getQuestionDtoById(Long id);
+    Optional<QuestionDto> getQuestionDtoById(Long id);
 
     List<QuestionDto> questionsSearch(String searchString);
 }

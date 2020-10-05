@@ -6,10 +6,11 @@ import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
 
-    StudentReview getStudentReviewIfAvailableAndOpen(Long idUser);
+    Optional<StudentReview> getStudentReviewIfAvailableAndOpen(Long idUser);
 
     Long getNumberStudentReviewByIdReview(Long idReview);
 
@@ -18,9 +19,9 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
     @Transactional(propagation = Propagation.MANDATORY)
     void deleteStudentReviewByVkId(Integer vkId);
 
-    StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
+    Optional<StudentReview> getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId);
 
-    StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
+    Optional<StudentReview> getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id);
 
     List<StudentReview> getOpenReviewByStudentVkId(Integer vkId);
 
@@ -28,7 +29,7 @@ public interface StudentReviewDao extends GenericDao<Long, StudentReview> {
 
     List<StudentReview> getStudentReviewsByStudentId(Long studentId);
 
-    StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
+    Optional<StudentReview> getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId);
 
     Boolean isThemePassedByStudent(Long studentId, Long themeId);
 }

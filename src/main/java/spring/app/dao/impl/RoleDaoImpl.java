@@ -4,22 +4,25 @@ import org.springframework.stereotype.Repository;
 import spring.app.dao.abstraction.RoleDao;
 import spring.app.dto.RoleDto;
 import spring.app.model.Role;
+import spring.app.util.SingleResultHelper;
 
-import javax.persistence.TypedQuery;
+import java.util.Optional;
 import java.util.List;
 
 @Repository
 public class RoleDaoImpl extends AbstractDao<Long, Role> implements RoleDao {
+
+    private final SingleResultHelper<Role> singleResultHelper = new SingleResultHelper<>();
+
 
     public RoleDaoImpl() {
         super(Role.class);
     }
 
     @Override
-    public Role getRoleByName(String roleName) {
-        TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class);
-        query.setParameter("name", roleName);
-        return query.getSingleResult();
+    public Optional<Role> getRoleByName(String roleName) {
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT r FROM Role r WHERE r.name = :name", Role.class)
+                .setParameter("name", roleName));
     }
 
     @Override

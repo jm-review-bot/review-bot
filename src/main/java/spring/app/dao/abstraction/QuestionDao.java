@@ -5,17 +5,19 @@ import org.springframework.transaction.annotation.Transactional;
 import spring.app.dto.QuestionDto;
 import spring.app.model.Question;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 public interface QuestionDao extends GenericDao<Long, Question> {
 
     List<Question> getQuestionsByReviewId(Long reviewId);
 
-    Question getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
+    Optional<Question> getQuestionByStudentReviewAnswerId(Long studentReviewAnswerId);
 
     List<Question> getQuestionsByThemeId(Long themeId);
 
-    Question getQuestionByThemeIdAndId(Long themeId, Long questionId);
+    Optional<Question> getQuestionByThemeIdAndId(Long themeId, Long questionId);
 
     Integer getQuestionMinPositionByThemeId(Long themeId);
 
@@ -26,7 +28,7 @@ public interface QuestionDao extends GenericDao<Long, Question> {
 
     List<QuestionDto> getAllQuestionDtoByTheme(Long themeId);
 
-    QuestionDto getQuestionDtoById(Long id);
+    Optional<QuestionDto> getQuestionDtoById(Long id);
 
     List<QuestionDto> questionsSearch(String searchString);
 }

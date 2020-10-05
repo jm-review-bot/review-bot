@@ -9,25 +9,27 @@ import spring.app.dao.abstraction.UserDao;
 import spring.app.dto.ReviewerDto;
 import spring.app.dto.UserDto;
 import spring.app.model.User;
+import spring.app.util.SingleResultHelper;
 
 import javax.persistence.NoResultException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     private static final Logger log = LoggerFactory.getLogger(UserDaoImpl.class);
+    private final SingleResultHelper<User> userSingleResultHelper = new SingleResultHelper<>();
+    private final SingleResultHelper<UserDto> userDtoSingleResultHelper = new SingleResultHelper<>();
 
     public UserDaoImpl() {
         super(User.class);
     }
 
     @Override
-    public User getByVkId(Integer vkId) throws NoResultException {
-        List<User> userList = entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId", User.class)
-                .setParameter("vkId", vkId)
-                .getResultList();
-        return userList.size() > 0 ? userList.get(0) : null;
+    public Optional<User> getByVkId(Integer vkId) throws NoResultException {
+        return userSingleResultHelper.singleResult(entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId", User.class)
+                .setParameter("vkId", vkId));
     }
 
     @Override
@@ -88,16 +90,16 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<ReviewerDto> getExaminersInThisTheme(long themeId) {
-      List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id,u.firstName,u.lastName) FROM FreeTheme ft JOIN ft.examiners u WHERE ft.id =:theme_id")
-                .setParameter("theme_id" , themeId)
+        List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id,u.firstName,u.lastName) FROM FreeTheme ft JOIN ft.examiners u WHERE ft.id =:theme_id")
+                .setParameter("theme_id", themeId)
                 .getResultList();
         return reviewers.size() > 0 ? reviewers : null;
     }
 
     @Override
     public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
-        List<ReviewerDto> reviewers =  entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) FROM User u WHERE u NOT IN (SELECT e FROM FreeTheme ft JOIN ft.examiners e WHERE ft.id =:theme_id)")
-                .setParameter("theme_id" , themeId)
+        List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) FROM User u WHERE u NOT IN (SELECT e FROM FreeTheme ft JOIN ft.examiners e WHERE ft.id =:theme_id)")
+                .setParameter("theme_id", themeId)
                 .getResultList();
         return reviewers.size() > 0 ? reviewers : null;
     }
@@ -111,8 +113,8 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     @Override
     public void deleteReviewerFromTheme(long themeId, long reviewerId) {
         entityManager.createNativeQuery("DELETE FROM user_free_theme WHERE free_theme_id =:theme_id AND examiner_id =:reviewer_id")
-                .setParameter("theme_id" , themeId)
-                .setParameter("reviewer_id" , reviewerId)
+                .setParameter("theme_id", themeId)
+                .setParameter("reviewer_id", reviewerId)
                 .executeUpdate();
     }
 
@@ -130,9 +132,8 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     }
 
     @Override
-    public UserDto getUserDtoById(Long userId) {
-        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
-                .setParameter("user_id", userId)
-                .getSingleResult();
+    public Optional<UserDto> getUserDtoById(Long userId) {
+        return userDtoSingleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
+                .setParameter("user_id", userId));
     }
 }
