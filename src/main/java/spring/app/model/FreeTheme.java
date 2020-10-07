@@ -21,7 +21,7 @@ public class FreeTheme extends Theme {
             joinColumns = {@JoinColumn(name = "free_theme_id")},
             inverseJoinColumns = {@JoinColumn(name = "examiner_id")}
     )
-    List<User> examiners;
+    private List<User> examiners;
 
     public List<User> getExaminers() {
         return examiners;
