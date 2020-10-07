@@ -1,6 +1,7 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -32,6 +33,7 @@ public class BotScheduler {
     @Value("${bot.minutes_remainder_students_reviewers}")
     private int minutesRemainderStudentsReviewers;
 
+    @Autowired
     public BotScheduler(VkService vkService, ReviewService reviewService, ChatBot bot, UserService userService, StepHolder stepHolder, StorageService storageService) {
         this.vkService = vkService;
         this.reviewService = reviewService;
