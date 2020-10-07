@@ -36,7 +36,7 @@ public class UserPassReviewGetListReview extends Step {
     private final ThemeService themeService;
     private final ReviewService reviewService;
     private final StudentReviewService studentReviewService;
-    private Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();//по vkId хранит позицию (в списке выбора ревью для записи [этот список выведен был пользователю])
+    private final Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();//по vkId хранит позицию (в списке выбора ревью для записи [этот список выведен был пользователю])
     // и айди ревью соответственно
 
     public UserPassReviewGetListReview(StorageService storageService, ThemeService themeService,

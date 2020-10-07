@@ -23,8 +23,8 @@ import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 @Component
 public class AdminEditReviewChangeReview extends Step {
 
-    private StorageService storageService;
-    private StudentReviewService studentReviewService;
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
 
     @Autowired
     public AdminEditReviewChangeReview(StorageService storageService, StudentReviewService studentReviewService) {

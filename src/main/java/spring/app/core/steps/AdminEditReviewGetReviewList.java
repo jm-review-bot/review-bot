@@ -30,9 +30,9 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminEditReviewGetReviewList extends Step {
 
-    private StorageService storageService;
-    private ThemeService themeService;
-    private StudentReviewService studentReviewService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
+    private final StudentReviewService studentReviewService;
 
     @Autowired
     public AdminEditReviewGetReviewList(

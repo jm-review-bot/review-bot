@@ -34,8 +34,8 @@ public class AdminReviewerRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminReviewerRestController.class);
 
-    private UserService userService;
-    private ThemeService themeService;
+    private final UserService userService;
+    private final ThemeService themeService;
 
     public AdminReviewerRestController (UserService userService , ThemeService themeService) {
         this.userService = userService;

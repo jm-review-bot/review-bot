@@ -31,11 +31,11 @@ import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 @Component
 public class ExaminerAddNewStudentReview extends Step {
 
-    private StorageService storageService;
-    private ThemeService themeService;
-    private UserService userService;
-    private StudentReviewService studentReviewService;
-    private ReviewService reviewService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
+    private final UserService userService;
+    private final StudentReviewService studentReviewService;
+    private final ReviewService reviewService;
 
     public ExaminerAddNewStudentReview(StorageService storageService,
                                        ThemeService themeService,

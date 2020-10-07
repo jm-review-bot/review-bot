@@ -26,9 +26,9 @@ import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 @Component
 public class AdminEditReviewGetReviewInfo extends Step {
 
-    private StorageService storageService;
-    private StudentReviewService studentReviewService;
-    private StudentReviewAnswerService studentReviewAnswerService;
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
+    private final StudentReviewAnswerService studentReviewAnswerService;
 
     public AdminEditReviewGetReviewInfo(
             StorageService storageService,

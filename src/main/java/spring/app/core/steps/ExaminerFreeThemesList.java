@@ -23,8 +23,8 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class ExaminerFreeThemesList extends Step {
 
-    private ThemeService themeService;
-    private StorageService storageService;
+    private final ThemeService themeService;
+    private final StorageService storageService;
 
     public ExaminerFreeThemesList(StorageService storageService,
                                   ThemeService themeService) {

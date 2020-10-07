@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class StudentReviewAnswerServiceImpl implements StudentReviewAnswerService {
 
-    private StudentReviewAnswerDao studentReviewAnswerDao;
+    private final StudentReviewAnswerDao studentReviewAnswerDao;
 
     @Autowired
     public StudentReviewAnswerServiceImpl(StudentReviewAnswerDao studentReviewAnswerDao) {

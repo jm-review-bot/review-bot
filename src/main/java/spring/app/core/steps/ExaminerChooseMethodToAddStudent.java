@@ -22,8 +22,8 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class ExaminerChooseMethodToAddStudent extends Step {
 
-    private StorageService storageService;
-    private ThemeService themeService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
 
     public ExaminerChooseMethodToAddStudent(StorageService storageService,
                                             ThemeService themeService) {

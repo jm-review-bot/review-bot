@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class ReviewServiceImpl implements ReviewService {
 
-    private ReviewDao reviewDao;
+    private final ReviewDao reviewDao;
 
     @Autowired
     public ReviewServiceImpl(ReviewDao reviewDao) {

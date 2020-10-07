@@ -26,8 +26,8 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class AdminEditReviewGetThemeList extends Step {
 
-    private StorageService storageService;
-    private ThemeService themeService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
 
     @Autowired
     public AdminEditReviewGetThemeList(StorageService storageService, ThemeService themeService) {

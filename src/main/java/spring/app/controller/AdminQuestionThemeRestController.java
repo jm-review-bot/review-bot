@@ -40,9 +40,9 @@ public class AdminQuestionThemeRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminQuestionThemeRestController.class);
 
-    private QuestionService questionService;
-    private QuestionMapper questionMapper;
-    private ThemeService themeService;
+    private final QuestionService questionService;
+    private final QuestionMapper questionMapper;
+    private final ThemeService themeService;
 
     public AdminQuestionThemeRestController(QuestionService questionService, QuestionMapper questionMapper, ThemeService themeService) {
         this.questionService = questionService;

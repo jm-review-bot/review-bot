@@ -39,8 +39,8 @@ public class AdminThemeRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
-    private ThemeService themeService;
-    private ThemeMapper themeMapper;
+    private final ThemeService themeService;
+    private final ThemeMapper themeMapper;
 
     public AdminThemeRestController(ThemeService themeService, ThemeMapper themeMapper) {
         this.themeService = themeService;

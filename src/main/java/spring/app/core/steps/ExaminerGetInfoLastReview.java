@@ -27,10 +27,10 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class ExaminerGetInfoLastReview extends Step{
 
-    StorageService storageService;
-    StudentReviewService studentReviewService;
-    UserService userService;
-    ThemeService themeService;
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
+    private final UserService userService;
+    private final ThemeService themeService;
 
     public ExaminerGetInfoLastReview(StorageService storageService,
                                      StudentReviewService studentReviewService,

@@ -20,10 +20,10 @@ import java.util.Optional;
 @Service
 public class StudentReviewServiceImpl implements StudentReviewService {
 
-    private StudentReviewDao studentReviewDao;
-    private ReviewDao reviewDao;
-    private UserDao userDao;
-    private ThemeDao themeDao;
+    private final StudentReviewDao studentReviewDao;
+    private final ReviewDao reviewDao;
+    private final UserDao userDao;
+    private final ThemeDao themeDao;
 
     @Autowired
     public StudentReviewServiceImpl(StudentReviewDao studentReviewDao,

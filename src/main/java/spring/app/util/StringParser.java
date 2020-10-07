@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
  * Утилитный класс для обработки ввода для получения тех или иных данных
  */
 public class StringParser {
-    private static Pattern numeric = Pattern.compile("\\d*");
+    private static final Pattern numeric = Pattern.compile("\\d*");
 
-    private static Pattern realNumeric = Pattern.compile("-?\\d+(\\.\\d+)?");
+    private static final Pattern realNumeric = Pattern.compile("-?\\d+(\\.\\d+)?");
 
     //обязательно первая цифра от 0 до 9, далее только цифры с + или без него, разделенные пробелом, max 3 цифры
-    private static Pattern validReviewerInputFormat = Pattern.compile("^\\d\\+?\\s?\\d?\\+?\\s?\\d?\\+?");
+    private static final Pattern validReviewerInputFormat = Pattern.compile("^\\d\\+?\\s?\\d?\\+?\\s?\\d?\\+?");
 
     /**
      * Проверка что введены только числовые данные. На данный момент метод не используется, вместо него есть {@link #toNumbersSet(String)}.

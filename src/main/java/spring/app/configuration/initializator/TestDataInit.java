@@ -33,7 +33,7 @@ import java.util.Map;
 public class TestDataInit {
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;

@@ -14,7 +14,7 @@ import static spring.app.util.Keyboards.DEF_BACK_KB;
 @Component
 public class ExaminerChooseOldStudentReviewToEdit extends Step {
 
-    StorageService storageService;
+    private  final StorageService storageService;
 
     public ExaminerChooseOldStudentReviewToEdit(StorageService storageService) {
         super("Данный функционал ещё находится в разработке", DEF_BACK_KB);
