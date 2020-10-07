@@ -49,13 +49,12 @@ public class AdminEditUser extends Step {
         Integer vkId = context.getVkId();
         if ("изменить имя".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
-        } else if("изменить пароль".equals(inputText)){
+        } else if ("изменить пароль".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_PASSWORD_EDITED_USER);
-        }
-        else if ("изменить вкИд".equals(inputText)) {
+        } else if ("изменить вкИд".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
-            Optional<ReviewStatistic> optionalReviewStatistic =reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
+            Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
             if (optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked()) {
                 sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
             } else {
@@ -67,8 +66,7 @@ public class AdminEditUser extends Step {
         } else if ("Назад".equals(inputText)) {
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             sendUserToNextStep(context, ADMIN_USERS_LIST);
-        }
-        else {
+        } else {
             throw new ProcessInputException("Введена неверная команда...");
         }
     }
@@ -110,13 +108,13 @@ public class AdminEditUser extends Step {
         }
 
         User user = userService.getUserById(Long.parseLong(savedInput.get(0)));
-        if(user.getRole().getName().equals("ADMIN"))
-        // Набор кнопок для редактирования админа
-        keyboard += EDITING_ADMIN_OR_BACK;
-        else
-        // Набор кнопок для редактирования пользователя
-        keyboard += EDITING_USER_OR_BACK;
-
+        if (user.getRole().getName().equals("ADMIN")) {
+            // Набор кнопок для редактирования админа
+            keyboard += EDITING_ADMIN_OR_BACK;
+        } else {
+            // Набор кнопок для редактирования пользователя
+            keyboard += EDITING_USER_OR_BACK;
+        }
         return keyboard;
     }
 }
