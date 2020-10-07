@@ -57,6 +57,10 @@ $(document).on('submit', '#edit-user-form', function (event) {
 $(document).on('click', '.change-password', function () {
     let userId = this.dataset.id
     $('#change-password-form :input[name~="userId"]').val(userId)
+    let button = document.getElementById('passwordChangeSubmit')
+    $('#change-password-form')[0].reset()
+    button.disabled = true
+    $('#message').html("")
     $('#change-password-modal-window').modal('show')
 })
 
@@ -76,7 +80,6 @@ $(document).on('submit', '#change-password-form', function (event) {
             alert('Возникла ошибка при изменения пароля пользователя')
         }
     })
-
 })
 
 $('#password, #confirmPassword').keyup(function () {
