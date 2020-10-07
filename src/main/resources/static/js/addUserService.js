@@ -16,7 +16,7 @@ $(document).on('click', '#add-user-btn', function () {
         htmlContent += htmlTheme
     }
     $('#add-user-form select').html(htmlContent)
-
+    $('#add-user-form')[0].reset()
     $('#add-user-modal-window').modal('show')
 })
 
