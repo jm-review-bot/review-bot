@@ -47,7 +47,10 @@ public class AdminEditUser extends Step {
         Integer vkId = context.getVkId();
         if ("изменить имя".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_FULLNAME_EDITED_USER);
-        } else if ("изменить вкИд".equals(inputText)) {
+        } else if("изменить пароль".equals(inputText)){
+            sendUserToNextStep(context, ADMIN_INPUT_NEW_PASSWORD_EDITED_USER);
+        }
+        else if ("изменить вкИд".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
             ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
@@ -62,7 +65,8 @@ public class AdminEditUser extends Step {
         } else if ("Назад".equals(inputText)) {
             storageService.removeUserStorage(vkId, ADMIN_USERS_LIST);
             sendUserToNextStep(context, ADMIN_USERS_LIST);
-        } else {
+        }
+        else {
             throw new ProcessInputException("Введена неверная команда...");
         }
     }
@@ -103,6 +107,11 @@ public class AdminEditUser extends Step {
             keyboard += CANCEL_BLOCK_FOR_TAKE_REVIEW + getRowDelimiterString();
         }
 
+        User user = userService.getUserById(Long.parseLong(savedInput.get(0)));
+        if(user.getRole().getName().equals("ADMIN"))
+        // Набор кнопок для редактирования админа
+        keyboard += EDITING_ADMIN_OR_BACK;
+        else
         // Набор кнопок для редактирования пользователя
         keyboard += EDITING_USER_OR_BACK;
 
