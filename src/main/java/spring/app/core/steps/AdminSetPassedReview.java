@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -34,6 +35,7 @@ public class AdminSetPassedReview extends Step {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminSetPassedReview.class);
 
+    @Autowired
     public AdminSetPassedReview(StorageService storageService,
                                 UserService userService,
                                 ThemeService themeService,

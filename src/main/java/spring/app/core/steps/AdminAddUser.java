@@ -4,6 +4,7 @@ import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.IncorrectVkIdsException;
@@ -34,6 +35,7 @@ public class AdminAddUser extends Step {
     private final VkService vkService;
     private final RoleService roleService;
 
+    @Autowired
     public AdminAddUser(StorageService storageService, UserService userService,
                         VkService vkService, RoleService roleService) {
         super("Введите ссылку на профиль нового пользователя.\n", DEF_BACK_KB);

@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -33,6 +34,7 @@ public class AdminSetThemeAddedUser extends Step {
     private final ReviewService reviewService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public AdminSetThemeAddedUser(StorageService storageService, UserService userService,
                                   ThemeService themeService, ReviewService reviewService,
                                   StudentReviewService studentReviewService) {

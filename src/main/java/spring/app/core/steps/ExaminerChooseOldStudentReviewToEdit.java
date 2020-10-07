@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -16,6 +17,7 @@ public class ExaminerChooseOldStudentReviewToEdit extends Step {
 
     private  final StorageService storageService;
 
+    @Autowired
     public ExaminerChooseOldStudentReviewToEdit(StorageService storageService) {
         super("Данный функционал ещё находится в разработке", DEF_BACK_KB);
         this.storageService = storageService;

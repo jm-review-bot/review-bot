@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -23,6 +24,7 @@ public class AdminSetPassedReviewResult extends Step {
     private final UserService userService;
     private final ThemeService themeService;
 
+    @Autowired
     public AdminSetPassedReviewResult(StorageService storageService,
                                       UserService userService,
                                       ThemeService themeService) {

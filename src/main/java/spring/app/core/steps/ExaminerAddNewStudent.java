@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.IncorrectVkIdsException;
@@ -28,6 +29,7 @@ public class ExaminerAddNewStudent extends Step {
     private final UserService userService;
     private final VkService vkService;
 
+    @Autowired
     public ExaminerAddNewStudent(StorageService storageService, VkService vkService, UserService userService) {
         super("Введите ссылку на профиль студента вконтакте.\n", DEF_BACK_KB);
         this.storageService = storageService;

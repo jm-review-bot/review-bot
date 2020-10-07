@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -39,6 +40,7 @@ public class UserPassReviewGetListReview extends Step {
     private final Map<Integer, Map<Integer, Long>> reviewsIndex = new HashMap<>();//по vkId хранит позицию (в списке выбора ревью для записи [этот список выведен был пользователю])
     // и айди ревью соответственно
 
+    @Autowired
     public UserPassReviewGetListReview(StorageService storageService, ThemeService themeService,
                                        ReviewService reviewService, StudentReviewService studentReviewService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки

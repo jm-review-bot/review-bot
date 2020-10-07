@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -27,6 +28,7 @@ public class UserStartReviewRules extends Step {
     private final ReviewService reviewService;
     private final UserService userService;
 
+    @Autowired
     public UserStartReviewRules(StorageService storageService, ReviewService reviewService, UserService userService) {
         super("", START_KB);
         this.storageService = storageService;

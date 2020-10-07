@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -16,6 +17,7 @@ public class UserPassReviewAddStudentReview extends Step {
 
     private final StorageService storageService;
 
+    @Autowired
     public UserPassReviewAddStudentReview(StorageService storageService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", USER_MENU_KB);

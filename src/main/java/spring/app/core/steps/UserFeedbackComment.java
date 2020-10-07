@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -24,6 +25,7 @@ public class UserFeedbackComment extends Step {
     private final StorageService storageService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public UserFeedbackComment(FeedbackService feedbackService, StorageService storageService,
                                StudentReviewService studentReviewService) {
         super("Дайте ваш развернутый комментарий, замечания, предложения (необязательно). " +

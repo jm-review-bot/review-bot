@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -37,6 +38,7 @@ public class ExaminerAddNewStudentReview extends Step {
     private final StudentReviewService studentReviewService;
     private final ReviewService reviewService;
 
+    @Autowired
     public ExaminerAddNewStudentReview(StorageService storageService,
                                        ThemeService themeService,
                                        UserService userService,

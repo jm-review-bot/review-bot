@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -50,6 +51,7 @@ public class UserStartReviewCore extends Step {
     //Хранит по vkId набор айдишников студентов которым можно задать вопрос. На старте - всем студентам на ревью
     private final Map<Integer, List<Long>> possibleAnswerer = new HashMap<>();
 
+    @Autowired
     public UserStartReviewCore(StorageService storageService, UserService userService,
                                QuestionService questionService, StudentReviewService studentReviewService,
                                StudentReviewAnswerService studentReviewAnswerService, ThemeService themeService,

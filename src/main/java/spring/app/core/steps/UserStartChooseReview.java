@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -32,6 +33,7 @@ public class UserStartChooseReview extends Step {
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
+    @Autowired
     public UserStartChooseReview(ReviewService reviewService, UserService userService,
                                  StorageService storageService, VkService vkService) {
         super("", DEF_BACK_KB);

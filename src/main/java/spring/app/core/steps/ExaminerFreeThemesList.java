@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -26,6 +27,7 @@ public class ExaminerFreeThemesList extends Step {
     private final ThemeService themeService;
     private final StorageService storageService;
 
+    @Autowired
     public ExaminerFreeThemesList(StorageService storageService,
                                   ThemeService themeService) {
         super("", DEF_BACK_KB);

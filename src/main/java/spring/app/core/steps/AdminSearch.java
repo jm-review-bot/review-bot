@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import com.vk.api.sdk.exceptions.ApiException;
 import com.vk.api.sdk.exceptions.ClientException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.IncorrectVkIdsException;
@@ -30,6 +31,7 @@ public class AdminSearch extends Step {
     private final StorageService storageService;
     private final VkService vkService;
 
+    @Autowired
     public AdminSearch(UserService userService, StorageService storageService, VkService vkService) {
         super("Введи ссылку на страницу пользователя.\n", DEF_BACK_KB);
         this.userService = userService;

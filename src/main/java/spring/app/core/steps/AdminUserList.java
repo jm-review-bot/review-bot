@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -29,6 +30,7 @@ public class AdminUserList extends Step {
     private final StorageService storageService;
     private final UserService userService;
 
+    @Autowired
     public AdminUserList(StorageService storageService, UserService userService) {
         super("", SEARCH_OR_BACK);
         this.storageService = storageService;

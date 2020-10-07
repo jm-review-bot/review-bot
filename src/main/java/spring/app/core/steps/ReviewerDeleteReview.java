@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepHolder;
@@ -40,6 +41,7 @@ public class ReviewerDeleteReview extends Step {
     private final StudentReviewService studentReviewService;
     private final UserService userService;
 
+    @Autowired
     public ReviewerDeleteReview(VkService vkService, ReviewService reviewService, ThemeService themeService, StorageService storageService, StudentReviewService studentReviewService, UserService userService) {
         super("",CANCEL_OR_DELETE);//две кнопки: “отмена” и “да, отменить ревью”
         this.reviewService = reviewService;

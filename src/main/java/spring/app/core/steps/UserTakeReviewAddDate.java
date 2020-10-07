@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -38,6 +39,7 @@ public class UserTakeReviewAddDate extends Step {
     @Value("${review.time_limit.before_starting_review}")
     private int timeLimitBeforeReview;
 
+    @Autowired
     public UserTakeReviewAddDate(StorageService storageService, ReviewService reviewService,
                                  ThemeService themeService, UserService userService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки

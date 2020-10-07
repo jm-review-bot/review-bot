@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -25,6 +26,7 @@ public class ExaminerChooseMethodToAddStudent extends Step {
     private final StorageService storageService;
     private final ThemeService themeService;
 
+    @Autowired
     public ExaminerChooseMethodToAddStudent(StorageService storageService,
                                             ThemeService themeService) {
         super("", CHOOSE_FROM_LIST + COLUMN_DELIMETER_FR + ENTER_MANUALLY + ROW_DELIMETER_FR + DEF_BACK_KB);

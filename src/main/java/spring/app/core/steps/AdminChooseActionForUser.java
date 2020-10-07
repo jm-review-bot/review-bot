@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -21,6 +22,7 @@ public class AdminChooseActionForUser extends Step {
 
     private final StorageService storageService;
 
+    @Autowired
     public AdminChooseActionForUser(StorageService storageService) {
         super("Выберите действие над пользователем", ACTIONS_FOR_USER);
         this.storageService = storageService;

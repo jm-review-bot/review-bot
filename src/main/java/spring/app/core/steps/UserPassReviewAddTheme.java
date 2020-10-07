@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -32,6 +33,7 @@ public class UserPassReviewAddTheme extends Step {
     private final ThemeService themeService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public UserPassReviewAddTheme(StorageService storageService, ThemeService themeService,
                                   StudentReviewService studentReviewService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки

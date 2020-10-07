@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -12,6 +13,7 @@ public class UserFeedbackReviewerRating extends UserBaseFeedbackStep {
 
     private final StorageService storageService;
 
+    @Autowired
     public UserFeedbackReviewerRating(StorageService storageService) {
         super();
         this.storageService = storageService;

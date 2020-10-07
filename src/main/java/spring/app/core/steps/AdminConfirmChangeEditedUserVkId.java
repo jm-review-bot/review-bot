@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -30,6 +31,7 @@ public class AdminConfirmChangeEditedUserVkId extends Step {
     private final StorageService storageService;
     private final UserService userService;
 
+    @Autowired
     public AdminConfirmChangeEditedUserVkId(StorageService storageService, UserService userService) {
         super("", YES_OR_CANCEL);
         this.storageService = storageService;

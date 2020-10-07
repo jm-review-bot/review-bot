@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -30,6 +31,7 @@ public class AdminEditReviewGetReviewInfo extends Step {
     private final StudentReviewService studentReviewService;
     private final StudentReviewAnswerService studentReviewAnswerService;
 
+    @Autowired
     public AdminEditReviewGetReviewInfo(
             StorageService storageService,
             StudentReviewService studentReviewService,

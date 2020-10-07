@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -25,6 +26,7 @@ public class UserStartReviewHangoutsLink extends Step {
     private final UserService userService;
     private final VkService vkService;
 
+    @Autowired
     public UserStartReviewHangoutsLink(StorageService storageService, UserService userService, VkService vkService) {
         super("Чтобы начать ревью, необходимо создать разговор в hangouts, для этого перейди по ссылке https://hangouts.google.com/hangouts/_/ ," +
                 " подключись к диалогу нажми \"пригласить участников\" и скопируй ссылку." +

@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -19,6 +20,7 @@ public class AdminMenu extends Step {
 
     private final StorageService storageService;
 
+    @Autowired
     public AdminMenu(StorageService storageService) {
         super("", DEF_ADMIN_MENU_KB);
         this.storageService = storageService;
