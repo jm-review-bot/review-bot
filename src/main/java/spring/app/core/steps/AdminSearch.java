@@ -14,7 +14,9 @@ import spring.app.util.StringParser;
 
 import java.util.Arrays;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_SEARCH;
+import static spring.app.core.StepSelector.ADMIN_CONFIRM_SEARCH;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 /**

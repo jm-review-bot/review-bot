@@ -5,13 +5,31 @@ import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.dto.QuestionNumberAnswererIdDto;
 import spring.app.exceptions.ProcessInputException;
-import spring.app.model.*;
-import spring.app.service.abstraction.*;
+import spring.app.model.Question;
+import spring.app.model.StudentReview;
+import spring.app.model.StudentReviewAnswer;
+import spring.app.model.User;
+import spring.app.model.Theme;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.QuestionService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.StudentReviewAnswerService;
 
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 import java.util.stream.Collectors;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.USER_START_REVIEW_CORE;
+import static spring.app.core.StepSelector.USER_FEEDBACK_CONFIRMATION;
+import static spring.app.core.StepSelector.START;
 import static spring.app.util.Keyboards.RIGHT_WRONG_ANSWER;
 import static spring.app.util.Keyboards.USER_MENU_KB;
 

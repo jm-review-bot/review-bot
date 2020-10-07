@@ -7,14 +7,28 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.REVIEWER_DELETE_REVIEW;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.SELECTING_REVIEW_TO_DELETE;
+import static spring.app.util.Keyboards.CANCEL_OR_DELETE;
+import static spring.app.util.Keyboards.HEADER_FR;
+import static spring.app.util.Keyboards.DEF_USER_MENU_KB;
+import static spring.app.util.Keyboards.ROW_DELIMETER_FR;
+import static spring.app.util.Keyboards.REVIEW_START_FR;
+import static spring.app.util.Keyboards.REVIEW_CANCEL_FR;
+import static spring.app.util.Keyboards.DELETE_STUDENT_REVIEW;
+import static spring.app.util.Keyboards.FOOTER_FR;
 
 @Component
 public class ReviewerDeleteReview extends Step {

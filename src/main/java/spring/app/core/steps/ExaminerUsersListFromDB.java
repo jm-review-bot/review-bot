@@ -16,7 +16,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.EXAMINER_USERS_LIST_FROM_DB;
+import static spring.app.core.StepSelector.EXAMINER_GET_INFO_LAST_REVIEW;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.core.StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component

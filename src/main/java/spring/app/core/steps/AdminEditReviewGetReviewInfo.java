@@ -15,7 +15,9 @@ import spring.app.util.StringParser;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW;
 import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 
 /**

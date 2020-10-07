@@ -7,7 +7,11 @@ import spring.app.service.abstraction.StorageService;
 
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.ADMIN_MENU;
 import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 
 @Component

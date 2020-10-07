@@ -13,7 +13,9 @@ import spring.app.util.StringParser;
 
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.USER_START_REVIEW_RULES;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component

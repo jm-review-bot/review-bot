@@ -9,7 +9,9 @@ import spring.app.service.abstraction.StorageService;
 
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER;
+import static spring.app.core.StepSelector.ADMIN_CHANGE_ADDED_USER_FULLNAME;
+import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
 import static spring.app.util.Keyboards.CHANGE_OR_NOT_ADDED_USER_FULLNAME;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 

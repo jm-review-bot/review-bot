@@ -15,8 +15,14 @@ import spring.app.service.abstraction.UserService;
 
 import java.util.Optional;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.EXAMINER_CHOOSE_OLD_STUDENT_REVIEW_TO_EDIT;
+import static spring.app.core.StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW;
+import static spring.app.core.StepSelector.EXAMINER_USERS_LIST_FROM_DB;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.core.StepSelector.EXAMINER_GET_INFO_LAST_REVIEW;
+import static spring.app.util.Keyboards.EDIT_OLD_OR_ADD_NEW;
+import static spring.app.util.Keyboards.ROW_DELIMETER_FR;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class ExaminerGetInfoLastReview extends Step{

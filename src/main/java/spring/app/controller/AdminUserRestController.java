@@ -11,14 +11,24 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import spring.app.dto.UserDto;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
-import spring.app.model.Role;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.VkService;
+import spring.app.service.abstraction.RoleService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import javax.validation.Valid;

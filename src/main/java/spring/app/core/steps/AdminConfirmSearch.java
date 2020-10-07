@@ -11,7 +11,11 @@ import spring.app.service.abstraction.UserService;
 
 import java.util.Arrays;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_SEARCH;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_REMOVE_USER;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
 import static spring.app.util.Keyboards.YES_NO_KB;
 
 /**

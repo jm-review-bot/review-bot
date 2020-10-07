@@ -18,8 +18,11 @@ import spring.app.util.StringParser;
 import java.util.ArrayList;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER_GET_ROLES_LIST;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class AdminEditUserGetRolesList extends Step {

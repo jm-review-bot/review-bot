@@ -18,7 +18,11 @@ import spring.app.util.StringParser;
 
 import java.util.Arrays;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_ADD_USER;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.ADMIN_PROPOSAL_CHANGE_FULLNAME_ADDED_USER;
+
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component

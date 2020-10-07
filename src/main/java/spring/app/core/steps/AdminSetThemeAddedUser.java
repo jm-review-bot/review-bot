@@ -7,13 +7,22 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.StudentReviewService;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Arrays;
 
 import static java.util.stream.Collectors.toList;
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_ADD_USER;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.core.StepSelector.ADMIN_SET_THEME_ADDED_USER;
 
 @Component
 public class AdminSetThemeAddedUser extends Step {

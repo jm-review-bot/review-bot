@@ -13,7 +13,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER;
+import static spring.app.core.StepSelector.ADMIN_SEARCH;
+import static spring.app.core.StepSelector.ADMIN_REMOVE_USER;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
 import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 
 /**

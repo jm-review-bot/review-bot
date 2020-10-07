@@ -14,7 +14,10 @@ import spring.app.service.abstraction.UserService;
 
 import java.util.Arrays;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER;
+import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
 import static spring.app.util.Keyboards.YES_OR_CANCEL;
 
 /**

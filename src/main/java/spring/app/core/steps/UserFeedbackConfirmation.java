@@ -8,7 +8,9 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.USER_FEEDBACK_CONFIRMATION;
+import static spring.app.core.StepSelector.USER_FEEDBACK_REVIEW_RATING;
 import static spring.app.util.Keyboards.FEEDBACK_CONFIRM_KB;
 
 @Component

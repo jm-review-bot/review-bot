@@ -18,7 +18,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_THEME;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_DATE;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.USER_MENU;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component

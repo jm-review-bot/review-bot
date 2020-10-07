@@ -9,7 +9,11 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.ReviewService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,7 +22,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.core.StepSelector.EXAMINER_USERS_LIST_FROM_DB;
+import static spring.app.core.StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 
