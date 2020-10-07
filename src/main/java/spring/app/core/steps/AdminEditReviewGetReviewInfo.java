@@ -43,7 +43,7 @@ public class AdminEditReviewGetReviewInfo extends Step {
         Integer vkId = context.getVkId();
         StringBuilder stringBuilder = new StringBuilder();
         String sStudentReviewToChange = storageService.getUserStorage(vkId, StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST).get(0);
-        StudentReview studentReview = studentReviewService.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long.parseLong(sStudentReviewToChange));
+        StudentReview studentReview = studentReviewService.getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long.parseLong(sStudentReviewToChange)).get();
 
         //извлечем инфу из ревью
         stringBuilder

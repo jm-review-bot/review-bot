@@ -57,7 +57,7 @@ public class UserTakeReviewAddTheme extends Step {
         }
         if (themePositionsList.contains(userInput)) {
             // вытаскиваем тему по позиции, позиция соответствует пользовательскому вводу
-            Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput));
+            Theme selectedTheme = themeService.getByPosition(Integer.parseInt(userInput)).get();
             // проверяем тип выбранной темы. Если это тема со свободной защитой - отображаем пользователю
             // сообщение “Произошла внутренняя ошибка. Нельзя выбрать ревью по теме со свободной защитой”. Если это тема с фиксированной защитой - всё ок, двигаем дальше
             if(selectedTheme.getThemeType().equals("free")) {

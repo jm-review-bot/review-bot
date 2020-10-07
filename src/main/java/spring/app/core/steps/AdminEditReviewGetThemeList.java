@@ -13,6 +13,7 @@ import spring.app.util.StringParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
@@ -75,7 +76,7 @@ public class AdminEditReviewGetThemeList extends Step {
         List<String> themesToReview = storageService.getUserStorage(context.getVkId(), ADMIN_EDIT_REVIEW_GET_THEME_LIST);
         if (themesToReview != null) {
             themesToReview.stream().forEach(themePosition -> {
-                Theme theme = themeService.getByPosition(Integer.parseInt(themePosition));
+                Theme theme = themeService.getByPosition(Integer.parseInt(themePosition)).get();
                 stringBuilder.append("[").append(themePosition).append("] ")
                         .append(theme.getTitle());
                 stringBuilder.append("\n");

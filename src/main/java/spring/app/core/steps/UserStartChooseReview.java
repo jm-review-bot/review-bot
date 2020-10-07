@@ -70,7 +70,7 @@ public class UserStartChooseReview extends Step {
                     // если никто не записался на ревью, то добавялем очки пользователю и закрываем ревью
                     reviewById.setIsOpen(false);
                     reviewService.updateReview(reviewById);
-                    User user = userService.getByVkId(vkId);
+                    User user = userService.getByVkId(vkId).get();
                     user.setReviewPoint(user.getReviewPoint() + pointForEmptyReview);
                     userService.updateUser(user);
                     vkService.sendMessage(

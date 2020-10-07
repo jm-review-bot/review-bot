@@ -8,12 +8,13 @@ import spring.app.model.Theme;
 import spring.app.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ThemeDao extends GenericDao<Long, Theme> {
 
     List<Theme> getAllThemesByThemeType(String themeType);
 
-    Theme getByPosition(Integer position);
+    Optional<Theme> getByPosition(Integer position);
 
     List<Theme> getPassedThemesByUser(Integer vkId);
 
@@ -21,7 +22,7 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     List<Theme> getAllThemesUpToPosition(Integer position);
 
-    Theme getThemeByReviewId(Long reviewId);
+    Optional<Theme> getThemeByReviewId(Long reviewId);
 
     Integer getThemeMaxPositionValue();
 
@@ -34,7 +35,7 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     List<Theme> getFreeThemesByExaminerId(Long examinerId);
 
-    FreeTheme getFreeThemeById (long id);
+    Optional<FreeTheme> getFreeThemeById (long id);
 
     List<User> getExaminersByFreeThemeId(Long freeThemeId);
 
@@ -42,5 +43,5 @@ public interface ThemeDao extends GenericDao<Long, Theme> {
 
     List<ThemeDto> themesSearch(String searchString);
 
-    ThemeDto getThemeDtoById(Long themeId);
+    Optional<ThemeDto> getThemeDtoById(Long themeId);
 }

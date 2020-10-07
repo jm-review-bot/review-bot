@@ -12,6 +12,7 @@ import spring.app.model.User;
 import spring.app.service.abstraction.ThemeService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ThemeServiceImpl implements ThemeService {
@@ -70,7 +71,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme getByPosition(Integer position) {
+    public Optional<Theme> getByPosition(Integer position) {
         return themeDao.getByPosition(position);
     }
 
@@ -90,7 +91,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme getThemeByReviewId(Long reviewId) {
+    public Optional<Theme> getThemeByReviewId(Long reviewId) {
         return themeDao.getThemeByReviewId(reviewId);
     }
 
@@ -110,7 +111,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public ThemeDto getThemeDtoById(Long themeId) {
+    public Optional<ThemeDto> getThemeDtoById(Long themeId) {
         return themeDao.getThemeDtoById(themeId);
     }
 
@@ -153,7 +154,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public FreeTheme getFreeThemeById(long id) {
+    public Optional<FreeTheme> getFreeThemeById(long id) {
         return themeDao.getFreeThemeById(id);
     }
 

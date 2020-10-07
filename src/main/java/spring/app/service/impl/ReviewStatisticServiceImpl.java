@@ -15,6 +15,7 @@ import spring.app.service.abstraction.ReviewStatisticService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class ReviewStatisticServiceImpl implements ReviewStatisticService {
@@ -88,7 +89,7 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
         Long countOpenReviews = reviewDao.getCountOpenReviewsByReviewerVkId(userVkId);
         Long countCreatedReviewForLastDay = reviewDao.getCountCompletedReviewsByReviewerVkIdFromDate(userVkId, LocalDateTime.now().minusDays(1));
         ReviewStatistic reviewStatistic = new ReviewStatistic();
-        reviewStatistic.setUser(userDao.getByVkId(userVkId));
+        reviewStatistic.setUser(userDao.getByVkId(userVkId).get());
         reviewStatistic.setCountBlocks(0);
         reviewStatistic.setCountOpenReviews(countOpenReviews);
         reviewStatistic.setCountReviewsPerDay(countCreatedReviewForLastDay);
@@ -97,19 +98,20 @@ public class ReviewStatisticServiceImpl implements ReviewStatisticService {
     }
 
     @Override
-    public ReviewStatistic getReviewStatisticByUserVkId(Integer userVkId) {
+    public Optional<ReviewStatistic> getReviewStatisticByUserVkId(Integer userVkId) {
         return reviewStatisticDao.getReviewStatisticByUserVkId(userVkId);
     }
 
     @Override
-    public ReviewStatistic getReviewStatisticByUserId(Long userId) {
+    public Optional<ReviewStatistic> getReviewStatisticByUserId(Long userId) {
         return reviewStatisticDao.getReviewStatisticByUserId(userId);
     }
 
     @Transactional
     @Override
     public void unblockTakingReviewForUser(Long userId) {
-        ReviewStatistic reviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);
+        Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticDao.getReviewStatisticByUserId(userId);
+        ReviewStatistic reviewStatistic = optionalReviewStatistic.get();
         reviewStatistic.setCountReviewsWithoutStudentsInRow((long) 0);
         reviewStatistic.setReviewBlocked(false);
         reviewStatisticDao.update(reviewStatistic);

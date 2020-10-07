@@ -15,6 +15,7 @@ import spring.app.util.Keyboards;
 
 import javax.persistence.NoResultException;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class VkBot implements ChatBot {
@@ -71,15 +72,13 @@ public class VkBot implements ChatBot {
             } else {
                 input = message.getBody();
             }
-            User user;
             // проверяем есть ли юзер у нас в БД, если нет, получаем исключение и отправляем Юзеру сообщение и выходим из цикла
-            try {
-                user = userService.getByVkId(userVkId);
-            } catch (NoResultException e) {
+            Optional<User> optionalUser = userService.getByVkId(userVkId);
+            if (!optionalUser.isPresent()) {
                 sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
                 return;
             }
-
+            User user = optionalUser.get();
             Role role = user.getRole();
             context = new BotContext(user, userVkId, input, role, stepHolder);
             // выясняем степ в котором находится User

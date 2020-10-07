@@ -9,6 +9,7 @@ import spring.app.model.Role;
 import spring.app.service.abstraction.RoleService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -49,7 +50,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Role getRoleByName(String roleName) {
+    public Optional<Role> getRoleByName(String roleName) {
         return roleDao.getRoleByName(roleName);
     }
 

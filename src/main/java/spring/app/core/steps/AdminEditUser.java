@@ -11,7 +11,9 @@ import spring.app.service.abstraction.ReviewStatisticService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 import static spring.app.core.StepSelector.*;
 import static spring.app.util.Keyboards.*;
@@ -53,8 +55,8 @@ public class AdminEditUser extends Step {
         else if ("изменить вкИд".equals(inputText)) {
             sendUserToNextStep(context, ADMIN_INPUT_NEW_VKID_EDITED_USER);
         } else if ("Снять блок с ревью".equals(inputText)) {
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
-            if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
+            Optional<ReviewStatistic> optionalReviewStatistic =reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(storageService.getUserStorage(vkId, ADMIN_USERS_LIST).get(0)));
+            if (optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked()) {
                 sendUserToNextStep(context, ADMIN_UNBLOCK_USER_TAKE_REVIEW);
             } else {
                 throw new ProcessInputException("Пользователь имеет возможность создавать ревью");
@@ -80,13 +82,13 @@ public class AdminEditUser extends Step {
         if (savedInput != null) {
             Long userId = Long.parseLong(savedInput.get(0));
             User selectedUser = userService.getUserById(userId);
-            ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId);
+            Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticService.getReviewStatisticByUserId(userId);
             text = String.format(
                     "Вы выбрали %s %s (%s).\nСтатус ревью: %s.\nРоль пользователя: %s.\nВыберите действие",
                     selectedUser.getFirstName(),
                     selectedUser.getLastName(),
                     selectedUser.getVkId(),
-                    reviewStatistic != null && reviewStatistic.isReviewBlocked() ? "заблокировано" : "доступно",
+                    optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked() ? "заблокировано" : "доступно",
                     selectedUser.getRole().getName()
             );
         } else {
@@ -102,8 +104,8 @@ public class AdminEditUser extends Step {
         List<String> savedInput = storageService.getUserStorage(vkId, ADMIN_USERS_LIST);
 
         // Кнопка для разблокировки пользователю возможности создания ревью
-        ReviewStatistic reviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(savedInput.get(0)));
-        if (reviewStatistic != null && reviewStatistic.isReviewBlocked()) {
+        Optional<ReviewStatistic> optionalReviewStatistic = reviewStatisticService.getReviewStatisticByUserId(Long.parseLong(savedInput.get(0)));
+        if (optionalReviewStatistic.isPresent() && optionalReviewStatistic.get().isReviewBlocked()) {
             keyboard += CANCEL_BLOCK_FOR_TAKE_REVIEW + getRowDelimiterString();
         }
 

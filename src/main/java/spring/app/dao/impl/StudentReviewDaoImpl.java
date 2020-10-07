@@ -1,19 +1,21 @@
 package spring.app.dao.impl;
 
-import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import spring.app.dao.abstraction.StudentReviewDao;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
+import spring.app.util.SingleResultHelper;
 
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> implements StudentReviewDao {
+
+    private final SingleResultHelper<StudentReview> singleResultHelper = new SingleResultHelper<>();
 
     public StudentReviewDaoImpl() {
         super(StudentReview.class);
@@ -24,12 +26,11 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
      *
      * @param idUser
      */
-    public StudentReview getStudentReviewIfAvailableAndOpen(Long idUser) {
-        String str = "SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme INNER JOIN Review r " +
-                "ON sr.review.id = r.id WHERE sr.user.id = :id_user AND r.isOpen = true";
-        TypedQuery<StudentReview> query = entityManager.createQuery(str, StudentReview.class).setMaxResults(1)
-                .setParameter("id_user", idUser);
-        return DataAccessUtils.singleResult(query.getResultList());
+    @Override
+    public Optional<StudentReview> getStudentReviewIfAvailableAndOpen(Long idUser) {
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT sr FROM StudentReview sr JOIN FETCH sr.review srr JOIN FETCH srr.theme INNER JOIN Review r " +
+                "ON sr.review.id = r.id WHERE sr.user.id = :id_user AND r.isOpen = true", StudentReview.class).setMaxResults(1)
+                .setParameter("id_user", idUser));
     }
 
     /**
@@ -37,6 +38,7 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
      *
      * @param idReview
      */
+    @Override
     public Long getNumberStudentReviewByIdReview(Long idReview) {
         return (Long) entityManager.createQuery("SELECT count (sr) FROM StudentReview sr WHERE sr.review.id = :id_review")
                 .setParameter("id_review", idReview).getResultList().get(0);
@@ -59,12 +61,10 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     }
 
     @Override
-    public StudentReview getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
-        return entityManager.createQuery("SELECT sr FROM StudentReview sr " +
+    public Optional<StudentReview> getStudentReviewsByIdWithFetchReviewUserThemeAndReviewer(Long id) {
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT sr FROM StudentReview sr " +
                 "JOIN FETCH sr.review r JOIN FETCH sr.user u JOIN FETCH r.theme JOIN FETCH r.user rewiever WHERE sr.id = :srId", StudentReview.class)
-                .setParameter("srId", id)
-                .getResultList().get(0);
-
+                .setParameter("srId", id));
     }
 
     @Override
@@ -79,11 +79,10 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
     }
 
     @Override
-    public StudentReview getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
-        return entityManager.createQuery("SELECT sr FROM StudentReview sr JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :student_id AND r.id = :review_id", StudentReview.class)
+    public Optional<StudentReview> getStudentReviewByReviewIdAndStudentId(Long reviewId, Long studentId) {
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT sr FROM StudentReview sr JOIN FETCH sr.user u JOIN FETCH sr.review r WHERE u.id = :student_id AND r.id = :review_id", StudentReview.class)
                 .setParameter("review_id", reviewId)
-                .setParameter("student_id", studentId)
-                .getSingleResult();
+                .setParameter("student_id", studentId));
     }
 
     /**
@@ -117,22 +116,17 @@ public class StudentReviewDaoImpl extends AbstractDao<Long, StudentReview> imple
 
     // Метод возвращает последнее ревью студента по выбранной теме
     @Override
-    public StudentReview getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
-        List<StudentReview> studentReviews = entityManager.createQuery("SELECT sr FROM StudentReview sr  WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id AND sr.isPassed IS NOT NULL ORDER BY sr.review.date DESC", StudentReview.class)
+    public Optional<StudentReview> getLastStudentReviewByStudentIdAndThemeId(Long studentId, Long themeId) {
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT sr FROM StudentReview sr  WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id AND sr.isPassed IS NOT NULL ORDER BY sr.review.date DESC", StudentReview.class)
                 .setParameter("student_id", studentId)
-                .setParameter("theme_id", themeId)
-                .setMaxResults(1)
-                .getResultList();
-        return (studentReviews.size() > 0 ? studentReviews.get(0) : null);
+                .setParameter("theme_id", themeId));
 
     }
 
     @Override
     public Boolean isThemePassedByStudent(Long studentId, Long themeId) {
-        Long studentReviewsCount = entityManager.createQuery("SELECT COUNT(sr) FROM StudentReview sr WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id AND sr.isPassed = true", Long.class)
+        return singleResultHelper.singleResult(entityManager.createQuery("SELECT COUNT(sr) FROM StudentReview sr WHERE sr.user.id = :student_id AND sr.review.theme.id = :theme_id AND sr.isPassed = true", Long.class)
                 .setParameter("student_id", studentId)
-                .setParameter("theme_id", themeId)
-                .getSingleResult();
-        return studentReviewsCount > 0;
+                .setParameter("theme_id", themeId)).isPresent();
     }
 }
