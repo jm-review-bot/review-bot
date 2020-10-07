@@ -3,6 +3,7 @@ package spring.app.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +22,9 @@ import java.util.Map;
 @RequestMapping("/api/admin/feedback")
 @Api(value = "Feedback controller")
 public class AdminFeedbackRestController {
-    private FeedbackService feedbackService;
+    private final FeedbackService feedbackService;
 
+    @Autowired
     public AdminFeedbackRestController(FeedbackService feedbackService) {
         this.feedbackService = feedbackService;
     }

@@ -3,6 +3,7 @@ package spring.app.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,7 @@ public class AdminRoleRestController {
 
     private final RoleService roleService;
 
+    @Autowired
     public AdminRoleRestController(RoleService roleService) {
         this.roleService = roleService;
     }

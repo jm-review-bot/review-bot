@@ -3,6 +3,7 @@ package spring.app.controller;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class AdminSearchRestController {
     private final ThemeService themeService;
     private final QuestionService questionService;
 
+    @Autowired
     public AdminSearchRestController(ThemeService themeService,
                                      QuestionService questionService) {
         this.themeService = themeService;

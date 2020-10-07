@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,6 +50,7 @@ public class AdminUserRestController {
     private final RoleService roleService;
     private final VkService vkService;
 
+    @Autowired
     public AdminUserRestController(UserService userService,
                                    StudentReviewService studentReviewService,
                                    ThemeService themeService,
