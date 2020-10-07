@@ -33,26 +33,20 @@ public class AdminMenu extends Step {
         String command = context.getInput();
         switch (command) {
             case "Пользователи":
-                switch (context.getRole().getName()) {
-                    case "ADMIN":
-                        sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
-                        break;
-                    default:
-                        sendUserToNextStep(context, START);
-                        break;
+                if ("ADMIN".equals(context.getRole().getName())) {
+                    sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
+                } else {
+                    sendUserToNextStep(context, START);
                 }
                 break;
             case "/start":
                 sendUserToNextStep(context, START);
                 break;
             case "Ревью":
-                switch (context.getRole().getName()) {
-                    case "ADMIN":
-                        sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
-                        break;
-                    default:
-                        sendUserToNextStep(context, START);
-                        break;
+                if ("ADMIN".equals(context.getRole().getName())) {
+                    sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
+                } else {
+                    sendUserToNextStep(context, START);
                 }
                 break;
             case "Главное меню":

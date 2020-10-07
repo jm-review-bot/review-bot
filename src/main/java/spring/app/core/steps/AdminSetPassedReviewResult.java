@@ -40,13 +40,11 @@ public class AdminSetPassedReviewResult extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
-        switch (command) {
-            case "Назад":
-                storageService.clearUsersOfStorage(context.getVkId());
-                sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
-                break;
-            default:
-                throw new ProcessInputException("Введена неверная команда...");
+        if ("Назад".equals(command)) {
+            storageService.clearUsersOfStorage(context.getVkId());
+            sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
+        } else {
+            throw new ProcessInputException("Введена неверная команда...");
         }
     }
 
