@@ -72,7 +72,7 @@ public class AdminReviewerRestController {
 
     @DeleteMapping("/{themeId}/reviewer/{reviewerId}")
     @ApiOperation(value = "Remove the reviewer from free theme")
-    public ResponseEntity deleteReviewer(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId ,
+    public ResponseEntity<?> deleteReviewer(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId ,
                                          @ApiParam(value = "Reviewer ID", required = true) @PathVariable long reviewerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User reviewer = userService.getUserById(reviewerId);

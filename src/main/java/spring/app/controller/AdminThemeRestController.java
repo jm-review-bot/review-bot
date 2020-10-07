@@ -86,7 +86,7 @@ public class AdminThemeRestController {
 
     @DeleteMapping("/{themeId}")
     @ApiOperation(value = "Delete the theme")
-    public ResponseEntity deleteTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId) {
+    public ResponseEntity<?> deleteTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme = themeService.getThemeById(themeId);
         themeService.deleteThemeById(themeId);
@@ -99,7 +99,7 @@ public class AdminThemeRestController {
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
     @ApiOperation(value = "Update the theme")
-    public ResponseEntity updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId,
+    public ResponseEntity<?> updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId,
                                       @ApiParam(value = "Theme model in DTO", required = true) @RequestBody ThemeDto themeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme themeById = themeService.getThemeById(themeId);

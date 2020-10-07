@@ -84,7 +84,7 @@ public class AdminQuestionThemeRestController {
     @ApiOperation(value = "Update the question")
     @Validated(UpdateGroup.class)
     @PostMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity updateQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId,
+    public ResponseEntity<?> updateQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId,
                                          @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId,
                                          @ApiParam(value = "Question object in DTO", required = true) @RequestBody @Valid QuestionDto questionDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -104,7 +104,7 @@ public class AdminQuestionThemeRestController {
 
     @ApiOperation(value = "Delete exist question")
     @DeleteMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity deleteQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+    public ResponseEntity<?> deleteQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
                                          @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Theme theme = themeService.getThemeById(themeId);
         Question question = questionService.getQuestionById(questionId);
