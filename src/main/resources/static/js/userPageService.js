@@ -41,6 +41,17 @@ function buildUsersTable() {
     let htmlContent = ''
     for (let i = 0; i < allUsersDto.length; i++) {
         let user = allUsersDto[i]
+        let userAdminEditButton = ''
+        if (user.role === "ADMIN") {
+            userAdminEditButton = `<td>
+            <button type="button" class="btn btn-outline-success change-password" data-id="${user.id}">
+                Сменить пароль
+            </button>
+        </td>`
+        } else{
+            userAdminEditButton = `<td>
+        </td>`
+        }
         let usersHtmlTable = `
             <tr>
                 <th>${user.id}</th>
@@ -51,8 +62,8 @@ function buildUsersTable() {
                     <button type="button" class="btn btn-outline-success edit-user" data-id="${user.id}">
                         Редактировать
                     </button>
-                </td>
-                <td>
+                </td>` + userAdminEditButton +
+            `<td>
                     <button type="button" class="btn btn-outline-danger delete-user" data-id="${user.id}">
                         Удалить
                     </button>
