@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -11,12 +12,16 @@ import spring.app.service.abstraction.ReviewStatisticService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER;
+import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_VKID_EDITED_USER;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_UNBLOCK_USER_TAKE_REVIEW;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER_GET_ROLES_LIST;
+import static spring.app.util.Keyboards.CANCEL_BLOCK_FOR_TAKE_REVIEW;
+import static spring.app.util.Keyboards.EDITING_USER_OR_BACK;
 
 /**
  * @author AkiraRokudo on 27.05.2020 in one of sun day
@@ -28,7 +33,7 @@ public class AdminEditUser extends Step {
     private final UserService userService;
     private final ReviewStatisticService reviewStatisticService;
 
-
+    @Autowired
     public AdminEditUser(StorageService storageService,
                          UserService userService,
                          ReviewStatisticService reviewStatisticService) {

@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -18,7 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.USER_START_CHOOSE_REVIEW;
+import static spring.app.core.StepSelector.USER_START_REVIEW_HANGOUTS_LINK;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
@@ -30,6 +33,7 @@ public class UserStartChooseReview extends Step {
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
+    @Autowired
     public UserStartChooseReview(ReviewService reviewService, UserService userService,
                                  StorageService storageService, VkService vkService) {
         super("", DEF_BACK_KB);

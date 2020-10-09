@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -13,7 +14,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER;
+import static spring.app.core.StepSelector.ADMIN_SEARCH;
+import static spring.app.core.StepSelector.ADMIN_REMOVE_USER;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
 import static spring.app.util.Keyboards.SEARCH_OR_BACK;
 
 /**
@@ -25,6 +30,7 @@ public class AdminUserList extends Step {
     private final StorageService storageService;
     private final UserService userService;
 
+    @Autowired
     public AdminUserList(StorageService storageService, UserService userService) {
         super("", SEARCH_OR_BACK);
         this.storageService = storageService;

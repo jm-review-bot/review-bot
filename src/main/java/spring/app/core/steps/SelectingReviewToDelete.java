@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -14,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.SELECTING_REVIEW_TO_DELETE;
+import static spring.app.core.StepSelector.REVIEWER_DELETE_REVIEW;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
@@ -25,6 +28,7 @@ public class SelectingReviewToDelete extends Step {
     private final ThemeService themeService;
     private final StorageService storageService;
 
+    @Autowired
     public SelectingReviewToDelete(VkService vkService, ReviewService reviewService, ThemeService themeService, StorageService storageService) {
         super("",DEF_BACK_KB);
         this.reviewService = reviewService;

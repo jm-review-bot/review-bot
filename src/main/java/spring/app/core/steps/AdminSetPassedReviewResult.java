@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -11,8 +12,10 @@ import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.ThemeService;
 import spring.app.service.abstraction.UserService;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW;
+import static spring.app.core.StepSelector.ADMIN_SET_PASSED_REVIEW_GET_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class AdminSetPassedReviewResult extends Step {
@@ -21,6 +24,7 @@ public class AdminSetPassedReviewResult extends Step {
     private final UserService userService;
     private final ThemeService themeService;
 
+    @Autowired
     public AdminSetPassedReviewResult(StorageService storageService,
                                       UserService userService,
                                       ThemeService themeService) {
@@ -38,13 +42,11 @@ public class AdminSetPassedReviewResult extends Step {
     @Override
     public void processInput(BotContext context) throws ProcessInputException, NoNumbersEnteredException, NoDataEnteredException {
         String command = context.getInput();
-        switch (command) {
-            case "Назад":
-                storageService.clearUsersOfStorage(context.getVkId());
-                sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
-                break;
-            default:
-                throw new ProcessInputException("Введена неверная команда...");
+        if ("Назад".equals(command)) {
+            storageService.clearUsersOfStorage(context.getVkId());
+            sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
+        } else {
+            throw new ProcessInputException("Введена неверная команда...");
         }
     }
 

@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -9,8 +10,11 @@ import spring.app.service.abstraction.StorageService;
 
 import java.util.Arrays;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_ADD_USER;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.util.Keyboards.ACTIONS_FOR_USER;
 
 
 @Component
@@ -18,6 +22,7 @@ public class AdminChooseActionForUser extends Step {
 
     private final StorageService storageService;
 
+    @Autowired
     public AdminChooseActionForUser(StorageService storageService) {
         super("Выберите действие над пользователем", ACTIONS_FOR_USER);
         this.storageService = storageService;

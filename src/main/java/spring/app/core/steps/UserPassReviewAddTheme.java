@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoNumbersEnteredException;
@@ -17,7 +18,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_PASS_REVIEW_ADD_THEME;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.USER_CANCEL_REVIEW;
+import static spring.app.core.StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 import static spring.app.util.Keyboards.DELETE_STUDENT_REVIEW;
 
@@ -28,6 +33,7 @@ public class UserPassReviewAddTheme extends Step {
     private final ThemeService themeService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public UserPassReviewAddTheme(StorageService storageService, ThemeService themeService,
                                   StudentReviewService studentReviewService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки

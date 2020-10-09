@@ -1,12 +1,15 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.service.abstraction.StorageService;
 import spring.app.util.StringParser;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.USER_PASS_REVIEW_GET_LIST_REVIEW;
 import static spring.app.util.Keyboards.USER_MENU_KB;
 
 @Component
@@ -14,6 +17,7 @@ public class UserPassReviewAddStudentReview extends Step {
 
     private final StorageService storageService;
 
+    @Autowired
     public UserPassReviewAddStudentReview(StorageService storageService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки
         super("", USER_MENU_KB);

@@ -5,11 +5,19 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import spring.app.dto.QuestionDto;
 import spring.app.groups.CreateGroup;
 import spring.app.groups.UpdateGroup;
@@ -33,10 +41,11 @@ public class AdminQuestionThemeRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminQuestionThemeRestController.class);
 
-    private QuestionService questionService;
-    private QuestionMapper questionMapper;
-    private ThemeService themeService;
+    private final QuestionService questionService;
+    private final QuestionMapper questionMapper;
+    private final ThemeService themeService;
 
+    @Autowired
     public AdminQuestionThemeRestController(QuestionService questionService, QuestionMapper questionMapper, ThemeService themeService) {
         this.questionService = questionService;
         this.questionMapper = questionMapper;
@@ -77,7 +86,7 @@ public class AdminQuestionThemeRestController {
     @ApiOperation(value = "Update the question")
     @Validated(UpdateGroup.class)
     @PostMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity updateQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId,
+    public ResponseEntity<?> updateQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId,
                                          @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId,
                                          @ApiParam(value = "Question object in DTO", required = true) @RequestBody @Valid QuestionDto questionDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -97,7 +106,7 @@ public class AdminQuestionThemeRestController {
 
     @ApiOperation(value = "Delete exist question")
     @DeleteMapping("/{themeId}/question/{questionId}")
-    public ResponseEntity deleteQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
+    public ResponseEntity<?> deleteQuestion(@ApiParam(value = "Theme ID", required = true) @PathVariable Long themeId,
                                          @ApiParam(value = "Question ID", required = true) @PathVariable Long questionId) {
         Theme theme = themeService.getThemeById(themeId);
         Question question = questionService.getQuestionById(questionId);

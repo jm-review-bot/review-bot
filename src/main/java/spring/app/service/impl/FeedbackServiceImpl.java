@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class FeedbackServiceImpl implements FeedbackService {
 
-    private FeedbackDao feedbackDao;
+    private final FeedbackDao feedbackDao;
 
     @Autowired
     public FeedbackServiceImpl(FeedbackDao feedbackDao) {

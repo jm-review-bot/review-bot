@@ -5,11 +5,20 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import spring.app.dto.ThemeDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.groups.CreateGroup;
@@ -31,9 +40,10 @@ public class AdminThemeRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminThemeRestController.class);
 
-    private ThemeService themeService;
-    private ThemeMapper themeMapper;
+    private final ThemeService themeService;
+    private final ThemeMapper themeMapper;
 
+    @Autowired
     public AdminThemeRestController(ThemeService themeService, ThemeMapper themeMapper) {
         this.themeService = themeService;
         this.themeMapper = themeMapper;
@@ -78,7 +88,7 @@ public class AdminThemeRestController {
 
     @DeleteMapping("/{themeId}")
     @ApiOperation(value = "Delete the theme")
-    public ResponseEntity deleteTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId) {
+    public ResponseEntity<?> deleteTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme theme = themeService.getThemeById(themeId);
         themeService.deleteThemeById(themeId);
@@ -91,7 +101,7 @@ public class AdminThemeRestController {
     @Validated(UpdateGroup.class)
     @PutMapping("/{themeId}")
     @ApiOperation(value = "Update the theme")
-    public ResponseEntity updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId,
+    public ResponseEntity<?> updateTheme(@ApiParam(value = "Theme id", required = true) @PathVariable Long themeId,
                                       @ApiParam(value = "Theme model in DTO", required = true) @RequestBody ThemeDto themeDto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Theme themeById = themeService.getThemeById(themeId);

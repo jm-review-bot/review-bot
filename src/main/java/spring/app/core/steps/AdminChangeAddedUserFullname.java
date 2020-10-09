@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -24,6 +25,7 @@ public class AdminChangeAddedUserFullname extends Step {
     private final StorageService storageService;
     private final UserService userService;
 
+    @Autowired
     public AdminChangeAddedUserFullname(StorageService storageService, UserService userService) {
         super("Введите новое имя и фамилию. Например: Иван Иванов", "");
         this.storageService = storageService;

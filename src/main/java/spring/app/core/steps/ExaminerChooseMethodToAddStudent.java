@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -9,15 +10,23 @@ import spring.app.model.Theme;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.ThemeService;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.EXAMINER_USERS_LIST_FROM_DB;
+import static spring.app.core.StepSelector.EXAMINER_ADD_NEW_STUDENT;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.core.StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT;
+import static spring.app.util.Keyboards.CHOOSE_FROM_LIST;
+import static spring.app.util.Keyboards.COLUMN_DELIMETER_FR;
+import static spring.app.util.Keyboards.ENTER_MANUALLY;
+import static spring.app.util.Keyboards.ROW_DELIMETER_FR;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class ExaminerChooseMethodToAddStudent extends Step {
 
-    private StorageService storageService;
-    private ThemeService themeService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
 
+    @Autowired
     public ExaminerChooseMethodToAddStudent(StorageService storageService,
                                             ThemeService themeService) {
         super("", CHOOSE_FROM_LIST + COLUMN_DELIMETER_FR + ENTER_MANUALLY + ROW_DELIMETER_FR + DEF_BACK_KB);

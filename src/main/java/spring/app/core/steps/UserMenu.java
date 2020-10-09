@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -8,7 +9,11 @@ import spring.app.model.Review;
 import spring.app.model.ReviewStatistic;
 import spring.app.model.StudentReview;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.ReviewStatisticService;
+import spring.app.service.abstraction.ReviewService;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.UserService;
 import spring.app.util.StringParser;
 
 import java.time.LocalDateTime;
@@ -18,8 +23,20 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.USER_START_REVIEW_HANGOUTS_LINK;
+import static spring.app.core.StepSelector.USER_START_CHOOSE_REVIEW;
+import static spring.app.core.StepSelector.SELECTING_REVIEW_TO_DELETE;
+import static spring.app.core.StepSelector.USER_CANCEL_REVIEW;
+import static spring.app.core.StepSelector.USER_PASS_REVIEW_ADD_THEME;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_THEME;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.util.Keyboards.DEF_USER_MENU_KB;
+import static spring.app.util.Keyboards.REVIEW_START_FR;
+import static spring.app.util.Keyboards.REVIEW_CANCEL_FR;
+import static spring.app.util.Keyboards.DELETE_STUDENT_REVIEW;
+import static spring.app.util.Keyboards.CHECKING_FREE_THEMES;
 
 @Component
 public class UserMenu extends Step {
@@ -33,6 +50,7 @@ public class UserMenu extends Step {
     @Value("${review.point_for_empty_review}")
     private int pointForEmptyReview;
 
+    @Autowired
     public UserMenu(StorageService storageService,
                     ReviewService reviewService,
                     UserService userService,

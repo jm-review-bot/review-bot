@@ -1,7 +1,7 @@
 package spring.app.util;
 
-import javax.persistence.*;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import java.util.Optional;
 
 public class SingleResultHelper<T> {

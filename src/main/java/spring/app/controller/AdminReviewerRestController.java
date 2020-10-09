@@ -5,11 +5,18 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import spring.app.dto.ReviewerDto;
 import spring.app.groups.UpdateGroup;
 import spring.app.model.Theme;
@@ -28,9 +35,10 @@ public class AdminReviewerRestController {
 
     private final static Logger logger = LoggerFactory.getLogger(AdminReviewerRestController.class);
 
-    private UserService userService;
-    private ThemeService themeService;
+    private final UserService userService;
+    private final ThemeService themeService;
 
+    @Autowired
     public AdminReviewerRestController (UserService userService , ThemeService themeService) {
         this.userService = userService;
         this.themeService = themeService;
@@ -66,7 +74,7 @@ public class AdminReviewerRestController {
 
     @DeleteMapping("/{themeId}/reviewer/{reviewerId}")
     @ApiOperation(value = "Remove the reviewer from free theme")
-    public ResponseEntity deleteReviewer(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId ,
+    public ResponseEntity<?> deleteReviewer(@ApiParam(value = "Theme ID", required = true) @PathVariable long themeId ,
                                          @ApiParam(value = "Reviewer ID", required = true) @PathVariable long reviewerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User reviewer = userService.getUserById(reviewerId);

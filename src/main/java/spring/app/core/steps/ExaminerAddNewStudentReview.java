@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -9,7 +10,11 @@ import spring.app.model.Review;
 import spring.app.model.StudentReview;
 import spring.app.model.Theme;
 import spring.app.model.User;
-import spring.app.service.abstraction.*;
+import spring.app.service.abstraction.StorageService;
+import spring.app.service.abstraction.StudentReviewService;
+import spring.app.service.abstraction.ThemeService;
+import spring.app.service.abstraction.UserService;
+import spring.app.service.abstraction.ReviewService;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -18,19 +23,22 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.core.StepSelector.EXAMINER_USERS_LIST_FROM_DB;
+import static spring.app.core.StepSelector.EXAMINER_ADD_NEW_STUDENT_REVIEW;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 
 @Component
 public class ExaminerAddNewStudentReview extends Step {
 
-    private StorageService storageService;
-    private ThemeService themeService;
-    private UserService userService;
-    private StudentReviewService studentReviewService;
-    private ReviewService reviewService;
+    private final StorageService storageService;
+    private final ThemeService themeService;
+    private final UserService userService;
+    private final StudentReviewService studentReviewService;
+    private final ReviewService reviewService;
 
+    @Autowired
     public ExaminerAddNewStudentReview(StorageService storageService,
                                        ThemeService themeService,
                                        UserService userService,

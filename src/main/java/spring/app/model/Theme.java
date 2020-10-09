@@ -4,7 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import spring.app.listener.ThemeListener;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.EntityListeners;
 import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)

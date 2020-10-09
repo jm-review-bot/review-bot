@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -15,7 +16,9 @@ import spring.app.util.StringParser;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.USER_START_REVIEW_CORE;
 import static spring.app.util.Keyboards.START_KB;
 
 @Component
@@ -25,6 +28,7 @@ public class UserStartReviewRules extends Step {
     private final ReviewService reviewService;
     private final UserService userService;
 
+    @Autowired
     public UserStartReviewRules(StorageService storageService, ReviewService reviewService, UserService userService) {
         super("", START_KB);
         this.storageService = storageService;
