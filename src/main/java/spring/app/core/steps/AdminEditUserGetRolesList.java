@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.controller.AdminThemeRestController;
 import spring.app.core.BotContext;
@@ -18,8 +19,11 @@ import spring.app.util.StringParser;
 import java.util.ArrayList;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER_GET_ROLES_LIST;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class AdminEditUserGetRolesList extends Step {
@@ -30,6 +34,7 @@ public class AdminEditUserGetRolesList extends Step {
     private final RoleService roleService;
     private final UserService userService;
 
+    @Autowired
     public AdminEditUserGetRolesList(StorageService storageService,
                                      RoleService roleService,
                                      UserService userService) {

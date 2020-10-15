@@ -9,7 +9,10 @@ import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.UserService;
 
-import static spring.app.util.Keyboards.*;
+import static spring.app.util.Keyboards.HEADER_FR;
+import static spring.app.util.Keyboards.ROW_DELIMETER_FR;
+import static spring.app.util.Keyboards.COLUMN_DELIMETER_FR;
+import static spring.app.util.Keyboards.FOOTER_FR;
 
 public abstract class Step {
 

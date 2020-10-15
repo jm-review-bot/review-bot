@@ -173,39 +173,6 @@ public class Keyboards {
             "  ]\n" +
             "} ";
 
-    //TODO:удалить, раз класс в котором он использовался не соответствовал тз и был удален
-    public final static String USER_TAKE_REVIEW_CONFIRMATION_KB = "{\n" +
-            "  \"one_time\": false,\n" +
-            "  \"buttons\": [\n" +
-            "    [\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Добавить\"\n" +
-            "        },\n" +
-            "        \"color\": \"positive\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"1\\\"}\",\n" +
-            "          \"label\": \"Отменить\"\n" +
-            "        },\n" +
-            "        \"color\": \"negative\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"action\": {\n" +
-            "          \"type\": \"text\",\n" +
-            "          \"payload\": \"{\\\"button\\\": \\\"2\\\"}\",\n" +
-            "          \"label\": \"Назад\"\n" +
-            "        },\n" +
-            "        \"color\": \"default\"\n" +
-            "      }\n" +
-            "    ]\n" +
-            "  ]\n" +
-            "} ";
-
     public final static String USER_MENU_KB = "{\n" +
             "        \"action\": {\n" +
             "          \"type\": \"text\",\n" +

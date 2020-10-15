@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -15,15 +16,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.EXAMINER_FREE_THEMES_LIST;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.EXAMINER_CHOOSE_METHOD_TO_ADD_STUDENT;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class ExaminerFreeThemesList extends Step {
 
-    private ThemeService themeService;
-    private StorageService storageService;
+    private final ThemeService themeService;
+    private final StorageService storageService;
 
+    @Autowired
     public ExaminerFreeThemesList(StorageService storageService,
                                   ThemeService themeService) {
         super("", DEF_BACK_KB);

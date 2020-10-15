@@ -1,6 +1,7 @@
 package spring.app.core;
 
 import com.vk.api.sdk.objects.messages.Message;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.abstraction.ChatBot;
 import spring.app.core.steps.Step;
@@ -20,10 +21,11 @@ import java.util.Optional;
 @Component
 public class VkBot implements ChatBot {
 
-    private VkService vkService;
-    private UserService userService;
-    private StepHolder stepHolder;
+    private final VkService vkService;
+    private final UserService userService;
+    private final StepHolder stepHolder;
 
+    @Autowired
     public VkBot(VkService vkService, UserService userService, StepHolder stepHolder) {
         this.vkService = vkService;
         this.userService = userService;

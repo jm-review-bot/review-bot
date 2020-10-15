@@ -15,7 +15,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_USER_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_THEME_LIST;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 /**

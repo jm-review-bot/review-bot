@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class QuestionServiceImpl implements QuestionService {
 
-    private QuestionDao questionDao;
+    private final QuestionDao questionDao;
 
     @Autowired
     public QuestionServiceImpl(QuestionDao questionDao) {

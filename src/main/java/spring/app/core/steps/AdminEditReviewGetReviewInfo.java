@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -15,7 +16,9 @@ import spring.app.util.StringParser;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW;
 import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 
 /**
@@ -24,10 +27,11 @@ import static spring.app.util.Keyboards.BACK_AND_EDIT_STATUS_KB;
 @Component
 public class AdminEditReviewGetReviewInfo extends Step {
 
-    private StorageService storageService;
-    private StudentReviewService studentReviewService;
-    private StudentReviewAnswerService studentReviewAnswerService;
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
+    private final StudentReviewAnswerService studentReviewAnswerService;
 
+    @Autowired
     public AdminEditReviewGetReviewInfo(
             StorageService storageService,
             StudentReviewService studentReviewService,

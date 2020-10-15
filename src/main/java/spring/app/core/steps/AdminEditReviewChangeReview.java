@@ -12,7 +12,9 @@ import spring.app.service.abstraction.StudentReviewService;
 
 import java.util.ArrayList;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_INFO;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_GET_REVIEW_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_REVIEW_CHANGE_REVIEW;
 import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 
 /**
@@ -21,8 +23,8 @@ import static spring.app.util.Keyboards.PASS_OR_NOT_PASS_OR_BACK;
 @Component
 public class AdminEditReviewChangeReview extends Step {
 
-    private StorageService storageService;
-    private StudentReviewService studentReviewService;
+    private final StorageService storageService;
+    private final StudentReviewService studentReviewService;
 
     @Autowired
     public AdminEditReviewChangeReview(StorageService storageService, StudentReviewService studentReviewService) {

@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.controller.AdminThemeRestController;
 import spring.app.core.BotContext;
@@ -14,8 +15,9 @@ import spring.app.service.abstraction.ReviewStatisticService;
 import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.UserService;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_MENU;
+import static spring.app.util.Keyboards.YES_NO_KB;
 
 @Component
 public class AdminUnblockUserTakeReview extends Step {
@@ -26,6 +28,7 @@ public class AdminUnblockUserTakeReview extends Step {
     private final UserService userService;
     private final ReviewStatisticService reviewStatisticService;
 
+    @Autowired
     public AdminUnblockUserTakeReview(StorageService storageService,
                                       ReviewStatisticService reviewStatisticService,
                                       UserService userService) {

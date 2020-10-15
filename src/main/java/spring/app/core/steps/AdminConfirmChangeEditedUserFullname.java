@@ -2,6 +2,7 @@ package spring.app.core.steps;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.core.StepSelector;
@@ -15,7 +16,9 @@ import spring.app.service.abstraction.UserService;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.ADMIN_INPUT_NEW_FULLNAME_EDITED_USER;
+import static spring.app.core.StepSelector.ADMIN_USERS_LIST;
+import static spring.app.core.StepSelector.ADMIN_EDIT_USER;
 import static spring.app.util.Keyboards.YES_OR_CANCEL;
 
 /**
@@ -28,6 +31,7 @@ public class AdminConfirmChangeEditedUserFullname extends Step {
     private final StorageService storageService;
     private final UserService userService;
 
+    @Autowired
     public AdminConfirmChangeEditedUserFullname(StorageService storageService, UserService userService) {
         super("", YES_OR_CANCEL);
         this.storageService = storageService;

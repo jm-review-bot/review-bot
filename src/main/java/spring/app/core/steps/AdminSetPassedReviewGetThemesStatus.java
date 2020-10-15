@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -17,8 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
-import static spring.app.util.Keyboards.*;
+import static spring.app.core.StepSelector.ADMIN_SET_PASSED_REVIEW_GET_THEMES_STATUS;
+import static spring.app.core.StepSelector.ADMIN_SET_PASSED_REVIEW;
+import static spring.app.core.StepSelector.ADMIN_SET_PASSED_REVIEW_GET_USERS_LIST;
+import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
 public class AdminSetPassedReviewGetThemesStatus extends Step {
@@ -28,6 +31,7 @@ public class AdminSetPassedReviewGetThemesStatus extends Step {
     private final UserService userService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public AdminSetPassedReviewGetThemesStatus(StorageService storageService,
                                                ThemeService themeService,
                                                UserService userService,

@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.ProcessInputException;
@@ -7,7 +8,11 @@ import spring.app.service.abstraction.StorageService;
 
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_REVIEW;
+import static spring.app.core.StepSelector.ADMIN_CHOOSE_ACTION_FOR_USER;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.ADMIN_MENU;
 import static spring.app.util.Keyboards.DEF_ADMIN_MENU_KB;
 
 @Component
@@ -15,6 +20,7 @@ public class AdminMenu extends Step {
 
     private final StorageService storageService;
 
+    @Autowired
     public AdminMenu(StorageService storageService) {
         super("", DEF_ADMIN_MENU_KB);
         this.storageService = storageService;
@@ -29,26 +35,20 @@ public class AdminMenu extends Step {
         String command = context.getInput();
         switch (command) {
             case "Пользователи":
-                switch (context.getRole().getName()) {
-                    case "ADMIN":
-                        sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
-                        break;
-                    default:
-                        sendUserToNextStep(context, START);
-                        break;
+                if ("ADMIN".equals(context.getRole().getName())) {
+                    sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_USER);
+                } else {
+                    sendUserToNextStep(context, START);
                 }
                 break;
             case "/start":
                 sendUserToNextStep(context, START);
                 break;
             case "Ревью":
-                switch (context.getRole().getName()) {
-                    case "ADMIN":
-                        sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
-                        break;
-                    default:
-                        sendUserToNextStep(context, START);
-                        break;
+                if ("ADMIN".equals(context.getRole().getName())) {
+                    sendUserToNextStep(context, ADMIN_CHOOSE_ACTION_FOR_REVIEW);
+                } else {
+                    sendUserToNextStep(context, START);
                 }
                 break;
             case "Главное меню":

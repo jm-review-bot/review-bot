@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 public class ThemeServiceImpl implements ThemeService {
 
-    private ThemeDao themeDao;
+    private final ThemeDao themeDao;
 
     @Autowired
     public ThemeServiceImpl(ThemeDao themeDao) {

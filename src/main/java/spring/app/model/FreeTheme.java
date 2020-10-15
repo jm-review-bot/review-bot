@@ -1,6 +1,12 @@
 package spring.app.model;
 
-import javax.persistence.*;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.JoinColumn;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinTable;
 import java.util.List;
 
 @DiscriminatorValue(value = "free")
@@ -15,7 +21,7 @@ public class FreeTheme extends Theme {
             joinColumns = {@JoinColumn(name = "free_theme_id")},
             inverseJoinColumns = {@JoinColumn(name = "examiner_id")}
     )
-    List<User> examiners;
+    private List<User> examiners;
 
     public List<User> getExaminers() {
         return examiners;

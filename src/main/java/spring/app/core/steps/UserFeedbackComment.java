@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -11,7 +12,10 @@ import spring.app.service.abstraction.StorageService;
 import spring.app.service.abstraction.StudentReviewService;
 import spring.app.util.StringParser;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_FEEDBACK_REVIEWER_RATING;
+import static spring.app.core.StepSelector.USER_FEEDBACK_REVIEW_RATING;
+import static spring.app.core.StepSelector.USER_FEEDBACK_CONFIRMATION;
+import static spring.app.core.StepSelector.USER_MENU;
 import static spring.app.util.Keyboards.USER_FEEDBACK_ENDING_KB;
 
 @Component
@@ -21,6 +25,7 @@ public class UserFeedbackComment extends Step {
     private final StorageService storageService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public UserFeedbackComment(FeedbackService feedbackService, StorageService storageService,
                                StudentReviewService studentReviewService) {
         super("Дайте ваш развернутый комментарий, замечания, предложения (необязательно). " +

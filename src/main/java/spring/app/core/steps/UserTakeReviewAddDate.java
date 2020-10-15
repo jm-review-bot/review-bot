@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
@@ -18,7 +19,10 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_THEME;
+import static spring.app.core.StepSelector.USER_TAKE_REVIEW_ADD_DATE;
+import static spring.app.core.StepSelector.START;
+import static spring.app.core.StepSelector.USER_MENU;
 import static spring.app.util.Keyboards.DEF_BACK_KB;
 
 @Component
@@ -35,6 +39,7 @@ public class UserTakeReviewAddDate extends Step {
     @Value("${review.time_limit.before_starting_review}")
     private int timeLimitBeforeReview;
 
+    @Autowired
     public UserTakeReviewAddDate(StorageService storageService, ReviewService reviewService,
                                  ThemeService themeService, UserService userService) {
         //у шага нет статического текста, но есть статические(видимые независимо от юзера) кнопки

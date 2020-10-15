@@ -7,7 +7,17 @@ import org.hibernate.annotations.Where;
 import org.springframework.security.core.userdetails.UserDetails;
 import spring.app.core.StepSelector;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.GenerationType;
+import javax.persistence.Column;
+import javax.persistence.ManyToOne;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;

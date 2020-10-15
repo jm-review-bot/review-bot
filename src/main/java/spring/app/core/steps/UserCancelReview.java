@@ -1,5 +1,6 @@
 package spring.app.core.steps;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
 import spring.app.exceptions.NoDataEnteredException;
@@ -14,7 +15,9 @@ import spring.app.util.StringParser;
 import java.util.Arrays;
 import java.util.List;
 
-import static spring.app.core.StepSelector.*;
+import static spring.app.core.StepSelector.USER_MENU;
+import static spring.app.core.StepSelector.USER_CANCEL_REVIEW;
+import static spring.app.core.StepSelector.START;
 import static spring.app.util.Keyboards.USER_MENU_KB;
 import static spring.app.util.Keyboards.YES_NO_KB;
 
@@ -25,6 +28,7 @@ public class UserCancelReview extends Step {
     private final StorageService storageService;
     private final StudentReviewService studentReviewService;
 
+    @Autowired
     public UserCancelReview(StorageService storageService, StudentReviewService studentReviewService) {
         super("", "");
         this.storageService = storageService;
