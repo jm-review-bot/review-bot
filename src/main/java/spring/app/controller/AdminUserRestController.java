@@ -107,6 +107,20 @@ public class AdminUserRestController {
         return ResponseEntity.ok().build();
     }
 
+    @ApiOperation(value = "Restore user")
+    @Validated(UpdateGroup.class)
+    @PatchMapping("/{userId}")
+    public ResponseEntity<?> restoreUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId){
+        User user = userService.getUserById(userId);
+        userService.restoreUserById(userId);
+
+        // Логирование
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("Админ (vkId={}) восстановил пользователя (ID={})",
+                loggedInUser.getVkId(), user.getVkId());
+        return ResponseEntity.ok().build();
+    }
+
     @ApiOperation(value = "Edit user")
     @Validated(UpdateGroup.class)
     @PostMapping("/{userId}")

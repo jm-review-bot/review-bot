@@ -28,7 +28,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public Optional<User> getByVkId(Integer vkId) throws NoResultException {
-        return userSingleResultHelper.singleResult(entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId", User.class)
+        return userSingleResultHelper.singleResult(entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId AND u.isDeleted = false", User.class)
                 .setParameter("vkId", vkId));
     }
 
@@ -127,7 +127,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<UserDto> getAllUsersDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u ORDER BY u.lastName", UserDto.class)
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name, u.isDeleted) FROM User u ORDER BY u.lastName", UserDto.class)
                 .getResultList();
     }
 
@@ -135,5 +135,18 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     public Optional<UserDto> getUserDtoById(Long userId) {
         return userDtoSingleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
                 .setParameter("user_id", userId));
+    }
+
+    @Transactional
+    @Override
+    public void restoreUserById(Long userId) {
+        entityManager.createQuery("UPDATE User u SET u.isDeleted = false WHERE u.id = :user_id").setParameter("user_id",userId).executeUpdate();
+    }
+
+    @Override
+    public List<UserDto> getUsersDtoByIds(List<Long> userIds) {
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.isDeleted) FROM User u WHERE u.id IN :userIds ORDER BY u.lastName", UserDto.class)
+                .setParameter("userIds", userIds)
+                .getResultList();
     }
 }

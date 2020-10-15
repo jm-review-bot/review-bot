@@ -17,7 +17,6 @@ import java.util.Objects;
 @Getter
 @Setter
 @SQLDelete(sql = "UPDATE users SET is_deleted = true WHERE id = ?")
-@Where(clause = "is_deleted = false")
 public class User implements UserDetails {
 
     @Id

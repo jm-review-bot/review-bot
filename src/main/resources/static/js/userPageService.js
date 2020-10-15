@@ -42,6 +42,8 @@ function buildUsersTable() {
     for (let i = 0; i < allUsersDto.length; i++) {
         let user = allUsersDto[i]
         let userAdminEditButton = ''
+        let username
+        let deleteRestoreButton
         if (user.role === "ADMIN") {
             userAdminEditButton = `<td>
             <button type="button" class="btn btn-outline-success change-password" data-id="${user.id}">
@@ -52,10 +54,22 @@ function buildUsersTable() {
             userAdminEditButton = `<td>
         </td>`
         }
+        if (user.deleted === true){
+            username = "<s>" + user.firstName + " " + user.lastName + "</s>"
+            deleteRestoreButton = `<button type="button" class="btn btn-outline-info restore-user" data-id="${user.id}">
+                        Восстановить
+                    </button>`
+        }
+        else {
+            username = user.firstName + " " + user.lastName
+            deleteRestoreButton = `<button type="button" class="btn btn-outline-danger delete-user" data-id="${user.id}">
+                        Удалить
+                    </button>`
+        }
         let usersHtmlTable = `
             <tr>
                 <th>${user.id}</th>
-                <td>${user.firstName} ${user.lastName}</td>
+                <td>${username}</td>
                 <td>${user.vkId}</td>
                 <td>${user.role}</td>
                 <td>
@@ -63,11 +77,8 @@ function buildUsersTable() {
                         Редактировать
                     </button>
                 </td>` + userAdminEditButton +
-            `<td>
-                    <button type="button" class="btn btn-outline-danger delete-user" data-id="${user.id}">
-                        Удалить
-                    </button>
-                </td>
+            `<td>` + deleteRestoreButton +
+                `</td>
             </tr>
         `
         htmlContent += usersHtmlTable;

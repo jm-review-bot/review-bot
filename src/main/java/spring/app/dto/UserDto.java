@@ -48,6 +48,9 @@ public class UserDto {
     @ApiModelProperty(notes = "Start theme position for new user.")
     private Long startThemeId;
 
+    @ApiModelProperty(notes = "Deleted user flag")
+    private boolean isDeleted;
+
     public UserDto() {
     }
 
@@ -61,5 +64,31 @@ public class UserDto {
         this.firstName = firstName;
         this.lastName = lastName;
         this.role = role;
+    }
+
+    public UserDto(Long id,
+                   Integer vkId,
+                   String firstName,
+                   String lastName,
+                   String role,
+                   boolean isDeleted) {
+        this.id = id;
+        this.vkId = vkId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+        this.isDeleted = isDeleted;
+    }
+
+    public UserDto(Long id,
+                   Integer vkId,
+                   String firstName,
+                   String lastName,
+                   boolean isDeleted) {
+        this.id = id;
+        this.vkId = vkId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.isDeleted = isDeleted;
     }
 }
