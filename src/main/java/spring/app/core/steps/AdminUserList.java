@@ -3,6 +3,7 @@ package spring.app.core.steps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import spring.app.core.BotContext;
+import spring.app.dto.UserDto;
 import spring.app.exceptions.ProcessInputException;
 import spring.app.model.User;
 import spring.app.service.abstraction.StorageService;
@@ -117,30 +118,37 @@ public class AdminUserList extends Step {
             usersIdList.remove(0);
         }
 
-        StringBuilder userList = new StringBuilder();
+        StringBuilder userListString = new StringBuilder();
         if ("delete".equals(mode)) {
-            userList.append("Список всех студентов. Выберете студента для удаления.\n");
+            userListString.append("Список всех студентов. Выберете студента для удаления.\n");
         } else {
-            userList.append("Выберите пользователя для изменения:\n");
+            userListString.append("Выберите пользователя для изменения:\n");
         }
 
+        List<UserDto> userList;
         if (usersIdList != null) {
-            //TODO: работать с листом юзеров, не дергая каждый раз БД
+            List<Long> usersIdListLong = new ArrayList<>();
+            usersIdList.forEach(userId -> {
+                usersIdListLong.add(Long.parseLong(userId));
+            });
+            userList = userService.getUsersDtoByIds(usersIdListLong);
             final int[] i = {1};
-            usersIdList.stream().forEach(userId -> {
-                User user = userService.getUserById(Long.parseLong(userId));
-                userList.append("[").append(i[0]++).append("] ")
+            userList.forEach(user -> {
+                userListString.append("[").append(i[0]++).append("] ")
                         .append(user.getFirstName())
                         .append(" ")
-                        .append(user.getLastName())
-                        .append(", https://vk.com/id")
+                        .append(user.getLastName());
+                if(user.isDeleted()){
+                    userListString.append("(УДАЛЕН)");
+                }
+                userListString.append(", https://vk.com/id")
                         .append(user.getVkId());
-                userList.append("\n");
+                userListString.append("\n");
             });
         }
-        userList.append("Для возврата в меню, введи \"назад\".\n\n Для поиска по ссылке нажмите кнопку 'Поиск'.\n");
+        userListString.append("Для возврата в меню, введи \"назад\".\n\n Для поиска по ссылке нажмите кнопку 'Поиск'.\n");
 
-        text = afterModificationMessage == null ? userList.toString() : afterModificationMessage + userList.toString();
+        text = afterModificationMessage == null ? userListString.toString() : afterModificationMessage + userListString.toString();
 
         return text;
     }

@@ -8,6 +8,12 @@ $(document).on('click', '.delete-user', function () {
     }
 })
 
+$(document).on('click', '.restore-user', function () {
+    let userId = this.dataset.id
+    restoreUser(userId)
+    buildUsersTable()
+})
+
 function deleteUser(userId) {
     $.ajax({
         url: `/api/admin/user/${userId}`,
@@ -15,6 +21,15 @@ function deleteUser(userId) {
         async: false
     });
 }
+
+function restoreUser(userId) {
+    $.ajax({
+        url: `/api/admin/user/${userId}`,
+        type: 'patch',
+        async: false
+    });
+}
+
 
 function askToDeleteUser(userDto) {
     let title = `Вы действительно хотите удалить пользователя ${userDto.firstName} ${userDto.lastName}?`

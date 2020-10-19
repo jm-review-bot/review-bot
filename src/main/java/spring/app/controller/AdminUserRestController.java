@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PatchMapping;
 import spring.app.dto.UserDto;
 import spring.app.exceptions.IncorrectVkIdsException;
 import spring.app.groups.CreateGroup;
@@ -117,6 +118,20 @@ public class AdminUserRestController {
         logger.info("Админ (vkId={}) удалил пользователя (ID={})",
                 loggedInUser.getVkId(), user.getVkId());
 
+        return ResponseEntity.ok().build();
+    }
+
+    @ApiOperation(value = "Restore user")
+    @Validated(UpdateGroup.class)
+    @PatchMapping("/{userId}")
+    public ResponseEntity<?> restoreUser(@ApiParam(value = "User ID", required = true) @PathVariable Long userId){
+        User user = userService.getUserById(userId);
+        userService.restoreUserById(userId);
+
+        // Логирование
+        User loggedInUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        logger.info("Админ (vkId={}) восстановил пользователя (ID={})",
+                loggedInUser.getVkId(), user.getVkId());
         return ResponseEntity.ok().build();
     }
 

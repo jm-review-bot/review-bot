@@ -77,7 +77,7 @@ public class VkBot implements ChatBot {
             // проверяем есть ли юзер у нас в БД, если нет, получаем исключение и отправляем Юзеру сообщение и выходим из цикла
             Optional<User> optionalUser = userService.getByVkId(userVkId);
             if (!optionalUser.isPresent()) {
-                sendMessage("Пользователь с таким vkId не найден в базе. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
+                sendMessage("Пользователь с таким vkId не найден в базе или был удален. Обратитесь к Герману Севостьянову или Станиславу Сорокину\n", Keyboards.NO_KB, userVkId);
                 return;
             }
             User user = optionalUser.get();

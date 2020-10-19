@@ -28,7 +28,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public Optional<User> getByVkId(Integer vkId) throws NoResultException {
-        return userSingleResultHelper.singleResult(entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId", User.class)
+        return userSingleResultHelper.singleResult(entityManager.createQuery("SELECT u FROM User u WHERE u.vkId = :vkId AND u.isDeleted = false", User.class)
                 .setParameter("vkId", vkId));
     }
 
@@ -57,7 +57,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     @Override
     public List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return (List<User>) entityManager.createNativeQuery("select u.* " +
-                "from users u join review r on u.id = r.reviewer_id where r.is_open = true and r.date between :period_start and :period_end", User.class)
+                "from users u join review r on u.id = r.reviewer_id where u.is_deleted = false and r.is_open = true and r.date between :period_start and :period_end", User.class)
                 .setParameter("period_start", periodStart)
                 .setParameter("period_end", periodEnd)
                 .getResultList();
@@ -65,7 +65,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<User> getStudentsByReviewId(Long reviewId) {
-        return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id", User.class)
+        return entityManager.createQuery("SELECT u FROM StudentReview sr JOIN sr.user u JOIN sr.review r WHERE r.id = :review_id and u.isDeleted = false", User.class)
                 .setParameter("review_id", reviewId)
                 .getResultList();
     }
@@ -73,7 +73,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     @Override
     public List<User> getStudentsByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
         return entityManager.createNativeQuery("SELECT u.* FROM users u JOIN student_review sr ON u.id = sr.student_id " +
-                "WHERE sr.review_id IN " +
+                "WHERE u.is_deleted = false AND sr.review_id IN " +
                 "(SELECT r.id FROM review r WHERE r.is_open = TRUE AND r.date BETWEEN :period_start AND :period_end)", User.class)
                 .setParameter("period_start", periodStart)
                 .setParameter("period_end", periodEnd)
@@ -98,7 +98,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<ReviewerDto> getExaminersInNotThisTheme(long themeId) {
-        List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) FROM User u WHERE u NOT IN (SELECT e FROM FreeTheme ft JOIN ft.examiners e WHERE ft.id =:theme_id)")
+        List<ReviewerDto> reviewers = entityManager.createQuery("SELECT DISTINCT new spring.app.dto.ReviewerDto(u.id , u.firstName , u.lastName) FROM User u WHERE u.isDeleted = false AND u NOT IN (SELECT e FROM FreeTheme ft JOIN ft.examiners e WHERE ft.id =:theme_id)")
                 .setParameter("theme_id", themeId)
                 .getResultList();
         return reviewers.size() > 0 ? reviewers : null;
@@ -127,7 +127,7 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
 
     @Override
     public List<UserDto> getAllUsersDto() {
-        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u ORDER BY u.lastName", UserDto.class)
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name, u.isDeleted) FROM User u ORDER BY u.lastName", UserDto.class)
                 .getResultList();
     }
 
@@ -135,5 +135,18 @@ public class UserDaoImpl extends AbstractDao<Long, User> implements UserDao {
     public Optional<UserDto> getUserDtoById(Long userId) {
         return userDtoSingleResultHelper.singleResult(entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.role.name) FROM User u WHERE u.id = :user_id", UserDto.class)
                 .setParameter("user_id", userId));
+    }
+
+    @Transactional
+    @Override
+    public void restoreUserById(Long userId) {
+        entityManager.createQuery("UPDATE User u SET u.isDeleted = false WHERE u.id = :user_id").setParameter("user_id",userId).executeUpdate();
+    }
+
+    @Override
+    public List<UserDto> getUsersDtoByIds(List<Long> userIds) {
+        return entityManager.createQuery("SELECT new spring.app.dto.UserDto(u.id, u.vkId, u.firstName, u.lastName, u.isDeleted) FROM User u WHERE u.id IN :userIds ORDER BY u.lastName", UserDto.class)
+                .setParameter("userIds", userIds)
+                .getResultList();
     }
 }

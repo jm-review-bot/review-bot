@@ -28,6 +28,8 @@ public interface UserService extends UserDetailsService {
 
     void deleteUserById(Long id);
 
+    void restoreUserById(Long id);
+
     Optional<User> getByVkId(Integer vkId);
 
     boolean isExistByVkId(Integer vkId);
@@ -35,6 +37,8 @@ public interface UserService extends UserDetailsService {
     void deleteUserByVkId(Integer vkId);
 
     List<User> getUsersByReviewPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+
+    List<UserDto> getUsersDtoByIds(List<Long> userIds);
 
     List<User> getStudentsByReviewId(Long reviewId);
 

@@ -43,6 +43,9 @@ public class UserServiceImpl implements UserService {
         this.vkService = vkService;
     }
 
+    @Override
+    public void restoreUserById(Long id) { userDao.restoreUserById(id);}
+
     @Transactional
     @Override
     public void addUser(User user) {
@@ -172,5 +175,10 @@ public class UserServiceImpl implements UserService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public List<UserDto> getUsersDtoByIds(List<Long> userIds) {
+        return userDao.getUsersDtoByIds(userIds);
     }
 }
